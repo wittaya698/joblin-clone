@@ -1,2 +1,2 @@
 #!/bin/bash
-phpunit --bootstrap vendor/autoload.php tests/Model/
+php ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/Model/

@@ -2,8 +2,6 @@
 
 namespace AppBundle\Model;
 
-use AppBundle\Exception\ValidationException;
-
 class User extends BaseModel {
 
 	public $useUuid = true;
@@ -24,16 +22,14 @@ class User extends BaseModel {
 	}
 
 	public function toPublicArray() {
-		$output = parent::toPublicArray();
-		unset($output['password']);
-		return $output;
+		throw new \Exception("toPublicArray(): to be implemented");
 	}
 
-	public function byEmail($email) {
-		return self::where('email', '=', $email)->first();
+	static public function byEmail($email) {
+		return self::where('email', '=', '$email')->first();
 	}
 
-	public function save(Array $options = array()) {
+	public function save(array $options = array()) {
 		$isNew = !$this->id;
 
 		parent::save($options);
@@ -44,9 +40,6 @@ class User extends BaseModel {
 	}
 
 	static public function validateUniqueEmail($key, $rule, $data) {
-		if (!isset($data['email'])) return true;
-		$u = self::byEmail($data['email']);
-		return !$u;
+		throw new \Exception("validateUniqueEmail(): to be implemented");
 	}
-
 }

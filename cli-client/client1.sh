@@ -1,2 +1,2 @@
 #!/bin/bash
-php main.php --config ~/src/notes/cli-client/.config1 "$@"
+php main.php --config "/Users/macbookair/Workspace/witthaya's projects/joplin-clone/cli-client/.config1" --sync

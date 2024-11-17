@@ -2,39 +2,26 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
-use AppBundle\Model\User;
-use AppBundle\Model\Session;
+use AppBundle\Diff;
+use AppBundle\Model\Action;
+use AppBundle\Exception\UnauthorizedException;
 use AppBundle\Model\Change;
 use AppBundle\Model\FolderItem;
-use AppBundle\Exception\ValidationException;
-
-
-use AppBundle\Diff;
-
-use DiffMatchPatch\DiffMatchPatch;
-
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UsersController extends ApiController {
-
-	/**
-	 * @Route("/users")
-	 */
-	public function allAction(Request $request) {
-
-
+	#[Route('users')]
+	public function allAction(Request $request): JsonResponse {
 
 		$source = "This is the first line.\n\nThis is the second line.";
 		$target1 = "This is the first line XXX.\n\nThis is the second line.";
 		$target2 = "This is the first line.\n\nThis is the second line YYY.";
 
 		$r = Diff::merge3($source, $target1, $target2);
-		var_dump($r);die();
-
+		var_dump($r);
 
 		// $dmp = new DiffMatchPatch();
 		// $patches = $dmp->patch_make($source, $target1);
@@ -163,15 +150,8 @@ class UsersController extends ApiController {
 		// $change->createDelta('salut, ça va ? oui bien');
 		// $change->save();
 
-
-
 		$d = Change::fullFieldText(FolderItem::unhex('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD'), FolderItem::enumId('field', 'title'));
-		var_dump($d);die();
-
-
-
-		die();
-
+		var_dump($r);
 
 		// $fineDiff = $this->get('app.fine_diff');
 		// $opcodes = $fineDiff->getDiffOpcodes('salut ca va', 'salut va?');
@@ -180,30 +160,11 @@ class UsersController extends ApiController {
 		// var_dump($merged);
 		// die();
 
-		if ($request->isMethod('POST')) {
-			$user = new User();
-			$data = $request->request->all();
-
-			$errors = User::validate($data);
-			if (count($errors)) throw ValidationException::fromErrors($errors);
-
-			$data['password'] = Session::hashPassword($data['password']);
-			$user->fromPublicArray($data);
-			$user->save();
-			return static::successResponse($user->toPublicArray());
-		}
-
-		return static::errorResponse('Invalid method');
+		throw new \Exception("allAction(): to be implemented");
 	}
 
-	/**
-	 * @Route("/users/{id}")
-	 */
-	public function oneAction($id, Request $request) {
-		$user = User::find(User::unhex($id));
-		if (!$user) return static::errorResponse('Not found', 0, 404);
-		$this->aclCheck($user);
-		return static::successResponse($user);
+	#[Route('users/{id}')]
+	public function oneAction(Request $request): JsonResponse {
+		throw new \Exception("oneAction(): to be implemented");
 	}
-
 }

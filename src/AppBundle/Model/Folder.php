@@ -7,15 +7,10 @@ class Folder extends FolderItem {
 	protected $versionedFields = array('title');
 
 	public function add($ids) {
-		$notes = Note::find($ids);
-		foreach ($notes as $note) {
-			$note->parent_id = $this->id;
-			$note->save();
-		}
+		throw new \Exception("add(): to be implemened");
 	}
 
 	public function notes() {
-		return Note::where('parent_id', '=', $this->id)->get();
+		throw new \Exception("notes(): to be implemened");
 	}
-
 }

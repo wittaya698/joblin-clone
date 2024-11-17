@@ -2,35 +2,22 @@
 
 namespace AppBundle\Exception;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
-
 class BaseException extends \Exception {
-
 	protected $httpStatusCode = 400;
 
 	public function getType() {
-		$t = str_replace('Exception', '', get_called_class());
-		$t = str_replace("AppBundle\\\\", '', $t);
-		return $t;
+		throw new \Exception("getType(): to be implemented");
 	}
 
 	public function getHttpStatusCode() {
-		return $this->httpStatusCode;
+		throw new \Exception("getHttpStatusCode(): to be implemented");
 	}
 
 	public function toErrorArray() {
-		$o = array();
-		$o['error'] = $this->getMessage();
-		if ($this->getCode()) $o['code'] = $this->getCode();
-		$o['type'] = $this->getType();
-		return $o;
+		throw new \Exception("toErrorArray(): to be implemented");
 	}
 
 	public function toJsonResponse($errorObject = null) {
-		if (!$errorObject) $errorObject = $this->toErrorArray();
-		$response = new JsonResponse($errorObject);
-		$response->setStatusCode($this->getHttpStatusCode());
-		return $response;
+		throw new \Exception("toJsonResponce(): to be implemented");
 	}
-
 }

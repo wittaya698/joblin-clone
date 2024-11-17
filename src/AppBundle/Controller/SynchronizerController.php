@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
 use AppBundle\Model\Action;
 use AppBundle\Exception\UnauthorizedException;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;
 
 /*
 
@@ -98,11 +98,8 @@ If has_more, resume with last sync_id
 */
 
 class SynchronizerController extends ApiController {
-
-	/**
-	 * @Route("/synchronizer")
-	 */
-	public function allAction(Request $request) {
+	#[Route('synchronizer')]
+	public function allAction(Request $request): JsonResponse {
 		$id = (int)$request->query->get('last_id');
 
 		if (!$this->user() || !$this->session()) throw new UnauthorizedException();
@@ -110,5 +107,4 @@ class SynchronizerController extends ApiController {
 		$actions = Action::actionsDoneAfterId($this->user()->id, $this->session()->client_id, $id);
 		return static::successResponse($actions);
 	}
-
 }

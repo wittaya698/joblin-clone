@@ -8,16 +8,14 @@ use AppBundle\Model\Note;
 use AppBundle\Model\Change;
 
 class ChangeTest extends BaseTestCase {
-
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 
 		Change::truncate();
 		Note::truncate();
 	}
 
-	public function tearDown() {
-
+	public function teardown(): void {
 	}
 
 	public function testDiff() {
@@ -34,7 +32,7 @@ class ChangeTest extends BaseTestCase {
 		$change->item_id = $itemId;
 		$change->createDelta($text1);
 		$change->save();
-		
+
 		$text2 = 'cd efgh NEW ijkl';
 
 		$change = new Change();
@@ -74,7 +72,7 @@ class ChangeTest extends BaseTestCase {
 		$change->save();
 
 		$changeId1 = $change->id;
-		
+
 		$text2 = 'cd efgh ijkl FROMCLIENT2';
 
 		$change = new Change();
@@ -128,5 +126,4 @@ class ChangeTest extends BaseTestCase {
 		$d = $n->toPublicArray();
 		$this->assertEquals(2, $d['rev_id']);
 	}
-	
 }

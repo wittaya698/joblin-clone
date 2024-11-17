@@ -2,23 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
-use AppBundle\Model\User;
 use AppBundle\Model\Session;
-use AppBundle\Exception\NotFoundException;
 use AppBundle\Exception\MethodNotAllowedException;
-
-
-use AppBundle\Model\Action;
+use Symfony\Component\Routing\Attribute\Route;
 
 class SessionsController extends ApiController {
-
-	/**
-	 * @Route("/sessions")
-	 */
+	#[Route('/sessions')]
 	public function allAction(Request $request) {
 		if ($request->isMethod('POST')) {
 			$data = $request->request->all();
@@ -30,13 +21,8 @@ class SessionsController extends ApiController {
 		throw new MethodNotAllowedException();
 	}
 
-	/**
-	 * @Route("/sessions/{id}", name="one_session")
-	 */
+	#[Route('/sessions/{id}')]
 	public function oneAction($id, Request $request) {
-		$session = Session::find(Session::unhex($id));
-		if (!$session) throw new NotFoundException();
-		return static::successResponse($session);
+		throw new \Exception("oneAction: to be implemented");
 	}
-
 }

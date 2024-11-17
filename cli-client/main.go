@@ -4,20 +4,20 @@ import (
 	//"bufio"
 	//"errors"
 	"fmt"
-	"os"
 	"io"
-	"io/ioutil"
+	"os"
+
 	// "os/exec"
 	// "os/user"
-	"path/filepath"
 	"path"
-	"crypto/md5"
+	"path/filepath"
+
 	// "runtime"
 	// "strconv"
 	"strings"
 	// "time"
-	"net/url"
 	"net/http"
+	"net/url"
 
 	"github.com/jessevdk/go-flags"
 )
@@ -40,14 +40,14 @@ type AppCommandOptions struct {
 }
 
 type CommandOptions struct {
-	App AppCommandOptions
+	App  AppCommandOptions
 	Sync SyncCommandOptions
 }
 
 func printHelp(flagParser *flags.Parser) {
 	flagParser.WriteHelp(os.Stdout)
 	fmt.Printf("\n")
-	fmt.Printf("For help with a particular command, type \"%s <command> --help\"\n", path.Base(os.Args[0]))	
+	fmt.Printf("For help with a particular command, type \"%s <command> --help\"\n", path.Base(os.Args[0]))
 }
 
 func createFlagParser() (CommandOptions, *flags.Parser) {
@@ -65,18 +65,15 @@ func createFlagParser() (CommandOptions, *flags.Parser) {
 }
 
 func createId(path string) string {
-	h := md5.New()
-	io.WriteString(h, "31208854954776365651")
-	io.WriteString(h, path)
-	return fmt.Sprintf("%x", h.Sum(nil))
+	fmt.Println("createId(): to be implemented")
+	os.Exit(1)
+	return ""
 }
 
 func readFile(path string) (string, error) {
-	content, err := ioutil.ReadFile(path)
-	if err != nil {
-		return "", err
-	}
-	return string(content), nil
+	fmt.Println("readFile(): to be implemented")
+	os.Exit(1)
+	return "", nil
 }
 
 func makeApiCall(method string, path string, data url.Values) (error, []byte) {
@@ -92,7 +89,7 @@ func makeApiCall(method string, path string, data url.Values) (error, []byte) {
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	response, err := client.Do(request)
-	body, err := ioutil.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 	if err != nil {
 		return err, []byte{}
 	}
@@ -118,9 +115,7 @@ func main() {
 	err, body := makeApiCall("POST", "notes", note)
 	fmt.Println(err)
 	fmt.Println(string(body))
-	os.Exit(0)
-
-
+	// os.Exit(0)
 
 	opts, flagParser := createFlagParser()
 
@@ -148,25 +143,14 @@ func main() {
 
 	_ = args
 
-	fullPath := "/home/laurent/src/notes/cli-client/test"
+	fullPath := "/Users/macbookair/Workspace/witthaya's projects/JoblinClone/cli-client/test"
 
-	walkPath := func (path string, info os.FileInfo, err error) error {
-		if len(path) - len(fullPath) <= 0 {
+	walkPath := func(path string, info os.FileInfo, err error) error {
+		if len(path)-len(fullPath) <= 0 {
 			return nil
 		}
-		p := path[len(fullPath)+1:];
-		fmt.Println(p)
-		fmt.Println(createId(p))
-
-		if !info.IsDir() {
-			content, err := readFile(path)
-			if err != nil {
-				fmt.Println(err)
-				return err
-			}
-			fmt.Println(content)
-		}
-
+		fmt.Println("FullPath > path")
+		os.Exit(1)
 		return nil
 	}
 

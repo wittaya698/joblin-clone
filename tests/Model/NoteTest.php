@@ -6,7 +6,7 @@ use AppBundle\Model\Note;
 
 class NoteTest extends BaseTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 	}
 
@@ -38,5 +38,4 @@ class NoteTest extends BaseTestCase {
 		$this->assertEquals('the body', $b['body']);
 		$this->assertArrayHasKey('rev_id', $b);
 	}
-	
 }

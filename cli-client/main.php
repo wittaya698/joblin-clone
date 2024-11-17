@@ -82,7 +82,7 @@ class Api {
 		curl_close($ch);
 
 		$output = json_decode($content, true);
-		if ($output === null) throw new Exception('Invalid response: ' . $content . "\n\nCommand: " . $cmd . "\n");
+		if ($output === null) throw new Exception('Invalid response: ' . html_entity_decode($content) . "\n\nCommand: " . $cmd . "\n");
 		if (isset($output['error'])) throw new Exception('API error: ' . $content . "\n\nCommand: " . $cmd . "\n");
 
 		return $output;
@@ -99,7 +99,6 @@ class Api {
 
 		return $this->exec($method, $path, null, $data);
 	}
-
 }
 
 class Config {
@@ -137,7 +136,6 @@ class Config {
 		$c[$name] = $value;
 		$this->save($c);
 	}
-
 }
 
 class FolderItem {
@@ -149,20 +147,46 @@ class FolderItem {
 	private $isFolder;
 	private $modTime;
 
-	public function setTitle($v) { $this->title = $v; }
-	public function setBody($v) { $this->body = $v; }
-	public function setId($v) { $this->id = $v; }
-	public function setParentId($v) { $this->parentId = $v; }
-	public function setIsFolder($v) { $this->isFolder = $v; }
-	public function setModTime($v) { $this->modTime = $v; }
+	public function setTitle($v) {
+		$this->title = $v;
+	}
+	public function setBody($v) {
+		$this->body = $v;
+	}
+	public function setId($v) {
+		$this->id = $v;
+	}
+	public function setParentId($v) {
+		$this->parentId = $v;
+	}
+	public function setIsFolder($v) {
+		$this->isFolder = $v;
+	}
+	public function setModTime($v) {
+		$this->modTime = $v;
+	}
 
-	public function title() { return $this->title; }
-	public function body() { return $this->body; }
-	public function id() { return $this->id; }
-	public function parentId() { return $this->parentId; }
-	public function isFolder() { return $this->isFolder; }
-	public function isNote() { return !$this->isFolder(); }
-	public function modTime() { return $this->modTime; }
+	public function title() {
+		return $this->title;
+	}
+	public function body() {
+		return $this->body;
+	}
+	public function id() {
+		return $this->id;
+	}
+	public function parentId() {
+		return $this->parentId;
+	}
+	public function isFolder() {
+		return $this->isFolder;
+	}
+	public function isNote() {
+		return !$this->isFolder();
+	}
+	public function modTime() {
+		return $this->modTime;
+	}
 
 	public function toApiArray() {
 		$output = array(
@@ -172,15 +196,6 @@ class FolderItem {
 		if ($this->isNote()) $output['body'] = $this->body();
 		return $output;
 	}
-
-	public function fromApiArray($type, $array) {
-		$this->setTitle($array['title']);
-		if ($type == 'note') $this->setBody($array['body']);
-		$this->setId($array['id']);
-		$this->setParentId($array['parent_id']);
-		$this->setIsFolder($type == 'folder');
-	}
-
 }
 
 class FolderItems {
@@ -220,19 +235,7 @@ class FolderItems {
 	}
 
 	public function setById($id, $item) {
-		$found = false;
-		for ($i = 0; $i < count($this->items); $i++) {
-			$it = $this->items[$i];
-			if ($it->id() == $id) {
-				$found = true;
-				$this->items[$i] = $item;
-				break;
-			}
-		}
-
-		if (!$found) {
-			$this->items[] = $item;
-		}
+		throw new Exception("setById(): to be implemented");
 	}
 
 	public function byId($id) {
@@ -248,26 +251,35 @@ class FolderItems {
 		if (!$parent) throw new Exception('Cannot find parent with ID ' . $item->parentId());
 		return escapePath($this->itemFullPath($parent) . '/' . $item->title());
 	}
-
 }
+
+$dbName = 'notes';
+$structureFile =  dirname(dirname(__FILE__)) . "/structure.sql";
+
+$cmd = sprintf("mysql -u root -p0906198331 -e 'DROP DATABASE IF EXISTS %s; CREATE DATABASE %s;'", $dbName, $dbName);
+exec($cmd);
+
+$cmd = sprintf('mysql -u root -p0906198331 %s < "%s"', $dbName, $structureFile);
+exec($cmd);
+
 
 $shortopts = "";
 $longopts = array(
-    "config:",
-    "sync",
+	"config:",
+	"sync",
 );
 
 $flags = getopt($shortopts, $longopts);
 
-if (!isset($flags['config'])) $flags['config'] = '/home/laurent/src/notes/cli-client/.config';
+// if (!isset($flags['config'])) $flags['config'] = '/home/laurent/src/notes/cli-client/.config';
 
 $config = new Config($flags['config']);
 
-$dataPath = '/home/laurent/src/notes/cli-client/test_' . $config->get('client_id');
+$dataPath = "Users/macbookair/Workspace/witthaya's projects/joplin-clone/cli-client/test_" . $config->get('client_id');
 
 $api = new Api('http://127.0.0.1:8000');
-$session = $api->login('test@example.com', '12345678', $config->get('client_id'));
-$api->setSessionId($session['id']);
+// $session = $api->login('test@example.com', '12345678', $config->get('client_id'));
+// $api->setSessionId($session['id']);
 
 if (array_key_exists('sync', $flags)) {
 	$syncStartTime = time();
@@ -279,35 +291,13 @@ if (array_key_exists('sync', $flags)) {
 	// Get latest changes from API
 	// ------------------------------------------------------------------------------------------
 
-	$response = $api->exec('GET', 'synchronizer', array('last_id' => $config->get('last_sync_id')));
-	// $response = $api->exec('GET', 'synchronizer', array('last_id' => 80));
+	# TODO: No action table found
+	// $response = $api->exec("GET", "synchronizer", array('last_id' => $config->get('last_sync_id')));
 
 	$pathMap = array();
 	$folders = array();
 	$notes = array();
 	$maxId = null;
-	foreach ($response['items'] as $item) {
-		$folderItem = new FolderItem();
-
-		switch ($item['type']) {
-
-			case 'create':
-			case 'update':
-
-				$resource = $api->exec('GET', $item['item_type'] . 's/' . $item['item_id']);
-				$folderItem->fromApiArray($item['item_type'], $resource);
-				break;
-
-			default:
-
-				throw new Exception('Unsupported action type: ' . $item['type']);
-
-		}
-
-		$folderItems->setById($folderItem->id(), $folderItem);
-
-		$maxId = max($item['id'], $maxId);
-	}
 
 	foreach ($folderItems->all() as $item) {
 		$relativePath = $folderItems->itemFullPath($item);
@@ -343,7 +333,7 @@ if (array_key_exists('sync', $flags)) {
 		}
 	}
 
-	$config->set('last_sync_time', $syncStartTime);
+	// $config->set('last_sync_time', $syncStartTime);
 	$config->set('folder_items', json_encode($pathMap));
 	if ($maxId !== null) $config->set('last_sync_id', $maxId);
 }

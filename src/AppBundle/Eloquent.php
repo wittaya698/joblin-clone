@@ -10,11 +10,11 @@ class Eloquent {
 		$this->capsule_ = new \Illuminate\Database\Capsule\Manager();
 
 		$this->capsule_->addConnection([
-			'driver'    => 'mysql',
+			'driver' => 'mysql',
 			'host'      => 'localhost',
 			'database'  => 'notes',
 			'username'  => 'root',
-			'password'  => 'pass',
+			'password'  => '0906198331',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
@@ -26,5 +26,4 @@ class Eloquent {
 	public function connection() {
 		return $this->capsule_->getConnection('default');
 	}
-
 }

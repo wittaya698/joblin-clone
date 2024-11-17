@@ -2,18 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
 use AppBundle\Model\Note;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;
 
 class NotesController extends ApiController {
-
-	/**
-	 * @Route("/notes")
-	 */
-	public function allAction(Request $request) {
+	#[Route('notes')]
+	public function allAction(Request $request): JsonResponse {
 		if ($request->isMethod('POST')) {
 			$note = new Note();
 			$note->fromPublicArray($request->request->all());
@@ -25,12 +22,10 @@ class NotesController extends ApiController {
 		return static::errorResponse('Invalid method');
 	}
 
-	/**
-	 * @Route("/notes/{id}")
-	 */
+	#[Route('notes/{id}')]
 	public function oneAction($id, Request $request) {
 		$note = Note::find(Note::unhex($id));
-		if (!$note && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);	
+		if (!$note && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);
 
 		if ($request->isMethod('GET')) {
 			return static::successResponse($note);
@@ -52,20 +47,13 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$data = $this->patchParameters();
-			foreach ($data as $n => $v) {
-				$note->{$n} = $v;
-			}
-			$note->save();
-			return static::successResponse($note);
+			throw new \Exception("Note PATCH method to be implemented");
 		}
 
 		if ($request->isMethod('DELETE')) {
-			$note->delete();
-			return static::successResponse();
+			throw new \Exception("Note DELETE method to be implemented");
 		}
 
 		return static::errorResponse('Invalid method');
 	}
-
 }

@@ -2,20 +2,18 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
+use AppBundle\Eloquent;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use AppBundle\Model\BaseModel;
 use AppBundle\Model\Session;
 use AppBundle\Model\User;
-use AppBundle\Exception\ForbiddenException;
 use AppBundle\Exception\UnauthorizedException;
 use Illuminate\Database\Eloquent\Collection;
 use AppBundle\Exception\BaseException;
+use Psr\Container\ContainerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-abstract class ApiController extends Controller {
-
+abstract class ApiController extends AbstractController {
 	protected $db = null;
 	protected $session = null;
 	protected $user = null;
@@ -23,10 +21,10 @@ abstract class ApiController extends Controller {
 	private $useTestUserAndSession = true;
 	private $testClientNum = 1;
 
-	public function setContainer(\Symfony\Component\DependencyInjection\ContainerInterface $container = null) {
+	public function setContainer(ContainerInterface $container): ?ContainerInterface {
 		parent::setContainer($container);
 
-		set_exception_handler(function($e) {
+		set_exception_handler(function ($e) {
 			if ($e instanceof BaseException) {
 				$r = $e->toJsonResponse();
 				$r->send();
@@ -50,9 +48,10 @@ abstract class ApiController extends Controller {
 		// Because diff for 3 is done between 2 and 3
 		// Need to introduce revID so that Change class knows between which versions the diff should be made
 
-		// HACK: get connection once here so that it's initialized and can 
+		// HACK: get connection once here so that it's initialized and can
 		// be accessed from models.
-		$this->db = $this->get('app.eloquent')->connection();
+		$eloquent = new Eloquent();
+		$this->db = $eloquent->connection();
 
 		$s = $this->session();
 
@@ -61,6 +60,8 @@ abstract class ApiController extends Controller {
 		if (!$s || !$this->user()) throw new UnauthorizedException('A session and user are required');
 
 		BaseModel::setClientId($s ? $s->client_id : 0);
+
+		return $container;
 	}
 
 	protected function session() {
@@ -75,11 +76,7 @@ abstract class ApiController extends Controller {
 			return $session;
 		}
 
-
-		if ($this->session) return $this->session;
-		$request = $this->container->get('request_stack')->getCurrentRequest();
-		$this->session = Session::find(BaseModel::unhex($request->query->get('session')));
-		return $this->session;
+		throw new \Exception("UseRealUserAndSession");
 	}
 
 	protected function user() {
@@ -96,27 +93,19 @@ abstract class ApiController extends Controller {
 			return $user;
 		}
 
-
-		if ($this->user) return $this->user;
-		$s = $this->session();
-		$this->user = $s ? $s->owner() : null;
-		return $this->user;
+		throw new \Exception("Implement user");
 	}
 
 	protected function aclCheck($resource) {
-		if (!is_array($resource)) $resource = array($resource);
-		$user = $this->user();
-		if (!$user) throw new ForbiddenException();
-		foreach ($resource as $r) {
-			if (!isset($r->owner_id)) continue;
-			if ($r->owner_id != $user->id) throw new ForbiddenException();
-		}
+		throw new \Exception("aclCheck(): to be implemented");
 	}
 
 	static private function serializeResponse($data) {
 		$output = $data;
 
-		if ($output instanceof Collection) $output = $output->all();
+		if ($output instanceof Collection) {
+			throw new \Exception("Output instance of Collection");
+		}
 
 		if ($output instanceof BaseModel) {
 			$output = $output->toPublicArray();
@@ -131,7 +120,7 @@ abstract class ApiController extends Controller {
 
 	static protected function successResponse($data = null) {
 		$output = self::serializeResponse($data);
-		return new JsonResponse($output);
+		return new JsonResponse($output, 200);
 	}
 
 	static protected function errorResponse($message, $errorCode = 0, $httpCode = 400) {
@@ -142,9 +131,7 @@ abstract class ApiController extends Controller {
 	}
 
 	protected function multipleValues($v) {
-		if ($v === null || $v === false) return array();
-		if (strpos((string)$v, ';') === false) return array($v);
-		return explode(';', $v);
+		throw new \Exception("multipleValues(): to be implemented");
 	}
 
 	// PHP doesn't parse PATCH and PUT requests automatically, so it needs
@@ -164,8 +151,8 @@ abstract class ApiController extends Controller {
 
 			// parse uploaded files
 			if (strpos($block, 'application/octet-stream') !== FALSE) {
-				// match "name", then everything after "stream" (optional) except for prepending newlines 
-				preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
+				throw new \Exception("Found 'application/octet-stream'");
+				// preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
 			} else {
 				// match "name" and optional value in between newline sequences
 				preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
@@ -193,5 +180,4 @@ abstract class ApiController extends Controller {
 	protected function putParameters() {
 		return $this->patchParameters();
 	}
-
 }

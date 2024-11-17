@@ -1,10 +1,8 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-
 use AppBundle\Model\BaseModel;
 use AppBundle\Model\User;
-use AppBundle\Model\Session;
 
 class BaseTestCase extends TestCase {
 
@@ -42,28 +40,13 @@ class BaseTestCase extends TestCase {
 	}
 
 	protected function session($userNum = 1, $clientNum = 1, $sessionNum = 1) {
-		$userId = $this->createModelId('user', $userNum);
-		$clientId = $this->createModelId('client', $clientNum);
-		$sessionId = $this->createModelId('session', $sessioNum);
-
-		$session = Session::find($sessionId);
-		if ($session) return $session;
-
-		$session = new Session();
-		$session->id = $sessionId;
-		$session->owner_id = $userId;
-		$session->client_id = $clientId;
-		$session->save();
-
-		return $session;
+		throw new Exception("session(): to be implemented");
 	}
 
-	public function setUp() {
+	public function setUp(): void {
 		BaseModel::setClientId($this->clientId());
 	}
 
-	public function tearDown() {
-
+	public function tearDown(): void {
 	}
-
 }

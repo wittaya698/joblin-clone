@@ -11,20 +11,7 @@ class Change extends BaseModel {
 	);
 
 	static public function changesDoneAfterId($userId, $clientId, $changeId) {
-		$limit = 100;
-		$items = self::where('id', '>', $changeId)
-		             ->where('user_id', '=', $userId)
-		             ->where('client_id', '!=', $clientId)
-		             ->orderBy('id')
-		             ->limit($limit + 1)
-		             ->get();
-		$hasMore = $limit < count($items);
-		if ($hasMore) array_pop($items);
-
-		return array(
-			'has_more' => $hasMore,
-			'items' => $items,
-		);
+		throw new \Exception("changesDoneAfterId(): to be implemented");
 	}
 
 	static public function itemFieldHistory($itemId, $itemField, $toId = null) {
@@ -58,5 +45,4 @@ class Change extends BaseModel {
 		$currentText = self::fullFieldText($this->item_id, $this->item_field, $this->previous_id);
 		$this->delta = Diff::diff($currentText, $newText);
 	}
-	
 }

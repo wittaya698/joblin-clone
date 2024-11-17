@@ -16,8 +16,9 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 	static private $clientId = null;
 	static protected $enums = array(
-		'field' => array('title', 'body', 'completed'),
+		'field' => array('title', 'body'),
 	);
+
 	static protected $defaultValidationRules = array();
 	static protected $defaultValidationMessages = array(
 		'required' => '{key} is required',
@@ -56,7 +57,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		if ($this->useUuid) {
 			$output['id'] = self::hex($output['id']);
 		}
-		
+
 		if (!empty($output['parent_id'])) $output['parent_id'] = self::hex($output['parent_id']);
 		if (!empty($output['owner_id'])) $output['owner_id'] = self::hex($output['owner_id']);
 		if (!empty($output['client_id'])) $output['client_id'] = self::hex($output['client_id']);
@@ -65,16 +66,17 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		foreach ($output as $k => $v) {
 			if (isset(static::$enums[$k])) {
-				$output[$k] = static::enumName($k, $v);
+				throw new \Exception("Enum key is set");
+				// $output[$k] = static::enumName($k, $v);
 			}
 		}
 
-		if (isset($output['item_type'])) {
-			$output['item_type'] = FolderItem::enumName('type', $output['item_type'], true);
+		if (isset($ouput['item_type'])) {
+			throw new \Exception("ItemType issett");
 		}
 
 		if (isset($output['item_field'])) {
-			$output['item_field'] = BaseModel::enumName('field', $output['item_field'], true);
+			throw new \Exception("ItemField issett");
 		}
 
 		$maxRevId = 0;
@@ -97,28 +99,25 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$this->changedVersionedFieldValues[$fieldName] = $fieldValue;
 	}
 
-	static public function createId() {
+	public function createId() {
 		return openssl_random_pseudo_bytes(16);
 	}
 
 	static public function hex($id) {
 		if (is_array($id)) {
-			foreach ($id as $k => $v) {
-				$id[$k] = self::hex($v);
-			}
-			return $id;
+			throw new \Exception("Is Array");
+			// foreach ($id as $k => $v) {
+			// 	$id[$k]
+			// }
 		}
 		return bin2hex($id);
 	}
 
 	static public function unhex($s) {
 		if (!strlen($s)) return null;
-		
+
 		if (is_array($s)) {
-			foreach ($s as $k => $v) {
-				$s[$k] = self::unhex($v);
-			}
-			return $s;
+			throw new \Exception("Is Array");
 		}
 		$output = @hex2bin($s);
 		if ($output === false) return null;
@@ -126,86 +125,19 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function owner() {
-		if (!isset($this->owner_id)) return null;
-		return User::find($this->owner_id);
+		throw new \Exception("owner(): to be implemented");
 	}
 
 	static public function validate($data, $rules = null) {
-		if (!$rules) $rules = static::$defaultValidationRules;
-
-		$errors = array();
-		
-		foreach ($rules as $key => $keyRules) {
-			foreach ($keyRules as $rule) {
-				$ok = true;
-				switch ($rule['type']) {
-
-					case 'required':
-
-						if (!array_key_exists($key, $data)) $ok = false;
-						break;
-
-					case 'notEmpty':
-
-						if (array_key_exists($key, $data) && !strlen((string)$data[$key])) $ok = false;
-						break;
-
-					case 'minLength':
-
-						if (array_key_exists($key, $data) && strlen((string)$data[$key]) < $rule['args'][0]) $ok = false;
-						break;
-
-					case 'maxLength':
-
-						if (array_key_exists($key, $data) && strlen((string)$data[$key]) > $rule['args'][0]) $ok = false;
-						break;
-
-					case 'function':
-
-						$ok = call_user_func_array($rule['args'][0], array($key, $rule, $data));
-						break;
-
-					default:
-
-						throw new \Exception(sprintf('unsupported validation rule: "%s"', $rule['name']));
-
-				}
-
-				if (!$ok) {
-					$errors[] = array(
-						'key' => $key,
-						'type' => $rule['type'] == 'function' ? 'other' : $rule['type'],
-						'message' => static::validationMessage($key, $rule, $data),
-					);
-				}
-			}
-		}
-
-		return $errors;
+		throw new \Exception("validate(): to be implemented");
 	}
 
 	static public function validationMessage($key, $rule, $data) {
-		$msg = static::$defaultValidationMessages[$rule['type']];
-		if (isset($rule['message'])) $msg = $rule['message'];
-		$msg = str_replace('{key}', $key, $msg);
-		$msg = str_replace('{value}', isset($data[$key]) ? $data[$key] : '', $msg);
-		$args = isset($rule['args']) ? $rule['args'] : array();
-		for ($i = 0; $i < count($args); $i++) {
-			$v = $args[$i];
-			if (is_array($v)) $v = '';
-			if (is_object($v) && !method_exists($v, '__toString')) $v = '';
-			$v = (string)$v;
-			$msg = str_replace(sprintf('{arg%s}', $i), $v, $msg);
-		}
-		return $msg;
+		throw new \Exception("alidationMessage(): to be implemented");
 	}
 
 	static public function enumName($enumType, $enumId, $returnNullOnError = false) {
-		foreach (static::$enums[$enumType] as $index => $name) {
-			if ($index + 1 == $enumId) return $name;
-		}
-		if ($returnNullOnError) return null;
-		throw new \Exception(sprintf('Invalid enum: %s/%s', $enumType, $enumId));
+		throw new \Exception("enumName(): to be implemented");
 	}
 
 	static public function enumId($enumType, $enumName, $returnNullOnError = false) {
@@ -224,7 +156,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$this->isNew = $v;
 	}
 
-	public function save(Array $options = array()) {
+	public function save(array $options = array()) {
 		$isNew = !$this->id || $this->isNew === true;
 
 		if ($this->useUuid && $isNew && !$this->id) $this->id = self::createId();
@@ -243,14 +175,13 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		parent::delete();
 
 		if (count($this->versionedFields)) {
-			$this->recordChanges('delete');
+			throw new \Exception("delete(): to be implemented");
 		}
 	}
 
 	protected function recordChanges($type, $versionedData = array()) {
 		if ($type == 'delete') {
-			$change = $this->newChange($type);
-			$change->save();
+			throw new \Exception("Found type Delte");
 		} else if ($type == 'create' || $type == 'update') {
 			foreach ($this->versionedFields as $field) {
 				if (!isset($versionedData[$field])) continue;
@@ -272,7 +203,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	private function newChange($type) {
-		if (static::clientId() === null) throw new \Exception('Client ID must be specified');
+		if (static::clientId() == null) throw new \Exception('Client ID must be specified');
 
 		$change = new Change();
 		$change->user_id = $this->owner_id;
@@ -282,5 +213,4 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$change->item_id = $this->id;
 		return $change;
 	}
-
 }

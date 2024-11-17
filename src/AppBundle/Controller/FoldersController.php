@@ -2,18 +2,16 @@
 
 namespace AppBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
 use AppBundle\Model\Folder;
+use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Attribute\Route;
 
 class FoldersController extends ApiController {
-
-	/**
-	 * @Route("/folders")
-	 */
-	public function allAction(Request $request) {
+	#[Route('folders')]
+	public function allAction(Request $request): JsonResponse {
 		if ($request->isMethod('POST')) {
 			$folder = new Folder();
 			$folder->fromPublicArray($request->request->all());
@@ -24,12 +22,12 @@ class FoldersController extends ApiController {
 		return static::errorResponse('Invalid method');
 	}
 
-	/**
-	 * @Route("/folders/{id}")
-	 */
+	#[Route('folders/{id}')]
 	public function oneAction($id, Request $request) {
 		$folder = Folder::find(Folder::unhex($id));
-		if (!$folder && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);
+		if (!$folder && !$request->isMethod('PUT')) {
+			throw new \Exception("Folder not found");
+		}
 
 		if ($request->isMethod('GET')) {
 			return static::successResponse($folder);
@@ -55,27 +53,8 @@ class FoldersController extends ApiController {
 		return static::successResponse($folder);
 	}
 
-	/**
-	 * @Route("/folders/{id}/notes")
-	 */
+	#[Route('folders/{id}/notes')]
 	public function linkAction($id, Request $request) {
-		$folder = Folder::find(Folder::unhex($id));
-		if (!$folder) return static::errorResponse('Not found', 0, 404);
-
-		if ($request->isMethod('GET')) {
-			return static::successResponse($folder->notes());
-		}
-
-		if ($request->isMethod('POST')) {
-			$ids = $this->multipleValues($request->request->get('id'));
-			if (!count($ids)) static::errorResponse('id parameter is missing');
-			$ids = Folder::unhex($ids);
-			$folder->add($ids);
-
-			return static::successResponse();
-		}
-
-		return static::errorResponse('Invalid method');
+		throw new Exception("linkAction(): to be implemented");
 	}
-
 }
