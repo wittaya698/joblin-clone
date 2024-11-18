@@ -29,3 +29,11 @@
 /web/bundles/
 *.sublime-workspace
 database.sqlite
+QtClient/build-*-Debug/
+*.pro.user
+notes.*sqlite
+Makefile
+Makefile.*
+TODO.md
+tests/generated
+QtClient/JoplinQtClient/make.bat
