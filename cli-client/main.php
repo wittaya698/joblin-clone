@@ -275,7 +275,7 @@ $flags = getopt($shortopts, $longopts);
 
 $config = new Config($flags['config']);
 
-$dataPath = "Users/macbookair/Workspace/witthaya's projects/joplin-clone/cli-client/test_" . $config->get('client_id');
+$dataPath = "/Users/macbookair/Workspace/witthaya's projects/joplin-clone/cli-client/test_" . $config->get('client_id');
 
 $api = new Api('http://127.0.0.1:8000');
 // $session = $api->login('test@example.com', '12345678', $config->get('client_id'));
@@ -337,3 +337,5 @@ if (array_key_exists('sync', $flags)) {
 	$config->set('folder_items', json_encode($pathMap));
 	if ($maxId !== null) $config->set('last_sync_id', $maxId);
 }
+
+echo ("\n\n--------------Main.php Done successfully--------------\n\n");

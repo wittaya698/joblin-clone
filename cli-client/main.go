@@ -117,31 +117,31 @@ func main() {
 	fmt.Println(string(body))
 	// os.Exit(0)
 
-	opts, flagParser := createFlagParser()
+	// opts, flagParser := createFlagParser()
 
-	args, err := flagParser.Parse()
+	// args, err := flagParser.Parse()
 
-	if err != nil {
-		t := err.(*flags.Error).Type
-		if t == flags.ErrHelp {
-			printHelp(flagParser)
-			os.Exit(0)
-		} else if t == flags.ErrCommandRequired {
-			// Here handle default flags (which are not associated with any command)
-			if opts.App.Version {
-				fmt.Println(VERSION)
-				os.Exit(0)
-			}
-			printHelp(flagParser)
-			os.Exit(0)
-		} else {
-			fmt.Printf("Error: %s\n", err)
-			fmt.Printf("Type '%s --help' for more information.\n", path.Base(os.Args[0]))
-			os.Exit(1)
-		}
-	}
+	// if err != nil {
+	// 	t := err.(*flags.Error).Type
+	// 	if t == flags.ErrHelp {
+	// 		printHelp(flagParser)
+	// 		os.Exit(0)
+	// 	} else if t == flags.ErrCommandRequired {
+	// 		// Here handle default flags (which are not associated with any command)
+	// 		if opts.App.Version {
+	// 			fmt.Println(VERSION)
+	// 			os.Exit(0)
+	// 		}
+	// 		printHelp(flagParser)
+	// 		os.Exit(0)
+	// 	} else {
+	// 		fmt.Printf("Error: %s\n", err)
+	// 		fmt.Printf("Type '%s --help' for more information.\n", path.Base(os.Args[0]))
+	// 		os.Exit(1)
+	// 	}
+	// }
 
-	_ = args
+	// _ = args
 
 	fullPath := "/Users/macbookair/Workspace/witthaya's projects/JoblinClone/cli-client/test"
 
@@ -154,6 +154,6 @@ func main() {
 		return nil
 	}
 
-	fmt.Println("\n---------------- Run complete -------------\n")
+	fmt.Println("\n---------------- Go Run complete -------------\n")
 	filepath.Walk(fullPath, walkPath)
 }

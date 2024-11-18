@@ -67,17 +67,16 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		foreach ($output as $k => $v) {
 			if (isset(static::$enums[$k])) {
-				throw new \Exception("Enum key is set");
-				// $output[$k] = static::enumName($k, $v);
+				$output[$k] = static::enumName($k, $v);
 			}
 		}
 
-		if (isset($ouput['item_type'])) {
-			throw new \Exception("ItemType issett");
+		if (isset($output['item_type'])) {
+			$output['item_type'] = FolderItem::enumName('type', $output['item_type'], true);
 		}
 
 		if (isset($output['item_field'])) {
-			throw new \Exception("ItemField issett");
+			$output['item_field'] = BaseModel::enumName('field', $output['item_field'], true);
 		}
 
 		$maxRevId = 0;
@@ -227,7 +226,11 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	static public function enumName($enumType, $enumId, $returnNullOnError = false) {
-		throw new \Exception("enumName(): to be implemented");
+		foreach (static::$enums[$enumType] as $index => $name) {
+			if ($index + 1 == $enumId) return $name;
+		}
+		if ($returnNullOnError) return null;
+		throw new \Exception(sprintf('Invalid enum: %s/%s', $enumType, $enumId));
 	}
 
 	static public function enumId($enumType, $enumName, $returnNullOnError = false) {

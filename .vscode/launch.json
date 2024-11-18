@@ -8,8 +8,6 @@
       "name": "Listen for Xdebug",
       "type": "php",
       "request": "launch",
-      // "program": "${workspaceFolder}/cli-client/main.php",
-      // "args": ["--config", "${workspaceFolder}/cli-client/.config1", "--sync"],
       "port": 9003,
       "internalConsoleOptions": "openOnFirstSessionStart"
     },
