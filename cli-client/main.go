@@ -154,5 +154,6 @@ func main() {
 		return nil
 	}
 
+	fmt.Println("\n---------------- Run complete -------------\n")
 	filepath.Walk(fullPath, walkPath)
 }

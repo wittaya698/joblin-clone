@@ -100,26 +100,8 @@ abstract class ApiController extends AbstractController {
 		throw new \Exception("aclCheck(): to be implemented");
 	}
 
-	static private function serializeResponse($data) {
-		$output = $data;
-
-		if ($output instanceof Collection) {
-			throw new \Exception("Output instance of Collection");
-		}
-
-		if ($output instanceof BaseModel) {
-			$output = $output->toPublicArray();
-		} else if (is_array($output)) {
-			foreach ($output as $k => $v) {
-				$output[$k] = self::serializeResponse($v);
-			}
-		}
-
-		return $output;
-	}
-
 	static protected function successResponse($data = null) {
-		$output = self::serializeResponse($data);
+		$output = BaseModel::anythingToPublicArray($data);
 		return new JsonResponse($output, 200);
 	}
 

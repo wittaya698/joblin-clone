@@ -4,6 +4,7 @@ namespace AppBundle\Model;
 
 use \Illuminate\Database\Eloquent\Model;
 use \Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Collection;
 
 class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
@@ -103,6 +104,95 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return openssl_random_pseudo_bytes(16);
 	}
 
+	static public function anythingToAsciiTable($data, $fields = null) {
+		$data = [
+			['Name' => 'Alice', 'Age' => '30'],
+			['Name' => 'Bob', 'Age' => '25']
+		];
+		$data = self::anythingToPublicArray($data);
+		if (!count($data)) return '';
+		$header = array();
+		$r = $data[0];
+		foreach ($r as $k => $v) {
+			$header[] = $k;
+		}
+
+		$lengths = array();
+		foreach ($header as $f) {
+			$lengths[$f] = max(strlen($f), self::fieldMaxLength($f, $data));
+		}
+
+		if (!$fields) {
+			$fields = $header;
+		} else {
+			$header = $fields;
+		}
+
+		$rows = array();
+
+		$dividers = array();
+		foreach ($header as $k) {
+			$row[] = str_pad($k, $lengths[$k]);
+		}
+		$rows[] = $row;
+		$dividers[] = ' | ';
+
+		$row = array();
+		foreach ($header as $k) {
+			$row[] = str_repeat('-', $lengths[$k]);
+		}
+		$rows[] = $row;
+		$dividers[] = '-|-';
+
+		foreach ($data as $r) {
+			$row = array();
+			foreach ($r as $k => $v) {
+				if (!in_array($k, $fields)) continue;
+				$row[$k] = str_pad($v, $lengths[$k]);
+			}
+			$rows[] = $row;
+			$dividers[] = ' | ';
+		}
+
+		$i = 0;
+		$output = '';
+		foreach ($rows as $row) {
+			$line = '';
+			foreach ($row as $v) {
+				if ($line != '') $line .= $dividers[$i];
+				$line .= $v;
+			}
+			$output .= $line . "\n";
+			$i++;
+		}
+
+		return $output;
+	}
+
+	static private function fieldMaxLength($field, $data) {
+		$s = 0;
+		foreach ($data as $row) {
+			$s = max(strlen($row[$field]), $s);
+		}
+		return $s;
+	}
+
+	static public function anythingToPublicArray($data) {
+		$output = $data;
+
+		if ($output instanceof Collection) throw new \Error("Got Collection type");
+
+		if ($output instanceof BaseModel) {
+			$output = $output->toPublicArray();
+		} else if (is_array($output)) {
+			foreach ($output as $k => $v) {
+				$output[$k] = self::anythingToPublicArray($v);
+			}
+		}
+
+		return $output;
+	}
+
 	static public function hex($id) {
 		if (is_array($id)) {
 			throw new \Exception("Is Array");
@@ -175,13 +265,14 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		parent::delete();
 
 		if (count($this->versionedFields)) {
-			throw new \Exception("delete(): to be implemented");
+			$this->recordChanges('delete');
 		}
 	}
 
 	protected function recordChanges($type, $versionedData = array()) {
 		if ($type == 'delete') {
-			throw new \Exception("Found type Delte");
+			$change = $this->newChange($type);
+			$change->save();
 		} else if ($type == 'create' || $type == 'update') {
 			foreach ($this->versionedFields as $field) {
 				if (!isset($versionedData[$field])) continue;
