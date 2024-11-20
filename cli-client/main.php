@@ -36,7 +36,7 @@ class Api {
 
 	static public function createId($string) {
 		// TODO: This needs to be unique per user
-		return md5('gKcr0 ^L3UL^fJV%1IW~~/Q`.,WRAr</8@$.k|uyK-w^d:k|{h!%(};|)OY9^lu=' . $string);
+		return substr(md5('gKcr0 ^L3UL^fJV%1IW~~/Q`.,WRAr</8@$.k|uyK-w^d:k|{h!%(};|)OY9^lu=' . $string), 0, 16);
 	}
 
 	public function setSessionId($sessionId) {

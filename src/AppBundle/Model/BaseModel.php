@@ -260,20 +260,24 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$this->updated_time = time(); // TODO: maybe only update if one of the fields, or if some of versioned data has changed
 		if ($isNew) $this->created_time = time();
 
-		parent::save($options);
+		$output = parent::save($options);
 
 		if (count($this->versionedFields)) {
 			$this->recordChanges($isNew ? 'create' : 'update', $this->changedVersionedFieldValues);
 		}
 		$this->changedVersionedFieldValues = array();
+
+		return $output;
 	}
 
 	public function delete() {
-		parent::delete();
+		$output = parent::delete();
 
 		if (count($this->versionedFields)) {
 			$this->recordChanges('delete');
 		}
+
+		return $output;
 	}
 
 	protected function recordChanges($type, $versionedData = array()) {

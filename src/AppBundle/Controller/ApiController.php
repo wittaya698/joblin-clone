@@ -71,7 +71,11 @@ abstract class ApiController extends AbstractController {
 	protected function session() {
 		if ($this->useTestUserAndSession) {
 			$session = Session::find(Session::unhex('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB'));
-			if ($session) $session->delete();
+			if ($session) return $session;
+			// if ($session) {
+			// 	$ok = $session->delete();
+			// 	if (!$ok) throw new \Exception("Cannot delete session");
+			// }
 			$session = new Session();
 			$session->id = Session::unhex('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
 			$session->owner_id = Session::unhex('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
