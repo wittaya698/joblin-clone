@@ -10,5 +10,4 @@ class FolderItem extends BaseModel {
 	static protected $enums = array(
 		'type' => array('folder', 'note', 'todo'),
 	);
-
 }

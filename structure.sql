@@ -30,6 +30,32 @@ CREATE TABLE `notes` (
 PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8;
 
+CREATE TABLE `tags` (
+	`id` binary(16) NOT NULL,
+	`title` varchar(1024) NOT NULL default '',
+	`owner_id` binary(16) NOT NULL,
+	`internal` tinyint(1) NOT NULL default '0',
+	`created_at` varchar(256) NOT NULL default '',
+	`updated_at` varchar(256) NOT NULL default '',
+	`created_time` int(11) NOT NULL default '0',
+	`updated_time` int(11) NOT NULL default '0',
+	`is_encrypted` tinyint(1) NOT NULL default '0',
+	`encryption_method` int(11) NOT NULL default '0',
+	PRIMARY KEY (`id`)
+) CHARACTER SET=utf8;
+
+CREATE TABLE `tagged_items` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`tag_id` binary(16) NOT NULL,
+	`item_id` binary(16) NOT NULL,
+	`item_type` int(11) NOT NULL,
+	`created_at` varchar(256) NOT NULL default '',
+	`updated_at` varchar(256) NOT NULL default '',
+	`created_time` int(11) NOT NULL default '0',
+	`updated_time` int(11) NOT NULL default '0',
+	PRIMARY KEY (`id`)
+) CHARACTER SET=utf8;
+
 CREATE TABLE `users` (
 	`id` binary(16) NOT NULL,
 	`email` varchar(256) NOT NULL default '',
@@ -69,4 +95,19 @@ CREATE TABLE `changes` (
 	`delta` MEDIUMTEXT,
 	`previous_id` int(11) NOT NULL default '0',
 PRIMARY KEY (`id`)
+) CHARACTER SET=utf8;
+
+CREATE TABLE `files` (
+	`id` binary(16) NOT NULL,
+	`title` varchar(256) NOT NULL default '',
+	`mime_type` int(11) NOT NULL default '0',
+	`original_name` varchar(256) NOT NULL default '',
+	`created_at` varchar(256) NOT NULL default '',
+	`updated_at` varchar(256) NOT NULL default '',
+	`created_time` int(11) NOT NULL default '0',
+	`updated_time` int(11) NOT NULL default '0',
+	`owner_id` binary(16) NULL default NULL,
+	`is_encrypted` tinyint(1) NOT NULL default '0',
+	`encryption_method` int(11) NOT NULL default '0',
+	PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8;

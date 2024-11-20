@@ -11,6 +11,24 @@ services:
     autowire: true # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+  AppBundle\:
+    resource: "../src/AppBundle/*"
+    exclude: "../src/AppBundle/{Entity, Tests}"
+
+  app.eloquent:
+    class: AppBundle\Eloquent
+    arguments: ["@app.mime_types", "@app.paths"]
+
+  twig.exception_listener:
+    class: stdObject
+
+  app.paths:
+    class: AppBundle\Paths
+    # arguments: ["%kernel.root_dir%"]
+
+  app.mime_types:
+    class: AppBundle\MimeTypes
+    arguments: ["@app.paths"]
 
   # makes classes in src/ available to be used as services
   # this creates a service per class whose id is the fully-qualified class name

@@ -18,8 +18,13 @@ abstract class ApiController extends AbstractController {
 	protected $session = null;
 	protected $user = null;
 
+	private $eloquent;
 	private $useTestUserAndSession = true;
 	private $testClientNum = 1;
+
+	public function __construct(Eloquent $eloquent) {
+		$this->eloquent = $eloquent;
+	}
 
 	public function setContainer(ContainerInterface $container): ?ContainerInterface {
 		parent::setContainer($container);
@@ -50,8 +55,7 @@ abstract class ApiController extends AbstractController {
 
 		// HACK: get connection once here so that it's initialized and can
 		// be accessed from models.
-		$eloquent = new Eloquent();
-		$this->db = $eloquent->connection();
+		$this->db =  $this->eloquent->connection();
 
 		$s = $this->session();
 
@@ -94,6 +98,11 @@ abstract class ApiController extends AbstractController {
 		}
 
 		throw new \Exception("Implement user");
+	}
+
+	protected function userId() {
+		$u = $this->user();
+		return $u ? $u->id : 0;
 	}
 
 	protected function aclCheck($resource) {

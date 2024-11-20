@@ -17,7 +17,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 	static private $clientId = null;
 	static protected $enums = array(
-		'field' => array('title', 'body'),
+		'field' => array('title', 'body', 'complete'),
 	);
 
 	static protected $defaultValidationRules = array();
@@ -72,7 +72,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		}
 
 		if (isset($output['item_type'])) {
-			$output['item_type'] = FolderItem::enumName('type', $output['item_type'], true);
+			$output['item_type'] = BaseModel::enumName('type', $output['item_type'], true);
 		}
 
 		if (isset($output['item_field'])) {
@@ -249,8 +249,12 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$this->isNew = $v;
 	}
 
+	public function isNew() {
+		return !$this->id || $this->isNew === true;
+	}
+
 	public function save(array $options = array()) {
-		$isNew = !$this->id || $this->isNew === true;
+		$isNew = $this->isNew();
 
 		if ($this->useUuid && $isNew && !$this->id) $this->id = self::createId();
 		$this->updated_time = time(); // TODO: maybe only update if one of the fields, or if some of versioned data has changed
@@ -302,7 +306,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$change = new Change();
 		$change->user_id = $this->owner_id;
 		$change->client_id = static::clientId();
-		$change->item_type = FolderItem::enumId('type', $this->classItemTypeName());
+		$change->item_type = BaseItem::enumId('type', $this->classItemTypeName());
 		$change->type = Change::enumId('type', $type);
 		$change->item_id = $this->id;
 		return $change;
