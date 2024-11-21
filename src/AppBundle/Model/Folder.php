@@ -5,6 +5,7 @@ namespace AppBundle\Model;
 class Folder extends BaseItem {
 
 	protected $versionedFields = array('title');
+	protected $isVersioned = true;
 
 	public function add($ids) {
 		throw new \Exception("add(): to be implemened");

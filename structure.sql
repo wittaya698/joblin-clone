@@ -10,6 +10,7 @@ CREATE TABLE `folders` (
 	`owner_id` binary(16) NULL default NULL,
 	`is_encrypted` tinyint(1) NOT NULL default '0',
 	`encryption_method` int(11) NOT NULL default '0',
+	'is_deafult' tinyint(1) NOT NULL default '0',
 PRIMARY KEY (`id`)
 ) CHARACTER SET=utf8;
 
@@ -91,7 +92,7 @@ CREATE TABLE `changes` (
 	`type` int(11) NOT NULL default '0',
 	`item_id` binary(16),
 	`item_type` int(11) NOT NULL default '0',
-	`item_field` int(11) NOT NULL default '0',
+	`item_field` varchar(32) NOT NULL default '0',
 	`delta` MEDIUMTEXT,
 	`previous_id` int(11) NOT NULL default '0',
 PRIMARY KEY (`id`)

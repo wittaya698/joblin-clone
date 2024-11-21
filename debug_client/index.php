@@ -138,6 +138,9 @@ switch ($action) {
 
 	case 'folders':
 		$folders = execRequest('GET', 'folders');
+		usort($folders, function ($a, $b) {
+			return strnatcmp($a['title'], $b['title']);
+		});
 		$pageParams['contentHtml'] = renderView('folders', array('folders' => $folders));
 		break;
 
