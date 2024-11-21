@@ -214,7 +214,7 @@ class ChangeTest extends BaseTestCase {
 			$this->assertCount($clientId == 1 ? 3 : 2, $r['items']);
 
 			foreach ($r['items'] as $item) {
-				$item = $item->toPublicArray();
+				// $item = $item->toPublicArray();
 				$this->assertEquals('create', $item['type']);
 
 				$n = Note::find(BaseModel::unhex($item['item_id']));
