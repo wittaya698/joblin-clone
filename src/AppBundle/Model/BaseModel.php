@@ -41,6 +41,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return self::$clientId;
 	}
 
+	// Note: this is used for both PATCH and PUT requests, so fields not
+	// in the array must not be reset.
 	public function fromPublicArray($array) {
 		foreach ($array as $k => $v) {
 			if ($k == 'rev_id') {

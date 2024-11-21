@@ -12,6 +12,10 @@ use Symfony\Component\Routing\Attribute\Route;
 class FoldersController extends ApiController {
 	#[Route('folders')]
 	public function allAction(Request $request): JsonResponse {
+		if ($request->isMethod('GET')) {
+			return static::successResponse(Folder::all());
+		}
+
 		if ($request->isMethod('POST')) {
 			$folder = new Folder();
 			$folder->fromPublicArray($request->request->all());
@@ -42,7 +46,19 @@ class FoldersController extends ApiController {
 			return static::successResponse($folder);
 		}
 
-		return static::successResponse($folder);
+		if ($request->isMethod('PATCH')) {
+			$data = $this->patchParameters();
+			$folder->fromPublicArray($this->patchParameters());
+			$folder->save();
+			return static::successResponse($folder);
+		}
+
+		if ($request->isMethod('DELETE')) {
+			$folder->delete();
+			return static::successResponse(array('id' => $id));
+		}
+
+		return static::errorResponse('Invalid method');
 	}
 
 	#[Route('folders/{id}/notes')]
