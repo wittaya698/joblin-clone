@@ -8,7 +8,10 @@ class ValidationException extends BaseException {
 	public $validationErrors = array();
 
 	static public function fromErrors($errors) {
-		throw new \Exception("fromErrors(): to be implemented");
+		if (!count($errors)) return new ValidationException();
+		$e = new ValidationException($errors[0]['message']);
+		$e->validationErrors = $errors;
+		return $e;
 	}
 
 	public function toErrorArray() {

@@ -214,15 +214,78 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function owner() {
-		throw new \Exception("owner(): to be implemented");
+		if (!isset($this->owner_id)) return null;
+		return User::find($this->owner_id);
 	}
 
 	static public function validate($data, $rules = null) {
-		throw new \Exception("validate(): to be implemented");
+		if (!$rules) $rules = static::$defaultValidationRules;
+
+		$errors = array();
+
+		foreach ($rules as $key => $keyRules) {
+			foreach ($keyRules as $rule) {
+				$ok = true;
+				switch ($rule['type']) {
+
+					case 'required':
+						if (!array_key_exists($key, $data)) $ok = false;
+						break;
+
+					case 'notEmpty':
+
+						if (array_key_exists($key, $data) && !strlen((string)$data[$key])) $ok = false;
+						break;
+
+					case 'minLength':
+
+						if (array_key_exists($key, $data) && strlen((string)$data[$key]) < $rule['args'][0]) $ok = false;
+						break;
+
+					case 'maxLength':
+
+						if (array_key_exists($key, $data) && strlen((string)$data[$key]) > $rule['args'][0]) $ok = false;
+						break;
+
+					case 'function':
+
+						$ok = call_user_func_array($rule['args'][0], array($key, $rule, $data));
+						break;
+
+					default:
+
+						throw new \Exception(sprintf('unsupported validation rule: "%s"', $rule['name']));
+				}
+
+				if (!$ok) {
+					$errors[] = array(
+						'key' => $key,
+						'type' => $rule['type'] == 'function' ? 'other' : $rule['type'],
+						'message' => static::validationMessage($key, $rule, $data),
+					);
+				}
+			}
+		}
+
+		return $errors;
 	}
 
 	static public function validationMessage($key, $rule, $data) {
-		throw new \Exception("alidationMessage(): to be implemented");
+		$msg = static::$defaultValidationMessages[$rule['type']];
+		if (isset($rule['message'])) $msg = $rule['message'];
+		$msg = str_replace('{key}', $key, $msg);
+		$msg = str_replace('{value}', isset($data[$key]) ? $data[$key] : '', $msg);
+		$args = isset($rule['args']) ? $rule['args'] : array();
+		for ($i = 0; $i < count($args); $i++) {
+			$v = $args[$i];
+			if (is_array($v)) $v = '';
+			if (is_object($v)) {
+				throw new \Exception("validationMessage(): arg is object");
+			}
+			$v = (string)$v;
+			$msg = str_replace(sprintf('{arg%s}', $i), $v, $msg);
+		}
+		return $msg;
 	}
 
 	static public function enumName($enumType, $enumId, $returnNullOnError = false) {

@@ -13,7 +13,13 @@ class User extends BaseModel {
 		static::$defaultValidationRules['email'] = array(
 			array('type' => 'required'),
 			array('type' => 'notEmpty'),
-			array('type' => 'function', 'args' => array(array('AppBundle\Model\User', 'validateUniqueEmail')), 'message' => 'email "{value}" is already in use'),
+			array(
+				'type' => 'function',
+				'args' => array(
+					array('AppBundle\Model\User', 'validateUniqueEmail')
+				),
+				'message' => 'email "{value}" is already in use'
+			),
 		);
 		static::$defaultValidationRules['password'] = array(
 			array('type' => 'required'),
@@ -22,11 +28,13 @@ class User extends BaseModel {
 	}
 
 	public function toPublicArray() {
-		throw new \Exception("toPublicArray(): to be implemented");
+		$output = parent::toPublicArray();
+		unset($output['password']);
+		return $output;
 	}
 
 	static public function byEmail($email) {
-		return self::where('email', '=', '$email')->first();
+		return self::where('email', '=', $email)->first();
 	}
 
 	public function save(array $options = array()) {
@@ -40,6 +48,8 @@ class User extends BaseModel {
 	}
 
 	static public function validateUniqueEmail($key, $rule, $data) {
-		throw new \Exception("validateUniqueEmail(): to be implemented");
+		if (!isset($data['email'])) return true;
+		$u = self::byEmail($data['email']);
+		return !$u;
 	}
 }

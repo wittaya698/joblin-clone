@@ -2,6 +2,7 @@
 
 namespace AppBundle\Model;
 
+use AppBundle\Exception\AuthException;
 use AppBundle\Exception\NotFoundException;
 
 class Session extends BaseModel {
@@ -25,6 +26,14 @@ class Session extends BaseModel {
 		$user = User::byEmail($email);
 		if (!$user) throw new NotFoundException();
 
-		throw new \Exception("Found user to login");
+		$ok = self::verifyPassword($password, $user->password);
+		if (!$ok) throw new AuthException();
+
+		$session = new Session();
+		$session->owner_id = $user->id;
+		$session->client_id = $clientId;
+		$session->save();
+
+		return $session;
 	}
 }

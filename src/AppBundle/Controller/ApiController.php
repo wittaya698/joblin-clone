@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use AppBundle\Exception\BaseException;
 use Psr\Container\ContainerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 abstract class ApiController extends AbstractController {
 	protected $db = null;
@@ -19,11 +20,13 @@ abstract class ApiController extends AbstractController {
 	protected $user = null;
 
 	private $eloquent;
+	private $requestStack;
 	private $useTestUserAndSession = true;
 	private $testClientNum = 1;
 
-	public function __construct(Eloquent $eloquent) {
+	public function __construct(Eloquent $eloquent, RequestStack $requestStack) {
 		$this->eloquent = $eloquent;
+		$this->requestStack = $requestStack;
 	}
 
 	public function setContainer(ContainerInterface $container): ?ContainerInterface {
@@ -44,14 +47,6 @@ abstract class ApiController extends AbstractController {
 			}
 		});
 
-		// 1. client 1 : bla bla bla
-		// 2. client 2 : bla bla bla fromclient2
-		// 3. client 1 : client1bla bla bla
-
-		// RESULT: client1bla bla bla
-
-		// Because diff for 3 is done between 2 and 3
-		// Need to introduce revID so that Change class knows between which versions the diff should be made
 
 		// HACK: get connection once here so that it's initialized and can
 		// be accessed from models.
@@ -59,9 +54,16 @@ abstract class ApiController extends AbstractController {
 
 		$s = $this->session();
 
+		// TODO: find less hacky way to get request path
+		$requestPath = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
+		$requestPath = ltrim($requestPath, '/');
+		$requestPath = rtrim($requestPath, '?');
+
 		// TODO: to keep it simple, only respond to logged in users, but in theory some data
 		// could be public.
-		if (!$s || !$this->user()) throw new UnauthorizedException('A session and user are required');
+		if ($requestPath != 'sessions' && (!$s || !$this->user())) {
+			throw new UnauthorizedException('A session and user are required');
+		}
 
 		BaseModel::setClientId($s ? $s->client_id : 0);
 
@@ -84,7 +86,10 @@ abstract class ApiController extends AbstractController {
 			return $session;
 		}
 
-		throw new \Exception("UseRealUserAndSession");
+		if ($this->session) return $this->session;
+		$request = $this->requestStack->getCurrentRequest();
+		$this->session = Session::find(BaseModel::unhex($request->query->get('session')));
+		return $this->session;
 	}
 
 	protected function user() {
@@ -101,7 +106,10 @@ abstract class ApiController extends AbstractController {
 			return $user;
 		}
 
-		throw new \Exception("Implement user");
+		if ($this->user) return $this->user;
+		$s = $this->session();
+		$this->user = $s ? $s->owner() : null;
+		return $this->user;
 	}
 
 	protected function userId() {
@@ -110,6 +118,8 @@ abstract class ApiController extends AbstractController {
 	}
 
 	protected function aclCheck($resource) {
+		if (!is_array($resource)) $resource = array($resource);
+		$user = $this->user();
 		throw new \Exception("aclCheck(): to be implemented");
 	}
 
