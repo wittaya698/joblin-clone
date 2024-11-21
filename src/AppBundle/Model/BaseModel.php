@@ -181,7 +181,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	static public function anythingToPublicArray($data) {
 		$output = $data;
 
-		if ($output instanceof Collection) throw new \Error("Got Collection type");
+		if ($output instanceof Collection) $output = $output->all();
 
 		if ($output instanceof BaseModel) {
 			$output = $output->toPublicArray();

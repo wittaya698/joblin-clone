@@ -21,7 +21,7 @@ abstract class ApiController extends AbstractController {
 
 	private $eloquent;
 	private $requestStack;
-	private $useTestUserAndSession = true;
+	private $useTestUserAndSession = false;
 	private $testClientNum = 1;
 
 	public function __construct(Eloquent $eloquent, RequestStack $requestStack) {

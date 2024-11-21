@@ -11,6 +11,6 @@ class Folder extends BaseItem {
 	}
 
 	public function notes() {
-		throw new \Exception("notes(): to be implemened");
+		return Note::where('parent_id', '=', $this->id)->get();
 	}
 }

@@ -64,6 +64,13 @@ class FoldersController extends ApiController {
 
 	#[Route('folders/{id}/notes')]
 	public function linkAction($id, Request $request) {
-		throw new Exception("linkAction(): to be implemented");
+		$folder = Folder::find(Folder::unhex($id));
+		if (!$folder) return static::errorResponse('Not found', 0, 404);
+
+		if ($request->isMethod('GET')) {
+			return static::successResponse($folder->notes());
+		}
+
+		return static::errorResponse('Invalid method');
 	}
 }
