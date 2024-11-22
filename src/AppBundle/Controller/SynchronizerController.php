@@ -105,8 +105,8 @@ class SynchronizerController extends ApiController {
 		if (!$this->user() || !$this->session()) throw new UnauthorizedException();
 
 		$actions = Change::changesDoneAfterId($this->user()->id, $this->session()->client_id, $lastChangeId);
-		// $actions['user_id'] = Change::hex($this->user()->id);
-		// $actions['client_id'] = Change::hex($this->session()->client_id);
+		$actions['user_id'] = Change::hex($this->user()->id);
+		$actions['client_id'] = Change::hex($this->session()->client_id);
 		return static::successResponse($actions);
 	}
 }

@@ -60,7 +60,7 @@ class ChangeTest extends BaseTestCase {
 
 		$note = Note::find($noteId);
 
-		$this->assertEquals('test', $note->versionedFieldValue('body'));
+		$this->assertEquals('test', $note->diffableField('body'));
 
 		$note->fromPublicArray(array('body' => 'test'));
 		$note->owner_id = $this->userId();
@@ -68,7 +68,7 @@ class ChangeTest extends BaseTestCase {
 
 		$note = Note::find($noteId);
 
-		$this->assertEquals('test', $note->versionedFieldValue('body'));
+		$this->assertEquals('test', $note->diffableField('body'));
 	}
 
 	public function testDiff3Ways() {
@@ -131,7 +131,7 @@ class ChangeTest extends BaseTestCase {
 
 	public function testRevId() {
 		$n = new Note();
-		$n->setVersionedFieldValue('body', 'abcd efgh');
+		$n->setDiffableField('body', 'abcd efgh');
 		$n->save();
 
 		$noteId = $n->id;
@@ -140,7 +140,7 @@ class ChangeTest extends BaseTestCase {
 		$d = $n->toPublicArray();
 		$this->assertEquals(1, $d['rev_id']);
 
-		$n->setVersionedFieldValue('body', '123456');
+		$n->setDiffableField('body', '123456');
 		$n->save();
 
 		$n = Note::find($noteId);

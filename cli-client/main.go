@@ -108,6 +108,12 @@ func main() {
 
 	//err, body := makeApiCall("GET", "users/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", url.Values{})
 
+	session := url.Values{}
+	session.Add("email", "wittayathongjeen698@gmail.com")
+	session.Add("password", "0906198331")
+	session.Add("client_id", "2A2A2A2A2A2A2A2A")
+	makeApiCall("POST", "sessions", session)
+
 	note := url.Values{}
 	note.Add("title", "from go")
 	note.Add("body", "body from go")

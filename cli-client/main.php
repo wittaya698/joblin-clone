@@ -138,7 +138,7 @@ class Config {
 	}
 }
 
-class FolderItem {
+class BaseItem {
 
 	private $title = '';
 	private $body = '';
@@ -198,17 +198,17 @@ class FolderItem {
 	}
 }
 
-class FolderItems {
+class BaseItems {
 
 	private $items = array();
 
-	private function getFolderItems($dir, $parentId, &$output) {
+	private function getBaseItems($dir, $parentId, &$output) {
 		$paths = glob($dir . '/*');
 		foreach ($paths as $path) {
 			$isFolder = is_dir($path);
 			$modTime = filemtime($path);
 
-			$o = new FolderItem();
+			$o = new BaseItem();
 			$o->setTitle(basename($path));
 			$o->setId(Api::createId($parentId . '_' . $o->title()));
 			$o->setParentId($parentId);
@@ -217,13 +217,13 @@ class FolderItems {
 
 			if (!$isFolder) $o->setBody(file_get_contents($path));
 			$output[] = $o;
-			if ($isFolder) $this->getFolderItems($path, $o->id(), $output);
+			if ($isFolder) $this->getBaseItems($path, $o->id(), $output);
 		}
 	}
 
 	public function fromPath($path) {
 		$this->items = array();
-		$this->getFolderItems($path, null, $this->items);
+		$this->getBaseItems($path, null, $this->items);
 	}
 
 	public function all() {
@@ -255,13 +255,28 @@ class FolderItems {
 
 $dbName = 'notes';
 $structureFile =  dirname(dirname(__FILE__)) . "/structure.sql";
+$cmd_prefix = "mysql -u root -p0906198331";
 
-$cmd = sprintf("mysql -u root -p0906198331 -e 'DROP DATABASE IF EXISTS %s; CREATE DATABASE %s;'", $dbName, $dbName);
+$cmd = sprintf('%s -e "DROP DATABASE IF EXISTS %s; CREATE DATABASE %s;"', $cmd_prefix, $dbName, $dbName);
 exec($cmd);
 
-$cmd = sprintf('mysql -u root -p0906198331 %s < "%s"', $dbName, $structureFile);
+$cmd = sprintf('%s %s < "%s"', $cmd_prefix, $dbName, $structureFile);
 exec($cmd);
 
+$user_id = 1;
+$user_email = "wittayathongjeen698@gmail.com";
+$user_password = "0906198331";
+$user_password_hashed = "\\$2y\\$10\\$4tPqgpfMh7S0bvqp1gwaC./clfsPdX.F6BaxTWs6fsVIYm6EqsALC";
+$cmd = sprintf(
+	'%s %s -e "INSERT INTO users (id, email, password, owner_id) VALUES (%s, \'%s\', \'%s\', %s)"',
+	$cmd_prefix,
+	$dbName,
+	$user_id,
+	$user_email,
+	$user_password_hashed,
+	$user_id
+);
+exec($cmd);
 
 $shortopts = "";
 $longopts = array(
@@ -278,29 +293,32 @@ $config = new Config($flags['config']);
 $dataPath = "/Users/macbookair/Workspace/witthaya's projects/joplin-clone/cli-client/test_" . $config->get('client_id');
 
 $api = new Api('http://127.0.0.1:8000');
-// $session = $api->login('test@example.com', '12345678', $config->get('client_id'));
-// $api->setSessionId($session['id']);
+
+$session = $api->login($user_email, $user_password, $config->get('client_id'));
+$api->setSessionId($session['id']);
 
 if (array_key_exists('sync', $flags)) {
 	$syncStartTime = time();
 	$lastSyncTime = $config->get('last_sync_time');
-	$folderItems = new FolderItems();
-	$folderItems->fromPath($dataPath);
+	$BaseItems = new BaseItems();
+	$BaseItems->fromPath($dataPath);
 
 	// ------------------------------------------------------------------------------------------
 	// Get latest changes from API
 	// ------------------------------------------------------------------------------------------
 
-	# TODO: No action table found
-	// $response = $api->exec("GET", "synchronizer", array('last_id' => $config->get('last_sync_id')));
+	$response = $api->exec("GET", "synchronizer", array('last_id' => $config->get('last_sync_id')));
 
 	$pathMap = array();
 	$folders = array();
 	$notes = array();
 	$maxId = null;
+	foreach ($response['items'] as $item) {
+		throw new \Exception("Found some items from synchronizer");
+	}
 
-	foreach ($folderItems->all() as $item) {
-		$relativePath = $folderItems->itemFullPath($item);
+	foreach ($BaseItems->all() as $item) {
+		$relativePath = $BaseItems->itemFullPath($item);
 		$path = $dataPath . '/' . $relativePath;
 
 		foreach (array('folder', 'note') as $itemType) {
@@ -323,10 +341,11 @@ if (array_key_exists('sync', $flags)) {
 	// Send changed notes and folders to API
 	// ------------------------------------------------------------------------------------------
 
-	foreach ($folderItems->all() as $item) {
+	foreach ($BaseItems->all() as $item) {
 		if ($item->modTime() < $lastSyncTime) continue;
 
 		if ($item->isFolder()) {
+			$item->is_default = 0;
 			$api->exec('PUT', 'folders/' . $item->id(), null, $item->toApiArray());
 		} else {
 			$api->exec('PUT', 'notes/' . $item->id(), null, $item->toApiArray());

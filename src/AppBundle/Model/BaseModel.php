@@ -10,8 +10,18 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 	public $timestamps = false;
 	public $useUuid = false;
-	protected $changedVersionedFieldValues = array();
-	protected $versionedFields = array();
+
+	// Diffable fields are those for which a diff is recorded on each change
+	// (such as the title or body of a note). The value of these fields is
+	// (currently) not recorded anywhere as-is - it needs to be rebuilt based on
+	// the diffs. The advantage of these fields is that they can be modified
+	// from different clients and the final value will be set correctly via
+	// three-way merge.
+	// These special fields need to be get and set via diffableField() and
+	// setDiffableField()
+	protected $changedDiffableField = array();
+	protected $diffableFields = array();
+
 	protected $isVersioned = false;
 	private $isNew = null;
 	private $revId = 0;
@@ -137,8 +147,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		foreach ($array as $k => $v) {
 			if ($k == 'rev_id') {
 				$this->revId = $v;
-			} else if (in_array($k, $this->versionedFields)) {
-				$this->changedVersionedFieldValues[$k] = $v;
+			} else if (in_array($k, $this->diffableFields)) {
+				$this->changedDiffableField[$k] = $v;
 			} else {
 				$this->{$k} = $v;
 			}
@@ -168,8 +178,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		}
 
 		$maxRevId = 0;
-		foreach ($this->versionedFields as $field) {
-			$r = $this->versionedFieldValue($field, true);
+		foreach ($this->diffableFields as $field) {
+			$r = $this->diffableField($field, true);
 			$output[$field] = $r['text'];
 			$maxRevId = max($maxRevId, $r['revId']);
 		}
@@ -179,12 +189,12 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		return $output;
 	}
 
-	public function versionedFieldValue($fieldName, $returnRevId = false) {
+	public function diffableField($fieldName, $returnRevId = false) {
 		return Change::fullFieldText($this->id, $fieldName, null, $returnRevId);
 	}
 
-	public function setVersionedFieldValue($fieldName, $fieldValue) {
-		$this->changedVersionedFieldValues[$fieldName] = $fieldValue;
+	public function setDiffableField($fieldName, $fieldValue) {
+		$this->changedDiffableField[$fieldName] = $fieldValue;
 	}
 
 	public function createId() {
@@ -323,7 +333,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		if ($isNew) $this->created_time = time();
 
 		if ($this->isVersioned) {
-			$changedFields = array_merge($this->getDirty(), $this->changedVersionedFieldValues);
+			$changedFields = array_merge($this->getDirty(), $this->changedDiffableField);
 			unset($changedFields['updated_time']);
 		}
 
@@ -333,9 +343,9 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		if ($this->isVersioned) {
 			if (count($changedFields)) {
-				$this->recordChanges($isNew ? 'create' : 'update', $this->changedVersionedFieldValues);
+				$this->recordChanges($isNew ? 'create' : 'update', $this->changedDiffableField);
 			}
-			$this->changedVersionedFieldValues = array();
+			$this->changedDiffableField = array();
 		}
 
 		return $output;
@@ -344,7 +354,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	public function delete() {
 		$output = parent::delete();
 
-		if (count($this->versionedFields)) {
+		if (count($this->diffableFields)) {
 			$this->recordChanges('delete');
 		}
 
@@ -356,17 +366,17 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			$change = $this->newChange($type);
 			$change->save();
 		} else if ($type == 'create' || $type == 'update') {
-			// When recording a "create" event, we only record the versioned fields because the complete history
+			// When recording a "create" event, we only record the diffable fields because the complete history
 			// is required to build their value. There's no need to record the other fields since they are
-			// simply new.
+			// new and the client needs to retrieve and save all of them.
 			//
-			// When recording an "update" event, all the modified fields are recorded.
+			// When recording an "update" event, all the modified fields, diffable or not, are recorded.
 			foreach ($changedFields as $field => $value) {
-				if ($type == 'create' && !in_array($field, $this->versionedFields)) continue;
+				if ($type == 'create' && !in_array($field, $this->diffableFields)) continue;
 
 				$change = $this->newChange($type);
 				$change->item_field = $field;
-				if (in_array($field, $this->versionedFields)) $change->createDelta($changedFields[$field]);
+				if (in_array($field, $this->diffableFields)) $change->createDelta($changedFields[$field]);
 				$change->save();
 			}
 		} else {
