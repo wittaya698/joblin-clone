@@ -343,7 +343,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		if ($this->isVersioned) {
 			if (count($changedFields)) {
-				$this->recordChanges($isNew ? 'create' : 'update', $this->changedDiffableField);
+				$this->recordChanges($isNew ? 'create' : 'update', $changedFields);
 			}
 			$this->changedDiffableField = array();
 		}
