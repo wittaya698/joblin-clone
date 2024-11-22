@@ -188,6 +188,8 @@ switch ($action) {
 
 	case 'changes':
 
+		// Hack so that all the changes are returned, as if the client requesting them
+		// was completely new.
 		$session = execRequest('POST', 'sessions', null, array(
 			'email' => 'wittayathongjeen698@gmail.com',
 			'password' => '0906198331',
