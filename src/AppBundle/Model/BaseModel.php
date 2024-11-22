@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Collection;
 
 class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
+	static public $cache_ = null;
+
 	public $timestamps = false;
 	public $useUuid = false;
 
@@ -42,6 +44,10 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 	public function __construct($attributes = array()) {
 		parent::__construct($attributes);
+	}
+
+	static protected function cache() {
+		return self::$cache_;
 	}
 
 	static public function setClientId($clientId) {
@@ -177,23 +183,56 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			$output['item_type'] = BaseModel::enumName('type', $output['item_type'], true);
 		}
 
-		$maxRevId = 0;
 		foreach ($this->diffableFields as $field) {
-			$r = $this->diffableField($field, true);
-			$output[$field] = $r['text'];
-			$maxRevId = max($maxRevId, $r['revId']);
+			$output[$field] = $this->diffableField($field);
 		}
-
-		$output['rev_id'] = $maxRevId;
 
 		return $output;
 	}
 
-	public function diffableField($fieldName, $returnRevId = false) {
-		return Change::fullFieldText($this->id, $fieldName, null, $returnRevId);
+	public function idString() {
+		return $this->useUuid ? self::hex($this->id) : (string)$this->id;
+	}
+
+	// private function cachePrefix() {
+	// 	return 'Model.' . $this->classItemTypeName() . '.' . $this->idString();
+	// }
+
+	// public function cacheSet($key, $value) {
+	// 	return self::cache()->set($this->cachePrefix() . '.' . $key, $value);
+	// }
+
+	// public function cacheGet($key) {
+	// 	return self::cache()->get($this->cachePrefix() . '.' . $key);
+	// }
+
+	// public function cacheDelete($key) {
+	// 	self::cache()->delete($this->cachePrefix() . '.' . $key);
+	// }
+
+	// public function cacheGetOrSet($key, $func, $expiryTime = null) {
+	// 	return self::cache()->getOrSet($this->cachePrefix() . '.' . $key, $func, $expiryTime);
+	// }
+
+	// public function cacheClear() {
+	// 	$p = $this->cachePrefix();
+	// 	$this->cacheDelete('diffableField.title');
+	// 	$this->cacheDelete('diffableField.body');
+	// }
+
+	public function diffableField($fieldName) {
+		return Change::fullFieldText($this->id, $fieldName);
+
+		// $r = $this->cacheGet('diffableField.' . $fieldName);
+		// if ($r !== null) return $r . '*';
+
+		// $r = Change::fullFieldText($this->id, $fieldName);
+		// $this->cacheSet('diffableField.' . $fieldName, $r);
+		// return $r;
 	}
 
 	public function setDiffableField($fieldName, $fieldValue) {
+		//$this->cacheDelete('diffableField.' . $fieldName);
 		$this->changedDiffableField[$fieldName] = $fieldValue;
 	}
 
@@ -339,6 +378,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		$output = parent::save($options);
 
+		//$this->cacheClear();
+
 		$this->isNew = null;
 
 		if ($this->isVersioned) {
@@ -352,6 +393,8 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	}
 
 	public function delete() {
+		//$this->cacheClear();
+
 		$output = parent::delete();
 
 		if (count($this->diffableFields)) {
@@ -400,5 +443,10 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$change->type = Change::enumId('type', $type);
 		$change->item_id = $this->id;
 		return $change;
+	}
+
+	static public function byId($id) {
+		$Class = get_called_class();
+		return $Class::find($id);
 	}
 }
