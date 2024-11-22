@@ -47,7 +47,7 @@ function saveCurlCmd($cmd) {
 
 function execRequest($method, $path, $query = array(), $data = null) {
 	$url = config('baseUrl') . '/' . $path;
-	if (!empty($_SESSION['sessionId'])) {
+	if (!empty($_SESSION['sessionId']) && !isset($query['session'])) {
 		$query['session'] = $_SESSION['sessionId'];
 	}
 	if (count($query)) $url .= '?' . http_build_query($query);
@@ -133,6 +133,8 @@ if (isset($_POST['update_folder'])) $action = 'update_folder';
 
 $pageParams = array(
 	'title' => ucfirst($action),
+	'pageTitle' => parse_url(config('baseUrl'), PHP_URL_HOST) . ' - ' . ucfirst($action),
+	'headerTitle' => ucfirst($action),
 	'contentHtml' => '',
 	'baseUrl' => config('baseUrl'),
 );
@@ -182,6 +184,17 @@ switch ($action) {
 			execRequest('PATCH', 'folders/' . $_POST['folder_id'], null, $diff);
 		}
 		redirect("/");
+		break;
+
+	case 'changes':
+
+		$session = execRequest('POST', 'sessions', null, array(
+			'email' => 'wittayathongjeen698@gmail.com',
+			'password' => '0906198331',
+			'client_id' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
+		));
+		$changes = execRequest('GET', 'synchronizer', array('session' => $session['id']));
+		$pageParams['contentHtml'] = renderView('changes', array('changes' => $changes));
 		break;
 }
 
