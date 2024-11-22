@@ -6,20 +6,19 @@ class Eloquent {
 
 	private $capsule_ = null;
 
-	public function __construct(MimeTypes $mimeTypes, Paths $paths) {
+	public function __construct(array $dbParams, MimeTypes $mimeTypes, Paths $paths) {
 		$this->capsule_ = new \Illuminate\Database\Capsule\Manager();
 
-		$this->capsule_->addConnection([
+		$dbParamsDefaults = array(
 			'driver' => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'notes',
-			'username'  => 'root',
-			'password'  => '0906198331',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-		]);
+		);
 
+		$dbParams = array_merge($dbParamsDefaults, $dbParams);
+
+		$this->capsule_->addConnection($dbParams);
 		$this->capsule_->bootEloquent();
 
 		// In order to keep things lightweight, the models aren't part of Symfony dependency
