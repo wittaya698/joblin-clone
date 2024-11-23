@@ -13,7 +13,14 @@ $kernel = new Kernel('dev', false);
 
 // When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
 //Request::enableHttpMethodParameterOverride();
-$request = Request::createFromGlobals();
-$response = $kernel->handle($request);
-$response->send();
-$kernel->terminate($request, $response);
+
+try {
+	$request = Request::createFromGlobals();
+	$response = $kernel->handle($request);
+	$response->send();
+	$kernel->terminate($request, $response);
+} catch (\Exception $e) {
+	header('HTTP/1.1 500 Internal Server Error');
+	echo $e->getMessage() . "\n";
+	echo $e->getTraceAsString();
+}
