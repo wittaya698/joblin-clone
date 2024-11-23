@@ -12,10 +12,14 @@ function initialize() {
 
 function config($name) {
 	$host = $_SERVER['HTTP_HOST'];
+
+	$baseUrl = 'http://localhost:8000';
 	$config = array(
 		'host' => $host,
-		'baseUrl' => $host == 'localhost:8080' ? "http://localhost:8000" : "",
+		'baseUrl' => $baseUrl,
 		'clientId' => 'E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3',
+		'email' => 'wittayathongjeen698@gmail.com',
+		'password' => '0906198331',
 	);
 	if (isset($config[$name])) return $config[$name];
 	throw new Exception('Unknown config: ' . $name);
@@ -62,7 +66,6 @@ function execRequest($method, $path, $query = array(), $data = null) {
 	}
 	$response = curl_exec($ch);
 	curl_close($ch);
-
 	$curlCmd = curlCmd($method, $url, $data);
 	saveCurlCmd($curlCmd);
 
@@ -118,10 +121,12 @@ function redirect($path) {
 initialize();
 
 $session = execRequest('POST', 'sessions', array(), array(
-	'email' => 'wittayathongjeen698@gmail.com',
-	'password' => '0906198331',
+	'email' => config('email'),
+	'password' => config('password'),
 	'client_id' => config('clientId'),
 ));
+
+if (isset($seesion['error'])) throw new Exception('Could not login. Please check credentials. ' . json_encode($session));
 
 $_SESSION['sessionId'] = $session['id'];
 
@@ -191,8 +196,8 @@ switch ($action) {
 		// Hack so that all the changes are returned, as if the client requesting them
 		// was completely new.
 		$session = execRequest('POST', 'sessions', null, array(
-			'email' => 'wittayathongjeen698@gmail.com',
-			'password' => '0906198331',
+			'email' => config('email'),
+			'password' => config('password'),
 			'client_id' => 'ABCDABCDABCDABCDABCDABCDABCDABCD',
 		));
 		$changes = execRequest('GET', 'synchronizer', array('session' => $session['id']));
