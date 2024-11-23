@@ -16,6 +16,7 @@
 .phpunit.result.cache
 ###< phpunit/phpunit ###
 
+/tmp
 /app/config/parameters.yml
 /build/
 !/var/cache
