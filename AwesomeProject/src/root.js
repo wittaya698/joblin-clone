@@ -6,7 +6,8 @@ import { connect, Provider } from 'react-redux';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { ItemList } from '@/src/components/item-list';
-import { NavigationContainer } from '@react-navigation/native';
+
+import { Note } from '@/src/models/note';
 
 let defaultState = {
     defaultText: 'bla',
@@ -39,8 +40,19 @@ const navReducer = createSlice({
     name: 'nav',
     initialState: defaultState,
     reducers: {
-        navigation_navigate: () => {},
-        navigation_back: (state, action) => action.payload.navigation.goBack(),
+        navigate: () => {},
+        back: (state, action) => {
+            // const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
+            // newState = Object.assign({}, state);
+            // if (nextStateNav) {
+            // 	newState.nav = nextStateNav;
+            // }
+
+            // if (action.noteId) {
+            // 	newState.selectedNoteId = action.noteId;
+            // }
+            action.payload.navigation.goBack();
+        },
         view_note: () => {}
     }
 });
@@ -53,7 +65,7 @@ const store = configureStore({
     }
 });
 
-class NotesScreen extends React.Component {
+class NotesScreenComponent extends React.Component {
     static navigationOptions = {
         title: 'Notes'
     };
@@ -68,23 +80,45 @@ class NotesScreen extends React.Component {
     }
 }
 
-class NoteScreen extends React.Component {
+const NotesScreen = connect(
+    state => {
+        return {};
+    },
+    dispatch => {
+        return {};
+    }
+)(NotesScreenComponent);
+
+class NoteScreenComponent extends React.Component {
     static navigationOptions = {
         title: 'Note'
     };
     render() {
-        const { navigate } = this.props.navigation;
+        let note = this.props.note;
+        // <Button title="Save note" /
         return (
             <View style={{ flex: 1 }}>
                 <TextInput
                     style={{ flex: 1, textAlignVertical: 'top' }}
                     multiline={true}
+                    value={note ? note.body : ''}
                 />
-                <Button title="Save note" onPress={() => navigate('Notes')} />;
             </View>
         );
     }
 }
+
+const NoteScreen = connect(
+    state => {
+        let selectedNote = state.nav.selectedNoteId
+            ? Note.noteById(state.notes, state.selectedNoteId)
+            : null;
+        return { note: selectedNote };
+    },
+    dispatch => {
+        return {};
+    }
+)(NoteScreenComponent);
 
 const Stack = createStackNavigator();
 class AppNavigator extends React.Component {

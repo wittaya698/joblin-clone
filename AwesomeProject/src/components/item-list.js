@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
 import { connect } from 'react-redux';
-import { view_note } from '@/src/root';
+import { actions } from '@/src/root';
 
 class ItemListComponent extends Component {
     constructor() {
@@ -53,7 +53,7 @@ const ItemList = connect(
     dispatch => {
         return {
             onItemClick: noteId => {
-                dispatch(view_note({ id: noteId }));
+                dispatch(actions.navigate({ routeName: 'Note', id: noteId }));
             }
         };
     }
