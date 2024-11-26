@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, TextInput, View } from 'react-native';
+import { AppRegistry, Button, TextInput, View } from 'react-native';
 
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { connect, Provider, useSelector } from 'react-redux';
@@ -13,6 +13,13 @@ import { Log } from './src/log.js';
 
 import { LoginButton } from './src/components/login-button.js';
 
+import { Root } from '@/src/root.js';
+
+export default class AndroidHome extends Component {
+    render() {
+        return <Root />;
+    }
+}
 // let debugMode = true;
 // let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
 
@@ -95,78 +102,78 @@ import { LoginButton } from './src/components/login-button.js';
 //         console.warn(error);
 //     });
 
-import { createStackNavigator } from '@react-navigation/stack';
+// import { createStackNavigator } from '@react-navigation/stack';
 
-const Stack = createStackNavigator();
+// const Stack = createStackNavigator();
 
-class MainScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Welcome'
-    };
-    render() {
-        const { navigate } = this.props.navigation;
-        return (
-            <Button
-                title="Go to Jane's profile"
-                onPress={() => navigate('Profile', { name: 'Jane' })}
-            />
-        );
-    }
-}
+// class MainScreen extends React.Component {
+//     static navigationOptions = {
+//         title: 'Welcome'
+//     };
+//     render() {
+//         const { navigate } = this.props.navigation;
+//         return (
+//             <Button
+//                 title="Go to Jane's profile"
+//                 onPress={() => navigate('Profile', { name: 'Jane' })}
+//             />
+//         );
+//     }
+// }
 
-class ProfileScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Profile'
-    };
-    render() {
-        const { navigate } = this.props.navigation;
-        return <Button title="Go to main" onPress={() => navigate('Main')} />;
-    }
-}
+// class ProfileScreen extends React.Component {
+//     static navigationOptions = {
+//         title: 'Profile'
+//     };
+//     render() {
+//         const { navigate } = this.props.navigation;
+//         return <Button title="Go to main" onPress={() => navigate('Main')} />;
+//     }
+// }
 
-class AppComponent extends React.Component {
-    render() {
-        return (
-            // <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Main" component={MainScreen} />
-                <Stack.Screen name="Profile" component={ProfileScreen} />
-            </Stack.Navigator>
-            // </NavigationContainer>
-        );
-    }
-}
+// class AppComponent extends React.Component {
+//     render() {
+//         return (
+//             // <NavigationContainer>
+//             <Stack.Navigator>
+//                 <Stack.Screen name="Main" component={MainScreen} />
+//                 <Stack.Screen name="Profile" component={ProfileScreen} />
+//             </Stack.Navigator>
+//             // </NavigationContainer>
+//         );
+//     }
+// }
 
-const navInitialState = null;
+// const navInitialState = null;
 
-const navReducer = createSlice({
-    name: 'nav',
-    initialState: navInitialState,
-    reducers: {
-        setNavState: (state, action) => action.payload
-    }
-}).reducer;
+// const navReducer = createSlice({
+//     name: 'nav',
+//     initialState: navInitialState,
+//     reducers: {
+//         setNavState: (state, action) => action.payload
+//     }
+// }).reducer;
 
-const appReducer = {
-    reducer: {
-        nav: navReducer
-    }
-};
+// const appReducer = {
+//     reducer: {
+//         nav: navReducer
+//     }
+// };
 
-const mapStateToProps = state => ({
-    nav: state.nav
-});
+// const mapStateToProps = state => ({
+//     nav: state.nav
+// });
 
-const App = connect(mapStateToProps)(AppComponent);
+// const App = connect(mapStateToProps)(AppComponent);
 
-const store = configureStore(appReducer);
+// const store = configureStore(appReducer);
 
-export default class Root extends React.Component {
-    render() {
-        return (
-            <Provider store={store}>
-                <App />
-            </Provider>
-        );
-    }
-}
+// export default class Root extends React.Component {
+//     render() {
+//         return (
+//             <Provider store={store}>
+//                 <App />
+//             </Provider>
+//         );
+//     }
+// }
