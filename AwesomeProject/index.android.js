@@ -4,9 +4,13 @@ import { Button, Text, TextInput, View } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { Database } from './src/database';
 import { WebApi } from './src/web-api';
-//import { Session } from 'src/model/session.js';
+//import { Session } from 'src/models/session.js';
 
-import { SessionService } from './src/service/session-service.js';
+import { SessionService } from './src/services/session-service.js';
+
+import { Log } from './src/log.js';
+
+import { LoginButton } from './src/components/login-button.js';
 
 let debugMode = true;
 let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
@@ -16,7 +20,7 @@ db.setDebugEnabled(debugMode);
 db.open();
 
 let defaultState = {
-    myButtonLabel: 'clicko123456',
+    myButtonLabel: 'click',
     counter: 0
 };
 
@@ -26,7 +30,6 @@ const counterSlice = createSlice({
     reducers: {
         set_button_name: (state, action) => {
             state.myButtonLabel = action.payload.name;
-            console.log(state.myButtonLabel);
         },
         inc_counter: state => {
             state.counter++;
@@ -34,7 +37,7 @@ const counterSlice = createSlice({
     }
 });
 
-const { set_button_name, inc_counter } = counterSlice.actions;
+export const { set_button_name, inc_counter } = counterSlice.actions;
 
 let store = configureStore({
     reducer: {
@@ -42,36 +45,11 @@ let store = configureStore({
     }
 });
 
-class MyButton extends Component {
-    render() {
-        var label = this.props.label;
-        if (label === undefined) label = '';
-        return <Button onPress={this.props.onPress} title={label} />;
-    }
-}
-
 class MyInput extends Component {
     render() {
         return <TextInput onChangeText={this.props.onChangeText} />;
     }
 }
-
-const mapStateToButtonProps = function (state) {
-    return { label: state.counter.myButtonLabel };
-};
-
-const mapDispatchToButtonProps = function (dispatch) {
-    return {
-        onPress: function () {
-            dispatch(inc_counter());
-        }
-    };
-};
-
-const MyConnectedButton = connect(
-    mapStateToButtonProps,
-    mapDispatchToButtonProps
-)(MyButton);
 
 const mapStateToInputProps = function (state) {
     return {};
@@ -95,8 +73,8 @@ export default class AndroidHome extends Component {
         return (
             <Provider store={store}>
                 <View>
-                    <MyConnectedButton />
                     <MyConnectionInput />
+                    <LoginButton />
                 </View>
             </Provider>
         );
