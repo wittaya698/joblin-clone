@@ -154,6 +154,28 @@ class Database {
                 );
             });
     }
+
+    static insertSql(tableName, data) {
+        let output = '';
+        let keySql = '';
+        let valueSql = '';
+        for (let key in data) {
+            if (data.hasOwnProperty(key)) continue;
+            if (keySql != '') keySql += ', ';
+            if (valueSql != '') valueSql += ', ';
+            keySql += key;
+            valueSql += '?';
+        }
+        return (
+            'INSERT INTO ' +
+            tableName +
+            ' (' +
+            keySql +
+            ') VALUES (' +
+            valueSql +
+            ')'
+        );
+    }
 }
 
 export { Database };

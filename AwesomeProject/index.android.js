@@ -1,23 +1,9 @@
 import React, { Component } from 'react';
-import { AppRegistry, Button, TextInput, View } from 'react-native';
-
-import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { connect, Provider, useSelector } from 'react-redux';
-
-import { Database } from './src/database';
-import { WebApi } from './src/web-api';
-
-import { SessionService } from './src/services/session-service.js';
-
-import { Log } from './src/log.js';
-
-import { LoginButton } from './src/components/login-button.js';
-
-import { Root } from '@/src/root.js';
+import { Main } from '@/src/main.js';
 
 export default class AndroidHome extends Component {
     render() {
-        return <Root />;
+        return <Main />;
     }
 }
 // let debugMode = true;

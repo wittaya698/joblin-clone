@@ -7,6 +7,7 @@ import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { ItemList } from '@/src/components/item-list';
 
+import { Log } from '@/src/log';
 import { Note } from '@/src/models/note';
 
 let defaultState = {
@@ -93,16 +94,51 @@ class NoteScreenComponent extends React.Component {
     static navigationOptions = {
         title: 'Note'
     };
+
+    constructor() {
+        super();
+        this.state = { note: Note.newNote() };
+    }
+
+    // componentWillMount() {
+    //     this.setState({ note: this.props.note });
+    // }
+
+    noteComponent_onChange = (propName, propValue) => {
+        this.setState((prevState, props) => {
+            let note = Object.assign({}, prevState.note);
+            note[propName] = propValue;
+            return { note: note };
+        });
+    };
+
+    title_onChangeText = text => {
+        this.noteComponent_onChange('title', text);
+    };
+
+    body_onChangeText = text => {
+        this.noteComponent_onChange('body', text);
+    };
+
     render() {
         let note = this.props.note;
-        // <Button title="Save note" /
+
+        let onSaveButtonPress = () => {
+            return this.props.onSaveButtonPress(this.state.note);
+        };
         return (
             <View style={{ flex: 1 }}>
                 <TextInput
+                    value={this.state.note.title}
+                    onChangeText={this.title_onChangeText}
+                />
+                <TextInput
                     style={{ flex: 1, textAlignVertical: 'top' }}
                     multiline={true}
-                    value={note ? note.body : ''}
+                    value={this.state.note.body}
+                    onChangeText={this.body_onChangeText}
                 />
+                <Button title="Save note" onPress={onSaveButtonPress} />
             </View>
         );
     }
@@ -110,10 +146,14 @@ class NoteScreenComponent extends React.Component {
 
 const NoteScreen = connect(
     state => {
-        let selectedNote = state.nav.selectedNoteId
-            ? Note.noteById(state.notes, state.selectedNoteId)
-            : null;
-        return { note: selectedNote };
+        return {
+            note: state.nav.selectedNoteId
+                ? Note.noteById(state.nav.notes, state.nav.selectedNoteId)
+                : Note.newNote(),
+            onSaveButtonPress: note => {
+                Log.info(note);
+            }
+        };
     },
     dispatch => {
         return {};
