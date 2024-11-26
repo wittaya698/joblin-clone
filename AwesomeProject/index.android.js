@@ -4,21 +4,16 @@ import { Button, Text, TextInput, View } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { Database } from './src/database';
 import { WebApi } from './src/web-api';
+//import { Session } from 'src/model/session.js';
+
+import { SessionService } from './src/service/session-service.js';
 
 let debugMode = true;
+let clientId = 'A7D301DA7D301DA7D301DA7D301DA7D3';
 
 let db = new Database();
 db.setDebugEnabled(debugMode);
 db.open();
-
-// let test = {
-// 	'abcd' : 123,
-// 	'efgh' : 456,
-// }
-
-// for (let [key, value] of test) {
-// 	console.info(key, value);
-// }
 
 let defaultState = {
     myButtonLabel: 'clicko123456',
@@ -108,17 +103,15 @@ export default class AndroidHome extends Component {
     }
 }
 
-// let api = new WebApi('http://192.168.2.42:8000');
-// api.exec('POST', 'sessions', null, {
-//     email: 'wittayathongjeen698@gmail.com',
-//     password: '0906198331',
-//     client_id: 'A7D301DA7D301DA7D301DA7D301DA7D3'
-// })
-//     .then(function (data) {
-//         console.info('GOT DATA:');
-//         console.info(data);
-//     })
-//     .catch(function (error) {
-//         console.warn('GOT ERROR:');
-//         console.warn(error);
-//     });
+let api = new WebApi('http://192.168.2.42:8000');
+let sessionService = new SessionService(api);
+sessionService
+    .login('wittayathongjeen698@gmail.com', '0906198331', clientId)
+    .then(session => {
+        console.info('GOT DATA:');
+        console.info(session);
+    })
+    .catch(function (error) {
+        console.warn('GOT ERROR:');
+        console.warn(error);
+    });

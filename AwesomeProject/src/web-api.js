@@ -37,11 +37,15 @@ class WebApi {
                     return response
                         .json()
                         .then(function (data) {
-                            resolve(data);
+                            if (data && data.error) {
+                                reject(data);
+                            } else {
+                                resolve(data);
+                            }
                         })
                         .catch(function (error) {
                             responseClone.text().then(function (text) {
-                                reject('Cannot parse JSON: ' + text);
+                                reject(new Error('Cannot parse JSON: ' + text));
                             });
                         });
                 })

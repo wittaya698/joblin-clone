@@ -290,7 +290,7 @@ $flags = getopt($shortopts, $longopts);
 
 $config = new Config($flags['config']);
 
-$dataPath = "/Users/macbookair/Workspace/witthaya's projects/joplin-clone/cli-client/test_" . $config->get('client_id');
+$dataPath = "/Users/macbookair/Workspace/witthaya_projects/joplin-clone/cli-client/test_" . $config->get('client_id');
 
 $api = new Api('http://127.0.0.1:8000');
 
