@@ -1,0 +1,1 @@
+db logcat *:S ReactNative:V ReactNativeJS:V

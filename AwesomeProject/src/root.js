@@ -6,6 +6,7 @@ import { connect, Provider } from 'react-redux';
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { ItemList } from '@/src/components/item-list';
+import { NavigationContainer } from '@react-navigation/native';
 
 let defaultState = {
     defaultText: 'bla',
@@ -34,65 +35,23 @@ let defaultState = {
     selectedNoteId: null
 };
 
-const reducer = createSlice({
+const navReducer = createSlice({
     name: 'nav',
     initialState: defaultState,
     reducers: {
-        set_button_name: (state, action) =>
-            (state.nav.myButtonLabel = action.name),
-        inc_counter: state => state.counter++,
-        view_note: (state, action) => {
-            state.selectedNoteId = action.payload.id;
-            // state.counter++;
-        }
+        navigation_navigate: () => {},
+        navigation_back: (state, action) => action.payload.navigation.goBack(),
+        view_note: () => {}
     }
 });
 
-export const { set_button_name, inc_counter, view_note } = reducer.actions;
-
-// const appReducer = {
-//     reducer: {
-//         nav: navReducer
-//     }
-// };
+export const { reducer, actions } = navReducer;
 
 const store = configureStore({
     reducer: {
-        nav: reducer.reducer
+        nav: reducer
     }
 });
-
-class MyInput extends Component {
-    render() {
-        return (
-            <TextInput
-                value={this.props.text}
-                onChangeText={this.props.onChangeText}
-            />
-        );
-    }
-}
-
-const mapStateToInputProps = function (state) {
-    return { text: state.nav.defaultText };
-};
-
-const mapDispatchToInputProps = function (dispatch) {
-    return {
-        onChangeText(text) {
-            dispatch(
-                set_button_name({
-                    name: text
-                })
-            );
-        }
-    };
-};
-
-const MyConnectionInput = connect(
-    mapStateToInputProps,
-    mapDispatchToInputProps
-)(MyInput);
 
 class NotesScreen extends React.Component {
     static navigationOptions = {
@@ -104,7 +63,6 @@ class NotesScreen extends React.Component {
             <View style={{ flex: 1 }}>
                 <ItemList style={{ flex: 1 }} />
                 <Button title="Create note" onPress={() => navigate('Note')} />
-                <MyConnectionInput />
             </View>
         );
     }
@@ -123,7 +81,6 @@ class NoteScreen extends React.Component {
                     multiline={true}
                 />
                 <Button title="Save note" onPress={() => navigate('Notes')} />;
-                <MyConnectionInput />
             </View>
         );
     }
@@ -161,52 +118,5 @@ class Root extends React.Component {
         );
     }
 }
-
-// class AppComponent extends React.Component {
-//     render() {
-//         return (
-//             // <NavigationContainer>
-//             <Stack.Navigator>
-//                 <Stack.Screen name="Main" component={MainScreen} />
-//                 <Stack.Screen name="Profile" component={ProfileScreen} />
-//             </Stack.Navigator>
-//             // </NavigationContainer>
-//         );
-//     }
-// }
-
-// const navInitialState = null;
-
-// const navReducer = createSlice({
-//     name: 'nav',
-//     initialState: navInitialState,
-//     reducers: {
-//         setNavState: (state, action) => action.payload
-//     }
-// }).reducer;
-
-// const appReducer = {
-//     reducer: {
-//         nav: navReducer
-//     }
-// };
-
-// const mapStateToProps = state => ({
-//     nav: state.nav
-// });
-
-// const App = connect(mapStateToProps)(AppComponent);
-
-// const store = configureStore(appReducer);
-
-// class Root extends React.Component {
-//     render() {
-//         return (
-//             <Provider store={store}>
-//                 <App />
-//             </Provider>
-//         );
-//     }
-// }
 
 export { Root };
