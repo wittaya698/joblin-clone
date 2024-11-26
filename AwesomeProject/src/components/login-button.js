@@ -1,18 +1,20 @@
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { inc_counter } from '../../index.android';
+import { _ } from '@/src/locale';
 
 const { Component } = require('react');
 
 class LoginButtonComponent extends Component {
     render() {
-        return <Button onPress={this.props.onPress} title={this.props.label} />;
+        return <Button onPress={this.props.onPress} title={_('Login')} />;
     }
 }
 
 const LoginButton = connect(
     state => {
-        return { label: state.counter.myButtonLabel };
+        return {};
+        // return { label: state.counter.myButtonLabel };
     },
     dispatch => {
         return {
