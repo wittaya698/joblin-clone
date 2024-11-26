@@ -86,16 +86,6 @@ class NoteScreen extends React.Component {
     }
 }
 
-class ProfileScreen extends React.Component {
-    static navigationOptions = {
-        title: 'Profile'
-    };
-    render() {
-        const { navigate } = this.props.navigation;
-        return <Button title="Go to main" onPress={() => navigate('Notes')} />;
-    }
-}
-
 const Stack = createStackNavigator();
 class AppNavigator extends React.Component {
     render() {
@@ -103,7 +93,6 @@ class AppNavigator extends React.Component {
             <Stack.Navigator>
                 <Stack.Screen name="Notes" component={NotesScreen} />
                 <Stack.Screen name="Note" component={NoteScreen} />
-                <Stack.Screen name="Profile" component={ProfileScreen} />
             </Stack.Navigator>
         );
     }
