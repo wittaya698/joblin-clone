@@ -54,7 +54,10 @@ const navReducer = createSlice({
             // }
             action.payload.navigation.goBack();
         },
-        view_note: () => {}
+        notes_loaded: (state, action) => {
+            state.notes = action.payload.notes;
+        },
+        save_note: () => {}
     }
 });
 
@@ -100,11 +103,11 @@ class NoteScreenComponent extends React.Component {
         this.state = { note: Note.newNote() };
     }
 
-    // componentWillMount() {
-    //     this.setState({ note: this.props.note });
-    // }
+    UNSAFE_componentWillMount() {
+        this.setState({ note: this.props.note });
+    }
 
-    noteComponent_onChange = (propName, propValue) => {
+    noteComponent_change = (propName, propValue) => {
         this.setState((prevState, props) => {
             let note = Object.assign({}, prevState.note);
             note[propName] = propValue;
@@ -112,56 +115,75 @@ class NoteScreenComponent extends React.Component {
         });
     };
 
-    title_onChangeText = text => {
-        this.noteComponent_onChange('title', text);
+    title_changeText = text => {
+        this.noteComponent_change('title', text);
     };
 
-    body_onChangeText = text => {
-        this.noteComponent_onChange('body', text);
+    body_changeText = text => {
+        this.noteComponent_change('body', text);
+    };
+
+    saveNoteButton_press = () => {
+        // TODO: if state changes are asynchronous, how to be sure that, when
+        // the button is presssed, this.state.note contains the actual note?
+        // - Save to database
+        // - Dispatch "noteSaved" when done
+        // -* Move i^p on state
+
+        Note.save(this.state.note)
+            .then(() => {
+                Log.info('NOTE_INSERTED');
+            })
+            .catch(error => {
+                Log.warn('CANNOT INSERT NOTE', error);
+            });
+
+        // this.props.dispatch({
+        // 	type: 'SAVE_NOTE',
+        // 	note: this.state.note,
+        // });
     };
 
     render() {
-        let note = this.props.note;
-
-        let onSaveButtonPress = () => {
-            return this.props.onSaveButtonPress(this.state.note);
-        };
         return (
             <View style={{ flex: 1 }}>
                 <TextInput
                     value={this.state.note.title}
-                    onChangeText={this.title_onChangeText}
+                    onChangeText={this.title_changeText}
                 />
                 <TextInput
                     style={{ flex: 1, textAlignVertical: 'top' }}
                     multiline={true}
                     value={this.state.note.body}
-                    onChangeText={this.body_onChangeText}
+                    onChangeText={this.body_changeText}
                 />
-                <Button title="Save note" onPress={onSaveButtonPress} />
+                <Button title="Save note" onPress={this.saveNoteButton_press} />
             </View>
         );
     }
 }
 
-const NoteScreen = connect(
-    state => {
-        return {
-            note: state.nav.selectedNoteId
-                ? Note.noteById(state.nav.notes, state.nav.selectedNoteId)
-                : Note.newNote(),
-            onSaveButtonPress: note => {
-                Log.info(note);
-            }
-        };
-    },
-    dispatch => {
-        return {};
-    }
-)(NoteScreenComponent);
+const NoteScreen = connect(state => {
+    return {
+        note: state.nav.selectedNoteId
+            ? Note.noteById(state.nav.notes, state.nav.selectedNoteId)
+            : Note.newNote()
+    };
+})(NoteScreenComponent);
 
 const Stack = createStackNavigator();
-class AppNavigator extends React.Component {
+class AppComponent extends React.Component {
+    componentDidMount() {
+        props = this.props;
+        Note.previews()
+            .then(notes => {
+                props.notes_loaded(notes);
+            })
+            .catch(error => {
+                Log.warn('Cannot load notes', error);
+            });
+    }
+
     render() {
         return (
             <Stack.Navigator>
@@ -172,11 +194,22 @@ class AppNavigator extends React.Component {
     }
 }
 
+const App = connect(
+    state => {},
+    dispatch => {
+        return {
+            notes_loaded: function (notes) {
+                dispatch(actions.notes_loaded({ notes: notes }));
+            }
+        };
+    }
+)(AppComponent);
+
 class Root extends React.Component {
     render() {
         return (
             <Provider store={store}>
-                <AppNavigator />
+                <App />
             </Provider>
         );
     }

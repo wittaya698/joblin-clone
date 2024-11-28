@@ -2,27 +2,26 @@ import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
 import { connect } from 'react-redux';
 import { actions } from '@/src/root';
+import { Log } from '@/src/log';
 
 class ItemListComponent extends Component {
     constructor() {
         super();
-        // const ds = new FlatList();
-        // this.state = { dataSource: ds };
+        this.state = { dataSource: {} };
     }
 
     UNSAFE_componentWillMount() {
-        // const newDataSource = this.state.dataSource.cloneWithRows(
-        //     this.props.notes
-        // );
-        // this.state = { dataSource: newDataSource };
+        const newDataSource = this.props.notes;
+        this.state = { dataSource: newDataSource };
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {
-        // TODO: use this to update:
         // https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
+        this.setState({ dataSource: newProps.notes });
     }
 
     render() {
+        Log.info('RENDER');
         let renderRow = rowData => {
             let onPress = () => {
                 this.props.onItemClick(rowData.id);
@@ -36,7 +35,7 @@ class ItemListComponent extends Component {
         return (
             <View>
                 <FlatList
-                    data={this.props.notes}
+                    data={this.state.dataSource}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => renderRow(item)}
                 />

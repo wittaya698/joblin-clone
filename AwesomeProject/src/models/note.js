@@ -19,6 +19,18 @@ class Note extends BaseModel {
             body: ''
         };
     }
+
+    static previews() {
+        return this.db()
+            .selectAll('SELECT id, title, body, updated_time FROM notes')
+            .then(r => {
+                let output = [];
+                for (let i = 0; i < r.rows.length; i++) {
+                    output.push(r.rows.item(i));
+                }
+                return output;
+            });
+    }
 }
 
 export { Note };
