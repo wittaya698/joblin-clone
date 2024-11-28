@@ -155,7 +155,7 @@ class Database {
         });
     }
 
-    insert(sql, params = null) {
+    exec(sql, params = null) {
         this.logQuery(sql, params);
 
         return new Promise((resolve, reject) => {
@@ -172,24 +172,7 @@ class Database {
         });
     }
 
-    del(sql, params = null) {
-        this.logQuery(sql, params);
-
-        return new Promise((resolve, reject) => {
-            this.db_.executeSql(
-                sql,
-                params,
-                r => {
-                    resolve();
-                },
-                error => {
-                    reject(error);
-                }
-            );
-        });
-    }
-
-    static insertSql(tableName, data) {
+    static insertQuery(tableName, data) {
         let keySql = '';
         let valueSql = '';
         let params = [];
@@ -210,6 +193,27 @@ class Database {
                 ') VALUES (' +
                 valueSql +
                 ')',
+            params: params
+        };
+    }
+
+    static updateQuery(tableName, data, where) {
+        let sql = '';
+        let params = [];
+        for (let key in data) {
+            if (!data.hasOwnProperty(key)) continue;
+            if (sql != '') sql += ', ';
+            sql += key + '=?';
+            params.push(data[key]);
+        }
+
+        if (typeof where != 'string') {
+            params.push(where.id);
+            where = 'id=?';
+        }
+
+        return {
+            sql: 'UPDATE `' + tableName + '` SET ' + sql + ' WHERE ' + where,
             params: params
         };
     }

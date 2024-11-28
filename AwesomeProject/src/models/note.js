@@ -5,6 +5,10 @@ class Note extends BaseModel {
         return 'notes';
     }
 
+    static useUuid() {
+        return true;
+    }
+
     static noteById(notes, id) {
         for (let i = 0; i < notes.length; i++) {
             if (notes[i].id == id) return notes[i];

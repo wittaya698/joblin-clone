@@ -1,27 +1,36 @@
 import { Log } from '@/src/log.js';
 import { Database } from '@/src/database.js';
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as createUuid } from 'uuid';
 
 class BaseModel {
     static tableName() {
         throw new Error('Must be overriden');
     }
 
+    static useUuid() {
+        return false;
+    }
+
     static save(o) {
         let isNew = !o.id;
-        if (isNew) o.id = uuidv4();
+        let query = '';
+
         if (isNew) {
-            let q = Database.insertSql(this.tableName(), o);
-            return this.db()
-                .insert(q.sql, q.params)
-                .then(() => {
-                    return o;
-                });
+            if (this.useUuid()) o.id = createUuid();
+            query = Database.insertQuery(this.tableName(), o);
         } else {
-            Log.error('NOT EIMPLEMENTED');
-            // TODO: update
+            let where = { id: o.id };
+            let temp = Object.assign({}, o);
+            delete temp.id;
+            query = Database.updateQuery(this.tableName(), temp, where);
         }
+
+        return this.db()
+            .exec(query.sql, query.params)
+            .then(() => {
+                return o;
+            });
     }
 
     static setDb(database) {

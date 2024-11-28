@@ -12,28 +12,7 @@ import { Note } from '@/src/models/note';
 
 let defaultState = {
     defaultText: 'bla',
-    notes: [
-        {
-            id: 1,
-            title: 'hello',
-            body: 'just testing\nmultiple\nlines'
-        },
-        {
-            id: 2,
-            title: 'hello2',
-            body: '2 just testing\nmultiple\nlines'
-        },
-        {
-            id: 3,
-            title: 'hello3',
-            body: '3 just testing\nmultiple\nlines'
-        },
-        {
-            id: 4,
-            title: 'hello4',
-            body: '4 just testing\nmultiple\nlines'
-        }
-    ],
+    notes: [],
     selectedNoteId: null
 };
 
@@ -43,15 +22,24 @@ const navReducer = createSlice({
     reducers: {
         navigate: () => {},
         back: (state, action) => {
+            // // If the current screen is already the requested screen, don't do anything
+            // const r = state.nav.routes;
+            // if (r.length && r[r.length - 1].routeName == action.routeName) {
+            // 	return state
+            // }
+
             // const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
+            // Log.info('NEXT', nextStateNav);
             // newState = Object.assign({}, state);
             // if (nextStateNav) {
             // 	newState.nav = nextStateNav;
             // }
 
-            // if (action.noteId) {
-            // 	newState.selectedNoteId = action.noteId;
+            // if (action.payload.noteId) {
+            // 	newState.selectedNoteId = action.payload.noteId;
             // }
+            // state = newState;
+
             action.payload.navigation.goBack();
         },
         // Replace all the notes with the provided array
@@ -65,14 +53,14 @@ const navReducer = createSlice({
             let found = false;
             for (let i = 0; i < newNotes.length; i++) {
                 let n = newNotes[i];
-                if (n.id == action.note.id) {
-                    newNotes[i] = action.note;
+                if (n.id == action.payload.note.id) {
+                    newNotes[i] = action.payload.note;
                     found = true;
                     break;
                 }
             }
 
-            if (!found) newNotes.push(action.note);
+            if (!found) newNotes.push(action.payload.note);
 
             state.notes = newNotes;
         },
@@ -92,25 +80,28 @@ class NotesScreenComponent extends React.Component {
     static navigationOptions = {
         title: 'Notes'
     };
-    render() {
+
+    createNoteButton_press = () => {
         const { navigate } = this.props.navigation;
+        navigate('Note');
+    };
+
+    render() {
         return (
             <View style={{ flex: 1 }}>
                 <ItemList style={{ flex: 1 }} />
-                <Button title="Create note" onPress={() => navigate('Note')} />
+                <Button
+                    title="Create note"
+                    onPress={this.createNoteButton_press}
+                />
             </View>
         );
     }
 }
 
-const NotesScreen = connect(
-    state => {
-        return {};
-    },
-    dispatch => {
-        return {};
-    }
-)(NotesScreenComponent);
+const NotesScreen = connect(state => {
+    return {};
+})(NotesScreenComponent);
 
 class NoteScreenComponent extends React.Component {
     static navigationOptions = {
@@ -143,11 +134,9 @@ class NoteScreenComponent extends React.Component {
     };
 
     saveNoteButton_press = () => {
-        // TODO: if state changes are asynchronous, how to be sure that, when
-        // the button is presssed, this.state.note contains the actual note?
         Note.save(this.state.note)
             .then(note => {
-                this.props.notes_update_one({ note: note });
+                this.props.notes_update_one(note);
             })
             .catch(error => {
                 Log.warn('Cannot save note', error);
