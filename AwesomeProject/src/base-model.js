@@ -1,5 +1,6 @@
 import { Log } from '@/src/log.js';
 import { Database } from '@/src/database.js';
+import { Registry } from '@/src/registry.js';
 import 'react-native-get-random-values';
 import { v4 as createUuid } from 'uuid';
 
@@ -33,12 +34,8 @@ class BaseModel {
             });
     }
 
-    static setDb(database) {
-        this.db_ = database;
-    }
-
     static db() {
-        return this.db_;
+        return Registry.db();
     }
 }
 

@@ -8,7 +8,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { ItemList } from '@/src/components/item-list';
 
 import { Log } from '@/src/log';
+import { Database } from '@/src/database';
+import { Registry } from '@/src/registry';
 import { Note } from '@/src/models/note';
+import { Setting } from '@/src/models/setting';
 
 let defaultState = {
     defaultText: 'bla',
@@ -86,14 +89,24 @@ class NotesScreenComponent extends React.Component {
         navigate('Note');
     };
 
+    loginButton_press = () => {};
+
+    syncButton_press = () => {
+        Log.info('SYNC');
+    };
+
     render() {
         return (
             <View style={{ flex: 1 }}>
                 <ItemList style={{ flex: 1 }} />
-                <Button
-                    title="Create note"
-                    onPress={this.createNoteButton_press}
-                />
+                <View style={{ flexDirection: 'row' }}>
+                    <Button
+                        title="Create note"
+                        onPress={this.createNoteButton_press}
+                    />
+                    <Button title="Login" onPress={this.loginButton_press} />
+                    <Button title="Sync" onPress={this.syncButton_press} />
+                </View>
             </View>
         );
     }
@@ -181,13 +194,31 @@ const NoteScreen = connect(
 const Stack = createStackNavigator();
 class AppComponent extends React.Component {
     componentDidMount() {
+        let db = new Database();
+        db.setDebugEnabled(Registry.debugMode());
         props = this.props;
-        Note.previews()
-            .then(notes => {
-                props.notes_update_all(notes);
+
+        db.open()
+            .then(() => {
+                Log.info('Database is ready.');
+                Registry.setDb(db);
+            })
+            .then(() => {
+                Log.info('Loading settings...');
+                return Setting.load();
+            })
+            .then(() => {
+                Log.info('Loading notes...');
+                Note.previews()
+                    .then(notes => {
+                        props.notes_update_all(notes);
+                    })
+                    .catch(error => {
+                        Log.warn('Cannot load notes', error);
+                    });
             })
             .catch(error => {
-                Log.warn('Cannot load notes', error);
+                Log.error('Cannot initialize database:', error);
             });
     }
 
