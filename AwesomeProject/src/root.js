@@ -54,8 +54,27 @@ const navReducer = createSlice({
             // }
             action.payload.navigation.goBack();
         },
-        notes_loaded: (state, action) => {
+        // Replace all the notes with the provided array
+        notes_update_all: (state, action) => {
             state.notes = action.payload.notes;
+        },
+        // Insert the note into the note list if it's new, or
+        // update it if it already exists.
+        note_update_one: (state, action) => {
+            let newNotes = state.notes.splice(0);
+            let found = false;
+            for (let i = 0; i < newNotes.length; i++) {
+                let n = newNotes[i];
+                if (n.id == action.note.id) {
+                    newNotes[i] = action.note;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) newNotes.push(action.note);
+
+            state.notes = newNotes;
         },
         save_note: () => {}
     }
@@ -126,24 +145,14 @@ class NoteScreenComponent extends React.Component {
     saveNoteButton_press = () => {
         // TODO: if state changes are asynchronous, how to be sure that, when
         // the button is presssed, this.state.note contains the actual note?
-        // - Save to database
-        // - Dispatch "noteSaved" when done
-        // -* Move i^p on state
-
         Note.save(this.state.note)
-            .then(() => {
-                Log.info('NOTE_INSERTED');
+            .then(note => {
+                this.props.notes_update_one({ note: note });
             })
             .catch(error => {
-                Log.warn('CANNOT INSERT NOTE', error);
+                Log.warn('Cannot save note', error);
             });
-
-        // this.props.dispatch({
-        // 	type: 'SAVE_NOTE',
-        // 	note: this.state.note,
-        // });
     };
-
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -163,13 +172,22 @@ class NoteScreenComponent extends React.Component {
     }
 }
 
-const NoteScreen = connect(state => {
-    return {
-        note: state.nav.selectedNoteId
-            ? Note.noteById(state.nav.notes, state.nav.selectedNoteId)
-            : Note.newNote()
-    };
-})(NoteScreenComponent);
+const NoteScreen = connect(
+    state => {
+        return {
+            note: state.nav.selectedNoteId
+                ? Note.noteById(state.nav.notes, state.nav.selectedNoteId)
+                : Note.newNote()
+        };
+    },
+    dispatch => {
+        return {
+            notes_update_one: function (note) {
+                dispatch(actions.note_update_one({ note: note }));
+            }
+        };
+    }
+)(NoteScreenComponent);
 
 const Stack = createStackNavigator();
 class AppComponent extends React.Component {
@@ -177,7 +195,7 @@ class AppComponent extends React.Component {
         props = this.props;
         Note.previews()
             .then(notes => {
-                props.notes_loaded(notes);
+                props.notes_update_all(notes);
             })
             .catch(error => {
                 Log.warn('Cannot load notes', error);
@@ -198,8 +216,8 @@ const App = connect(
     state => {},
     dispatch => {
         return {
-            notes_loaded: function (notes) {
-                dispatch(actions.notes_loaded({ notes: notes }));
+            notes_update_all: function (notes) {
+                dispatch(actions.notes_update_all({ notes: notes }));
             }
         };
     }

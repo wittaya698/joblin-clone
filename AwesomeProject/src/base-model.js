@@ -13,7 +13,11 @@ class BaseModel {
         if (isNew) o.id = uuidv4();
         if (isNew) {
             let q = Database.insertSql(this.tableName(), o);
-            return this.db().insert(q.sql, q.params);
+            return this.db()
+                .insert(q.sql, q.params)
+                .then(() => {
+                    return o;
+                });
         } else {
             Log.error('NOT EIMPLEMENTED');
             // TODO: update
