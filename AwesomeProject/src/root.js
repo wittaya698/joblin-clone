@@ -12,6 +12,7 @@ import { Setting } from '@/src/models/setting';
 
 import { NoteScreen } from '@/src/components/screens/note';
 import { NotesScreen } from '@/src/components/screens/notes';
+import { LoginScreen } from '@/src/components/screens/login';
 
 let defaultState = {
     defaultText: 'bla',
@@ -115,6 +116,7 @@ class AppComponent extends React.Component {
             <Stack.Navigator>
                 <Stack.Screen name="Notes" component={NotesScreen} />
                 <Stack.Screen name="Note" component={NoteScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
             </Stack.Navigator>
         );
     }

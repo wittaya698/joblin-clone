@@ -3,6 +3,7 @@ import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/src/log.js';
 import { ItemList } from '@/src/components/item-list.js';
+import { actions } from '@/src/root';
 
 class NotesScreenComponent extends React.Component {
     static navigationOptions = {
@@ -14,7 +15,9 @@ class NotesScreenComponent extends React.Component {
         navigate('Note');
     };
 
-    loginButton_press = () => {};
+    loginButton_press = () => {
+        this.props.dispatch(go_to_login({ routeName: 'Login' }));
+    };
 
     syncButton_press = () => {
         Log.info('SYNC');
@@ -37,8 +40,17 @@ class NotesScreenComponent extends React.Component {
     }
 }
 
-const NotesScreen = connect(state => {
-    return {};
-})(NotesScreenComponent);
+const NotesScreen = connect(
+    state => {
+        return {};
+    },
+    dispatch => {
+        return {
+            go_to_login: function (routeName) {
+                dispatch(actions.navigate({ routeName: routeName }));
+            }
+        };
+    }
+)(NotesScreenComponent);
 
 export { NotesScreen };
