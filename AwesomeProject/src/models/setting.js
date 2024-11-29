@@ -2,13 +2,22 @@ import { BaseModel } from '@/src/base-model';
 
 class Setting extends BaseModel {
     static tableName() {
-        console.error('tabaleName(): to be implemented');
-        throw Error();
+        return 'settings';
     }
 
     static defaultSetting(key) {
-        console.error('defaultSetting(): to be implemented');
-        throw Error();
+        if (!this.defaults_) {
+            this.defaults_ = {
+                clientId: { value: '', type: 'string' },
+                sessionId: { value: '', type: 'string' },
+                lastUpdateTime: { value: '', type: 'int' }
+            };
+        }
+        if (!(key in this.defaults_)) throw new Error('Unknown key: ' + key);
+
+        let output = Object.assign({}, this.defaults_[key]);
+        output.key = key;
+        return output;
     }
 
     static load() {
@@ -28,8 +37,14 @@ class Setting extends BaseModel {
     }
 
     static value(key) {
-        console.error('value(): to be implemented');
-        throw Error();
+        for (let i = 0; i < this.cache_.length; i++) {
+            if (this.cache_[i].key == key) {
+                return this.cache_[i].value;
+            }
+        }
+
+        let s = this.defaultSetting(key);
+        return s.value;
     }
 
     static scheduleUpdate() {

@@ -97,6 +97,7 @@ class AppComponent extends React.Component {
                 return Setting.load();
             })
             .then(() => {
+                Log.info('Client ID', Setting.value('clientId'));
                 Log.info('Loading notes...');
                 Note.previews()
                     .then(notes => {

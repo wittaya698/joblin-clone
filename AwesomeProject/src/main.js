@@ -8,14 +8,13 @@
 
 import { Root } from '@/src/root.js';
 import React, { Component } from 'react';
-import { Database } from '@/src/database';
-import { BaseModel } from '@/src/base-model';
-import { Registry } from './registry';
-import { AppRegistry } from 'react-native';
+import { Registry } from '@/src/registry';
+import { Log } from '@/src/log';
 
 export default class Main extends Component {
     render() {
         Registry.setDebugMode(true);
+        Log.setLevel(Registry.debugMode() ? Log.LEVEL_DEBUG : Log.LEVEL_WARN);
         // Note: The final part of the initialization process is in
         // AppComponent.componentDidMount(), when the application is ready.
         return <Root />;

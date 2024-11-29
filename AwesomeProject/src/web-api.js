@@ -1,4 +1,5 @@
-const queryString = require('query-string');
+import { Log } from '@/src/log';
+import { stringify } from 'query-string';
 
 class WebApi {
     constructor(baseUrl) {
@@ -8,7 +9,7 @@ class WebApi {
     makeRequest(method, path, query, data) {
         let url = this.baseUrl_;
         if (path) url += '/' + path;
-        if (query) url += '?' + queryString(query);
+        if (query) url += '?' + stringify(query);
         let options = {};
         options.method = method.toUpperCase();
         if (data) {
@@ -26,10 +27,26 @@ class WebApi {
         };
     }
 
+    static toCurl(r, data) {
+        let o = r.options;
+        let cmd = [];
+        cmd.push('curl');
+        if (o.method == 'PUT') cmd.push('-X PUT');
+        if (o.method == 'PATCH') cmd.push('-X PATCH');
+        if (o.method == 'DELETE') cmd.push('-X DELETE');
+        if (o.method != 'GET' && o.method != 'DELETE') {
+            cmd.push("--data '" + stringify(data) + "'");
+        }
+        cmd.push(r.url);
+        return cmd.join(' ');
+    }
+
     exec(method, path, query, data) {
         let that = this;
         return new Promise(function (resolve, reject) {
             let r = that.makeRequest(method, path, query, data);
+
+            Log.debug(WebApi.toCurl(r, data));
 
             fetch(r.url, r.options)
                 .then(function (response) {
@@ -38,7 +55,8 @@ class WebApi {
                         .json()
                         .then(function (data) {
                             if (data && data.error) {
-                                reject(data);
+                                let e = new Error(data.error);
+                                reject(e);
                             } else {
                                 resolve(data);
                             }

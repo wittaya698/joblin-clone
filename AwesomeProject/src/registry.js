@@ -4,6 +4,8 @@
 // registry should be designed in such a way that they can be converted to use
 // dependency injection later on (eg. `BaseModel.db()`, `Synchroniser.api()`)
 
+import { WebApi } from '@/src/web-api.js';
+
 class Registry {
     static setDebugMode(v) {
         this.debugMode_ = v;
@@ -14,8 +16,10 @@ class Registry {
         return this.debugMode_;
     }
 
-    static setApi(v) {
-        this.api_ = v;
+    static api() {
+        if (this.api_) return this.api_;
+        this.api_ = new WebApi('http://192.168.2.34:8000');
+        return this.api_;
     }
 
     static setDb(v) {
@@ -27,18 +31,7 @@ class Registry {
             throw new Error(
                 'Accessing database before it has been initialised'
             );
-        // if (!this.db_) {
-        // 	this.db_ = new Database();
-        // 	this.db_.setDebugEnabled(this.debugMode());
-        // 	this.db_.open();
-        // }
         return this.db_;
-    }
-
-    static api() {
-        if (!this.api_)
-            throw new Error('Accessing web API before it has been initialised');
-        return this.api_;
     }
 }
 

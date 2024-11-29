@@ -1,6 +1,6 @@
 import SQLite from 'react-native-sqlite-storage';
-import { Log } from './log.js';
-import { v4 as createUuid } from 'uuid';
+import { Log } from '@/src/log.js';
+import { uuid } from '@/src/uuid.js';
 
 const structureSql = `
 CREATE TABLE folders (
@@ -93,7 +93,7 @@ class Database {
 
     open() {
         this.db_ = SQLite.openDatabase(
-            { name: 'joplin-4.sqlite', location: 'default' },
+            { name: 'joplin-5.sqlite', location: 'default' },
             db => {
                 Log.info('Database was open successfully');
             },
@@ -155,18 +155,7 @@ class Database {
     selectAll(sql, params = null) {
         this.logQuery(sql, params);
 
-        return new Promise((resolve, reject) => {
-            this.db_.executeSql(
-                sql,
-                params,
-                r => {
-                    resolve(r);
-                },
-                error => {
-                    reject(error);
-                }
-            );
-        });
+        return this.exec(sql, params);
     }
 
     exec(sql, params = null) {
@@ -177,7 +166,7 @@ class Database {
                 sql,
                 params,
                 r => {
-                    resolve();
+                    resolve(r);
                 },
                 error => {
                     reject(error);
@@ -257,7 +246,6 @@ class Database {
 
                     Log.info('Database is new - creating the schema...');
                     let statements = this.sqlStringToLines(structureSql);
-                    //this.db_.transaction((tx) => {
                     this.transaction(
                         tx => {
                             try {
@@ -266,7 +254,7 @@ class Database {
                                 }
                                 tx.executeSql(
                                     'INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' +
-                                        createUuid() +
+                                        uuid.create() +
                                         '", "' +
                                         Database.enumToId(
                                             'settings',

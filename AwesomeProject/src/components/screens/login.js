@@ -1,6 +1,10 @@
 import React from 'react';
-import { View, TextInput, Button } from 'react-native';
+import { View, TextInput, Button, Text } from 'react-native';
 import { connect } from 'react-redux';
+
+import { Setting } from '@/src/models/setting';
+import { Registry } from '@/src/registry';
+import { _ } from '@/src/locale';
 
 class LoginScreenComponent extends React.Component {
     static navigationOptions = {
@@ -9,11 +13,11 @@ class LoginScreenComponent extends React.Component {
 
     constructor() {
         super();
-        this.state = { username: '', password: '' };
+        this.state = { username: '', password: '', errorMessage: null };
     }
 
-    username_changeText = text => {
-        this.setState({ username: text });
+    email_changeText = text => {
+        this.setState({ email: text });
     };
 
     password_changeText = text => {
@@ -21,28 +25,43 @@ class LoginScreenComponent extends React.Component {
     };
 
     loginButton_press = () => {
-        Log.info('LOGIN');
-        // Note.save(this.state.note).then((note) => {
-        // 	this.props.dispatch({
-        // 		type: 'NOTES_UPDATE_ONE',
-        // 		note: note,
-        // 	});
-        // }).catch((error) => {
-        // 	Log.warn('Cannot save note', error);
-        // });
+        this.setState({ errorMessage: null });
+
+        return Registry.api()
+            .post('sessions', null, {
+                email: this.state.email,
+                password: this.state.password,
+                client_id: Setting.value('clientId')
+            })
+            .then(session => {
+                Log.info('GOT DATA:');
+                Log.info(session);
+            })
+            .catch(error => {
+                this.setState({
+                    errorMessage: _('Could not login: %s)', error.message)
+                });
+            });
     };
 
     render() {
         return (
             <View style={{ flex: 1 }}>
                 <TextInput
-                    value={this.state.username}
-                    onChangeText={this.username_changeText}
+                    value={this.state.email}
+                    onChangeText={this.email_changeText}
+                    keyboardType="email-address"
                 />
                 <TextInput
                     value={this.state.password}
                     onChangeText={this.password_changeText}
+                    secureTextEntry={true}
                 />
+                {this.state.errorMessage && (
+                    <Text style={{ color: '#ff0000' }}>
+                        {this.state.errorMessage}
+                    </Text>
+                )}
                 <Button title="Login" onPress={this.loginButton_press} />
             </View>
         );
