@@ -47,6 +47,7 @@ class NoteScreenComponent extends React.Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
+                <TextInput value={this.state.note.parent_id} />
                 <TextInput
                     value={this.state.note.title}
                     onChangeText={this.title_changeText}
@@ -68,7 +69,7 @@ const NoteScreen = connect(
         return {
             note: state.nav.selectedNoteId
                 ? Note.byId(state.nav.notes, state.nav.selectedNoteId)
-                : Note.newNote()
+                : Note.newNote(state.nav.selectedFolderId)
         };
     },
     dispatch => {

@@ -5,25 +5,26 @@ import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { Log } from '@/src/log';
+import { Note } from '@/src/models/note';
+import { Folder } from '@/src/models/folder';
 import { Database } from '@/src/database';
 import { Registry } from '@/src/registry';
-import { Note } from '@/src/models/note';
 import { Setting } from '@/src/models/setting';
 
 import { NoteScreen } from '@/src/components/screens/note';
 import { NotesScreen } from '@/src/components/screens/notes';
 import { FolderScreen } from '@/src/components/screens/folder';
+import { FoldersScreen } from '@/src/components/screens/folders';
 import { LoginScreen } from '@/src/components/screens/login';
-import { useNavigation } from '@react-navigation/native';
 
 let defaultState = {
     defaultText: 'bla',
     notes: [],
     folders: [
-        { id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: 'un' },
-        { id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: 'deux' },
-        { id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: 'trois' },
-        { id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: 'quatre' }
+        // { id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: 'un' },
+        // { id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: 'deux' },
+        // { id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: 'trois' },
+        // { id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: 'quatre' }
     ],
     selectedNoteId: null,
     selectedFolderId: null
@@ -39,7 +40,11 @@ const navReducer = createSlice({
                 ? action.payload.noteId
                 : null;
             state.selectedNoteId = note_id;
-            action.payload.navigation.navigate(route, { noteId: note_id });
+            const folder_id = action.payload.folderId
+                ? action.payload.folderId
+                : null;
+            state.selectedFolderId = folder_id;
+            action.payload.navigation.navigate(route);
         },
         back: (state, action) => {
             // // If the current screen is already the requested screen, don't do anything
@@ -83,6 +88,10 @@ const navReducer = createSlice({
             if (!found) newNotes.push(action.payload.note);
 
             state.notes = newNotes;
+        },
+
+        folder_update_all: (state, action) => {
+            state.folders = action.payload.folders;
         },
 
         folder_update_one: (state, action) => {
@@ -130,26 +139,38 @@ class AppComponent extends React.Component {
             })
             .then(() => {
                 Log.info('Client ID', Setting.value('clientId'));
-                Log.info('Loading notes...');
-                Note.previews()
-                    .then(notes => {
-                        props.notes_update_all(notes);
+                Log.info('Loading folders...');
+
+                Folder.all()
+                    .then(folders => {
+                        props.folderUpdateAll(folders);
                     })
                     .catch(error => {
-                        Log.warn('Cannot load notes', error);
+                        Log.warn('Cannot load folders', error);
                     });
-            })
-            .catch(error => {
-                Log.error('Cannot initialize database:', error);
             });
+        // .then(() => {
+        //     Log.info('Loading notes...');
+        //     Note.previews()
+        //         .then(notes => {
+        //             props.notesUpdateAll(notes);
+        //         })
+        //         .catch(error => {
+        //             Log.warn('Cannot load notes', error);
+        //         });
+        // })
+        // .catch(error => {
+        //     Log.error('Cannot initialize database:', error);
+        // });
     }
 
     render() {
         return (
-            <Stack.Navigator>
+            <Stack.Navigator initialRouteName="Folders">
                 <Stack.Screen name="Notes" component={NotesScreen} />
                 <Stack.Screen name="Note" component={NoteScreen} />
                 <Stack.Screen name="Folder" component={FolderScreen} />
+                <Stack.Screen name="Folders" component={FoldersScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
             </Stack.Navigator>
         );
@@ -160,8 +181,11 @@ const App = connect(
     state => {},
     dispatch => {
         return {
-            notes_update_all: function (notes) {
+            notesUpdateAll: function (notes) {
                 dispatch(actions.notes_update_all({ notes: notes }));
+            },
+            folderUpdateAll: function (folders) {
+                dispatch(actions.folder_update_all({ folders: folders }));
             }
         };
     }

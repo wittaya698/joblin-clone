@@ -4,8 +4,13 @@ import { actions } from '../root';
 
 class NoteListComponent extends ItemListComponent {
     constructor(props) {
-        super(props);
+        super();
+        this.navigation = props.navigation;
     }
+
+    listView_itemClick = noteId => {
+        this.props.goToNote(this.navigation, noteId);
+    };
 }
 
 const NoteList = connect(
@@ -16,10 +21,10 @@ const NoteList = connect(
     },
     dispatch => {
         return {
-            onItemClick: (navigation, noteId) => {
+            goToNote: (nv, noteId) => {
                 dispatch(
                     actions.navigate({
-                        navigation: navigation,
+                        navigation: nv,
                         route: 'Note',
                         noteId: noteId
                     })

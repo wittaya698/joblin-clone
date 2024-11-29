@@ -93,7 +93,7 @@ class Database {
 
     open() {
         this.db_ = SQLite.openDatabase(
-            { name: 'joplin-5.sqlite', location: 'default' },
+            { name: 'joplin-6.sqlite', location: 'default' },
             db => {
                 Log.info('Database was open successfully');
             },
