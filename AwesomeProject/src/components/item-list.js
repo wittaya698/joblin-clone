@@ -1,13 +1,11 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
-import { connect } from 'react-redux';
-import { actions } from '@/src/root';
-import { Log } from '@/src/log';
 
 class ItemListComponent extends Component {
-    constructor() {
+    constructor(props) {
         super();
         this.state = { dataSource: {} };
+        this.navigation = props.navigation;
     }
 
     UNSAFE_componentWillMount() {
@@ -17,13 +15,13 @@ class ItemListComponent extends Component {
 
     UNSAFE_componentWillReceiveProps(newProps) {
         // https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
-        this.setState({ dataSource: newProps.notes });
+        this.setState({ dataSource: newProps.items });
     }
 
     render() {
         let renderRow = rowData => {
             let onPress = () => {
-                this.props.onItemClick(rowData.id);
+                this.props.onItemClick(this.navigation, rowData.id);
             };
             return (
                 <TouchableHighlight onPress={onPress}>
@@ -46,17 +44,4 @@ class ItemListComponent extends Component {
     }
 }
 
-const ItemList = connect(
-    state => {
-        return { notes: state.nav.notes };
-    },
-    dispatch => {
-        return {
-            onItemClick: noteId => {
-                dispatch(actions.navigate({ routeName: 'Note', id: noteId }));
-            }
-        };
-    }
-)(ItemListComponent);
-
-export { ItemList };
+export { ItemListComponent };

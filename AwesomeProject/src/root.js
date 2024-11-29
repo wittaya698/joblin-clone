@@ -12,19 +12,35 @@ import { Setting } from '@/src/models/setting';
 
 import { NoteScreen } from '@/src/components/screens/note';
 import { NotesScreen } from '@/src/components/screens/notes';
+import { FolderScreen } from '@/src/components/screens/folder';
 import { LoginScreen } from '@/src/components/screens/login';
+import { useNavigation } from '@react-navigation/native';
 
 let defaultState = {
     defaultText: 'bla',
     notes: [],
-    selectedNoteId: null
+    folders: [
+        { id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: 'un' },
+        { id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: 'deux' },
+        { id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: 'trois' },
+        { id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: 'quatre' }
+    ],
+    selectedNoteId: null,
+    selectedFolderId: null
 };
 
 const navReducer = createSlice({
     name: 'nav',
     initialState: defaultState,
     reducers: {
-        navigate: () => {},
+        navigate: (state, action) => {
+            const route = action.payload.route;
+            const note_id = action.payload.noteId
+                ? action.payload.noteId
+                : null;
+            state.selectedNoteId = note_id;
+            action.payload.navigation.navigate(route, { noteId: note_id });
+        },
         back: (state, action) => {
             // // If the current screen is already the requested screen, don't do anything
             // const r = state.nav.routes;
@@ -52,9 +68,9 @@ const navReducer = createSlice({
         },
         // Insert the note into the note list if it's new, or
         // update it if it already exists.
-        note_update_one: (state, action) => {
+        notes_update_one: (state, action) => {
             let newNotes = state.notes.splice(0);
-            let found = false;
+            var found = false;
             for (let i = 0; i < newNotes.length; i++) {
                 let n = newNotes[i];
                 if (n.id == action.payload.note.id) {
@@ -68,7 +84,23 @@ const navReducer = createSlice({
 
             state.notes = newNotes;
         },
-        save_note: () => {}
+
+        folder_update_one: (state, action) => {
+            let newFolders = state.folders.splice(0);
+            var found = false;
+            for (let i = 0; i < newFolders.length; i++) {
+                let n = newFolders[i];
+                if (n.id == action.payload.folder.id) {
+                    newFolders[i] = action.payload.folder;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) newFolders.push(action.payload.folder);
+
+            state.folders = newFolders;
+        }
     }
 });
 
@@ -117,6 +149,7 @@ class AppComponent extends React.Component {
             <Stack.Navigator>
                 <Stack.Screen name="Notes" component={NotesScreen} />
                 <Stack.Screen name="Note" component={NoteScreen} />
+                <Stack.Screen name="Folder" component={FolderScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
             </Stack.Navigator>
         );

@@ -55,8 +55,7 @@ class WebApi {
                         .json()
                         .then(function (data) {
                             if (data && data.error) {
-                                let e = new Error(data.error);
-                                reject(e);
+                                reject(new Error(data.error));
                             } else {
                                 resolve(data);
                             }

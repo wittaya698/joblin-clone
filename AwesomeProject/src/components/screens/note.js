@@ -3,6 +3,7 @@ import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/src/log.js';
 import { Note } from '@/src/models/note.js';
+import { actions } from '@/src/root';
 
 class NoteScreenComponent extends React.Component {
     static navigationOptions = {
@@ -66,14 +67,14 @@ const NoteScreen = connect(
     state => {
         return {
             note: state.nav.selectedNoteId
-                ? Note.noteById(state.nav.notes, state.nav.selectedNoteId)
+                ? Note.byId(state.nav.notes, state.nav.selectedNoteId)
                 : Note.newNote()
         };
     },
     dispatch => {
         return {
             notes_update_one: function (note) {
-                dispatch(actions.note_update_one({ note: note }));
+                dispatch(actions.notes_update_one({ note: note }));
             }
         };
     }

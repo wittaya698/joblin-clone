@@ -1,25 +1,24 @@
-import { BaseModel } from '@/src/base-model.js';
+import { BaseModel } from '../base-model';
 
-class Note extends BaseModel {
+class Folder extends BaseModel {
     static tableName() {
-        return 'notes';
+        return 'folders';
     }
 
     static useUuid() {
         return true;
     }
 
-    static newNote() {
+    static newFolder() {
         return {
             id: null,
-            title: '',
-            body: ''
+            title: ''
         };
     }
 
-    static previews() {
+    static all() {
         return this.db()
-            .selectAll('SELECT id, title, body, updated_time FROM notes')
+            .selectAll('SELECT * FROM folders')
             .then(r => {
                 let output = [];
                 for (let i = 0; i < r.rows.length; i++) {
@@ -30,4 +29,4 @@ class Note extends BaseModel {
     }
 }
 
-export { Note };
+export { Folder };

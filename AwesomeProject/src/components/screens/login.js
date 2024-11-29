@@ -2,6 +2,7 @@ import React from 'react';
 import { View, TextInput, Button, Text } from 'react-native';
 import { connect } from 'react-redux';
 
+import { Log } from '@/src/log';
 import { Setting } from '@/src/models/setting';
 import { Registry } from '@/src/registry';
 import { _ } from '@/src/locale';
