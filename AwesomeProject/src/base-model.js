@@ -41,6 +41,18 @@ class BaseModel {
             });
     }
 
+    static delete(id) {
+        if (!id) {
+            Log.warn('Cannot delete object without an ID');
+            return;
+        }
+
+        return this.db().exec(
+            'DELETE FROM ' + this.tableName() + ' WHERE id = ?',
+            [id]
+        );
+    }
+
     static db() {
         return Registry.db();
     }

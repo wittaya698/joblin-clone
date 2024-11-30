@@ -4,8 +4,6 @@ import { Checkbox } from '@/src/components/checkbox';
 import { actions } from '../root';
 
 class ItemListComponent extends Component {
-    static dispatch = null;
-
     constructor() {
         super();
         this.previousListMode = 'view';
@@ -41,7 +39,7 @@ class ItemListComponent extends Component {
     }
 
     setListMode = mode => {
-        ItemListComponent.dispatch(actions.set_list_mode({ listMode: mode }));
+        this.props.dispatch(actions.set_list_mode({ listMode: mode }));
     };
 
     listView_itemPress = itemId => {};

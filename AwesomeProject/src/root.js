@@ -3,6 +3,7 @@ import React from 'react';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
+import { MenuProvider } from 'react-native-popup-menu';
 
 import { Log } from '@/src/log';
 import { Note } from '@/src/models/note';
@@ -77,7 +78,7 @@ const navReducer = createSlice({
         },
 
         folders_update_one: (state, action) => {
-            let newFolders = state.folders.splice(0);
+            var newFolders = state.folders.splice(0);
             var found = false;
             for (let i = 0; i < newFolders.length; i++) {
                 let n = newFolders[i];
@@ -89,6 +90,17 @@ const navReducer = createSlice({
             }
 
             if (!found) newFolders.push(action.payload.folder);
+
+            state.folders = newFolders;
+        },
+
+        folder_delete: (state, action) => {
+            var newFolders = [];
+            for (let i = 0; i < state.folders.length; i++) {
+                let f = state.folders[i];
+                if (f.id == action.payload.folderId) continue;
+                newFolders.push(f);
+            }
 
             state.folders = newFolders;
         },
@@ -143,13 +155,15 @@ class AppComponent extends React.Component {
     render() {
         ItemListComponent.dispatch = this.props.dispatch;
         return (
-            <Stack.Navigator initialRouteName="Folders">
-                <Stack.Screen name="Notes" component={NotesScreen} />
-                <Stack.Screen name="Note" component={NoteScreen} />
-                <Stack.Screen name="Folder" component={FolderScreen} />
-                <Stack.Screen name="Folders" component={FoldersScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
-            </Stack.Navigator>
+            <MenuProvider>
+                <Stack.Navigator initialRouteName="Folders">
+                    <Stack.Screen name="Notes" component={NotesScreen} />
+                    <Stack.Screen name="Note" component={NoteScreen} />
+                    <Stack.Screen name="Folder" component={FolderScreen} />
+                    <Stack.Screen name="Folders" component={FoldersScreen} />
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                </Stack.Navigator>
+            </MenuProvider>
         );
     }
 }

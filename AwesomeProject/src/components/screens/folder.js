@@ -60,8 +60,8 @@ class FolderScreenComponent extends React.Component {
 
 const FolderScreen = connect(state => {
     return {
-        folder: state.selectedFolderId
-            ? Folder.byId(state.folders, state.selectedFolderId)
+        folder: state.nav.selectedFolderId
+            ? Folder.byId(state.nav.folders, state.nav.selectedFolderId)
             : Folder.newFolder()
     };
 })(FolderScreenComponent);
