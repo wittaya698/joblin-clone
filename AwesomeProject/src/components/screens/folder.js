@@ -1,11 +1,12 @@
 import React from 'react';
-import { Folder } from '../../models/folder';
+import { Folder } from '@/src/models/folder';
+import { ScreenHeader } from '@/src/components/screen-header';
 import { connect } from 'react-redux';
 import { Button, TextInput, View } from 'react-native';
 
 class FolderScreenComponent extends React.Component {
-    static navigationOptions = {
-        title: 'Folder'
+    static navigationOptions = options => {
+        return { header: null };
     };
 
     constructor() {
@@ -40,8 +41,10 @@ class FolderScreenComponent extends React.Component {
     };
 
     render() {
+        routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
+                <ScreenHeader navState={{ routeName: routeName }} />
                 <TextInput
                     value={this.state.folder.title}
                     onChangeText={this.title_changeText}

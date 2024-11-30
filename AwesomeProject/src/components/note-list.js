@@ -4,18 +4,13 @@ import { actions } from '../root';
 
 class NoteListComponent extends ItemListComponent {
     listView_itemPress = noteId => {
-        this.dispatch(actions.navigate({ noteId: noteId }));
+        this.props.dispatch(actions.navigate({ noteId: noteId }));
         this.props.navigator.navigate('Note');
     };
 }
 
-const NoteList = connect(
-    state => {
-        return { items: state.nav.notes, navigator: state.nav.navigator };
-    },
-    dispatch => {
-        return { dispatch: fn => dispatch(fn) };
-    }
-)(NoteListComponent);
+const NoteList = connect(state => {
+    return { items: state.nav.notes, navigator: state.nav.navigator };
+})(NoteListComponent);
 
 export { NoteList };

@@ -154,19 +154,12 @@ class AppComponent extends React.Component {
     }
 }
 
-const App = connect(
-    state => {
-        return { nav: state.nav };
-    },
-    dispatch => {
-        return { dispatch: fn => dispatch(fn) };
-    }
-)(AppComponent);
+const App = connect(state => {
+    return { nav: state.nav };
+})(AppComponent);
 
 class Root extends React.Component {
     render() {
-        Log.info('TTTTTTTTTTTTTTTTTTT', defaultState.nav);
-
         return (
             <Provider store={store}>
                 <App />

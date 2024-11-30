@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
+
 import { Log } from '@/src/log.js';
-import { Note } from '@/src/models/note.js';
 import { actions } from '@/src/root';
+import { Note } from '@/src/models/note.js';
+import { ScreenHeader } from '@/src/components/screen-header';
 
 class NoteScreenComponent extends React.Component {
-    static navigationOptions = {
-        title: 'Note'
+    static navigationOptions = options => {
+        return { header: null };
     };
 
     constructor() {
@@ -38,15 +40,17 @@ class NoteScreenComponent extends React.Component {
     saveNoteButton_press = () => {
         Note.save(this.state.note)
             .then(note => {
-                this.props.notes_update_one(note);
+                this.props.dispatch(actions.notes_update_one({ note: note }));
             })
             .catch(error => {
                 Log.warn('Cannot save note', error);
             });
     };
     render() {
+        routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
+                <ScreenHeader navState={{ routeName: routeName }} />
                 <TextInput value={this.state.note.parent_id} />
                 <TextInput
                     value={this.state.note.title}
@@ -64,21 +68,12 @@ class NoteScreenComponent extends React.Component {
     }
 }
 
-const NoteScreen = connect(
-    state => {
-        return {
-            note: state.nav.selectedNoteId
-                ? Note.byId(state.nav.notes, state.nav.selectedNoteId)
-                : Note.newNote(state.nav.selectedFolderId)
-        };
-    },
-    dispatch => {
-        return {
-            notes_update_one: function (note) {
-                dispatch(actions.notes_update_one({ note: note }));
-            }
-        };
-    }
-)(NoteScreenComponent);
+const NoteScreen = connect(state => {
+    return {
+        note: state.nav.selectedNoteId
+            ? Note.byId(state.nav.notes, state.nav.selectedNoteId)
+            : Note.newNote(state.nav.selectedFolderId)
+    };
+})(NoteScreenComponent);
 
 export { NoteScreen };

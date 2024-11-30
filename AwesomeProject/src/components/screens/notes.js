@@ -3,10 +3,11 @@ import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/src/log.js';
 import { NoteList } from '@/src/components/note-list';
+import { ScreenHeader } from '@/src/components/screen-header';
 
 class NotesScreenComponent extends React.Component {
-    static navigationOptions = {
-        title: 'Notes'
+    static navigationOptions = options => {
+        return { header: null };
     };
 
     createNoteButton_press = () => {
@@ -26,8 +27,10 @@ class NotesScreenComponent extends React.Component {
     };
 
     render() {
+        routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
+                <ScreenHeader navState={{ routeName: routeName }} />
                 <NoteList style={{ flex: 1 }} />
                 <View style={{ flexDirection: 'row' }}>
                     <Button

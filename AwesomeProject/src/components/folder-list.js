@@ -15,17 +15,12 @@ class FolderListComponent extends ItemListComponent {
     };
 }
 
-const FolderList = connect(
-    state => {
-        return {
-            items: state.nav.folders,
-            listMode: state.nav.listMode,
-            navigator: state.nav.navigator
-        };
-    },
-    dispatch => {
-        return { dispatch: fn => dispatch(fn) };
-    }
-)(FolderListComponent);
+const FolderList = connect(state => {
+    return {
+        items: state.nav.folders,
+        listMode: state.nav.listMode,
+        navigator: state.nav.navigator
+    };
+})(FolderListComponent);
 
 export { FolderList };

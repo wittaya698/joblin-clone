@@ -3,13 +3,14 @@ import { View, TextInput, Button, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 import { Log } from '@/src/log';
-import { Setting } from '@/src/models/setting';
 import { Registry } from '@/src/registry';
+import { Setting } from '@/src/models/setting';
+import { ScreenHeader } from '@/src/components/screen-header';
 import { _ } from '@/src/locale';
 
 class LoginScreenComponent extends React.Component {
-    static navigationOptions = {
-        title: 'Login'
+    static navigationOptions = options => {
+        return { header: null };
     };
 
     constructor() {
@@ -46,8 +47,10 @@ class LoginScreenComponent extends React.Component {
     };
 
     render() {
+        routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
+                <ScreenHeader navState={{ routeName: routeName }} />
                 <TextInput
                     value={this.state.email}
                     onChangeText={this.email_changeText}

@@ -1,4 +1,4 @@
-import { BaseModel } from '../base-model';
+import { BaseModel } from '@/src/base-model';
 
 class Folder extends BaseModel {
     static tableName() {
