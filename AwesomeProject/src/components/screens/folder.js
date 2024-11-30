@@ -32,7 +32,7 @@ class FolderScreenComponent extends React.Component {
     saveFolderButton_press = () => {
         Folder.save(this.state.folder)
             .then(folder => {
-                this.props.folder_update_one({ folder: folder });
+                this.props.folders_update_one({ folder: folder });
             })
             .catch(error => {
                 Log.warn('Cannot save folder', error);

@@ -10,18 +10,15 @@ class NotesScreenComponent extends React.Component {
     };
 
     createNoteButton_press = () => {
-        const { navigate } = this.props.navigation;
-        navigate('Note');
+        this.props.navigation.navigate('Note');
     };
 
     createFolderButton_press = () => {
-        const { navigate } = this.props.navigation;
-        navigate('Folder');
+        this.props.navigation.navigate('Folder');
     };
 
     loginButton_press = () => {
-        const { navigate } = this.props.navigation;
-        navigate('Login');
+        this.props.navigation.navigate('Login');
     };
 
     syncButton_press = () => {
@@ -31,10 +28,7 @@ class NotesScreenComponent extends React.Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <NoteList
-                    style={{ flex: 1 }}
-                    navigation={this.props.navigation}
-                />
+                <NoteList style={{ flex: 1 }} />
                 <View style={{ flexDirection: 'row' }}>
                     <Button
                         title="Create note"

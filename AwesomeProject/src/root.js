@@ -16,56 +16,38 @@ import { NotesScreen } from '@/src/components/screens/notes';
 import { FolderScreen } from '@/src/components/screens/folder';
 import { FoldersScreen } from '@/src/components/screens/folders';
 import { LoginScreen } from '@/src/components/screens/login';
+import { ItemListComponent } from './components/item-list';
 
 let defaultState = {
-    defaultText: 'bla',
+    nav: {},
+    navigator: null,
     notes: [],
-    folders: [
-        // { id: 'abcdabcdabcdabcdabcdabcdabcdab01', title: 'un' },
-        // { id: 'abcdabcdabcdabcdabcdabcdabcdab02', title: 'deux' },
-        // { id: 'abcdabcdabcdabcdabcdabcdabcdab03', title: 'trois' },
-        // { id: 'abcdabcdabcdabcdabcdabcdabcdab04', title: 'quatre' }
-    ],
+    folders: [],
     selectedNoteId: null,
-    selectedFolderId: null
+    selectedFolderId: null,
+    listMode: 'view'
 };
 
 const navReducer = createSlice({
     name: 'nav',
     initialState: defaultState,
     reducers: {
-        navigate: (state, action) => {
-            const route = action.payload.route;
-            const note_id = action.payload.noteId
-                ? action.payload.noteId
-                : null;
-            state.selectedNoteId = note_id;
-            const folder_id = action.payload.folderId
-                ? action.payload.folderId
-                : null;
-            state.selectedFolderId = folder_id;
-            action.payload.navigation.navigate(route);
+        set_navigator: (state, action) => {
+            state.navigator = action.payload.navigator;
         },
-        back: (state, action) => {
-            // // If the current screen is already the requested screen, don't do anything
+        navigate: (state, action) => {
             // const r = state.nav.routes;
-            // if (r.length && r[r.length - 1].routeName == action.routeName) {
-            // 	return state
-            // }
 
-            // const nextStateNav = AppNavigator.router.getStateForAction(action, state.nav);
-            // Log.info('NEXT', nextStateNav);
-            // newState = Object.assign({}, state);
-            // if (nextStateNav) {
-            // 	newState.nav = nextStateNav;
-            // }
+            action.params = { listMode: 'view' };
 
-            // if (action.payload.noteId) {
-            // 	newState.selectedNoteId = action.payload.noteId;
-            // }
-            // state = newState;
+            // state.nav = newNav?;
+            if ('noteId' in action.payload) {
+                state.selectedNoteId = action.payload.noteId;
+            }
 
-            action.payload.navigation.goBack();
+            if ('folderId' in action.payload) {
+                state.selectedFolderId = action.payload.folderId;
+            }
         },
         // Replace all the notes with the provided array
         notes_update_all: (state, action) => {
@@ -90,11 +72,11 @@ const navReducer = createSlice({
             state.notes = newNotes;
         },
 
-        folder_update_all: (state, action) => {
+        folders_update_all: (state, action) => {
             state.folders = action.payload.folders;
         },
 
-        folder_update_one: (state, action) => {
+        folders_update_one: (state, action) => {
             let newFolders = state.folders.splice(0);
             var found = false;
             for (let i = 0; i < newFolders.length; i++) {
@@ -109,6 +91,11 @@ const navReducer = createSlice({
             if (!found) newFolders.push(action.payload.folder);
 
             state.folders = newFolders;
+        },
+
+        set_list_mode: (state, action) => {
+            state.listMode = action.payload.listMode;
+            // state.nav = Object.assign({}, state.nav)
         }
     }
 });
@@ -143,28 +130,18 @@ class AppComponent extends React.Component {
 
                 Folder.all()
                     .then(folders => {
-                        props.folderUpdateAll(folders);
+                        props.dispatch(
+                            actions.folders_update_all({ folders: folders })
+                        );
                     })
                     .catch(error => {
                         Log.warn('Cannot load folders', error);
                     });
             });
-        // .then(() => {
-        //     Log.info('Loading notes...');
-        //     Note.previews()
-        //         .then(notes => {
-        //             props.notesUpdateAll(notes);
-        //         })
-        //         .catch(error => {
-        //             Log.warn('Cannot load notes', error);
-        //         });
-        // })
-        // .catch(error => {
-        //     Log.error('Cannot initialize database:', error);
-        // });
     }
 
     render() {
+        ItemListComponent.dispatch = this.props.dispatch;
         return (
             <Stack.Navigator initialRouteName="Folders">
                 <Stack.Screen name="Notes" component={NotesScreen} />
@@ -178,21 +155,18 @@ class AppComponent extends React.Component {
 }
 
 const App = connect(
-    state => {},
+    state => {
+        return { nav: state.nav };
+    },
     dispatch => {
-        return {
-            notesUpdateAll: function (notes) {
-                dispatch(actions.notes_update_all({ notes: notes }));
-            },
-            folderUpdateAll: function (folders) {
-                dispatch(actions.folder_update_all({ folders: folders }));
-            }
-        };
+        return { dispatch: fn => dispatch(fn) };
     }
 )(AppComponent);
 
 class Root extends React.Component {
     render() {
+        Log.info('TTTTTTTTTTTTTTTTTTT', defaultState.nav);
+
         return (
             <Provider store={store}>
                 <App />

@@ -3,34 +3,18 @@ import { connect } from 'react-redux';
 import { actions } from '../root';
 
 class NoteListComponent extends ItemListComponent {
-    constructor(props) {
-        super();
-        this.navigation = props.navigation;
-    }
-
-    listView_itemClick = noteId => {
-        this.props.goToNote(this.navigation, noteId);
+    listView_itemPress = noteId => {
+        this.dispatch(actions.navigate({ noteId: noteId }));
+        this.props.navigator.navigate('Note');
     };
 }
 
 const NoteList = connect(
     state => {
-        return {
-            items: state.nav.notes
-        };
+        return { items: state.nav.notes, navigator: state.nav.navigator };
     },
     dispatch => {
-        return {
-            goToNote: (nv, noteId) => {
-                dispatch(
-                    actions.navigate({
-                        navigation: nv,
-                        route: 'Note',
-                        noteId: noteId
-                    })
-                );
-            }
-        };
+        return { dispatch: fn => dispatch(fn) };
     }
 )(NoteListComponent);
 
