@@ -13,7 +13,7 @@ class FolderScreenComponent extends React.Component {
         this.state = { folder: Folder.newFolder() };
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.setState({ folder: this.props.folder });
     }
 

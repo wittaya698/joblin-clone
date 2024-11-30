@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
-import { connect, useDispatch } from 'react-redux';
+import { Checkbox } from '@/src/components/checkbox';
 import { actions } from '../root';
 
 class ItemListComponent extends Component {
@@ -58,14 +58,14 @@ class ItemListComponent extends Component {
             let onLongPress = () => {
                 this.listView_itemLongPress(item.id);
             };
-            let editable = this.props.listMode == 'edit' ? ' [X] ' : '';
+            let isEditable = this.props.listMode == 'edit';
 
             return (
                 <TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
-                    <Text>
-                        {item.title}
-                        <Text>{editable}</Text>
-                    </Text>
+                    <View>
+                        {isEditable && <Checkbox label={item.title}></Checkbox>}
+                        {!isEditable && <Text>{item.title}</Text>}
+                    </View>
                 </TouchableHighlight>
             );
         };
