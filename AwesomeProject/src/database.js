@@ -93,7 +93,7 @@ class Database {
 
     open() {
         this.db_ = SQLite.openDatabase(
-            { name: 'joplin-6.sqlite', location: 'default' },
+            { name: 'joplin-7.sqlite', location: 'default' },
             db => {
                 Log.info('Database was open successfully');
             },
@@ -221,12 +221,18 @@ class Database {
         };
     }
 
-    transaction(readyCallback, errorCallback, successCallback) {
-        return this.db_.transaction(
-            readyCallback,
-            errorCallback,
-            successCallback
-        );
+    transaction(readyCallback) {
+        return new Promise((resolve, reject) => {
+            this.db_.transaction(
+                readyCallback,
+                error => {
+                    reject(error);
+                },
+                () => {
+                    resolve();
+                }
+            );
+        });
     }
 
     updateSchema() {
@@ -246,33 +252,24 @@ class Database {
 
                     Log.info('Database is new - creating the schema...');
                     let statements = this.sqlStringToLines(structureSql);
-                    this.transaction(
-                        tx => {
-                            try {
-                                for (let i = 0; i < statements.length; i++) {
-                                    tx.executeSql(statements[i]);
-                                }
-                                tx.executeSql(
-                                    'INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' +
-                                        uuid.create() +
-                                        '", "' +
-                                        Database.enumToId(
-                                            'settings',
-                                            'string'
-                                        ) +
-                                        '")'
-                                );
-                            } catch (error) {
-                                reject(error);
-                            }
-                        },
-                        error => {
-                            reject(error);
-                        },
-                        () => {
-                            resolve('Database scheme created successfully');
+                    this.transaction(tx => {
+                        for (let i = 0; i < statements.length; i++) {
+                            tx.executeSql(statements[i]);
                         }
-                    );
+                        tx.executeSql(
+                            'INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' +
+                                uuid.create() +
+                                '", "' +
+                                Database.enumToId('settings', 'string') +
+                                '")'
+                        );
+                    })
+                        .then(() => {
+                            resolve('Database schema created successfully');
+                        })
+                        .catch(error => {
+                            reject(error);
+                        });
                 });
         });
     }

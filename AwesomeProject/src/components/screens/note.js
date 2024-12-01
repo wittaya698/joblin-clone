@@ -51,7 +51,7 @@ class NoteScreenComponent extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <ScreenHeader navState={{ routeName: routeName }} />
-                <TextInput value={this.state.note.parent_id} />
+                <TextInput value={this.state.note.title} />
                 <TextInput
                     value={this.state.note.title}
                     onChangeText={this.title_changeText}
