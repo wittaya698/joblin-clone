@@ -1,0 +1,84 @@
+import React, { Component } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { FAB, Portal, Provider } from 'react-native-paper';
+import { connect } from 'react-redux';
+import { Log } from '@/src/log.js';
+import { ScreenHeader } from './screen-header';
+import { actions } from '@/src/root';
+
+const styles = StyleSheet.create({
+    actionButtonIcon: {
+        fontSize: 20,
+        height: 22,
+        color: 'white'
+    }
+});
+
+class ActionButtonComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            open: false
+        };
+    }
+
+    newNote_press() {
+        this.props.dispatch(
+            actions.navigate({
+                noteId: null,
+                folderId: this.props.parentFolderId
+            })
+        );
+        this.props.navigator.navigate('Note');
+    }
+
+    newFolder_press() {
+        this.props.dispatch(actions.navigate({ noteId: null }));
+        this.props.navigator.navigate('Folder');
+    }
+
+    handleStateChange = ({ open }) => {
+        this.setState({ open });
+    };
+
+    render() {
+        const { open } = this.state;
+        const style = styles.actionButtonIcon;
+        const actions = [
+            {
+                label: 'New note',
+                icon: () => <Icon name="document" style={style} />,
+                onPress: () => {
+                    this.newNote_press();
+                }
+            },
+            {
+                label: 'New folder',
+                icon: () => <Icon name="folder" style={style} />,
+                onPress: () => {
+                    this.newFolder_press();
+                }
+            }
+        ];
+        return (
+            <Provider>
+                {/* <Portal> */}
+                <FAB.Group
+                    visible={true}
+                    open={open}
+                    icon={open ? 'close' : 'plus'}
+                    actions={actions}
+                    onStateChange={this.handleStateChange}
+                />
+                {/* </Portal> */}
+            </Provider>
+        );
+    }
+}
+
+const ActionButton = connect(state => {
+    return { navigator: state.nav.navigator };
+})(ActionButtonComponent);
+
+export { ActionButton };

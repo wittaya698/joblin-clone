@@ -47,11 +47,11 @@ class NoteScreenComponent extends React.Component {
             });
     };
     render() {
+        Log.info(this.state.note);
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
                 <ScreenHeader navState={{ routeName: routeName }} />
-                <TextInput value={this.state.note.title} />
                 <TextInput
                     value={this.state.note.title}
                     onChangeText={this.title_changeText}

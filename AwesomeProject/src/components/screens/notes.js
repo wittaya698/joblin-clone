@@ -7,6 +7,7 @@ import { ScreenHeader } from '@/src/components/screen-header';
 import { Folder } from '@/src/models/folder';
 import { actions } from '@/src/root';
 import { _ } from '@/src/locale';
+import { ActionButton } from '../action-button';
 
 class NotesScreenComponent extends React.Component {
     static navigationOptions = options => {
@@ -75,17 +76,12 @@ class NotesScreenComponent extends React.Component {
                 />
                 <NoteList style={{ flex: 1 }} />
                 <View style={{ flexDirection: 'row' }}>
-                    <Button
-                        title="Create note"
-                        onPress={this.createNoteButton_press}
-                    />
-                    <Button
-                        title="Create folder"
-                        onPress={this.createFolderButton_press}
-                    />
                     <Button title="Login" onPress={this.loginButton_press} />
                     <Button title="Sync" onPress={this.syncButton_press} />
                 </View>
+                <ActionButton
+                    parentFolderId={this.props.selectedFolderId}
+                ></ActionButton>
             </View>
         );
     }

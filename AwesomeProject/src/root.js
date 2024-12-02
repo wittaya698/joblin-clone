@@ -6,7 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { MenuProvider } from 'react-native-popup-menu';
 
 import { Log } from '@/src/log';
-import { Note } from '@/src/models/note';
 import { Folder } from '@/src/models/folder';
 import { Database } from '@/src/database';
 import { Registry } from '@/src/registry';

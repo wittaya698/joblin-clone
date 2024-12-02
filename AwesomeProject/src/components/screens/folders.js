@@ -5,15 +5,11 @@ import { connect } from 'react-redux';
 import { FolderList } from '@/src/components/folder-list';
 import { ScreenHeader } from '@/src/components/screen-header';
 import { actions } from '@/src/root';
+import { ActionButton } from '@/src/components/action-button';
 
 class FoldersScreenComponent extends React.Component {
     static navigationOptions = options => {
         return { header: null };
-    };
-
-    createFolderButton_press = () => {
-        this.props.dispatch(actions.navigate({ folderId: null }));
-        this.props.navigation.navigate('Folder');
     };
 
     render() {
@@ -24,10 +20,7 @@ class FoldersScreenComponent extends React.Component {
             <View style={{ flex: 1 }}>
                 <ScreenHeader navState={{ routeName: routeName }} />
                 <FolderList style={{ flex: 1 }} />
-                <Button
-                    title="Create folder"
-                    onPress={this.createFolderButton_press}
-                />
+                <ActionButton></ActionButton>
             </View>
         );
     }
