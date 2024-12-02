@@ -25,7 +25,8 @@ let defaultState = {
     folders: [],
     selectedNoteId: null,
     selectedFolderId: null,
-    listMode: 'view'
+    listMode: 'view',
+    user: { email: 'wittayathongjeen698@gmail.com', session: null }
 };
 
 const navReducer = createSlice({
@@ -104,6 +105,10 @@ const navReducer = createSlice({
             state.folders = newFolders;
         },
 
+        user_set: (state, action) => {
+            state.user = action.payload.user;
+        },
+
         set_list_mode: (state, action) => {
             state.listMode = action.payload.listMode;
             // state.nav = Object.assign({}, state.nav)
@@ -136,7 +141,12 @@ class AppComponent extends React.Component {
                 return Setting.load();
             })
             .then(() => {
+                let user = Setting.object('user');
                 Log.info('Client ID', Setting.value('clientId'));
+                Log.info('User', user);
+
+                this.props.dispatch(actions.user_set({ user: user }));
+
                 Log.info('Loading folders...');
 
                 Folder.all()

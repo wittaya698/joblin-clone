@@ -7,6 +7,7 @@ import { Registry } from '@/src/registry';
 import { Setting } from '@/src/models/setting';
 import { ScreenHeader } from '@/src/components/screen-header';
 import { _ } from '@/src/locale';
+import { actions } from '@/src/root';
 
 class LoginScreenComponent extends React.Component {
     static navigationOptions = options => {
@@ -16,6 +17,10 @@ class LoginScreenComponent extends React.Component {
     constructor() {
         super();
         this.state = { username: '', password: '', errorMessage: null };
+    }
+
+    UNSAFE_componentWillMount() {
+        this.setState({ email: this.props.user.email });
     }
 
     email_changeText = text => {
@@ -36,8 +41,17 @@ class LoginScreenComponent extends React.Component {
                 client_id: Setting.value('clientId')
             })
             .then(session => {
-                Log.info('GOT DATA:');
-                Log.info(session);
+                Log.info('Got session', session);
+
+                let user = {
+                    email: this.state.email,
+                    session: session.id
+                };
+                Setting.setObject('user', user);
+
+                this.props.dispatch(actions.user_set({ user: user }));
+
+                this.props.navigator.goBack();
             })
             .catch(error => {
                 this.setState({
@@ -73,7 +87,7 @@ class LoginScreenComponent extends React.Component {
 }
 
 const LoginScreen = connect(state => {
-    return {};
+    return { user: state.nav.user, navigator: state.nav.navigator };
 })(LoginScreenComponent);
 
 export { LoginScreen };
