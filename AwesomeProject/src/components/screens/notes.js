@@ -22,14 +22,6 @@ class NotesScreenComponent extends React.Component {
         this.props.navigation.navigate('Folder');
     };
 
-    loginButton_press = () => {
-        this.props.navigation.navigate('Login');
-    };
-
-    syncButton_press = () => {
-        Log.info('SYNC');
-    };
-
     deleteFolder_onPress = folderId => {
         Folder.delete(folderId).then(() => {
             this.props.dispatch(actions.folder_delete({ folderId: folderId }));
@@ -75,10 +67,6 @@ class NotesScreenComponent extends React.Component {
                     menuOptions={this.menuOptions()}
                 />
                 <NoteList style={{ flex: 1 }} />
-                <View style={{ flexDirection: 'row' }}>
-                    <Button title="Login" onPress={this.loginButton_press} />
-                    <Button title="Sync" onPress={this.syncButton_press} />
-                </View>
                 <ActionButton
                     parentFolderId={this.props.selectedFolderId}
                 ></ActionButton>

@@ -6,9 +6,9 @@ class Setting extends BaseModel {
     static defaults_ = {
         clientId: { value: '', type: 'string' },
         sessionId: { value: '', type: 'string' },
-        lastUpdateTime: { value: '', type: 'int' },
         'user.email': { value: '', type: 'string' },
-        'user.session': { value: '', type: 'string' }
+        'user.session': { value: '', type: 'string' },
+        'sync.lastRevId': { value: 0, type: 'int' }
     };
 
     static tableName() {
@@ -37,11 +37,13 @@ class Setting extends BaseModel {
         this.cache_ = [];
         return this.db()
             .selectAll('SELECT * FROM settings')
-            .then(r => {
-                for (let i = 0; i < r.rows.length; i++) {
-                    this.cache_.push(r.rows.item(i));
-                }
-            });
+            .then(
+                function (r) {
+                    for (let i = 0; i < r.rows.length; i++) {
+                        this.cache_.push(r.rows.item(i));
+                    }
+                }.bind(this)
+            );
     }
 
     static setValue(key, value) {

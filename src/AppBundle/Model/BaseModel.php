@@ -384,7 +384,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		if ($this->isVersioned) {
 			if (count($changedFields)) {
-				$this->recordChanges($isNew ? 'create' : 'update', $changedFields);
+				$this->trackChanges($isNew ? 'create' : 'update', $changedFields);
 			}
 			$this->changedDiffableField = array();
 		}
@@ -398,13 +398,13 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$output = parent::delete();
 
 		if (count($this->diffableFields)) {
-			$this->recordChanges('delete');
+			$this->trackChanges('delete');
 		}
 
 		return $output;
 	}
 
-	protected function recordChanges($type, $changedFields = array()) {
+	protected function trackChanges($type, $changedFields = array()) {
 		if ($type == 'delete') {
 			$change = $this->newChange($type);
 			$change->save();

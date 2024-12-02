@@ -9,6 +9,14 @@ class Note extends BaseModel {
         return true;
     }
 
+    static itemType() {
+        return BaseModel.ITEM_TYPE_NOTE;
+    }
+
+    static trackChanges() {
+        return true;
+    }
+
     static newNote(parentId = null) {
         return {
             id: null,

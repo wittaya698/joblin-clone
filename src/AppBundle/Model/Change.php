@@ -47,6 +47,7 @@ class Change extends BaseModel {
 			$itemIdToChange[$change->item_id] = $change;
 		}
 
+
 		$output = array();
 		foreach ($itemIdToChange as $itemId => $change) {
 			if (in_array($itemId, $createdItems) && in_array($itemId, $deletedItems)) {

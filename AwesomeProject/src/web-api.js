@@ -4,6 +4,15 @@ import { stringify } from 'query-string';
 class WebApi {
     constructor(baseUrl) {
         this.baseUrl_ = baseUrl;
+        this.session_ = null;
+    }
+
+    setSession(v) {
+        this.session_ = v;
+    }
+
+    session() {
+        return this.session_;
     }
 
     makeRequest(method, path, query, data) {
@@ -37,42 +46,51 @@ class WebApi {
         if (o.method != 'GET' && o.method != 'DELETE') {
             cmd.push("--data '" + stringify(data) + "'");
         }
-        cmd.push(r.url);
+        cmd.push("'" + r.url + "'");
         return cmd.join(' ');
     }
 
     exec(method, path, query, data) {
         let that = this;
-        return new Promise(function (resolve, reject) {
-            let r = that.makeRequest(method, path, query, data);
+        return new Promise(
+            function (resolve, reject) {
+                if (this.session_) {
+                    query = query ? Object.assign({}, query) : {};
+                    if (!query.session) query.session = this.session_;
+                }
 
-            Log.debug(WebApi.toCurl(r, data));
+                let r = that.makeRequest(method, path, query, data);
 
-            fetch(r.url, r.options)
-                .then(function (response) {
-                    let responseClone = response.clone();
-                    return response
-                        .json()
-                        .then(function (data) {
-                            if (data && data.error) {
-                                reject(new Error(data.error));
-                            } else {
-                                resolve(data);
-                            }
-                        })
-                        .catch(function (error) {
-                            responseClone.text().then(function (text) {
-                                reject(new Error('Cannot parse JSON: ' + text));
+                Log.debug(WebApi.toCurl(r, data));
+
+                fetch(r.url, r.options)
+                    .then(function (response) {
+                        let responseClone = response.clone();
+                        return response
+                            .json()
+                            .then(function (data) {
+                                if (data && data.error) {
+                                    reject(new Error(data.error));
+                                } else {
+                                    resolve(data);
+                                }
+                            })
+                            .catch(function (error) {
+                                responseClone.text().then(function (text) {
+                                    reject(
+                                        new Error('Cannot parse JSON: ' + text)
+                                    );
+                                });
                             });
-                        });
-                })
-                .then(function (data) {
-                    resolve(data);
-                })
-                .catch(function (error) {
-                    reject(error);
-                });
-        });
+                    })
+                    .then(function (data) {
+                        resolve(data);
+                    })
+                    .catch(function (error) {
+                        reject(error);
+                    });
+            }.bind(this)
+        );
     }
 
     get(path, query) {

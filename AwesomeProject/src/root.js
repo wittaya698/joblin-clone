@@ -17,6 +17,8 @@ import { FolderScreen } from '@/src/components/screens/folder';
 import { FoldersScreen } from '@/src/components/screens/folders';
 import { LoginScreen } from '@/src/components/screens/login';
 import { ItemListComponent } from './components/item-list';
+import { BaseModel } from '@/src/base-model';
+import { Synchronizer } from '@/src/synchronizer';
 
 let defaultState = {
     nav: {},
@@ -129,8 +131,10 @@ class AppComponent extends React.Component {
     componentDidMount() {
         let db = new Database();
         db.setDebugEnabled(Registry.debugMode());
-        props = this.props;
 
+        BaseModel.dispatch = this.props.dispatch;
+
+        props = this.props;
         db.open()
             .then(() => {
                 Log.info('Database is ready.');
@@ -145,6 +149,8 @@ class AppComponent extends React.Component {
                 Log.info('Client ID', Setting.value('clientId'));
                 Log.info('User', user);
 
+                Registry.api().setSession(user.session);
+
                 this.props.dispatch(actions.user_set({ user: user }));
 
                 Log.info('Loading folders...');
@@ -158,6 +164,13 @@ class AppComponent extends React.Component {
                     .catch(error => {
                         Log.warn('Cannot load folders', error);
                     });
+            })
+            .then(() => {
+                let synchronizer = new Synchronizer();
+                synchronizer.start();
+            })
+            .catch(error => {
+                Log.error('Initialization error:', error);
             });
     }
 
