@@ -44,7 +44,7 @@ class Synchronizer {
                                     // TODO: automatically handle NULL fields by checking type and default value of field
                                     if (!folder.parent_id)
                                         folder.parent_id = '';
-                                    return Folder.save(folder, true, true);
+                                    return Folder.save(folder, { isNew: true });
                                 });
                             }
                         }

@@ -166,8 +166,8 @@ class AppComponent extends React.Component {
                     });
             })
             .then(() => {
-                let synchronizer = new Synchronizer();
-                synchronizer.start();
+                // let synchronizer = new Synchronizer();
+                // synchronizer.start();
             })
             .catch(error => {
                 Log.error('Initialization error:', error);

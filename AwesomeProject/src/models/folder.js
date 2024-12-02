@@ -1,4 +1,6 @@
 import { BaseModel } from '@/src/base-model';
+import { Note } from '@/src/models/note';
+import { actions } from '@/src/root';
 
 class Folder extends BaseModel {
     static tableName() {
@@ -24,11 +26,37 @@ class Folder extends BaseModel {
         };
     }
 
-    static delete(id) {
-        return this.db().transaction(tx => {
-            tx.executeSql('DELETE FROM notes WHERE parent_id = ?', [id]);
-            tx.executeSql('DELETE FROM folders WHERE id = ?', [id]);
-        });
+    static noteIds(id) {
+        return this.db()
+            .exec('SELECT id FROM notes WHERE parent_id = ?', [id])
+            .then(r => {
+                let output = [];
+                for (let i = 0; i < r.rows.length; i++) {
+                    let row = r.rows.item(i);
+                    output.push(row.id);
+                }
+                return output;
+            });
+    }
+
+    static delete(folderId, options = null) {
+        return this.noteIds(folderId)
+            .then(ids => {
+                let chain = [];
+                for (let i = 0; i < ids.length; i++) {
+                    chain.push(() => {
+                        return Note.delete(ids[i]);
+                    });
+                }
+
+                return promiseChain(chain);
+            })
+            .then(() => {
+                return super.delete(folderId, options);
+            })
+            .then(() => {
+                this.dispatch(actions.folder_delete({ folderId: folderId }));
+            });
     }
 
     static all() {
