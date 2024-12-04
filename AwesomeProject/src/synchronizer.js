@@ -48,12 +48,38 @@ class Synchronizer {
                                     // TODO: automatically handle NULL fields by checking type and default value of field
                                     if (!folder.parent_id)
                                         folder.parent_id = '';
-                                    return Folder.save(folder, { isNew: true });
+                                    return Folder.save(folder, {
+                                        isNew: true,
+                                        trackChanges: false
+                                    });
                                 });
                             }
 
                             // TODO: update
                             // TODO: delete
+                            if (syncOp.type == 'update') {
+                                chain.push(() => {
+                                    return Folder.load(syncOp.item_id).then(
+                                        folder => {
+                                            folder = Folder.applyPatch(
+                                                folder,
+                                                syncOp.item
+                                            );
+                                            return Folder.save(folder, {
+                                                trackChanges: false
+                                            });
+                                        }
+                                    );
+                                });
+                            }
+
+                            if (syncOp.type == 'delete') {
+                                chain.push(() => {
+                                    return Folder.delete(syncOp.item_id, {
+                                        trackChanges: false
+                                    });
+                                });
+                            }
                         }
                     }
                     return promiseChain(chain);
@@ -75,7 +101,6 @@ class Synchronizer {
         } else if (state == 'uploadingChanges') {
             Change.all().then(changes => {
                 let mergedChanges = Change.mergeChanges(changes);
-                // Log.info(mergedChanges);
                 let chain = [];
                 let processedChangeIds = [];
                 for (let i = 0; i < mergedChanges.length; i++) {
@@ -83,7 +108,6 @@ class Synchronizer {
                     chain.push(() => {
                         let p = null;
 
-                        Log.info(this.api());
                         if (c.type == Change.TYPE_NOOP) {
                             p = Promise.resolve();
                         } else if (c.type == Change.TYPE_CREATE) {
@@ -103,11 +127,7 @@ class Synchronizer {
                                 );
                             });
                         } else if (c.type == Change.TYPE_DELETE) {
-                            p = Folder.load(c.item_id).then(folder => {
-                                return this.api().delete(
-                                    'folders/' + folder.id
-                                );
-                            });
+                            this.api().delete('folders/' + c.item_id);
                         }
 
                         return p.then(() => {
