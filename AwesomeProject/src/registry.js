@@ -18,7 +18,7 @@ class Registry {
 
     static api() {
         if (this.api_) return this.api_;
-        this.api_ = new WebApi('http://192.168.2.36:8000');
+        this.api_ = new WebApi('http://192.168.2.34:8000');
         return this.api_;
     }
 

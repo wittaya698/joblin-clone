@@ -15,6 +15,9 @@ export default class Main extends Component {
     render() {
         Registry.setDebugMode(true);
         Log.setLevel(Registry.debugMode() ? Log.LEVEL_DEBUG : Log.LEVEL_WARN);
+        Log.info(
+            'START ======================================================================================================'
+        );
         // Note: The final part of the initialization process is in
         // AppComponent.componentDidMount(), when the application is ready.
         return <Root />;

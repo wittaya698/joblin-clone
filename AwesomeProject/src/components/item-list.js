@@ -62,7 +62,11 @@ class ItemListComponent extends Component {
                 <TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
                     <View>
                         {isEditable && <Checkbox label={item.title}></Checkbox>}
-                        {!isEditable && <Text>{item.title}</Text>}
+                        {!isEditable && (
+                            <Text>
+                                {item.title}[{item.id}]
+                            </Text>
+                        )}
                     </View>
                 </TouchableHighlight>
             );

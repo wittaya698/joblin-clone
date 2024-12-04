@@ -38,24 +38,29 @@ abstract class ApiController extends AbstractController {
 				$r->send();
 				echo "\n";
 			} else {
+				$msg = $e->getMessage();
+
+				// If the message was sent in Latin encoding, JsonResponse below will fail
+				// so encode it using UTF-8 here.
+				if (json_encode($msg) === false) {
+					$msg = utf8_encode($e->getMessage());
+				}
+
 				$r = array(
-					'error' => $e->getMessage(),
+					'error' => $msg,
 					'code' => 0,
 					'type' => 'Exception',
 					//'trace' => $e->getTraceAsString(),
 				);
-				$response = new JsonResponse($r);
+				try {
+					$response = new JsonResponse($r);
+				} catch (\Exception $wat) {
+					// If that happens, print the error message as is, since it's better than showing nothing at all
+					die($e->getMessage());
+				}
 				$response->setStatusCode(500);
 				$response->send();
 				echo "\n";
-
-
-				// $msg = array();
-				// $msg[] = 'Exception: ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine();
-				// $msg[] = '';
-				// $msg[] = $e->getTraceAsString();
-				// echo implode("\n", $msg);
-				// echo "\n";
 			}
 		});
 
@@ -162,39 +167,64 @@ abstract class ApiController extends AbstractController {
 	protected function patchParameters() {
 		$output = array();
 		$input = file_get_contents('php://input');
-		preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
-		$boundary = $matches[1];
-		$blocks = preg_split("/-+$boundary/", $input);
-		array_pop($blocks);
-		foreach ($blocks as $id => $block) {
-			if (empty($block)) continue;
 
-			// you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
+		//var_dump($input, $_SERVER['CONTENT_TYPE']);die();
 
-			// parse uploaded files
-			if (strpos($block, 'application/octet-stream') !== FALSE) {
-				throw new \Exception("Found 'application/octet-stream'");
-				// preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
-			} else {
-				// match "name" and optional value in between newline sequences
-				preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
-			}
-			if (!isset($matches[2])) {
-				// Regex above will not find anything if the parameter has not value. For example
-				// "parent_id" below:
+		// Two content types are supported:
+		//
+		// multipart/form-data; boundary=------------------------68670b1a1565e787
+		// application/x-www-form-urlencoded
 
-				// Content-Disposition: form-data; name="parent_id"
-				//
-				//
-				// Content-Disposition: form-data; name="id"
-				//
-				// 54ad197be333c98778c7d6f49506efcb
-
-				$output[$matches[1]] = '';
-			} else {
-				$output[$matches[1]] = $matches[2];
-			}
+		if (!isset($_SERVER['CONTENT_TYPE']) || strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') === 0) {
+			parse_str($input, $output);
+		} else {
+			throw new \Exception('Only application/x-www-form-urlencoded Content-Type is supported');
 		}
+
+		// if (!isset($_SERVER['CONTENT_TYPE'])) throw new \Exception("Cannot decode input data");
+		// preg_match('/boundary=(.*)$/', $_SERVER['CONTENT_TYPE'], $matches);
+		// if (!isset($matches[1])) throw new \Exception("Cannot decode input data");
+
+		// $boundary = $matches[1];
+		// $lines = explode("\r\n", $input);
+
+		// $state = 'out';
+
+		// foreach ($lines as $line) {
+
+		// }
+
+		// $blocks = preg_split("/-+$boundary/", $input);
+		// array_pop($blocks);
+		// foreach ($blocks as $id => $block) {
+		// 	if (empty($block)) continue;
+
+		// 	// you'll have to var_dump $block to understand this and maybe replace \n or \r with a visibile char
+
+		// 	// parse uploaded files
+		// 	if (strpos($block, 'application/octet-stream') !== FALSE) {
+		// 		throw new \Exception("Found 'application/octet-stream'");
+		// 		// preg_match("/name=\"([^\"]*)\".*stream[\n|\r]+([^\n\r].*)?$/s", $block, $matches);
+		// 	} else {
+		// 		// match "name" and optional value in between newline sequences
+		// 		preg_match('/name=\"([^\"]*)\"[\n|\r]+([^\n\r].*)?\r$/s', $block, $matches);
+		// 	}
+		// 	if (!isset($matches[2])) {
+		// 		// Regex above will not find anything if the parameter has not value. For example
+		// 		// "parent_id" below:
+
+		// 		// Content-Disposition: form-data; name="parent_id"
+		// 		//
+		// 		//
+		// 		// Content-Disposition: form-data; name="id"
+		// 		//
+		// 		// 54ad197be333c98778c7d6f49506efcb
+
+		// 		$output[$matches[1]] = '';
+		// 	} else {
+		// 		$output[$matches[1]] = $matches[2];
+		// 	}
+		// }
 
 		return $output;
 	}

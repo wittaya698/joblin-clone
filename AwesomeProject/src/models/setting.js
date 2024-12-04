@@ -47,15 +47,11 @@ class Setting extends BaseModel {
     }
 
     static setValue(key, value) {
-        // if (value !== null && typeof value === 'object') {
-        // 	return this.setObject(key, value);
-        // }
-
-        this.scheduleUpdate();
-
         for (let i = 0; i < this.cache_.length; i++) {
             if (this.cache_[i].key == key) {
+                if (this.cache_[i].value === value) return;
                 this.cache_[i].value = value;
+                this.scheduleUpdate();
                 return;
             }
         }
@@ -63,11 +59,7 @@ class Setting extends BaseModel {
         let s = this.defaultSetting(key);
         s.value = value;
         this.cache_.push(s);
-    }
-
-    static del(key) {
-        console.error('del(): to be implemented');
-        throw Error();
+        this.scheduleUpdate();
     }
 
     static value(key) {
@@ -102,29 +94,38 @@ class Setting extends BaseModel {
         }
     }
 
+    static saveAll() {
+        if (!this.updateTimeoutId_) return Promise.resolve();
+
+        Log.info('Saving settings...');
+        clearTimeout(this.updateTimeoutId_);
+        this.updateTimeoutId_ = null;
+
+        return BaseModel.db()
+            .transaction(tx => {
+                tx.executeSql('DELETE FROM settings');
+                for (let i = 0; i < this.cache_.length; i++) {
+                    let q = Database.insertQuery(
+                        this.tableName(),
+                        this.cache_[i]
+                    );
+                    tx.executeSql(q.sql, q.params);
+                }
+            })
+            .then(() => {
+                Log.info('Settings have been saved.');
+            })
+            .catch(error => {
+                Log.warn('Could not save settings', error);
+                reject(error);
+            });
+    }
+
     static scheduleUpdate() {
         if (this.updateTimeoutId) clearTimeout(this.updateTimeoutId);
 
-        this.updateTimeoutId = setTimeout(() => {
-            Log.info('Saving settings...');
-            this.updateTimeoutId = null;
-            BaseModel.db()
-                .transaction(tx => {
-                    tx.executeSql('DELETE FROM settings');
-                    for (let i = 0; i < this.cache_.length; i++) {
-                        let q = Database.insertQuery(
-                            this.tableName(),
-                            this.cache_[i]
-                        );
-                        tx.executeSql(q.sql, q.params);
-                    }
-                })
-                .then(() => {
-                    Log.info('Settings have been saved.');
-                })
-                .catch(error => {
-                    Log.warn('Could not update settings:', error);
-                });
+        this.updateTimeoutId_ = setTimeout(() => {
+            this.saveAll();
         }, 500);
     }
 }

@@ -130,7 +130,8 @@ const Stack = createStackNavigator();
 class AppComponent extends React.Component {
     componentDidMount() {
         let db = new Database();
-        db.setDebugEnabled(Registry.debugMode());
+        // db.setDebugEnabled(Registry.debugMode());
+        db.setDebugEnabled(false);
 
         BaseModel.dispatch = this.props.dispatch;
 
@@ -166,8 +167,10 @@ class AppComponent extends React.Component {
                     });
             })
             .then(() => {
-                // let synchronizer = new Synchronizer();
-                // synchronizer.start();
+                // db.executeSql('DELETE FROM folders');
+                // db.executeSql('DELETE FROM changes');
+                let synchronizer = new Synchronizer(db, Registry.api());
+                synchronizer.start();
             })
             .catch(error => {
                 Log.error('Initialization error:', error);

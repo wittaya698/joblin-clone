@@ -1,6 +1,7 @@
 import { BaseModel } from '@/src/base-model';
 import { Note } from '@/src/models/note';
 import { actions } from '@/src/root';
+import { promiseChain } from '@/src/promise-chain';
 
 class Folder extends BaseModel {
     static tableName() {

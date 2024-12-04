@@ -371,6 +371,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		$this->updated_time = time(); // TODO: maybe only update if one of the fields, or if some of versioned data has changed
 		if ($isNew) $this->created_time = time();
 
+		if ($this->parent_id === '') $this->parent_id = null;
 		if ($this->isVersioned) {
 			$changedFields = array_merge($this->getDirty(), $this->changedDiffableField);
 			unset($changedFields['updated_time']);

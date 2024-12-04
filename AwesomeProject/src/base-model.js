@@ -59,13 +59,20 @@ class BaseModel {
         return options;
     }
 
+    static load(id) {
+        return this.db().selectOne(
+            'SELECT * FROM ' + this.tableName() + ' WHERE id = ?',
+            [id]
+        );
+    }
+
     static saveQuery(o, isNew = 'auto') {
         if (isNew == 'auto') isNew = !o.id;
         let query = '';
         let itemId = o.id;
 
         if (isNew) {
-            if (this.useUuid()) {
+            if (this.useUuid() && !o.id) {
                 // o = Object.assign({}, o);
                 itemId = uuid.create();
                 o.id = itemId;
@@ -98,17 +105,29 @@ class BaseModel {
                     // which are not handled by React Native.
                     const { Change } = require('@/src/models/change');
 
-                    let change = Change.newChange();
-                    change.type = isNew
-                        ? Change.TYPE_CREATE
-                        : Change.TYPE_UPDATE;
-                    change.item_id = query.id;
-                    change.item_type = this.itemType();
+                    if (isNew) {
+                        let change = Change.newChange();
+                        change.type = Change.TYPE_CREATE;
+                        change.item_id = query.id;
+                        change.item_type = this.itemType();
 
-                    let changeQuery = Change.saveQuery(change);
-                    tx.executeSql(changeQuery.sql, changeQuery.params);
+                        let changeQuery = Change.saveQuery(change);
+                        tx.executeSql(changeQuery.sql, changeQuery.params);
+                    } else {
+                        for (let n in o) {
+                            if (!o.hasOwnProperty(n)) continue;
 
-                    // TODO: item field for UPDATE
+                            let change = Change.newChange();
+                            change.type = Change.TYPE_UPDATE;
+                            change.item_id = query.id;
+                            change.item_type = this.itemType();
+                            change.item_field = n;
+
+                            let changeQuery = Change.saveQuery(change);
+
+                            tx.executeSql(changeQuery.sql, changeQuery.params);
+                        }
+                    }
                 }
             })
             .then(() => {
@@ -130,14 +149,14 @@ class BaseModel {
         return this.db()
             .exec('DELETE FROM ' + this.tableName() + ' WHERE id = ?', [id])
             .then(() => {
-                // if (options.trackChanges && this.trackChanges()) {
-                // 	const { Change } = require('src/models/change.js');
-                // 	let change = Change.newChange();
-                // 	change.type = Change.TYPE_DELETE;
-                // 	change.item_id = id;
-                // 	change.item_type = this.itemType();
-                // 	return Change.save(change);
-                // }
+                if (options.trackChanges && this.trackChanges()) {
+                    const { Change } = require('@/src/models/change');
+                    let change = Change.newChange();
+                    change.type = Change.TYPE_DELETE;
+                    change.item_id = id;
+                    change.item_type = this.itemType();
+                    return Change.save(change);
+                }
             });
     }
 
