@@ -43,11 +43,16 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			throw new \Exception("Note PATCH method to be implemented");
+			$data = $this->patchParameters();
+			$note->fromPublicArray($this->patchParameters());
+			$note->id = Note::unhex($id);
+			$note->save();
+			return static::successResponse($note);
 		}
 
 		if ($request->isMethod('DELETE')) {
-			throw new \Exception("Note DELETE method to be implemented");
+			$note->delete();
+			return static::successResponse();
 		}
 
 		return static::errorResponse('Invalid method');
