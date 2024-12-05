@@ -52,6 +52,10 @@ class LoginScreenComponent extends React.Component {
                 this.props.dispatch(actions.user_set({ user: user }));
 
                 this.props.navigator.goBack();
+
+                Registry.api().setSession(session.id);
+
+                Registry.synchronizer().start();
             })
             .catch(error => {
                 this.setState({

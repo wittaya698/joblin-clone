@@ -26,17 +26,24 @@ class Synchronizer {
         return this.api_;
     }
 
-    switchState(state) {
-        Log.info('Sync: switching state to: ' + state);
+    processState(state) {
+        // if (this.state() == state) {
+        // 	Log.info('Sync: cannot switch to same state: ' + state);
+        // 	return;
+        // }
+
+        Log.info('Sync: processing: ' + state);
+        this.state_ = state;
 
         if (state == 'downloadChanges') {
             let maxRevId = null;
+            let hasMore = false;
             this.api()
                 .get('synchronizer', {
                     last_id: Setting.value('sync.lastRevId')
-                    // last_id: 0
                 })
                 .then(syncOperations => {
+                    hasMore = syncOperations.has_more;
                     let chain = [];
                     for (let i = 0; i < syncOperations.items.length; i++) {
                         let syncOp = syncOperations.items[i];
@@ -52,7 +59,7 @@ class Synchronizer {
                             chain.push(() => {
                                 let item = ItemClass.fromApiResult(syncOp.item);
                                 // TODO: automatically handle NULL fields by checking type and default value of field
-                                if (parent_id in item && !item.parent_id)
+                                if ('parent_id' in item && !item.parent_id)
                                     item.parent_id = '';
                                 return ItemClass.save(item, {
                                     isNew: true,
@@ -65,6 +72,7 @@ class Synchronizer {
                             chain.push(() => {
                                 return ItemClass.load(syncOp.item_id).then(
                                     item => {
+                                        if (!item) return;
                                         item = ItemClass.applyPatch(
                                             item,
                                             syncOp.item
@@ -88,7 +96,7 @@ class Synchronizer {
                     return promiseChain(chain);
                 })
                 .then(() => {
-                    Log.info('All items synced.');
+                    Log.info('All items synced. has_more = ', hasMore);
                     if (maxRevId) {
                         Setting.setValue('sync.lastRevId', maxRevId);
 
@@ -96,7 +104,11 @@ class Synchronizer {
                     }
                 })
                 .then(() => {
-                    this.switchState('uploadingChanges');
+                    if (hasMore) {
+                        this.processState('downloadChanges');
+                    } else {
+                        this.processState('uploadingChanges');
+                    }
                 })
                 .catch(error => {
                     Log.warn('Sync error', error);
@@ -140,14 +152,18 @@ class Synchronizer {
                                 );
                             });
                         } else if (c.type == Change.TYPE_DELETE) {
-                            this.api().delete(path + '/' + c.item_id);
+                            p = this.api().delete(path + '/' + c.item_id);
                         }
 
-                        return p.then(() => {
-                            processedChangeIds = processedChangeIds.concat(
-                                c.ids
-                            );
-                        });
+                        return p
+                            .then(() => {
+                                processedChangeIds = processedChangeIds.concat(
+                                    c.ids
+                                );
+                            })
+                            .catch(error => {
+                                Log.warn('Failed applying changes', c.ids);
+                            });
                     });
                 }
                 promiseChain(chain).then(() => {
@@ -176,7 +192,7 @@ class Synchronizer {
             return;
         }
 
-        this.switchState('downloadChanges');
+        this.processState('downloadChanges');
     }
 }
 

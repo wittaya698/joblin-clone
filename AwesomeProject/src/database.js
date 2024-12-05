@@ -117,7 +117,7 @@ class Database {
 
     open() {
         this.db_ = SQLite.openDatabase(
-            { name: 'joplin-19.sqlite', location: 'default' },
+            { name: 'joplin-21.sqlite', location: 'default' },
             db => {
                 Log.info('Database was open successfully');
             },
@@ -381,6 +381,23 @@ class Database {
 
                     Log.info(this.tableFields_);
                 });
+
+                // }).then(() => {
+                // 	let p = this.exec('DELETE FROM notes').then(() => {
+                // 		return this.exec('DELETE FROM folders');
+                // 	}).then(() => {
+                // 		return this.exec('DELETE FROM changes');
+                // 	}).then(() => {
+                // 		return this.exec('DELETE FROM settings WHERE `key` = "sync.lastRevId"');
+                // 	});
+
+                // 	return p.then(() => {
+                // 		return this.exec('UPDATE settings SET `value` = "' + uuid.create() + '" WHERE `key` = "clientId"');
+                // 	}).then(() => {
+                // 		return this.exec('DELETE FROM settings WHERE `key` != "clientId"');
+                // 	});
+
+                // 	return p;
             })
             .catch(error => {
                 if (error && error.code != 0) {
