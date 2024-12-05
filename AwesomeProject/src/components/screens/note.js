@@ -14,7 +14,7 @@ class NoteScreenComponent extends React.Component {
 
     constructor() {
         super();
-        this.state = { note: Note.newNote() };
+        this.state = { note: Note.new() };
     }
 
     UNSAFE_componentWillMount() {
@@ -47,7 +47,6 @@ class NoteScreenComponent extends React.Component {
             });
     };
     render() {
-        Log.info(this.state.note);
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
@@ -72,7 +71,7 @@ const NoteScreen = connect(state => {
     return {
         note: state.nav.selectedNoteId
             ? Note.byId(state.nav.notes, state.nav.selectedNoteId)
-            : Note.newNote(state.nav.selectedFolderId)
+            : Note.new(state.nav.selectedFolderId)
     };
 })(NoteScreenComponent);
 

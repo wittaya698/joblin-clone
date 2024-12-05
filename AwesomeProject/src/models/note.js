@@ -17,13 +17,10 @@ class Note extends BaseModel {
         return true;
     }
 
-    static newNote(parentId = null) {
-        return {
-            id: null,
-            title: '',
-            body: '',
-            parent_id: parentId
-        };
+    static new(parentId = '') {
+        let output = super.new();
+        output.parent_id = parentId;
+        return output;
     }
 
     static previews(parentId) {

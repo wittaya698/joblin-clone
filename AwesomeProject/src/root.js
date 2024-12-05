@@ -134,6 +134,7 @@ class AppComponent extends React.Component {
         db.setDebugEnabled(false);
 
         BaseModel.dispatch = this.props.dispatch;
+        BaseModel.db_ = db;
 
         props = this.props;
         db.open()
