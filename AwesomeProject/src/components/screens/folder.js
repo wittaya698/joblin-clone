@@ -1,8 +1,10 @@
 import React from 'react';
-import { Folder } from '@/src/models/folder';
-import { ScreenHeader } from '@/src/components/screen-header';
 import { connect } from 'react-redux';
 import { Button, TextInput, View } from 'react-native';
+
+import { Folder } from '@/src/models/folder';
+import { ScreenHeader } from '@/src/components/screen-header';
+import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
 class FolderScreenComponent extends React.Component {
     static navigationOptions = options => {
@@ -11,11 +13,19 @@ class FolderScreenComponent extends React.Component {
 
     constructor() {
         super();
-        this.state = { folder: Folder.newFolder() };
+        this.state = { folder: Folder.new() };
+        this.originalFolder = null;
     }
 
     UNSAFE_componentWillMount() {
-        this.setState({ folder: this.props.folder });
+        if (!this.props.folderId) {
+            this.setState({ folder: Folder.new() });
+        } else {
+            Folder.load(this.props.folderId).then(folder => {
+                this.originalFolder = Object.assign({}, folder);
+                this.setState({ folder: folder });
+            });
+        }
     }
 
     folderComponent_change = (propName, propValue) => {
@@ -31,13 +41,14 @@ class FolderScreenComponent extends React.Component {
     };
 
     saveFolderButton_press = () => {
-        Folder.save(this.state.folder)
-            .then(folder => {
-                this.props.folders_update_one({ folder: folder });
-            })
-            .catch(error => {
-                Log.warn('Cannot save folder', error);
-            });
+        NoteFolderService.save(
+            'folder',
+            this.state.folder,
+            this.originalFolder
+        ).then(folder => {
+            this.originalFolder = Object.assign({}, folder);
+            this.setState({ folder: folder });
+        });
     };
 
     render() {
@@ -60,9 +71,10 @@ class FolderScreenComponent extends React.Component {
 
 const FolderScreen = connect(state => {
     return {
-        folder: state.nav.selectedFolderId
-            ? Folder.byId(state.nav.folders, state.nav.selectedFolderId)
-            : Folder.newFolder()
+        folderId: state.nav.selectedFolderId
+        // folder: state.nav.selectedFolderId
+        //     ? Folder.byId(state.nav.folders, state.nav.selectedFolderId)
+        //     : Folder.newFolder()
     };
 })(FolderScreenComponent);
 
