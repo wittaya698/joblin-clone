@@ -18,7 +18,13 @@ class NoteScreenComponent extends React.Component {
     }
 
     UNSAFE_componentWillMount() {
-        this.setState({ note: this.props.note });
+        if (!this.props.noteId) {
+            this.setState({ note: Note.new(this.props.folderId) });
+        } else {
+            Note.load(this.props.noteId).then(note => {
+                this.setState({ note: note });
+            });
+        }
     }
 
     noteComponent_change = (propName, propValue) => {
@@ -38,13 +44,7 @@ class NoteScreenComponent extends React.Component {
     };
 
     saveNoteButton_press = () => {
-        Note.save(this.state.note)
-            .then(note => {
-                this.props.dispatch(actions.notes_update_one({ note: note }));
-            })
-            .catch(error => {
-                Log.warn('Cannot save note', error);
-            });
+        Note.save(this.state.note);
     };
     render() {
         routeName = nav.getState().routes[nav.getState().index].name;
@@ -69,9 +69,8 @@ class NoteScreenComponent extends React.Component {
 
 const NoteScreen = connect(state => {
     return {
-        note: state.nav.selectedNoteId
-            ? Note.byId(state.nav.notes, state.nav.selectedNoteId)
-            : Note.new(state.nav.selectedFolderId)
+        noteId: state.nav.selectedNoteId,
+        folderId: state.nav.selectedFolderId
     };
 })(NoteScreenComponent);
 

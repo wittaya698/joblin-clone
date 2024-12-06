@@ -47,7 +47,8 @@ class Synchronizer {
                     let chain = [];
                     for (let i = 0; i < syncOperations.items.length; i++) {
                         let syncOp = syncOperations.items[i];
-                        if (syncOp.id > maxRevId) maxRevId = syncOp.id;
+                        if (Number(syncOp.id) > Number(maxRevId))
+                            maxRevId = syncOp.id;
 
                         let ItemClass = null;
                         if (syncOp.item_type == 'folder') {
