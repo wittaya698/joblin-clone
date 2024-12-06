@@ -115,63 +115,68 @@ class Synchronizer {
                     Log.warn('Sync error', error);
                 });
         } else if (state == 'uploadingChanges') {
-            Change.all().then(changes => {
-                let mergedChanges = Change.mergeChanges(changes);
-                let chain = [];
-                let processedChangeIds = [];
-                for (let i = 0; i < mergedChanges.length; i++) {
-                    let c = mergedChanges[i];
-                    chain.push(() => {
-                        let p = null;
+            Change.all()
+                .then(changes => {
+                    let mergedChanges = Change.mergeChanges(changes);
+                    let chain = [];
+                    let processedChangeIds = [];
+                    for (let i = 0; i < mergedChanges.length; i++) {
+                        let c = mergedChanges[i];
+                        chain.push(() => {
+                            let p = null;
 
-                        let ItemClass = null;
-                        let path = null;
-                        if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
-                            ItemClass = Folder;
-                            path = 'folders';
-                        } else if (c.item_type == BaseModel.ITEM_TYPE_NOTE) {
-                            ItemClass = Note;
-                            path = 'notes';
-                        }
+                            let ItemClass = null;
+                            let path = null;
+                            if (c.item_type == BaseModel.ITEM_TYPE_FOLDER) {
+                                ItemClass = Folder;
+                                path = 'folders';
+                            } else if (
+                                c.item_type == BaseModel.ITEM_TYPE_NOTE
+                            ) {
+                                ItemClass = Note;
+                                path = 'notes';
+                            }
 
-                        if (c.type == Change.TYPE_NOOP) {
-                            p = Promise.resolve();
-                        } else if (c.type == Change.TYPE_CREATE) {
-                            p = ItemClass.load(c.item_id).then(item => {
-                                return this.api().put(
-                                    path + '/' + item.id,
-                                    null,
-                                    item
-                                );
-                            });
-                        } else if (c.type == Change.TYPE_UPDATE) {
-                            p = ItemClass.load(c.item_id).then(item => {
-                                return this.api().patch(
-                                    path + '/' + item.id,
-                                    null,
-                                    item
-                                );
-                            });
-                        } else if (c.type == Change.TYPE_DELETE) {
-                            p = this.api().delete(path + '/' + c.item_id);
-                        }
+                            if (c.type == Change.TYPE_NOOP) {
+                                p = Promise.resolve();
+                            } else if (c.type == Change.TYPE_CREATE) {
+                                p = ItemClass.load(c.item_id).then(item => {
+                                    return this.api().put(
+                                        path + '/' + item.id,
+                                        null,
+                                        item
+                                    );
+                                });
+                            } else if (c.type == Change.TYPE_UPDATE) {
+                                p = ItemClass.load(c.item_id).then(item => {
+                                    return this.api().patch(
+                                        path + '/' + item.id,
+                                        null,
+                                        item
+                                    );
+                                });
+                            } else if (c.type == Change.TYPE_DELETE) {
+                                p = this.api().delete(path + '/' + c.item_id);
+                            }
 
-                        return p
-                            .then(() => {
-                                processedChangeIds = processedChangeIds.concat(
-                                    c.ids
-                                );
-                            })
-                            .catch(error => {
-                                Log.warn('Failed applying changes', c.ids);
-                            });
+                            return p
+                                .then(() => {
+                                    processedChangeIds =
+                                        processedChangeIds.concat(c.ids);
+                                })
+                                .catch(error => {
+                                    Log.warn('Failed applying changes', c.ids);
+                                });
+                        });
+                    }
+                    return promiseChain(chain).then(() => {
+                        Log.info('IDs to delete: ', processedChangeIds);
+                        Change.deleteMultiple(processedChangeIds);
                     });
-                }
-                promiseChain(chain).then(() => {
-                    Log.info('IDs to delete: ', processedChangeIds);
-                    Change.deleteMultiple(processedChangeIds);
+                })
+                .then(() => {
+                    this.processState('idle');
                 });
-            });
         }
     }
 

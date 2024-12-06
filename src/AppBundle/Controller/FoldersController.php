@@ -40,7 +40,7 @@ class FoldersController extends ApiController {
 		if ($request->isMethod('PUT')) {
 			$isNew = !$folder;
 			if ($isNew) $folder = new Folder();
-			$folder->fromPublicArray($this->putParameters());
+			$folder->fromPublicArray(Folder::filter($this->putParameters()));
 			$folder->id = Folder::unhex($id);
 			$folder->owner_id = $this->user()->id;
 			$folder->setIsNew($isNew);
@@ -50,7 +50,7 @@ class FoldersController extends ApiController {
 
 		if ($request->isMethod('PATCH')) {
 			$data = $this->patchParameters();
-			$folder->fromPublicArray($this->patchParameters());
+			$folder->fromPublicArray(Folder::filter($this->patchParameters()));
 			$folder->id = Folder::unhex($id);
 			$folder->save();
 			return static::successResponse($folder);

@@ -52,7 +52,7 @@ class Note extends BaseModel {
                 return Note.load(note.id);
             })
             .then(note => {
-                if (!note) return; // Has been deleted in the meantime
+                if (!note) return; // Race condition - note has been deleted in the meantime
                 note.longitude = geoData.coords.longitude;
                 note.latitude = geoData.coords.latitude;
                 note.altitude = geoData.coords.altitude;
@@ -66,6 +66,7 @@ class Note extends BaseModel {
     static save(o, options = null) {
         return super.save(o, options).then(note => {
             this.dispatch(actions.notes_update_one({ note: note }));
+            return note;
         });
     }
 }

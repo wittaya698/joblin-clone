@@ -15,6 +15,7 @@ export default class Main extends Component {
     render() {
         Registry.setDebugMode(true);
         Log.setLevel(Registry.debugMode() ? Log.LEVEL_DEBUG : Log.LEVEL_WARN);
+        console.ignoredYellowBox = ['Remote debugger'];
         Log.info(
             'START ======================================================================================================'
         );
