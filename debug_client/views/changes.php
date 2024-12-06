@@ -14,7 +14,7 @@
 			<td><?php echo htmlentities($it['type']); ?></td>
 			<td><?php echo htmlentities($it['item_type']); ?></td>
 			<td><?php echo htmlentities($it['item_id']); ?></td>
-			<td><?php echo htmlentities($t == 'update' ? json_encode($it['item']) : ''); ?></td>
+			<td><?php echo htmlentities($it == 'update' ? json_encode($it['item']) : ''); ?></td>
 		</tr>
 	<?php endfor; ?>
 </table>

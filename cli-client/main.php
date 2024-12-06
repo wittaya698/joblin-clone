@@ -253,7 +253,7 @@ class BaseItems {
 	}
 }
 
-$dbName = 'notes';
+$dbName = 'notes_test';
 $structureFile =  dirname(dirname(__FILE__)) . "/structure.sql";
 $cmd_prefix = "mysql -u root -p0906198331";
 
