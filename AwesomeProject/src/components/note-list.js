@@ -5,12 +5,12 @@ import { actions } from '../root';
 class NoteListComponent extends ItemListComponent {
     listView_itemPress = noteId => {
         this.props.dispatch(actions.navigate({ noteId: noteId }));
-        this.props.navigator.navigate('Note');
+        navigator.navigate('Note');
     };
 }
 
 const NoteList = connect(state => {
-    return { items: state.nav.notes, navigator: state.nav.navigator };
+    return { items: state.nav.notes };
 })(NoteListComponent);
 
 export { NoteList };

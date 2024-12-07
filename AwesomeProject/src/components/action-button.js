@@ -30,12 +30,12 @@ class ActionButtonComponent extends React.Component {
                 folderId: this.props.parentFolderId
             })
         );
-        this.props.navigator.navigate('Note');
+        navigator.navigate('Note');
     }
 
     newFolder_press() {
         this.props.dispatch(actions.navigate({ noteId: null }));
-        this.props.navigator.navigate('Folder');
+        navigator.navigate('Folder');
     }
 
     handleStateChange = ({ open }) => {
@@ -78,7 +78,7 @@ class ActionButtonComponent extends React.Component {
 }
 
 const ActionButton = connect(state => {
-    return { navigator: state.nav.navigator };
+    return {};
 })(ActionButtonComponent);
 
 export { ActionButton };

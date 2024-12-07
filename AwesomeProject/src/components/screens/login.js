@@ -51,7 +51,7 @@ class LoginScreenComponent extends React.Component {
 
                 this.props.dispatch(actions.user_set({ user: user }));
 
-                this.props.navigator.goBack();
+                navigator.goBack();
 
                 Registry.api().setSession(session.id);
 
@@ -91,7 +91,7 @@ class LoginScreenComponent extends React.Component {
 }
 
 const LoginScreen = connect(state => {
-    return { user: state.nav.user, navigator: state.nav.navigator };
+    return { user: state.nav.user };
 })(LoginScreenComponent);
 
 export { LoginScreen };

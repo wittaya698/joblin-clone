@@ -3,7 +3,6 @@ import React from 'react';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { MenuProvider } from 'react-native-popup-menu';
 
 import { Log } from '@/src/log';
@@ -20,7 +19,8 @@ import { LoginScreen } from '@/src/components/screens/login';
 import { ItemListComponent } from './components/item-list';
 import { BaseModel } from '@/src/base-model';
 import { Synchronizer } from '@/src/synchronizer';
-import SideMenu from '@/src/menu';
+import { SideMenuContent } from '@/src/components/side-menu-content';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 let defaultState = {
     nav: {},
@@ -30,7 +30,8 @@ let defaultState = {
     selectedNoteId: null,
     selectedFolderId: null,
     listMode: 'view',
-    user: { email: 'wittayathongjeen698@gmail.com', session: null }
+    user: { email: 'wittayathongjeen698@gmail.com', session: null },
+    showSideMenu: false
 };
 
 const navReducer = createSlice({
@@ -116,6 +117,18 @@ const navReducer = createSlice({
         set_list_mode: (state, action) => {
             state.listMode = action.payload.listMode;
             // state.nav = Object.assign({}, state.nav)
+        },
+
+        side_menu_toggle: (state, action) => {
+            state.showSideMenu = !state.showSideMenu;
+        },
+
+        side_menu_open: (state, action) => {
+            state.showSideMenu = true;
+        },
+
+        side_menu_close: (state, action) => {
+            state.showSideMenu = false;
         }
     }
 });
@@ -195,16 +208,17 @@ class HomeStackComponent extends React.Component {
     }
 }
 
-const HomeStack = connect(state => {
+export const HomeStack = connect(state => {
     return { nav: state.nav };
 })(HomeStackComponent);
 
 const Drawer = createDrawerNavigator();
 const App = () => {
     return (
-        <Drawer.Navigator drawerContent={props => <SideMenu {...props} />}>
+        <Drawer.Navigator
+            drawerContent={props => <SideMenuContent {...props} />}
+        >
             <Drawer.Screen name="Home" component={HomeStack} />
-            {/* <Drawer.Screen name="Profile" component={ProfileScreen} /> */}
         </Drawer.Navigator>
     );
 };

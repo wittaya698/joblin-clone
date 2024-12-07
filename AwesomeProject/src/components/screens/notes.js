@@ -15,22 +15,22 @@ class NotesScreenComponent extends React.Component {
     };
 
     createNoteButton_press = () => {
-        this.props.navigation.navigate('Note');
+        navigator.navigate('Note');
     };
 
     createFolderButton_press = () => {
-        this.props.navigation.navigate('Folder');
+        navigator.navigate('Folder');
     };
 
     deleteFolder_onPress = folderId => {
         Folder.delete(folderId).then(() => {
-            this.props.navigator.navigate('Folders');
+            navigator.navigate('Folders');
         });
     };
 
     editFolder_onPress = folderId => {
         this.props.dispatch(actions.navigate({ folderId: folderId }));
-        this.props.navigator.navigate('Folder');
+        navigator.navigate('Folder');
     };
 
     menuOptions = () => {
@@ -77,8 +77,7 @@ class NotesScreenComponent extends React.Component {
 const NotesScreen = connect(state => {
     return {
         folders: state.nav.folders,
-        selectedFolderId: state.nav.selectedFolderId,
-        navigator: state.nav.navigator
+        selectedFolderId: state.nav.selectedFolderId
     };
 })(NotesScreenComponent);
 

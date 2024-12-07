@@ -37,6 +37,10 @@ class ScreenHeaderComponent extends Component {
         this.props.dispatch(actions.user_set({ user: user }));
     };
 
+    sideMenuButton_press = () => {
+        this.props.dispatch(actions.side_menu_toggle());
+    };
+
     showBackButton() {
         // Note: this is hardcoded for now because navigation.state doesn't tell whether
         // it's possible to go back or not. Maybe it's possible to get this information
@@ -109,6 +113,7 @@ class ScreenHeaderComponent extends Component {
                     alignItems: 'center'
                 }}
             >
+                <Button title="☰" onPress={this.sideMenuButton_press} />
                 <Button
                     disabled={!this.showBackButton()}
                     title="<"
