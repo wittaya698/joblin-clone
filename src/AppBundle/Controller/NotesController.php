@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
+use AppBundle\Exception\NotFoundException;
 use AppBundle\Model\Note;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -25,7 +26,7 @@ class NotesController extends ApiController {
 	#[Route('notes/{id}')]
 	public function oneAction($id, Request $request) {
 		$note = Note::find(Note::unhex($id));
-		if (!$note && !$request->isMethod('PUT')) return static::errorResponse('Not found', 0, 404);
+		if (!$note && !$request->isMethod('PUT')) throw new NotFoundException();
 
 		if ($request->isMethod('GET')) {
 			return static::successResponse($note);

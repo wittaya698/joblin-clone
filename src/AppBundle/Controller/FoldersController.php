@@ -4,6 +4,8 @@ namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\ApiController;
+use AppBundle\Exception\MethodNotAllowedException;
+use AppBundle\Exception\NotFoundException;
 use AppBundle\Model\Folder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -23,15 +25,13 @@ class FoldersController extends ApiController {
 			return static::successResponse($folder);
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 
 	#[Route('folders/{id}')]
 	public function oneAction($id, Request $request) {
 		$folder = Folder::byId(Folder::unhex($id));
-		if (!$folder && !$request->isMethod('PUT')) {
-			throw new \Exception("Folder not found");
-		}
+		if (!$folder && !$request->isMethod('PUT')) throw new NotFoundException();
 
 		if ($request->isMethod('GET')) {
 			return static::successResponse($folder);
@@ -61,18 +61,18 @@ class FoldersController extends ApiController {
 			return static::successResponse(array('id' => $id));
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 
 	#[Route('folders/{id}/notes')]
 	public function linkAction($id, Request $request) {
 		$folder = Folder::byId(Folder::unhex($id));
-		if (!$folder) return static::errorResponse('Not found', 0, 404);
+		if (!$folder) throw new NotFoundException();
 
 		if ($request->isMethod('GET')) {
 			return static::successResponse($folder->notes());
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 }

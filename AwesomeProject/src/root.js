@@ -3,6 +3,7 @@ import React from 'react';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import { MenuProvider } from 'react-native-popup-menu';
 
 import { Log } from '@/src/log';
@@ -19,6 +20,7 @@ import { LoginScreen } from '@/src/components/screens/login';
 import { ItemListComponent } from './components/item-list';
 import { BaseModel } from '@/src/base-model';
 import { Synchronizer } from '@/src/synchronizer';
+import SideMenu from '@/src/menu';
 
 let defaultState = {
     nav: {},
@@ -127,7 +129,7 @@ const store = configureStore({
 });
 
 const Stack = createStackNavigator();
-class AppComponent extends React.Component {
+class HomeStackComponent extends React.Component {
     componentDidMount() {
         let db = new Database();
         // db.setDebugEnabled(Registry.debugMode());
@@ -193,9 +195,19 @@ class AppComponent extends React.Component {
     }
 }
 
-const App = connect(state => {
+const HomeStack = connect(state => {
     return { nav: state.nav };
-})(AppComponent);
+})(HomeStackComponent);
+
+const Drawer = createDrawerNavigator();
+const App = () => {
+    return (
+        <Drawer.Navigator drawerContent={props => <SideMenu {...props} />}>
+            <Drawer.Screen name="Home" component={HomeStack} />
+            {/* <Drawer.Screen name="Profile" component={ProfileScreen} /> */}
+        </Drawer.Navigator>
+    );
+};
 
 class Root extends React.Component {
     render() {

@@ -19,10 +19,28 @@ class Folder extends BaseItem {
 	);
 
 	public function add($ids) {
-		throw new \Exception("add(): to be implemened");
+		$notes = Note::find($ids);
+		foreach ($notes as $note) {
+			$note->parent_id = $this->id;
+			$note->save();
+		}
 	}
 
 	public function notes() {
 		return Note::where('parent_id', '=', $this->id)->get();
+	}
+
+	static public function countByOwnerId($ownerId) {
+		return Folder::where('owner_id', '=', $ownerId)->count();
+	}
+
+	public function delete() {
+		if (self::countByOwnerId($this->owner_id) <= 1) throw new \Exception('Cannot delete the last folder');
+
+		$notes = $this->notes();
+		foreach ($notes as $note) {
+			$note->delete();
+		}
+		return parent::delete();
 	}
 }
