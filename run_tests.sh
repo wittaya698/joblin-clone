@@ -5,4 +5,4 @@
 # php bin/console app:build-mime-type-array
 
 php ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests/
-# php phpunit-5.7.20.phar --bootstrap vendor/autoload.php tests/
+# php phpunit-5.7.20.phar --filter testConflict tests/Model/ChangeTest.php --bootstrap vendor/autoload.php tests/

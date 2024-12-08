@@ -21,7 +21,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 	// three-way merge.
 	// These special fields need to be get and set via diffableField() and
 	// setDiffableField()
-	protected $changedDiffableField = array();
+	protected $changedDiffableFields = array();
 	protected $diffableFields = array();
 
 	protected $isVersioned = false;
@@ -360,7 +360,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 		if ($this->parent_id === '') $this->parent_id = null;
 		if ($this->isVersioned) {
-			$changedFields = array_merge($this->getDirty(), $this->changedDiffableField);
+			$changedFields = array_merge($this->getDirty(), $this->changedDiffableFields);
 			unset($changedFields['updated_time']);
 		}
 
@@ -372,7 +372,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			if (count($changedFields)) {
 				$this->trackChanges($isNew ? 'create' : 'update', $changedFields);
 			}
-			$this->changedDiffableField = array();
+			$this->changedDiffableFields = array();
 		}
 
 		return $output;
