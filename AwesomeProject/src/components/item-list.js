@@ -6,7 +6,6 @@ import { actions } from '../root';
 class ItemListComponent extends Component {
     constructor() {
         super();
-        this.previousListMode = 'view';
         this.state = { dataSource: {}, items: [], selectedItemIds: [] };
     }
 
@@ -19,34 +18,13 @@ class ItemListComponent extends Component {
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {
-        // When the items have changed, we just pass this to the data source. However,
-        // when the list mode change, we need to clone the items to make sure the whole
-        // list is updated (so that the checkbox can be added or removed).
-        let items = newProps.items;
-
-        if (newProps.listMode != this.previousListMode) {
-            items = newProps.items.slice();
-            for (let i = 0; i < items.length; i++) {
-                items[i] = Object.assign({}, items[i]);
-            }
-            this.previousListMode = newProps.listMode;
-        }
-
         // https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
         this.setState({
             dataSource: newProps.items
         });
     }
 
-    setListMode = mode => {
-        this.props.dispatch(actions.set_list_mode({ listMode: mode }));
-    };
-
     listView_itemPress = itemId => {};
-
-    listView_itemLongPress = itemId => {
-        this.setListMode('edit');
-    };
 
     render() {
         let renderRow = item => {
@@ -56,17 +34,13 @@ class ItemListComponent extends Component {
             let onLongPress = () => {
                 this.listView_itemLongPress(item.id);
             };
-            let isEditable = this.props.listMode == 'edit';
 
             return (
                 <TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
                     <View>
-                        {isEditable && <Checkbox label={item.title}></Checkbox>}
-                        {!isEditable && (
-                            <Text>
-                                {item.title}[{item.id}]
-                            </Text>
-                        )}
+                        <Text>
+                            {item.title}[{item.id}]
+                        </Text>
                     </View>
                 </TouchableHighlight>
             );

@@ -31,7 +31,6 @@ let defaultState = {
     folders: [],
     selectedNoteId: null,
     selectedFolderId: null,
-    listMode: 'view',
     user: { email: 'wittayathongjeen698@gmail.com', session: null },
     showSideMenu: false
 };
@@ -45,9 +44,6 @@ const navReducer = createSlice({
         },
         navigate: (state, action) => {
             // const r = state.nav.routes;
-
-            action.params = { listMode: 'view' };
-
             // state.nav = newNav?;
             if ('noteId' in action.payload) {
                 state.selectedNoteId = action.payload.noteId;
@@ -114,11 +110,6 @@ const navReducer = createSlice({
 
         user_set: (state, action) => {
             state.user = action.payload.user;
-        },
-
-        set_list_mode: (state, action) => {
-            state.listMode = action.payload.listMode;
-            // state.nav = Object.assign({}, state.nav)
         },
 
         side_menu_toggle: (state, action) => {

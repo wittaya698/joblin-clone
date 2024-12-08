@@ -16,7 +16,6 @@ class FolderListComponent extends ItemListComponent {
 const FolderList = connect(state => {
     return {
         items: state.nav.folders,
-        listMode: state.nav.listMode,
         navigator: state.nav.navigator
     };
 })(FolderListComponent);
