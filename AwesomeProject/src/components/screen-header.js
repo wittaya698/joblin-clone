@@ -46,7 +46,7 @@ class ScreenHeaderComponent extends Component {
         // it's possible to go back or not. Maybe it's possible to get this information
         // from somewhere else.
         navigator = this.props.navigator;
-        return this.props.navState.routeName != 'Folders';
+        return this.props.navState.routeName != 'Notes';
     }
 
     backButton_press = () => {

@@ -16,11 +16,13 @@ import { NotesScreen } from '@/src/components/screens/notes';
 import { FolderScreen } from '@/src/components/screens/folder';
 import { FoldersScreen } from '@/src/components/screens/folders';
 import { LoginScreen } from '@/src/components/screens/login';
+import { LoadingScreen } from '@/src/components/screens/loading.js';
 import { ItemListComponent } from './components/item-list';
 import { BaseModel } from '@/src/base-model';
 import { Synchronizer } from '@/src/synchronizer';
 import { SideMenuContent } from '@/src/components/side-menu-content';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
 let defaultState = {
     nav: {},
@@ -150,6 +152,7 @@ class HomeStackComponent extends React.Component {
 
         BaseModel.dispatch = this.props.dispatch;
         BaseModel.db_ = db;
+        NoteFolderService.dispatch = this.props.dispatch;
 
         props = this.props;
         db.open()
@@ -172,15 +175,29 @@ class HomeStackComponent extends React.Component {
 
                 Log.info('Loading folders...');
 
-                Folder.all()
+                return Folder.all()
                     .then(folders => {
                         props.dispatch(
                             actions.folders_update_all({ folders: folders })
                         );
+                        return folders;
                     })
                     .catch(error => {
                         Log.warn('Cannot load folders', error);
                     });
+            })
+            .then(folders => {
+                let folder = folders[0];
+
+                if (!folder) throw new Error('No default folder is defined');
+
+                return NoteFolderService.openNoteList(folder.id);
+
+                // this.props.dispatch({
+                // 	type: 'Navigation/NAVIGATE',
+                // 	routeName: 'Notes',
+                // 	folderId: folder.id,
+                // });
             })
             .then(() => {
                 let synchronizer = new Synchronizer(db, Registry.api());
@@ -196,12 +213,13 @@ class HomeStackComponent extends React.Component {
         ItemListComponent.dispatch = this.props.dispatch;
         return (
             <MenuProvider>
-                <Stack.Navigator initialRouteName="Folders">
+                <Stack.Navigator initialRouteName="Loading">
                     <Stack.Screen name="Notes" component={NotesScreen} />
                     <Stack.Screen name="Note" component={NoteScreen} />
                     <Stack.Screen name="Folder" component={FolderScreen} />
                     <Stack.Screen name="Folders" component={FoldersScreen} />
                     <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Loading" component={LoadingScreen} />
                 </Stack.Navigator>
             </MenuProvider>
         );

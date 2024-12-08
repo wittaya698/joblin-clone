@@ -13,8 +13,6 @@ class FoldersScreenComponent extends React.Component {
     };
 
     render() {
-        nav = this.props.navigation;
-        this.props.dispatch(actions.set_navigator({ navigator: nav }));
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
@@ -28,8 +26,7 @@ class FoldersScreenComponent extends React.Component {
 
 const FoldersScreen = connect(state => {
     return {
-        folders: state.nav.folders,
-        navigator: state.nav.navigator
+        folders: state.nav.folders
     };
 })(FoldersScreenComponent);
 

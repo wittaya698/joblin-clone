@@ -2,18 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-native';
 import { Log } from '@/src/log.js';
+import { Note } from '@/src/models/note.js';
+import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
-import {
-    Dimensions,
-    StyleSheet,
-    ScrollView,
-    View,
-    Image,
-    Text
-} from 'react-native';
+import { Dimensions, StyleSheet, ScrollView } from 'react-native';
 import { actions } from '../root';
-
-const window = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     menu: {
@@ -43,8 +36,8 @@ class SideMenuContentComponent extends Component {
     }
 
     folder_press(folder) {
-        this.props.dispatch(actions.navigate({ folderId: folder.id }));
         navigator.navigate('Notes');
+        NoteFolderService.openNoteList(folder.id);
     }
 
     render() {

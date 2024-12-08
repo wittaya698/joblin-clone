@@ -6,6 +6,8 @@ import { Note } from '@/src/models/note.js';
 import { Folder } from '@/src/models/folder.js';
 import { Log } from '@/src/log.js';
 import { Registry } from '@/src/registry.js';
+import { actions } from '@/src/root';
+import { connect } from 'react-redux';
 
 class NoteFolderService extends BaseService {
     static save(type, item, oldItem) {
@@ -35,6 +37,20 @@ class NoteFolderService extends BaseService {
             .then(() => {
                 Registry.synchronizer().start();
                 return output;
+            });
+    }
+
+    static openNoteList(folderId) {
+        return Note.previews(folderId)
+            .then(
+                function (notes) {
+                    this.dispatch(actions.notes_update_all({ notes: notes }));
+                    this.dispatch(actions.navigate({ folderId: folderId }));
+                    this.navigator.navigate('Notes');
+                }.bind(this)
+            )
+            .catch(error => {
+                Log.warn('Cannot load notes', error);
             });
     }
 }
