@@ -6,6 +6,7 @@ import { Log } from '@/src/log.js';
 import { Note } from '@/src/models/note.js';
 import { Registry } from '@/src/registry.js';
 import { ScreenHeader } from '@/src/components/screen-header';
+import { Checkbox } from '@/src/components/checkbox';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
 class NoteScreenComponent extends React.Component {
@@ -21,7 +22,12 @@ class NoteScreenComponent extends React.Component {
 
     UNSAFE_componentWillMount() {
         if (!this.props.noteId) {
-            this.setState({ note: Note.new(this.props.folderId) });
+            let note =
+                this.props.itemType == 'todo'
+                    ? Note.newTodo(this.props.folderId)
+                    : Note.new(this.props.folderId);
+            Log.info(note);
+            this.setState({ note: note });
         } else {
             Note.load(this.props.noteId).then(note => {
                 this.originalNote = Object.assign({}, note);
@@ -55,20 +61,39 @@ class NoteScreenComponent extends React.Component {
         );
     };
     render() {
+        const note = this.state.note;
+        const isTodo = !!Number(note.is_todo);
+        let todoComponents = null;
+
+        if (note.is_todo) {
+            todoComponents = (
+                <View>
+                    <Button title="test" onPress={this.saveNoteButton_press} />
+                </View>
+            );
+        }
+
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
                 <ScreenHeader navState={{ routeName: routeName }} />
-                <TextInput
-                    value={this.state.note.title}
-                    onChangeText={this.title_changeText}
-                />
+                <View style={{ flexDirection: 'row' }}>
+                    {isTodo && (
+                        <Checkbox checked={!!Number(note.todo_completed)} />
+                    )}
+                    <TextInput
+                        style={{ flex: 1 }}
+                        value={note.title}
+                        onChangeText={this.title_changeText}
+                    />
+                </View>
                 <TextInput
                     style={{ flex: 1, textAlignVertical: 'top' }}
                     multiline={true}
                     value={this.state.note.body}
                     onChangeText={this.body_changeText}
                 />
+                {todoComponents}
                 <Button title="Save note" onPress={this.saveNoteButton_press} />
             </View>
         );
@@ -78,7 +103,8 @@ class NoteScreenComponent extends React.Component {
 const NoteScreen = connect(state => {
     return {
         noteId: state.nav.selectedNoteId,
-        folderId: state.nav.selectedFolderId
+        folderId: state.nav.selectedFolderId,
+        itemType: state.nav.selectedItemType
     };
 })(NoteScreenComponent);
 

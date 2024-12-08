@@ -30,6 +30,7 @@ let defaultState = {
     notes: [],
     folders: [],
     selectedNoteId: null,
+    selectedItemType: 'note',
     selectedFolderId: null,
     user: { email: 'wittayathongjeen698@gmail.com', session: null },
     showSideMenu: false
@@ -52,6 +53,10 @@ const navReducer = createSlice({
             if ('folderId' in action.payload) {
                 state.selectedFolderId = action.payload.folderId;
             }
+
+            if ('itemType' in action.payload) {
+                state.selectedItemType = action.payload.itemType;
+            }
         },
         // Replace all the notes with the provided array
         notes_update_all: (state, action) => {
@@ -60,6 +65,8 @@ const navReducer = createSlice({
         // Insert the note into the note list if it's new, or
         // update it if it already exists.
         notes_update_one: (state, action) => {
+            Log.info('NOITTEOJTNEONTOE', action.payload.note);
+
             let newNotes = state.notes.splice(0);
             var found = false;
             for (let i = 0; i < newNotes.length; i++) {

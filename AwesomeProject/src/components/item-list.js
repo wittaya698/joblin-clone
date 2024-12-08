@@ -1,7 +1,9 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
-import { Checkbox } from '@/src/components/checkbox';
 import { actions } from '../root';
+import { Checkbox } from '@/src/components/checkbox';
+import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { Note } from '@/src/models/note.js';
 
 class ItemListComponent extends Component {
     constructor() {
@@ -24,6 +26,14 @@ class ItemListComponent extends Component {
         });
     }
 
+    todoCheckbox_change(itemId, checked) {
+        Note.load(itemId).then(oldNote => {
+            let newNote = Object.assign({}, oldNote);
+            newNote.todo_completed = checked;
+            return NoteFolderService.save('note', newNote, oldNote);
+        });
+    }
+
     listView_itemPress = itemId => {};
 
     render() {
@@ -37,7 +47,15 @@ class ItemListComponent extends Component {
 
             return (
                 <TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
-                    <View>
+                    <View style={{ flexDirection: 'row' }}>
+                        {!!Number(item.is_todo) && (
+                            <Checkbox
+                                checked={!!Number(item.todo_completed)}
+                                onChange={checked => {
+                                    this.todoCheckbox_change(item.id, checked);
+                                }}
+                            />
+                        )}
                         <Text>
                             {item.title}[{item.id}]
                         </Text>

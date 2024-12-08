@@ -23,6 +23,24 @@ class ActionButtonComponent extends React.Component {
         };
     }
 
+    newTodo_press() {
+        this.props.dispatch(
+            actions.navigate({
+                noteId: null,
+                folderId: this.props.parentFolderId,
+                itemType: 'todo'
+            })
+        );
+        navigator.navigate('Note');
+        // this.props.dispatch({
+        // 	type: 'Navigation/NAVIGATE',
+        // 	routeName: 'Note',
+        // 	noteId: null,
+        // 	folderId: this.props.parentFolderId,
+        // 	itemType: 'todo',
+        // });
+    }
+
     newNote_press() {
         this.props.dispatch(
             actions.navigate({
@@ -46,6 +64,13 @@ class ActionButtonComponent extends React.Component {
         const { open } = this.state;
         const style = styles.actionButtonIcon;
         const actions = [
+            {
+                label: 'New todo',
+                icon: () => <Icon name="checkbox-outline" style={style} />,
+                onPress: () => {
+                    this.newTodo_press();
+                }
+            },
             {
                 label: 'New note',
                 icon: () => <Icon name="document" style={style} />,
