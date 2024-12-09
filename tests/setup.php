@@ -33,7 +33,7 @@ exec($cmd);
 
 $capsule = new \Illuminate\Database\Capsule\Manager();
 
-$capsule->addConnection([
+$capsuleConfig = [
 	'driver'    => 'mysql',
 	'host'      => $dbConfig['host'],
 	'database'  => $dbConfig['dbName'],
@@ -42,6 +42,10 @@ $capsule->addConnection([
 	'charset'   => 'utf8',
 	'collation' => 'utf8_unicode_ci',
 	'prefix'    => '',
-]);
+];
+
+$capsule->addConnection($capsuleConfig);
+
+$_SERVER['JOPLIN_TESTING_DB_CONFIG'] = $capsuleConfig;
 
 $capsule->bootEloquent();
