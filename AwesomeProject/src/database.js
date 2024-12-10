@@ -2,6 +2,7 @@ import SQLite from 'react-native-sqlite-storage';
 import { Log } from '@/src/log.js';
 import { uuid } from '@/src/uuid.js';
 import { promiseChain } from '@/src/promise-chain';
+import { _ } from '@/src/locale';
 
 const structureSql = `
 CREATE TABLE folders (
@@ -9,7 +10,8 @@ CREATE TABLE folders (
 	parent_id TEXT NOT NULL DEFAULT "",
 	title TEXT NOT NULL DEFAULT "",
 	created_time INT NOT NULL DEFAULT 0,
-	updated_time INT NOT NULL DEFAULT 0
+	updated_time INT NOT NULL DEFAULT 0,
+    is_default BOOLEAN NOT NULL DEFAULT 0
 );
 
 CREATE TABLE notes (
@@ -117,7 +119,7 @@ class Database {
 
     open() {
         this.db_ = SQLite.openDatabase(
-            { name: 'joplin-21.sqlite', location: 'default' },
+            { name: 'joplin-22.sqlite', location: 'default' },
             db => {
                 Log.info('Database was open successfully');
             },
@@ -432,6 +434,15 @@ class Database {
                             '", "' +
                             Database.enumId('settings', 'string') +
                             '")'
+                    );
+                    tx.executeSql(
+                        'INSERT INTO folders (`id`, `title`, `is_default`, `created_time`) VALUES ("' +
+                            uuid.create() +
+                            '", "' +
+                            _('Default list') +
+                            '", 1, ' +
+                            Math.round(new Date().getTime() / 1000) +
+                            ')'
                     );
                 }).then(() => {
                     Log.info('Database schema created successfully');

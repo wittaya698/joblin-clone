@@ -165,6 +165,9 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		if (static::isDiffableField($fieldName)) return (string)$fieldValue;
 		if (!static::isValidField($fieldName)) throw new \Exception('Unknown field: ' . $fieldName);
 
+		# ** Critical ** To be removed
+		if (!static::$fields[$fieldName]) return $fieldValue;
+
 		switch (static::$fields[$fieldName]['public']) {
 			case 'string':
 				return (string)$fieldValue;

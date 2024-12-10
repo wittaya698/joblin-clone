@@ -2,6 +2,7 @@ import { BaseModel } from '@/src/base-model';
 import { Note } from '@/src/models/note';
 import { actions } from '@/src/root';
 import { promiseChain } from '@/src/promise-chain';
+import { _ } from '@/src/locale.js';
 
 class Folder extends BaseModel {
     static tableName() {
@@ -41,7 +42,15 @@ class Folder extends BaseModel {
     }
 
     static delete(folderId, options = null) {
-        return this.noteIds(folderId)
+        return this.load(folderId)
+            .then(folder => {
+                if (!!folder.is_default) {
+                    throw new Error(_('Cannot delete the default list'));
+                }
+            })
+            .then(() => {
+                return this.noteIds(folderId);
+            })
             .then(ids => {
                 let chain = [];
                 for (let i = 0; i < ids.length; i++) {
