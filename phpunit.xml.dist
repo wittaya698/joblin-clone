@@ -21,6 +21,10 @@
         <env name="REDIS_HOST" value="localhost" />
 		<env name="MEMCACHED_HOST" value="localhost" />
         <env name="KERNEL_CLASS" value="Kernel"/>
+        <env name="DATABASE_NAME" value="notes_test"/>
+		<env name="DATABASE_HOST" value="localhost"/>
+		<env name="DATABASE_USER" value="root"/>
+		<env name="DATABASE_PASSWORD" value="0906198331"/>
         <server name="KERNEL_DIR" value="app/" />
     </php>
 
@@ -30,6 +34,7 @@
 			<directory>./src/Symfony/Component/*/Tests/</directory>
 			<directory>./src/Symfony/Component/*/*/Tests/</directory>
 			<directory>./src/Symfony/Bundle/*/Tests/</directory>
+			<directory>./tests</directory>
 		</testsuite>
     </testsuites>
 

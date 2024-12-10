@@ -18,6 +18,7 @@ services:
     bind:
       $dbParams: "%database%"
       $kernelCacheDir: "../var/cache"
+      $rootDir: "app"
 
   AppBundle\:
     resource: "../src/AppBundle/*"

@@ -3,11 +3,13 @@
 namespace AppBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Controller\ApiController;
-use AppBundle\Exception\NotFoundException;
-use AppBundle\Model\Note;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+
+use AppBundle\Model\Note;
+use AppBundle\Controller\ApiController;
+use AppBundle\Exception\NotFoundException;
+use AppBundle\Exception\MethodNotAllowedException;
 
 class NotesController extends ApiController {
 	#[Route('notes')]
@@ -20,7 +22,7 @@ class NotesController extends ApiController {
 			return static::successResponse($note->toPublicArray());
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 
 	#[Route('notes/{id}')]
@@ -45,9 +47,11 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$data = Note::filter($this->patchParameters());
-			$note->fromPublicArray($data);
+			$query = $request->query->all();
+
 			$note->id = Note::unhex($id);
+			$note->revId = $query['rev_id'];
+			$note->fromPublicArray($this->patchParameters());
 			$note->save();
 			return static::successResponse($note);
 		}
@@ -57,6 +61,6 @@ class NotesController extends ApiController {
 			return static::successResponse();
 		}
 
-		return static::errorResponse('Invalid method');
+		throw new MethodNotAllowedException();
 	}
 }

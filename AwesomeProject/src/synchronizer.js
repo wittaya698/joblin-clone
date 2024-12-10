@@ -114,7 +114,7 @@ class Synchronizer {
         let hasMore = false;
         this.api()
             .get('synchronizer', {
-                last_id: Setting.value('sync.lastRevId')
+                rev_id: Setting.value('sync.lastRevId')
             })
             .then(syncOperations => {
                 hasMore = syncOperations.has_more;

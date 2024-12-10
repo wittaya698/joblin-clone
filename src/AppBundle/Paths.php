@@ -6,8 +6,8 @@ class Paths {
 
 	private $rootDir_ = null;
 
-	public function __construct() {
-		$this->rootDir_ = "app";
+	public function __construct(string $rootDir) {
+		$this->rootDir_ = $rootDir;
 	}
 
 	public function rootDir() {

@@ -4,6 +4,9 @@ namespace AppBundle\Model;
 
 class Note extends BaseItem {
 
+	protected $isVersioned = true;
+	static protected $diffableFields = array('title', 'body');
+
 	static protected $fields = array(
 		'id' => null,
 		'completed' => null,
@@ -34,7 +37,4 @@ class Note extends BaseItem {
 		if (array_key_exists('altitude', $output)) $output['altitude'] = (string)number_format($output['altitude'], 4);
 		return $output;
 	}
-
-	protected $diffableFields = array('title', 'body');
-	protected $isVersioned = true;
 }

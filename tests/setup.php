@@ -1,5 +1,9 @@
 <?php
 
+$_SERVER['JOPLIN_TESTING'] = true;
+
+require_once dirname(__FILE__) . '/TestUtils.php';
+require_once dirname(__FILE__) . '/BaseTestCase.php';
 require_once dirname(__FILE__) . '/BaseControllerTestCase.php';
 
 $dbConfig = array(
