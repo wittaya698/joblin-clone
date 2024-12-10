@@ -34,6 +34,9 @@ class NotesController extends ApiController {
 			return static::successResponse($note);
 		}
 
+		$query = $request->query->all();
+		if ($note) $note->revId = $query['rev_id'];
+
 		if ($request->isMethod('PUT')) {
 			$isNew = !$note;
 			if ($isNew) $note = new Note();
@@ -47,10 +50,6 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$query = $request->query->all();
-
-			$note->id = Note::unhex($id);
-			$note->revId = $query['rev_id'];
 			$note->fromPublicArray($this->patchParameters());
 			$note->save();
 			return static::successResponse($note);
