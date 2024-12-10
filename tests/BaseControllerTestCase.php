@@ -41,6 +41,7 @@ class BaseControllerTestCase extends WebTestCase {
 					'error' => $e->getMessage(),
 					'code' => $e->getCode(),
 					'type' => get_class($e),
+					'trace' => $e->getTraceAsString()
 				);
 			}
 			return $output;
