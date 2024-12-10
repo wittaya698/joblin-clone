@@ -8,6 +8,7 @@ import { Registry } from '@/src/registry.js';
 import { ScreenHeader } from '@/src/components/screen-header';
 import { Checkbox } from '@/src/components/checkbox';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { _ } from '@/src/locale.js';
 
 class NoteScreenComponent extends React.Component {
     static navigationOptions = options => {
@@ -60,6 +61,30 @@ class NoteScreenComponent extends React.Component {
             }
         );
     };
+
+    deleteNote_onPress = noteId => {
+        Log.info('DELETE', noteId);
+    };
+
+    attachFile_onPress = noteId => {};
+
+    menuOptions = () => {
+        return [
+            {
+                title: _('Attach file'),
+                onPress: () => {
+                    this.attachFile_onPress(this.state.note.id);
+                }
+            },
+            {
+                title: _('Delete note'),
+                onPress: () => {
+                    this.deleteNote_onPress(this.state.note.id);
+                }
+            }
+        ];
+    };
+
     render() {
         const note = this.state.note;
         const isTodo = !!Number(note.is_todo);
@@ -76,7 +101,10 @@ class NoteScreenComponent extends React.Component {
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>
-                <ScreenHeader navState={{ routeName: routeName }} />
+                <ScreenHeader
+                    navState={{ routeName: routeName }}
+                    menuOptions={this.menuOptions()}
+                />
                 <View style={{ flexDirection: 'row' }}>
                     {isTodo && (
                         <Checkbox checked={!!Number(note.todo_completed)} />
