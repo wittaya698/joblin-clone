@@ -161,6 +161,25 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 		}
 	}
 
+	static public function dbValueToPublicValue($fieldName, $fieldValue) {
+		if (static::isDiffableField($fieldName)) return (string)$fieldValue;
+		if (!static::isValidField($fieldName)) throw new \Exception('Unknown field: ' . $fieldName);
+
+		switch (static::$fields[$fieldName]['public']) {
+			case 'string':
+				return (string)$fieldValue;
+				break;
+			case 'int':
+				return (int)$fieldValue;
+				break;
+			case 'bool':
+				return $fieldValue === '1' || $fieldValue === 1 || $fieldValue === true;
+				break;
+		}
+
+		return $fieldValue;
+	}
+
 	public function toPublicArray() {
 		$output = $this->toArray();
 		if ($this->useUuid) {
@@ -177,6 +196,7 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 			if (isset(static::$enums[$k])) {
 				$output[$k] = static::enumName($k, $v);
 			}
+			$output[$k] = static::dbValueToPublicValue($k, $v);
 		}
 
 		if (isset($output['item_type'])) {
