@@ -8,9 +8,9 @@ import { actions } from '@/src/root';
 import { ActionButton } from '@/src/components/action-button';
 
 class FoldersScreenComponent extends React.Component {
-    static navigationOptions = options => {
+    static navigationOptions(options) {
         return { header: null };
-    };
+    }
 
     render() {
         routeName = nav.getState().routes[nav.getState().index].name;

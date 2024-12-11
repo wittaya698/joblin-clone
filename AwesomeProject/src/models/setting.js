@@ -3,14 +3,6 @@ import { Log } from '@/src/log';
 import { Database } from '@/src/database';
 
 class Setting extends BaseModel {
-    static defaults_ = {
-        clientId: { value: '', type: 'string' },
-        sessionId: { value: '', type: 'string' },
-        'user.email': { value: '', type: 'string' },
-        'user.session': { value: '', type: 'string' },
-        'sync.lastRevId': { value: 0, type: 'int' }
-    };
-
     static tableName() {
         return 'settings';
     }
@@ -129,5 +121,13 @@ class Setting extends BaseModel {
         }, 500);
     }
 }
+
+Setting.defaults_ = {
+    clientId: { value: '', type: 'string' },
+    sessionId: { value: '', type: 'string' },
+    'user.email': { value: '', type: 'string' },
+    'user.session': { value: '', type: 'string' },
+    'sync.lastRevId': { value: 0, type: 'int' }
+};
 
 export { Setting };

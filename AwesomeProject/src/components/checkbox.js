@@ -22,11 +22,11 @@ class Checkbox extends Component {
         this.state = { checked: this.props.checked };
     }
 
-    onPress = () => {
+    onPress() {
         let newChecked = !this.state.checked;
         this.setState({ checked: newChecked });
         if (this.props.onChange) this.props.onChange(newChecked);
-    };
+    }
 
     render() {
         const iconName = this.state.checked
@@ -35,7 +35,7 @@ class Checkbox extends Component {
 
         return (
             <TouchableHighlight
-                onPress={this.onPress}
+                onPress={() => this.onPress()}
                 style={{ justifyContent: 'center', alignItems: 'center' }}
             >
                 <Icon name={iconName} style={styles.checkboxIcon} />

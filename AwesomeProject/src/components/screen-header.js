@@ -27,20 +27,6 @@ class ScreenHeaderComponent extends Component {
         menuOptions: []
     };
 
-    menu_login = () => {
-        this.props.navigator.navigate('Login');
-    };
-
-    menu_logout = () => {
-        let user = { email: null, session: null };
-        Setting.setObject('user', user);
-        this.props.dispatch(actions.user_set({ user: user }));
-    };
-
-    sideMenuButton_press = () => {
-        this.props.dispatch(actions.side_menu_toggle());
-    };
-
     showBackButton() {
         // Note: this is hardcoded for now because navigation.state doesn't tell whether
         // it's possible to go back or not. Maybe it's possible to get this information
@@ -49,15 +35,29 @@ class ScreenHeaderComponent extends Component {
         return this.props.navState.routeName != 'Notes';
     }
 
-    backButton_press = () => {
-        this.props.navigator.goBack();
-    };
+    sideMenuButton_press() {
+        this.props.dispatch(actions.side_menu_toggle());
+    }
 
-    menu_select = value => {
+    backButton_press() {
+        this.props.navigator.goBack();
+    }
+
+    menu_select(value) {
         if (typeof value == 'function') {
             value();
         }
-    };
+    }
+
+    menu_login() {
+        this.props.navigator.navigate('Login');
+    }
+
+    menu_logout() {
+        let user = { email: null, session: null };
+        Setting.setObject('user', user);
+        this.props.dispatch(actions.user_set({ user: user }));
+    }
 
     render() {
         let key = 0;
@@ -80,7 +80,7 @@ class ScreenHeaderComponent extends Component {
         if (this.props.user && this.props.user.session) {
             menuOptionComponents.push(
                 <MenuOption
-                    value={this.menu_logout}
+                    value={() => this.menu_logout()}
                     key={'menuOption_' + key++}
                 >
                     <Text>{_('Logout')}</Text>
@@ -88,7 +88,10 @@ class ScreenHeaderComponent extends Component {
             );
         } else {
             menuOptionComponents.push(
-                <MenuOption value={this.menu_login} key={'menuOption_' + key++}>
+                <MenuOption
+                    value={() => this.menu_login()}
+                    key={'menuOption_' + key++}
+                >
                     <Text>{_('Login')}</Text>
                 </MenuOption>
             );
@@ -113,14 +116,14 @@ class ScreenHeaderComponent extends Component {
                     alignItems: 'center'
                 }}
             >
-                <Button title="☰" onPress={this.sideMenuButton_press} />
+                <Button title="☰" onPress={() => this.sideMenuButton_press()} />
                 <Button
                     disabled={!this.showBackButton()}
                     title="<"
-                    onPress={this.backButton_press}
+                    onPress={() => this.backButton_press()}
                 ></Button>
                 <Text style={{ flex: 1, marginLeft: 10 }}>{title}</Text>
-                <Menu onSelect={this.menu_select}>
+                <Menu onSelect={value => this.menu_select(value)}>
                     <MenuTrigger>
                         <Text style={{ fontSize: 20 }}>&#8942;</Text>
                     </MenuTrigger>

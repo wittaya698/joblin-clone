@@ -10,19 +10,11 @@ import { _ } from '@/src/locale';
 import { ActionButton } from '../action-button';
 
 class NotesScreenComponent extends React.Component {
-    static navigationOptions = options => {
+    static navigationOptions(options) {
         return { header: null };
-    };
+    }
 
-    createNoteButton_press = () => {
-        navigator.navigate('Note');
-    };
-
-    createFolderButton_press = () => {
-        navigator.navigate('Folder');
-    };
-
-    deleteFolder_onPress = folderId => {
+    deleteFolder_onPress(folderId) {
         Folder.delete(folderId)
             .then(() => {
                 navigator.navigate('Folders');
@@ -30,14 +22,14 @@ class NotesScreenComponent extends React.Component {
             .catch(error => {
                 alert(error.message);
             });
-    };
+    }
 
-    editFolder_onPress = folderId => {
+    editFolder_onPress(folderId) {
         this.props.dispatch(actions.navigate({ folderId: folderId }));
         navigator.navigate('Folder');
-    };
+    }
 
-    menuOptions = () => {
+    menuOptions() {
         return [
             {
                 title: _('Delete folder'),
@@ -52,7 +44,7 @@ class NotesScreenComponent extends React.Component {
                 }
             }
         ];
-    };
+    }
 
     render() {
         let folder = Folder.byId(

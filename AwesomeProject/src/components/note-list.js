@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import { actions } from '../root';
 
 class NoteListComponent extends ItemListComponent {
-    listView_itemPress = noteId => {
+    listView_itemPress(noteId) {
         this.props.dispatch(actions.navigate({ noteId: noteId }));
         navigator.navigate('Note');
-    };
+    }
 }
 
 const NoteList = connect(state => {

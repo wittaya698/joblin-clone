@@ -2,11 +2,6 @@ import { BaseModel } from '@/src/base-model';
 import { Log } from '@/src/log';
 
 class Change extends BaseModel {
-    static TYPE_NOOP = 0;
-    static TYPE_CREATE = 1;
-    static TYPE_UPDATE = 2;
-    static TYPE_DELETE = 3;
-
     static tableName() {
         return 'changes';
     }
@@ -105,5 +100,10 @@ class Change extends BaseModel {
         return output;
     }
 }
+
+Change.TYPE_NOOP = 0;
+Change.TYPE_CREATE = 1;
+Change.TYPE_UPDATE = 2;
+Change.TYPE_DELETE = 3;
 
 export { Change };

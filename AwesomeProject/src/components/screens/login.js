@@ -10,9 +10,9 @@ import { _ } from '@/src/locale';
 import { actions } from '@/src/root';
 
 class LoginScreenComponent extends React.Component {
-    static navigationOptions = options => {
+    static navigationOptions(options) {
         return { header: null };
-    };
+    }
 
     constructor() {
         super();
@@ -23,15 +23,15 @@ class LoginScreenComponent extends React.Component {
         this.setState({ email: this.props.user.email });
     }
 
-    email_changeText = text => {
+    email_changeText(text) {
         this.setState({ email: text });
     };
 
-    password_changeText = text => {
+    password_changeText(text) {
         this.setState({ password: text });
     };
 
-    loginButton_press = () => {
+    loginButton_press() {
         this.setState({ errorMessage: null });
 
         return Registry.api()
@@ -71,12 +71,12 @@ class LoginScreenComponent extends React.Component {
                 <ScreenHeader navState={{ routeName: routeName }} />
                 <TextInput
                     value={this.state.email}
-                    onChangeText={this.email_changeText}
+                    onChangeText={(text) => this.email_changeText(text)}
                     keyboardType="email-address"
                 />
                 <TextInput
                     value={this.state.password}
-                    onChangeText={this.password_changeText}
+                    onChangeText={(this) => this.password_changeText(text)}
                     secureTextEntry={true}
                 />
                 {this.state.errorMessage && (
@@ -84,7 +84,7 @@ class LoginScreenComponent extends React.Component {
                         {this.state.errorMessage}
                     </Text>
                 )}
-                <Button title="Login" onPress={this.loginButton_press} />
+                <Button title="Login" onPress={() => this.loginButton_press()} />
             </View>
         );
     }
