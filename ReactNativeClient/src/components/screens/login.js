@@ -25,11 +25,11 @@ class LoginScreenComponent extends React.Component {
 
     email_changeText(text) {
         this.setState({ email: text });
-    };
+    }
 
     password_changeText(text) {
         this.setState({ password: text });
-    };
+    }
 
     loginButton_press() {
         this.setState({ errorMessage: null });
@@ -62,7 +62,7 @@ class LoginScreenComponent extends React.Component {
                     errorMessage: _('Could not login: %s)', error.message)
                 });
             });
-    };
+    }
 
     render() {
         routeName = nav.getState().routes[nav.getState().index].name;
@@ -71,12 +71,12 @@ class LoginScreenComponent extends React.Component {
                 <ScreenHeader navState={{ routeName: routeName }} />
                 <TextInput
                     value={this.state.email}
-                    onChangeText={(text) => this.email_changeText(text)}
+                    onChangeText={text => this.email_changeText(text)}
                     keyboardType="email-address"
                 />
                 <TextInput
                     value={this.state.password}
-                    onChangeText={(this) => this.password_changeText(text)}
+                    onChangeText={text => this.password_changeText(text)}
                     secureTextEntry={true}
                 />
                 {this.state.errorMessage && (
@@ -84,7 +84,10 @@ class LoginScreenComponent extends React.Component {
                         {this.state.errorMessage}
                     </Text>
                 )}
-                <Button title="Login" onPress={() => this.loginButton_press()} />
+                <Button
+                    title="Login"
+                    onPress={() => this.loginButton_press()}
+                />
             </View>
         );
     }

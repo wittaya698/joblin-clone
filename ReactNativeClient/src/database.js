@@ -93,11 +93,6 @@ INSERT INTO version (version) VALUES (1);
 `;
 
 class Database {
-    static TYPE_INT = 1;
-    static TYPE_TEXT = 2;
-    static TYPE_BOOLEAN = 3;
-    static TYPE_NUMERIC = 4;
-
     constructor() {
         this.debugMode_ = false;
         this.initialized_ = false;
@@ -453,5 +448,10 @@ class Database {
             });
     }
 }
+
+Database.TYPE_INT = 1;
+Database.TYPE_TEXT = 2;
+Database.TYPE_BOOLEAN = 3;
+Database.TYPE_NUMERIC = 4;
 
 export { Database };
