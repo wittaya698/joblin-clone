@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<en-note>
+  <h1>Header 1</h1>
+  <h2>Header 2</h2>
+  <h3>Header 3</h3>
+  <h4>Header 4</h4>
+  <h5>Header 5</h5>
+
+  <p>This is a paragraph with <strong>strong text</strong> and <em>emphasized text</em>.</p>
+
+  <p>This paragraph contains a <a href="https://example.com">link</a>.</p>
+
+  <p>A line break follows here:<br/>And here is the next line.</p>
+
+  <ul>
+    <li>Unordered list item 1</li>
+    <li>Unordered list item 2</li>
+  </ul>
+
+  <ol>
+    <li>Ordered list item 1</li>
+    <li>Ordered list item 2</li>
+  </ol>
+
+  <en-todo checked="true">Completed task</en-todo>
+  <en-todo checked="false">Incomplete task</en-todo>
+
+  <pre><code>Code block example</code></pre>
+
+  <en-media hash="12345" type="image/png" alt="Sample image"/>
+
+  <span>This tag should be ignored.</span>
+  <font>This tag should also be ignored.</font>
+</en-note>
