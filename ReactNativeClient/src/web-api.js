@@ -99,7 +99,8 @@ class WebApi {
 
                 let r = that.makeRequest(method, path, query, data);
 
-                Log.debug(WebApi.toCurl(r, data));
+                //Log.debug(WebApi.toCurl(r, data));
+                //console.info(WebApi.toCurl(r, data));
 
                 fetch(r.url, r.options)
                     .then(function (response) {

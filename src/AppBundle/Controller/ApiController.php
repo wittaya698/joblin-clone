@@ -32,39 +32,6 @@ abstract class ApiController extends AbstractController {
 	public function setContainer(ContainerInterface $container): ?ContainerInterface {
 		parent::setContainer($container);
 
-		set_exception_handler(function ($e) {
-			if ($e instanceof BaseException) {
-				$r = $e->toJsonResponse();
-				$r->send();
-				echo "\n";
-			} else {
-				$msg = $e->getMessage();
-
-				// If the message was sent in Latin encoding, JsonResponse below will fail
-				// so encode it using UTF-8 here.
-				if (json_encode($msg) === false) {
-					$msg = utf8_encode($e->getMessage());
-				}
-
-				$r = array(
-					'error' => $msg,
-					'code' => 0,
-					'type' => 'Exception',
-					//'trace' => $e->getTraceAsString(),
-				);
-				try {
-					$response = new JsonResponse($r);
-				} catch (\Exception $wat) {
-					// If that happens, print the error message as is, since it's better than showing nothing at all
-					die($e->getMessage());
-				}
-				$response->setStatusCode(500);
-				$response->send();
-				echo "\n";
-			}
-		});
-
-
 		// HACK: get connection once here so that it's initialized and can
 		// be accessed from models.
 		$this->db =  $this->eloquent->connection();
@@ -87,7 +54,6 @@ abstract class ApiController extends AbstractController {
 		}
 
 		BaseModel::setClientId($s ? $s->client_id : 0);
-		restore_exception_handler();
 		return $container;
 	}
 
@@ -176,7 +142,7 @@ abstract class ApiController extends AbstractController {
 		if (!isset($_SERVER['CONTENT_TYPE']) || strpos($_SERVER['CONTENT_TYPE'], 'application/x-www-form-urlencoded') === 0) {
 			parse_str($input, $output);
 		} else {
-			throw new \Exception('Only application/x-www-form-urlencoded Content-Type is supported');
+			throw new \Exception('Only application/x-www-form-urlencoded Content-Type is supported. Not supported: ' . $_SERVER['CONTENT_TYPE']);
 		}
 
 		return $output;

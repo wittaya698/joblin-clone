@@ -16,7 +16,7 @@ class NotesController extends ApiController {
 	public function allAction(Request $request): JsonResponse {
 		if ($request->isMethod('POST')) {
 			$note = new Note();
-			$note->fromPublicArray($request->request->all());
+			$note->fromPublicArray(Note::filter($request->request->all()));
 			$note->owner_id = $this->user()->id;
 			$note->save();
 			return static::successResponse($note->toPublicArray());
@@ -41,7 +41,7 @@ class NotesController extends ApiController {
 			$isNew = !$note;
 			if ($isNew) $note = new Note();
 			$data = Note::filter($this->putParameters());
-			$note->fromPublicArray($data);
+			$note->fromPublicArray(Note::filter($this->putParameters()));
 			$note->id = Note::unhex($id);
 			$note->owner_id = $this->user()->id;
 			$note->setIsNew($isNew);
@@ -50,7 +50,7 @@ class NotesController extends ApiController {
 		}
 
 		if ($request->isMethod('PATCH')) {
-			$note->fromPublicArray($this->patchParameters());
+			$note->fromPublicArray(Note::filter($this->patchParameters()));
 			$note->save();
 			return static::successResponse($note);
 		}

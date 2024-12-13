@@ -31,6 +31,6 @@ class UsersControllerTest extends BaseControllerTestCase {
 		$u1 = $this->request('POST', '/users', null, array('email' => 'john@example.com', 'password' => '12345678'));
 		$duplicateEmail = $this->request('POST', '/users', null, array('email' => 'john@example.com', 'password' => '12345678'));
 
-		$this->assertEquals('Validation', $u['type']);
+		$this->assertEquals('Validation', $duplicateEmail['type']);
 	}
 }

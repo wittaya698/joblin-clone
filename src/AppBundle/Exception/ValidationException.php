@@ -15,6 +15,8 @@ class ValidationException extends BaseException {
 	}
 
 	public function toErrorArray() {
-		throw new \Exception("toErrorArray(): to be implemented");
+		$o = parent::toErrorArray();
+		$o['validation_errors'] = $this->validationErrors;
+		return $o;
 	}
 }

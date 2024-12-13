@@ -24,6 +24,10 @@ services:
     resource: "../src/AppBundle/*"
     exclude: "../src/AppBundle/{Entity, Tests}"
 
+  AppBundle\EventListener\ExceptionListener:
+    tags:
+      - { name: kernel.event_subscriber }
+
   app.eloquent:
     class: AppBundle\Eloquent
     arguments:

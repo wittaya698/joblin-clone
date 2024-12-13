@@ -306,12 +306,12 @@ class BaseModel extends \Illuminate\Database\Eloquent\Model {
 
 					case 'notEmpty':
 
-						if (!isset($this->{$key}) && !strlen((string)$this->{$key})) $ok = false;
+						if (isset($this->{$key}) && !strlen((string)$this->{$key})) $ok = false;
 						break;
 
 					case 'minLength':
 
-						if (!isset($this->{$key}) && strlen((string)$this->{$key}) < $rule['args'][0]) $ok = false;
+						if (isset($this->{$key}) && strlen((string)$this->{$key}) < $rule['args'][0]) $ok = false;
 						break;
 
 					case 'maxLength':
