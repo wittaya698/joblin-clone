@@ -46,6 +46,10 @@ let fileApi = new FileApi(
 );
 let synchronizer = new Synchronizer(db, fileApi);
 
+// import moment from 'moment-timezone';
+
+// console.info(moment.tz.guess());
+
 db.open({
     name: '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/test.sqlite3'
 }).then(() => {
