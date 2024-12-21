@@ -22,6 +22,7 @@
     "react-native-popup-menu": "^0.16.1",
     "react-native-vector-icons": "^10.2.0",
     "sax": "^1.4.1",
+    "source-map-support": "^0.5.21",
     "sprintf-js": "^1.1.3",
     "sqlite3": "^5.1.7",
     "string-to-stream": "^3.0.1",
@@ -32,7 +33,7 @@
   },
   "scripts": {
     "babelbuild": "babel app -d build",
-    "build": "npx babel app --out-dir build && npx babel app/src/models --out-dir build/src/models && npx babel app/src/services --out-dir build/src/services",
+    "build": "npx babel app --out-dir build --source-maps && npx babel app/src/models --out-dir build/src/models --source-maps && npx babel app/src/services --out-dir build/src/services --source-maps",
     "clean": "babel-changed --reset"
   },
   "devDependencies": {

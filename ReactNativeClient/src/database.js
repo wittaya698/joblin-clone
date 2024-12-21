@@ -298,6 +298,7 @@ class Database {
     }
 
     refreshTableFields() {
+        Log.info('Initializing tables...');
         let queries = [];
         queries.push(this.wrapQuery('DELETE FROM table_fields'));
 

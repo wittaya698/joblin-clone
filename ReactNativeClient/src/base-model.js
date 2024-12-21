@@ -73,10 +73,6 @@ class BaseModel {
 
     static load(id) {
         return this.loadByField('id', id);
-        // return this.db().selectOne(
-        //     'SELECT * FROM ' + this.tableName() + ' WHERE id = ?',
-        //     [id]
-        // );
     }
 
     static loadByField(fieldName, fieldValue) {
@@ -149,7 +145,7 @@ class BaseModel {
 
         query.id = itemId;
 
-        Log.info('Saving', o);
+        Log.info('Saving', JSON.stringify(o));
 
         return query;
     }
