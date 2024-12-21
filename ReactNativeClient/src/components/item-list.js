@@ -1,9 +1,7 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
-import { actions } from '../root';
-import { Checkbox } from '@/src/components/checkbox';
+import { Checkbox } from '@/src/components/checkbox.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
-import { Note } from '@/src/models/note.js';
 
 class ItemListComponent extends Component {
     constructor() {

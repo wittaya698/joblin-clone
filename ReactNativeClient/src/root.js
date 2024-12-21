@@ -4,25 +4,27 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { MenuProvider } from 'react-native-popup-menu';
-
-import { Log } from '@/src/log';
-import { Folder } from '@/src/models/folder';
-import { Database } from '@/src/database';
-import { Registry } from '@/src/registry';
-import { Setting } from '@/src/models/setting';
-
-import { NoteScreen } from '@/src/components/screens/note';
-import { NotesScreen } from '@/src/components/screens/notes';
-import { FolderScreen } from '@/src/components/screens/folder';
-import { FoldersScreen } from '@/src/components/screens/folders';
-import { LoginScreen } from '@/src/components/screens/login';
-import { LoadingScreen } from '@/src/components/screens/loading.js';
-import { ItemListComponent } from './components/item-list';
-import { BaseModel } from '@/src/base-model';
-import { Synchronizer } from '@/src/synchronizer';
-import { SideMenuContent } from '@/src/components/side-menu-content';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Dropbox } from 'dropbox';
+
+import { Log } from '@/src/log.js';
+import { Folder } from '@/src/models/folder.js';
+import { Database } from '@/src/database.js';
+import { Registry } from '@/src/registry.js';
+import { Setting } from '@/src/models/setting.js';
+
+import { NoteScreen } from '@/src/components/screens/note.js';
+import { NotesScreen } from '@/src/components/screens/notes.js';
+import { FolderScreen } from '@/src/components/screens/folder.js';
+import { FoldersScreen } from '@/src/components/screens/folders.js';
+import { LoginScreen } from '@/src/components/screens/login.js';
+import { LoadingScreen } from '@/src/components/screens/loading.js';
+import { ItemListComponent } from '@/src/components/item-list.js';
+import { BaseModel } from '@/src/base-model.js';
+import { Synchronizer } from '@/src/synchronizer.js';
+import { SideMenuContent } from '@/src/components/side-menu-content.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { DatabaseDriverReactNative } from '@/src/database-driver-react-native.js';
 
 let defaultState = {
     nav: {},
@@ -65,8 +67,6 @@ const navReducer = createSlice({
         // Insert the note into the note list if it's new, or
         // update it if it already exists.
         notes_update_one: (state, action) => {
-            Log.info('NOITTEOJTNEONTOE', action.payload.note);
-
             let newNotes = state.notes.splice(0);
             var found = false;
             for (let i = 0; i < newNotes.length; i++) {
@@ -144,7 +144,7 @@ const store = configureStore({
 const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     componentDidMount() {
-        let db = new Database();
+        let db = new Database(new DatabaseDriverReactNative());
         // db.setDebugEnabled(Registry.debugMode());
         db.setDebugEnabled(true);
 
@@ -152,8 +152,7 @@ class HomeStackComponent extends React.Component {
         BaseModel.db_ = db;
         NoteFolderService.dispatch = this.props.dispatch;
 
-        props = this.props;
-        db.open()
+        db.open({ name: 'joplin-23.sqlite' })
             .then(() => {
                 Log.info('Database is ready.');
                 Registry.setDb(db);
@@ -164,6 +163,18 @@ class HomeStackComponent extends React.Component {
             })
             .then(() => {
                 let user = Setting.object('user');
+
+                if (!user || !user.session) {
+                    user = {
+                        email: 'wittayathongjeen698@gmail.com',
+                        session: '96e5b998c9a5025e37f76d4c97ced906'
+                    };
+                    Setting.setObject('user', user);
+                    this.props.dispatch(actions.user_set({ user: user }));
+                }
+
+                Setting.setValue('sync.lastRevId', '123456');
+
                 Log.info('Client ID', Setting.value('clientId'));
                 Log.info('User', user);
 
@@ -175,7 +186,7 @@ class HomeStackComponent extends React.Component {
 
                 return Folder.all()
                     .then(folders => {
-                        props.dispatch(
+                        this.props.dispatch(
                             actions.folders_update_all({ folders: folders })
                         );
                         return folders;
@@ -198,7 +209,18 @@ class HomeStackComponent extends React.Component {
                 // });
             })
             .then(() => {
-                let synchronizer = new Synchronizer(db, Registry.api());
+                var dropboxApi = new Dropbox({ accessToken: '' });
+                // dbx.filesListFolder({path: '/Joplin/Laurent.4e847cc'})
+                // .then(function(response) {
+                // //console.log('DROPBOX RESPONSE', response);
+                // console.log('DROPBOX RESPONSE', response.entries.length, response.has_more);
+                // })
+                // .catch(function(error) {
+                // console.log('DROPBOX ERROR', error);
+                // });
+                // return this.api_;
+                // let synchronizer = new Synchronizer(db, Registry.api());
+                let synchronizer = new Synchronizer(db, dropboxApi);
                 Registry.setSynchronizer(synchronizer);
                 synchronizer.start();
             })

@@ -1,6 +1,6 @@
-import { BaseModel } from '@/src/base-model';
-import { Log } from '@/src/log';
-import { Database } from '@/src/database';
+import { Log } from '@/src/log.js';
+import { Database } from '@/src/database.js';
+import { BaseModel } from '@/src/base-model.js';
 
 class Setting extends BaseModel {
     static tableName() {
@@ -29,13 +29,9 @@ class Setting extends BaseModel {
         this.cache_ = [];
         return this.db()
             .selectAll('SELECT * FROM settings')
-            .then(
-                function (r) {
-                    for (let i = 0; i < r.rows.length; i++) {
-                        this.cache_.push(r.rows.item(i));
-                    }
-                }.bind(this)
-            );
+            .then(rows => {
+                this.cache_ = rows;
+            });
     }
 
     static setValue(key, value) {
@@ -93,17 +89,16 @@ class Setting extends BaseModel {
         clearTimeout(this.updateTimeoutId_);
         this.updateTimeoutId_ = null;
 
+        let queries = [];
+        queries.push('DELETE FROM settings');
+        for (let i = 0; i < this.cache_.length; i++) {
+            queries.push(
+                Database.insertQuery(this.tableName(), this.cache_[i])
+            );
+        }
+
         return BaseModel.db()
-            .transaction(tx => {
-                tx.executeSql('DELETE FROM settings');
-                for (let i = 0; i < this.cache_.length; i++) {
-                    let q = Database.insertQuery(
-                        this.tableName(),
-                        this.cache_[i]
-                    );
-                    tx.executeSql(q.sql, q.params);
-                }
-            })
+            .transactionExecBatch(queries)
             .then(() => {
                 Log.info('Settings have been saved.');
             })

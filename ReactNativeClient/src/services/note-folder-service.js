@@ -5,9 +5,7 @@ import { BaseModel } from '@/src/base-model.js';
 import { Note } from '@/src/models/note.js';
 import { Folder } from '@/src/models/folder.js';
 import { Log } from '@/src/log.js';
-import { Registry } from '@/src/registry.js';
-import { actions } from '@/src/root';
-import { connect } from 'react-redux';
+import { actions } from '@/src/root.js';
 
 class NoteFolderService extends BaseService {
     static save(type, item, oldItem) {
@@ -35,22 +33,22 @@ class NoteFolderService extends BaseService {
                     return Note.updateGeolocation(item.id);
             })
             .then(() => {
-                Registry.synchronizer().start();
+                // Registry.synchronizer().start();
                 return output;
             });
     }
 
-    static setField(type, itemId, fieldName, fieldValue, oldValue = undefined) {
-        // TODO: not really consistent as the promise will return 'null' while
-        // this.save will return the note or folder. Currently not used, and maybe not needed.
-        if (oldValue !== undefined && fieldValue === oldValue)
-            return Promise.resolve();
+    // static setField(type, itemId, fieldName, fieldValue, oldValue = undefined) {
+    //     // TODO: not really consistent as the promise will return 'null' while
+    //     // this.save will return the note or folder. Currently not used, and maybe not needed.
+    //     if (oldValue !== undefined && fieldValue === oldValue)
+    //         return Promise.resolve();
 
-        let item = { id: itemId };
-        item[fieldName] = fieldValue;
-        let oldItem = { id: itemId };
-        return this.save(type, item, oldItem);
-    }
+    //     let item = { id: itemId };
+    //     item[fieldName] = fieldValue;
+    //     let oldItem = { id: itemId };
+    //     return this.save(type, item, oldItem);
+    // }
 
     static openNoteList(folderId) {
         return Note.previews(folderId)

@@ -2,12 +2,12 @@ import React from 'react';
 import { View, TextInput, Button, Text } from 'react-native';
 import { connect } from 'react-redux';
 
-import { Log } from '@/src/log';
-import { Registry } from '@/src/registry';
-import { Setting } from '@/src/models/setting';
-import { ScreenHeader } from '@/src/components/screen-header';
-import { _ } from '@/src/locale';
-import { actions } from '@/src/root';
+import { Log } from '@/src/log.js';
+import { Registry } from '@/src/registry.js';
+import { Setting } from '@/src/models/setting.js';
+import { ScreenHeader } from '@/src/components/screen-header.js';
+import { _ } from '@/src/locale.js';
+import { actions } from '@/src/root.js';
 
 class LoginScreenComponent extends React.Component {
     static navigationOptions(options) {
@@ -55,7 +55,7 @@ class LoginScreenComponent extends React.Component {
 
                 Registry.api().setSession(session.id);
 
-                Registry.synchronizer().start();
+                // Registry.synchronizer().start();
             })
             .catch(error => {
                 this.setState({

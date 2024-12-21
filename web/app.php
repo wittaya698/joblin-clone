@@ -29,6 +29,7 @@ try {
 		'error' => $e->getMessage(),
 		'code' => $e->getCode(),
 		'type' => $errorType,
+		'trace' => $e->getTraceAsString(),
 	);
 	if ($errorType == 'NotFoundHttpException') {
 		header('HTTP/1.1 404 Not found');

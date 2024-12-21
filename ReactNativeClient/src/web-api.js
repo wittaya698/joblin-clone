@@ -3,6 +3,7 @@ import { isNode } from '@/src/env.js';
 import { stringify } from 'query-string';
 
 if (isNode()) {
+    // TODO: doesn't work in React-Native - FormData gets set to "undefined"
     // Needs to be in a variable otherwise ReactNative will try to load this module (and fails due to
     // missing node modules), even if isNode() is false.
     let modulePath = '@/src/shim.js';
@@ -28,6 +29,7 @@ class WebApi {
     constructor(baseUrl) {
         this.baseUrl_ = baseUrl;
         this.session_ = null;
+        this.retryInterval_ = 500;
     }
 
     setSession(v) {
@@ -88,63 +90,80 @@ class WebApi {
         return cmd.join(' ');
     }
 
+    delay(milliseconds) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve();
+            }, milliseconds);
+        });
+    }
+
     exec(method, path, query, data) {
-        let that = this;
-        return new Promise(
-            function (resolve, reject) {
-                if (this.session_) {
-                    query = query ? Object.assign({}, query) : {};
-                    if (!query.session) query.session = this.session_;
+        return this.execNoRetry(method, path, query, data)
+            .then(data => {
+                this.retryInterval_ = 500;
+                return data;
+            })
+            .catch(error => {
+                if (error.errno == 'ECONNRESET') {
+                    this.retryInterval_ += 500;
+                    console.warn(
+                        'Got error ' +
+                            error.errno +
+                            '. Retrying in ' +
+                            this.retryInterval_
+                    );
+                    return this.delay(this.retryInterval_).then(() => {
+                        return this.exec(method, path, query, data);
+                    });
+                } else {
+                    this.retryInterval_ = 500;
+                    reject(error);
+                }
+            });
+    }
+
+    execNoRetry(method, path, query, data) {
+        if (this.session_) {
+            query = query ? Object.assign({}, query) : {};
+            if (!query.session) query.session = this.session_;
+        }
+
+        let r = this.makeRequest(method, path, query, data);
+
+        Log.debug(WebApi.toCurl(r, data));
+        //console.info(WebApi.toCurl(r, data));
+
+        return fetch(r.url, r.options).then(
+            function (response) {
+                let responseClone = response.clone();
+
+                if (!response.ok) {
+                    return responseClone.text().then(function (text) {
+                        throw new WebApiError(
+                            'HTTP ' +
+                                response.status +
+                                ': ' +
+                                response.statusText +
+                                ': ' +
+                                text
+                        );
+                    });
                 }
 
-                let r = that.makeRequest(method, path, query, data);
-
-                //Log.debug(WebApi.toCurl(r, data));
-                //console.info(WebApi.toCurl(r, data));
-
-                fetch(r.url, r.options)
-                    .then(function (response) {
-                        let responseClone = response.clone();
-
-                        if (!response.ok) {
-                            return responseClone.text().then(function (text) {
-                                reject(
-                                    new WebApiError(
-                                        'HTTP ' +
-                                            response.status +
-                                            ': ' +
-                                            response.statusText +
-                                            ': ' +
-                                            text
-                                    )
-                                );
-                            });
-                        }
-
-                        return response
-                            .json()
-                            .then(function (data) {
-                                if (data && data.error) {
-                                    reject(new WebApiError(data));
-                                } else {
-                                    resolve(data);
-                                }
-                            })
-                            .catch(function (error) {
-                                responseClone.text().then(function (text) {
-                                    reject(
-                                        new WebApiError(
-                                            'Cannot parse JSON: ' + text
-                                        )
-                                    );
-                                });
-                            });
-                    })
+                return response
+                    .json()
                     .then(function (data) {
-                        resolve(data);
+                        if (data && data.error) {
+                            throw new WebApiError(data);
+                        } else {
+                            return data;
+                        }
                     })
                     .catch(function (error) {
-                        reject(error);
+                        responseClone.text().then(function (text) {
+                            throw new WebApiError('Cannot parse JSON: ' + text);
+                        });
                     });
             }.bind(this)
         );

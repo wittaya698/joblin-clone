@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 
 import { Log } from '@/src/log.js';
 import { Note } from '@/src/models/note.js';
-import { Registry } from '@/src/registry.js';
-import { ScreenHeader } from '@/src/components/screen-header';
-import { Checkbox } from '@/src/components/checkbox';
+import { ScreenHeader } from '@/src/components/screen-header.js';
+import { Checkbox } from '@/src/components/checkbox.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
 import { _ } from '@/src/locale.js';
 

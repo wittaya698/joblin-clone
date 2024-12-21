@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { FAB, Portal, Provider } from 'react-native-paper';
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons.js';
+import { FAB, Provider } from 'react-native-paper';
 import { connect } from 'react-redux';
-import { Log } from '@/src/log.js';
-import { ScreenHeader } from './screen-header';
-import { actions } from '@/src/root';
+
+import { actions } from '@/src/root.js';
 
 const styles = StyleSheet.create({
     actionButtonIcon: {

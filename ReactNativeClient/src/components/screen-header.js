@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { Log } from '@/src/log.js';
 import { _ } from '@/src/locale.js';
-import { Setting } from '@/src/models/setting';
+import { Setting } from '@/src/models/setting.js';
+import { actions } from '@/src/root.js';
 
 import {
     Menu,
@@ -11,7 +11,6 @@ import {
     MenuOptions,
     MenuTrigger
 } from 'react-native-popup-menu';
-import { actions } from '@/src/root';
 
 const styles = StyleSheet.create({
     divider: {
@@ -23,10 +22,6 @@ const styles = StyleSheet.create({
 });
 
 class ScreenHeaderComponent extends Component {
-    static defaultProps = {
-        menuOptions: []
-    };
-
     showBackButton() {
         // Note: this is hardcoded for now because navigation.state doesn't tell whether
         // it's possible to go back or not. Maybe it's possible to get this information
@@ -133,6 +128,10 @@ class ScreenHeaderComponent extends Component {
         );
     }
 }
+
+ScreenHeaderComponent.defaultProps = {
+    menuOptions: []
+};
 
 const ScreenHeader = connect(state => {
     return { user: state.nav.user, navigator: state.nav.navigator };

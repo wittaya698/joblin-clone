@@ -1,7 +1,7 @@
 import { Log } from '@/src/log.js';
 import { Database } from '@/src/database.js';
-import 'react-native-get-random-values';
-import { uuid } from '@/src/uuid';
+// import 'react-native-get-random-values';
+import { uuid } from '@/src/uuid.js';
 
 class BaseModel {
     static tableName() {
@@ -72,9 +72,21 @@ class BaseModel {
     }
 
     static load(id) {
+        return this.loadByField('id', id);
+        // return this.db().selectOne(
+        //     'SELECT * FROM ' + this.tableName() + ' WHERE id = ?',
+        //     [id]
+        // );
+    }
+
+    static loadByField(fieldName, fieldValue) {
         return this.db().selectOne(
-            'SELECT * FROM ' + this.tableName() + ' WHERE id = ?',
-            [id]
+            'SELECT * FROM ' +
+                this.tableName() +
+                ' WHERE `' +
+                fieldName +
+                '` = ?',
+            [fieldValue]
         );
     }
 
@@ -146,46 +158,46 @@ class BaseModel {
         options = this.modOptions(options);
 
         let isNew = options.isNew == 'auto' ? !o.id : options.isNew;
-        let query = this.saveQuery(o, isNew);
+
+        let queries = [];
+        let saveQuery = this.saveQuery(o, isNew);
+        let itemId = saveQuery.id;
+
+        queries.push(saveQuery);
+
+        if (options.trackChanges && this.trackChanges()) {
+            // Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
+            // which are not handled by React Native.
+            const { Change } = require('@/src/models/change');
+
+            if (isNew) {
+                let change = Change.newChange();
+                change.type = Change.TYPE_CREATE;
+                change.item_id = itemId;
+                change.item_type = this.itemType();
+
+                queries.push(Change.saveQuery(change));
+            } else {
+                for (let n in o) {
+                    if (!o.hasOwnProperty(n)) continue;
+                    if (n == 'id') continue;
+
+                    let change = Change.newChange();
+                    change.type = Change.TYPE_UPDATE;
+                    change.item_id = itemId;
+                    change.item_type = this.itemType();
+                    change.item_field = n;
+
+                    queries.push(Change.saveQuery(change));
+                }
+            }
+        }
 
         return this.db()
-            .transaction(tx => {
-                tx.executeSql(query.sql, query.params);
-
-                if (options.trackChanges && this.trackChanges()) {
-                    // Cannot import this class the normal way due to cyclical dependencies between Change and BaseModel
-                    // which are not handled by React Native.
-                    const { Change } = require('@/src/models/change');
-
-                    if (isNew) {
-                        let change = Change.newChange();
-                        change.type = Change.TYPE_CREATE;
-                        change.item_id = query.id;
-                        change.item_type = this.itemType();
-
-                        let changeQuery = Change.saveQuery(change);
-                        tx.executeSql(changeQuery.sql, changeQuery.params);
-                    } else {
-                        for (let n in o) {
-                            if (!o.hasOwnProperty(n)) continue;
-                            if (n == 'id') continue;
-
-                            let change = Change.newChange();
-                            change.type = Change.TYPE_UPDATE;
-                            change.item_id = query.id;
-                            change.item_type = this.itemType();
-                            change.item_field = n;
-
-                            let changeQuery = Change.saveQuery(change);
-
-                            tx.executeSql(changeQuery.sql, changeQuery.params);
-                        }
-                    }
-                }
-            })
+            .transactionExecBatch(queries)
             .then(() => {
                 o = Object.assign({}, o);
-                o.id = query.id;
+                o.id = itemId;
                 return o;
             })
             .catch(error => {
@@ -229,5 +241,6 @@ BaseModel.ITEM_TYPE_FOLDER = 2;
 BaseModel.tableInfo_ = null;
 BaseModel.tableKeys_ = null;
 BaseModel.db_ = null;
+BaseModel.dispatch = function (o) {};
 
 export { BaseModel };

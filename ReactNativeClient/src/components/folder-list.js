@@ -1,10 +1,6 @@
 import { connect } from 'react-redux';
-import { actions } from '@/src/root';
 
-import { ItemListComponent } from '@/src/components/item-list';
-import { Folder } from '@/src/models/folder';
-import { Note } from '@/src/models/note';
-import { Log } from '@/src/log';
+import { ItemListComponent } from '@/src/components/item-list.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
 class FolderListComponent extends ItemListComponent {

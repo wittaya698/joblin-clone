@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-native';
-import { Log } from '@/src/log.js';
-import { Note } from '@/src/models/note.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
-import { Dimensions, StyleSheet, ScrollView } from 'react-native';
-import { actions } from '../root';
+import { StyleSheet, ScrollView } from 'react-native';
 
 const styles = StyleSheet.create({
     menu: {

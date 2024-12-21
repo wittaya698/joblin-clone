@@ -2,10 +2,9 @@ import React from 'react';
 import { Button, View } from 'react-native';
 import { connect } from 'react-redux';
 
-import { FolderList } from '@/src/components/folder-list';
-import { ScreenHeader } from '@/src/components/screen-header';
-import { actions } from '@/src/root';
-import { ActionButton } from '@/src/components/action-button';
+import { FolderList } from '@/src/components/folder-list.js';
+import { ScreenHeader } from '@/src/components/screen-header.js';
+import { ActionButton } from '@/src/components/action-button.js';
 
 class FoldersScreenComponent extends React.Component {
     static navigationOptions(options) {
