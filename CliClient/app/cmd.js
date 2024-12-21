@@ -8,9 +8,9 @@ import { uuid } from '@/src/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { _ } from '@/src/locale.js';
 
-// import { Folder } from '@/src/models/folder.js';
-// import { Note } from '@/src/models/note.js';
-// import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { Folder } from '@/src/models/folder.js';
+import { Note } from '@/src/models/note.js';
+import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
 // name: 'f42b0e23f06948ee9dda3fcf1b1c4205/.folder.md',
 // createdTime: 1497216952,
@@ -71,9 +71,51 @@ db.open({
         vorpal.delimiter(promptString());
     }
 
+    // For now, to go around this issue: https://github.com/dthree/vorpal/issues/114
+    function quotePromptArg(s) {
+        if (s.indexOf(' ') >= 0) {
+            return '"' + s + '"';
+        }
+        return s;
+    }
+
+    function autocompleteFolders() {
+        return Folder.all().then(folders => {
+            let output = [];
+            for (let i = 0; i < folders.length; i++) {
+                output.push(quotePromptArg(folders[i].title));
+            }
+            output.push('..');
+            output.push('.');
+            return output;
+        });
+    }
+
+    function autocompleteItems() {
+        let promise = null;
+        if (!currentFolder) {
+            promise = Folder.all();
+        } else {
+            promise = Note.previews(currentFolder.id);
+        }
+
+        return promise.then(items => {
+            let output = [];
+            for (let i = 0; i < items.length; i++) {
+                output.push(quotePromptArg(items[i].title));
+            }
+            return output;
+        });
+    }
+
     process.stdin.on('keypress', (_, key) => {
         if (key && key.name === 'return') {
             updatePrompt();
+        }
+
+        if (key.name === 'tab') {
+            vorpal.ui.imprint();
+            vorpal.log(vorpal.ui.input());
         }
     });
 
@@ -99,11 +141,13 @@ db.open({
                 switchCurrentFolder(folder);
                 end();
             });
-        }
+        },
+        autocomplete: autocompleteFolders
     });
 
     commands.push({
         usage: 'mklist <list-title>',
+        alias: 'mkdir',
         description: 'Creates a new list',
         action: function (args, end) {
             NoteFolderService.save('folder', {
@@ -121,6 +165,7 @@ db.open({
 
     commands.push({
         usage: 'mknote <note-title>',
+        alias: 'touch',
         description: 'Creates a new note',
         action: function (args, end) {
             if (!currentFolder) {
@@ -144,7 +189,7 @@ db.open({
     });
 
     commands.push({
-        usage: 'edit <item-title> <prop-name> [prop-value]',
+        usage: 'set <item-title> <prop-name> [prop-value]',
         description: 'Sets the given <prop-name> of the given item.',
         action: function (args, end) {
             let promise = null;
@@ -181,7 +226,8 @@ db.open({
                 .then(() => {
                     end();
                 });
-        }
+        },
+        autocomplete: autocompleteItems
     });
 
     commands.push({
@@ -221,7 +267,51 @@ db.open({
                 .then(() => {
                     end();
                 });
-        }
+        },
+        autocomplete: autocompleteItems
+    });
+
+    commands.push({
+        usage: 'rm <item-title>',
+        description:
+            'Deletes the given item. For a list, all the notes within that list will be deleted.',
+        action: function (args, end) {
+            let title = args['item-title'];
+
+            let promise = null;
+            let itemType = currentFolder ? 'note' : 'folder';
+            if (itemType == 'folder') {
+                promise = Folder.loadByField('title', title);
+            } else {
+                promise = Folder.loadNoteByField(
+                    currentFolder.id,
+                    'title',
+                    title
+                );
+            }
+
+            promise
+                .then(item => {
+                    if (!item) {
+                        this.log(_('No item with title "%s" found.', title));
+                        end();
+                        return;
+                    }
+
+                    if (itemType == 'folder') {
+                        return Folder.delete(item.id);
+                    } else {
+                        return Note.delete(item.id);
+                    }
+                })
+                .catch(error => {
+                    this.log(error);
+                })
+                .then(() => {
+                    end();
+                });
+        },
+        autocomplete: autocompleteItems
     });
 
     commands.push({
@@ -232,7 +322,9 @@ db.open({
 
             let promise = null;
 
-            if (folderTitle) {
+            if (folderTitle == '..') {
+                promise = Promise.resolve('root');
+            } else if (folderTitle && folderTitle != '.') {
                 promise = Folder.loadByField('title', folderTitle);
             } else if (currentFolder) {
                 promise = Promise.resolve(currentFolder);
@@ -265,7 +357,8 @@ db.open({
                 .then(() => {
                     end();
                 });
-        }
+        },
+        autocomplete: autocompleteFolders
     });
 
     commands.push({
@@ -286,6 +379,14 @@ db.open({
     for (let i = 0; i < commands.length; i++) {
         let c = commands[i];
         let o = vorpal.command(c.usage, c.description);
+        if (c.alias) {
+            o.alias(c.alias);
+        }
+        if (c.autocomplete) {
+            o.autocomplete({
+                data: c.autocomplete
+            });
+        }
         o.action(c.action);
     }
 
