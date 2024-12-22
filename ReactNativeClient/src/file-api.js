@@ -67,6 +67,10 @@ class FileApi {
             this.fullPath_(newPath)
         );
     }
+
+    format() {
+        return this.driver_.format();
+    }
 }
 
 export { FileApi };

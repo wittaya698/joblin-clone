@@ -29,12 +29,12 @@ db.setDebugEnabled(false);
 // );
 // let synchronizer = new Synchronizer(db, fileApi);
 
-// let fileDriver = new FileApiDriverMemory();
-// let fileApi = new FileApi(
-//     '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
-//     fileDriver
-// );
-// let synchronizer = new Synchronizer(db, fileApi);
+let fileDriver = new FileApiDriverMemory();
+let fileApi = new FileApi(
+    '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
+    fileDriver
+);
+let synchronizer = new Synchronizer(db, fileApi);
 
 fileApi
     .mkdir('test')
