@@ -143,7 +143,7 @@ class Synchronizer {
                                                 );
                                             })
                                             .then(() => {
-                                                return this.api().setFileTimestamp(
+                                                return this.api().setTimestamp(
                                                     Folder.systemMetadataPath(
                                                         parent,
                                                         item
@@ -152,10 +152,19 @@ class Synchronizer {
                                                 );
                                             });
                                     } else {
-                                        return this.api().put(
-                                            path,
-                                            Note.toFriendlyString(result.item)
-                                        );
+                                        return this.api()
+                                            .put(
+                                                path,
+                                                Note.toFriendlyString(
+                                                    result.item
+                                                )
+                                            )
+                                            .then(() => {
+                                                return this.api().setTimestamp(
+                                                    path,
+                                                    item.updated_time
+                                                );
+                                            });
                                     }
                                 });
                             });

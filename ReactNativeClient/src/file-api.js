@@ -6,65 +6,65 @@ class FileApi {
         this.driver_ = driver;
     }
 
-    list(path, recursive = false) {
-        return this.driver_
-            .list(this.baseDir_ + '/' + path, recursive)
-            .then(items => {
-                if (recursive) {
-                    let chain = [];
-                    for (let i = 0; i < items.length; i++) {
-                        let item = items[i];
-                        if (!item.isDir) continue;
-
-                        chain.push(() => {
-                            return this.list(path + '/' + item.name, true).then(
-                                children => {
-                                    for (let j = 0; j < children.length; j++) {
-                                        let md = children[j];
-                                        md.name = item.name + '/' + md.name;
-                                        items.push(md);
-                                    }
-                                }
-                            );
-                        });
-                    }
-
-                    return promiseChain(chain).then(() => {
-                        return items;
-                    });
-                } else {
-                    return items;
-                }
-            });
+    fullPath_(path) {
+        let output = this.baseDir_;
+        if (path != '') output += '/' + path;
+        return output;
     }
 
-    setFileTimestamp(path, timestamp) {
-        return this.driver_.setFileTimestamp(
-            this.baseDir_ + '/' + path,
-            timestamp
-        );
+    list(path = '', recursive = false) {
+        let fullPath = this.fullPath_(path);
+        return this.driver_.list(fullPath, recursive).then(items => {
+            if (recursive) {
+                let chain = [];
+                for (let i = 0; i < items.length; i++) {
+                    let item = items[i];
+                    if (!item.isDir) continue;
+
+                    chain.push(() => {
+                        return this.list(item.path, true).then(children => {
+                            for (let j = 0; j < children.length; j++) {
+                                let md = children[j];
+                                md.path = item.path + '/' + md.path;
+                                items.push(md);
+                            }
+                        });
+                    });
+                }
+
+                return promiseChain(chain).then(() => {
+                    return items;
+                });
+            } else {
+                return items;
+            }
+        });
+    }
+
+    setTimestamp(path, timestamp) {
+        return this.driver_.setTimestamp(this.fullPath_(path), timestamp);
     }
 
     mkdir(path) {
-        return this.driver_.mkdir(this.baseDir_ + '/' + path);
+        return this.driver_.mkdir(this.fullPath_(path));
     }
 
     get(path) {
-        return this.driver_.get(this.baseDir_ + '/' + path);
+        return this.driver_.get(this.fullPath_(path));
     }
 
     put(path, content) {
-        return this.driver_.put(this.baseDir_ + '/' + path, content);
+        return this.driver_.put(this.fullPath_(path), content);
     }
 
     delete(path) {
-        return this.driver_.delete(this.baseDir_ + '/' + path);
+        return this.driver_.delete(this.fullPath_(path));
     }
 
     move(oldPath, newPath) {
         return this.driver_.move(
-            this.baseDir_ + '/' + oldPath,
-            this.baseDir_ + '/' + newPath
+            this.fullPath_(oldPath),
+            this.fullPath_(newPath)
         );
     }
 }
