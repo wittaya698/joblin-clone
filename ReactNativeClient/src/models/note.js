@@ -121,23 +121,23 @@ class Note extends BaseModel {
     static updateGeolocation(noteId) {
         Log.info('Updating lat/long of note ' + noteId);
 
-        // let geoData = null;
-        // Geolocation.currentPosition()
-        //     .then(data => {
-        //         Log.info('Got lat/long');
-        //         geoData = data;
-        //         return Note.load(note.id);
-        //     })
-        //     .then(note => {
-        //         if (!note) return; // Race condition - note has been deleted in the meantime
-        //         note.longitude = geoData.coords.longitude;
-        //         note.latitude = geoData.coords.latitude;
-        //         note.altitude = geoData.coords.altitude;
-        //         Note.save(note, { updateLatLong: false });
-        //     })
-        //     .catch(error => {
-        //         Log.info('Cannot get location:', error);
-        //     });
+        let geoData = null;
+        Geolocation.currentPosition()
+            .then(data => {
+                Log.info('Got lat/long');
+                geoData = data;
+                return Note.load(note.id);
+            })
+            .then(note => {
+                if (!note) return; // Race condition - note has been deleted in the meantime
+                note.longitude = geoData.coords.longitude;
+                note.latitude = geoData.coords.latitude;
+                note.altitude = geoData.coords.altitude;
+                Note.save(note, { updateLatLong: false });
+            })
+            .catch(error => {
+                Log.info('Cannot get location:', error);
+            });
     }
 
     static save(o, options = null) {
@@ -146,7 +146,7 @@ class Note extends BaseModel {
             .then(result => {
                 // 'result' could be a partial one at this point (if, for example, only one property of it was saved)
                 // so call this.preview() so that the right fields are populated.
-                return this.preview(result.id);
+                return this.load(result.id);
             })
             .then(note => {
                 this.dispatch(actions.notes_update_one({ note: note }));

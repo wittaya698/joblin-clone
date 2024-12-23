@@ -204,4 +204,6 @@ describe('Synchronizer syncActions', function () {
             done();
         });
     });
+
+    it('should sync items', function (done) {});
 });
