@@ -1,13 +1,13 @@
-import { Synchronizer } from 'src/synchronizer.js';
-import { FileApi } from 'src/file-api.js';
-import { FileApiDriverMemory } from 'src/file-api-driver-memory.js';
 import { time } from 'src/time-utils.js';
+import {
+    setupDatabase,
+    setupDatabaseAndSynchronizer,
+    db,
+    synchronizer,
+    fileApi
+} from 'test-utils.js';
 
 describe('Synchronizer syncActions', function () {
-    let fileDriver = new FileApiDriverMemory();
-    let fileApi = new FileApi('/root', fileDriver);
-    let synchronizer = new Synchronizer(null, fileApi);
-
     // Note: set 1 matches set 1 of createRemoteItems()
     function createLocalItems(id, updatedTime, lastSyncTime) {
         let output = [];
@@ -33,11 +33,11 @@ describe('Synchronizer syncActions', function () {
         if (!updatedTime) updatedTime = time.unix();
 
         if (id === 1) {
-            return fileApi
+            return fileApi()
                 .format()
-                .then(() => fileApi.mkdir('test'))
-                .then(() => fileApi.put('test/un', 'abcd'))
-                .then(() => fileApi.list('', true))
+                .then(() => fileApi().mkdir('test'))
+                .then(() => fileApi().put('test/un', 'abcd'))
+                .then(() => fileApi().list('', true))
                 .then(items => {
                     for (let i = 0; i < items.length; i++) {
                         items[i].updatedTime = updatedTime;
@@ -49,11 +49,15 @@ describe('Synchronizer syncActions', function () {
         }
     }
 
+    beforeEach(function (done) {
+        setupDatabaseAndSynchronizer(done);
+    });
+
     it('should create remote items', function () {
         let localItems = createLocalItems(1, time.unix(), 0);
         let remoteItems = [];
 
-        let actions = synchronizer.syncActions(localItems, remoteItems, []);
+        let actions = synchronizer().syncActions(localItems, remoteItems, []);
 
         expect(actions.length).toBe(2);
         for (let i = 0; i < actions.length; i++) {
@@ -70,7 +74,11 @@ describe('Synchronizer syncActions', function () {
                 lastSyncTime + 1000,
                 lastSyncTime
             );
-            let actions = synchronizer.syncActions(localItems, remoteItems, []);
+            let actions = synchronizer().syncActions(
+                localItems,
+                remoteItems,
+                []
+            );
 
             expect(actions.length).toBe(2);
             for (let i = 0; i < actions.length; i++) {
@@ -99,7 +107,11 @@ describe('Synchronizer syncActions', function () {
                 time.unix() + 1000,
                 time.unix() - 1000
             );
-            let actions = synchronizer.syncActions(localItems, remoteItems, []);
+            let actions = synchronizer().syncActions(
+                localItems,
+                remoteItems,
+                []
+            );
 
             expect(actions.length).toBe(2);
             for (let i = 0; i < actions.length; i++) {
@@ -113,7 +125,11 @@ describe('Synchronizer syncActions', function () {
     it('should create local file', function (done) {
         createRemoteItems(1).then(remoteItems => {
             let localItems = [];
-            let actions = synchronizer.syncActions(localItems, remoteItems, []);
+            let actions = synchronizer().syncActions(
+                localItems,
+                remoteItems,
+                []
+            );
 
             expect(actions.length).toBe(2);
             for (let i = 0; i < actions.length; i++) {
@@ -129,7 +145,7 @@ describe('Synchronizer syncActions', function () {
         createRemoteItems(1).then(remoteItems => {
             let localItems = createLocalItems(1, time.unix(), time.unix());
             let deletedItemPaths = [localItems[0].path, localItems[1].path];
-            let actions = synchronizer.syncActions(
+            let actions = synchronizer().syncActions(
                 [],
                 remoteItems,
                 deletedItemPaths
@@ -153,7 +169,7 @@ describe('Synchronizer syncActions', function () {
                 lastSyncTime - 1000,
                 lastSyncTime
             );
-            let actions = synchronizer.syncActions(localItems, [], []);
+            let actions = synchronizer().syncActions(localItems, [], []);
 
             expect(actions.length).toBe(2);
             for (let i = 0; i < actions.length; i++) {
@@ -173,7 +189,11 @@ describe('Synchronizer syncActions', function () {
                 lastSyncTime - 1000,
                 lastSyncTime
             );
-            let actions = synchronizer.syncActions(localItems, remoteItems, []);
+            let actions = synchronizer().syncActions(
+                localItems,
+                remoteItems,
+                []
+            );
 
             expect(actions.length).toBe(2);
             for (let i = 0; i < actions.length; i++) {

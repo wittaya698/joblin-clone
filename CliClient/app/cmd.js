@@ -16,62 +16,76 @@ import { Folder } from '@/src/models/folder.js';
 import { Note } from '@/src/models/note.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
-import Vorpal from 'vorpal';
-const vorpal = Vorpal();
+// import { ItemSyncTime } from 'src/models/item-sync-time.js';
 
-let db = new Database(new DatabaseDriverNode());
-db.setDebugEnabled(false);
+// import Vorpal from 'vorpal';
+// const vorpal = Vorpal();
 
-// let fileDriver = new FileApiDriverLocal();
+// let db = new Database(new DatabaseDriverNode());
+// db.setDebugEnabled(false);
+// db.open({
+//     name: '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/test.sqlite3'
+// }).then(() => {
+// 	BaseModel.db_ = db;
+
+// 	return ItemSyncTime.setTime(123, 789);
+
+// }).then((r) => {
+// 	console.info(r);
+// }).catch((error) => {
+// 	console.error(error);
+// });
+
+// // let fileDriver = new FileApiDriverLocal();
+// // let fileApi = new FileApi(
+// //     '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
+// //     fileDriver
+// // );
+// // let synchronizer = new Synchronizer(db, fileApi);
+
+// let fileDriver = new FileApiDriverMemory();
 // let fileApi = new FileApi(
 //     '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
 //     fileDriver
 // );
 // let synchronizer = new Synchronizer(db, fileApi);
 
-let fileDriver = new FileApiDriverMemory();
-let fileApi = new FileApi(
-    '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
-    fileDriver
-);
-let synchronizer = new Synchronizer(db, fileApi);
-
-fileApi
-    .mkdir('test')
-    .then(() => {
-        return fileApi.mkdir('test2');
-    })
-    .then(() => {
-        return fileApi
-            .put('test/un', 'abcd1111')
-            .then(fileApi.put('test/deux', 'abcd2222'));
-    })
-    .then(() => {
-        return fileApi.list();
-    })
-    .then(items => {
-        //console.info(items);
-    })
-    .then(() => {
-        return fileApi.delete('test/un');
-    })
-    .then(() => {
-        return fileApi.get('test/deux').then(content => {
-            console.info(content);
-        });
-    })
-    .then(() => {
-        return fileApi.list('test', true);
-    })
-    .then(items => {
-        console.info(items);
-    })
-    .catch(error => {
-        console.error(error);
-    })
-    .then(() => {
-        process.exit();
-    });
+// fileApi
+//     .mkdir('test')
+//     .then(() => {
+//         return fileApi.mkdir('test2');
+//     })
+//     .then(() => {
+//         return fileApi
+//             .put('test/un', 'abcd1111')
+//             .then(fileApi.put('test/deux', 'abcd2222'));
+//     })
+//     .then(() => {
+//         return fileApi.list();
+//     })
+//     .then(items => {
+//         //console.info(items);
+//     })
+//     .then(() => {
+//         return fileApi.delete('test/un');
+//     })
+//     .then(() => {
+//         return fileApi.get('test/deux').then(content => {
+//             console.info(content);
+//         });
+//     })
+//     .then(() => {
+//         return fileApi.list('test', true);
+//     })
+//     .then(items => {
+//         console.info(items);
+//     })
+//     .catch(error => {
+//         console.error(error);
+//     })
+//     .then(() => {
+//         process.exit();
+//     });
 
 // db.open({
 //     name: '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/test.sqlite3'
