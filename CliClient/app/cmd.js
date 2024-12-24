@@ -17,53 +17,6 @@ import { Note } from '@/src/models/note.js';
 import { NoteFolderService } from '@/src/services/note-folder-service.js';
 
 let db = new Database(new DatabaseDriverNode());
-db.setDebugEnabled(false);
-
-// function whilePromise(callback) {
-// 	let isDone = false;
-
-// 	function done() {
-// 		isDone = true;
-// 	}
-
-// 	let iterationDone = false;
-// 	let p = callback(done).then(() => {
-// 		iterationDone = true;
-// 	});
-
-// 	let iid = setInterval(() => {
-// 		if (iterationDone) {
-// 			if (isDone) {
-// 				clearInterval(iid);
-// 				return;
-// 			}
-
-// 			iterationDone = false;
-// 			callback(done).then(() => {
-// 				iterationDone = true;
-// 			});
-// 		}
-// 	}, 100);
-// }
-
-// function myPromise() {
-// 	return new Promise((resolve, reject) => {
-// 		setTimeout(() => {
-// 			resolve();
-// 		}, 500);
-// 	});
-// }
-
-// let counter = 0;
-// whilePromise((done) => {
-// 	return myPromise().then(() => {
-// 		counter++;
-// 		console.info(counter);
-// 		if (counter == 5) {
-// 			done();
-// 		}
-// 	});
-// });
 
 let fileDriver = new FileApiDriverLocal();
 let fileApi = new FileApi(
@@ -132,12 +85,14 @@ function createLocalItems() {
         });
 }
 
+db.setDebugEnabled(true);
 db.open({
     name: '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/test-sync.sqlite3'
 })
     .then(() => {
         BaseModel.db_ = db;
-        return clearDatabase().then(createLocalItems);
+        //return clearDatabase();
+        //return clearDatabase().then(createLocalItems);
     })
     .then(() => {
         return synchronizer.start();

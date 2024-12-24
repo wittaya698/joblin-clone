@@ -30,13 +30,16 @@ class FileApiDriverMemory {
     }
 
     stat(path) {
-        let item = this.itemIndexByPath(path);
-        if (!item) return Promise.reject(new Error('File not found: ' + path));
+        let item = this.itemByPath(path);
+
+        // ** Critical ** To be removed
+        if (item === null) return Promise.resolve();
+        // if (!item) return Promise.reject(new Error('File not found: ' + path));
         return Promise.resolve(item);
     }
 
     setTimestamp(path, timestamp) {
-        let item = this.itemIndexByPath(path);
+        let item = this.itemByPath(path);
         if (!item) return Promise.reject(new Error('File not found: ' + path));
         item.updatedTime = timestamp;
         return Promise.resolve();

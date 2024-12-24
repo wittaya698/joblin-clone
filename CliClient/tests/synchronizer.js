@@ -201,10 +201,12 @@ describe('Synchronizer start', function () {
     });
 
     it('should create remote items', function (done) {
-        createFoldersAndNotes().then(() => {
-            return synchronizer().start();
-        });
-    }).then(() => {
-        done();
+        createFoldersAndNotes()
+            .then(() => {
+                return synchronizer().start();
+            })
+            .then(() => {
+                done();
+            });
     });
 });

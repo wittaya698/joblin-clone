@@ -19,6 +19,11 @@ class NoteFolderService extends BaseService {
             }
         }
 
+        // console.info(item);
+        // console.info(oldItem);
+        // console.info('DIFF', diff);
+        // return Promise.resolve();
+
         let ItemClass = null;
         if (type == 'note') {
             ItemClass = Note;

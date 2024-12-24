@@ -25,6 +25,20 @@ class Synchronizer {
         return this.api_;
     }
 
+    loadParentAndItem(change) {
+        if (change.item_type == BaseModel.ITEM_TYPE_NOTE) {
+            return Note.load(change.item_id).then(note => {
+                return Folder.load(note.parent_id).then(folder => {
+                    return Promise.resolve({ parent: folder, item: note });
+                });
+            });
+        } else {
+            return Folder.load(change.item_id).then(folder => {
+                return Promise.resolve({ parent: null, item: folder });
+            });
+        }
+    }
+
     processState_uploadChanges() {
         Change.all()
             .then(changes => {
@@ -49,20 +63,46 @@ class Synchronizer {
                         if (c.type == Change.TYPE_NOOP) {
                             p = Promise.resolve();
                         } else if (c.type == Change.TYPE_CREATE) {
-                            p = ItemClass.load(c.item_id).then(item => {
-                                return this.api().put(
-                                    path + '/' + item.id,
-                                    null,
-                                    item
-                                );
+                            p = this.loadParentAndItem(c).then(result => {
+                                let options = {
+                                    contents: Note.toFriendlyString(
+                                        result.item
+                                    ),
+                                    path: Note.systemPath(
+                                        result.parent,
+                                        result.item
+                                    ),
+                                    mode: 'overwrite'
+                                    // client_modified:
+                                };
+
+                                return this.api()
+                                    .filesUpload(options)
+                                    .then(result => {
+                                        console.info('DROPBOX', result);
+                                    });
                             });
+                            // p = ItemClass.load(c.item_id).then((item) => {
+
+                            // 	console.info(item);
+                            // 	let options = {
+                            // 		contents: Note.toFriendlyString(item),
+                            // 		path: Note.systemPath(item),
+                            // 		mode: 'overwrite',
+                            // 		// client_modified:
+                            // 	};
+
+                            // 	// console.info(options);
+
+                            // 	//let content = Note.toFriendlyString(item);
+                            // 	//console.info(content);
+
+                            // 	//console.info('SYNC', item);
+                            // 	//return this.api().put(path + '/' + item.id, null, item);
+                            // });
                         } else if (c.type == Change.TYPE_UPDATE) {
                             p = ItemClass.load(c.item_id).then(item => {
-                                return this.api().patch(
-                                    path + '/' + item.id,
-                                    null,
-                                    item
-                                );
+                                //return this.api().patch(path + '/' + item.id, null, item);
                             });
                         } else if (c.type == Change.TYPE_DELETE) {
                             p = this.api().delete(path + '/' + c.item_id);
@@ -75,12 +115,12 @@ class Synchronizer {
                                 );
                             })
                             .catch(error => {
-                                Log.warn(
-                                    'Failed applying changes',
-                                    c.ids,
-                                    error.message,
-                                    error.type
-                                );
+                                // Log.warn(
+                                //     'Failed applying changes',
+                                //     c.ids,
+                                //     error.message,
+                                //     error.type
+                                // );
                                 // This is fine - trying to apply changes to an object that has been deleted
                                 if (error.type == 'NotFoundException') {
                                     processedChangeIds =
@@ -100,8 +140,8 @@ class Synchronizer {
                         );
                     })
                     .then(() => {
-                        Log.info('IDs to delete: ', processedChangeIds);
-                        Change.deleteMultiple(processedChangeIds);
+                        // Log.info('IDs to delete: ', processedChangeIds);
+                        // Change.deleteMultiple(processedChangeIds);
                     });
             })
             .then(() => {
@@ -211,12 +251,12 @@ class Synchronizer {
             return;
         }
 
-        if (!this.api().session()) {
-            Log.info(
-                'Sync: cannot start synchronizer because user is not logged in.'
-            );
-            return;
-        }
+        // if (!this.api().session()) {
+        //     Log.info(
+        //         'Sync: cannot start synchronizer because user is not logged in.'
+        //     );
+        //     return;
+        // }
 
         this.processState('uploadChanges');
     }

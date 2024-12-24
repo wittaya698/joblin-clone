@@ -1,29 +1,18 @@
-import { BaseModel } from '@/src/base-model.js';
 import { Log } from '@/src/log.js';
 import { Folder } from '@/src/models/folder.js';
 import { Geolocation } from '@/src/geolocation.js';
 import { actions } from '@/src/root.js';
 import { folderItemFilename } from '@/src/string-utils.js';
+import { BaseItem } from '@/src/models/base-item.js';
 import moment from 'moment';
 
-class Note extends BaseModel {
+class Note extends BaseItem {
     static tableName() {
         return 'notes';
     }
 
-    static toFriendlyString_format(propName, propValue) {
-        if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
-            if (!propValue) return '';
-            propValue = moment.unix(propValue).format('YYYY-MM-DD hh:mm:ss');
-        } else if (propValue === null || propValue === undefined) {
-            propValue = '';
-        }
-
-        return propValue;
-    }
-
-    static toFriendlyString(note) {
-        let shownKeys = [
+    static toFriendlyString(note, type = null, shownKeys = null) {
+        return super.toFriendlyString(note, 'note', [
             'author',
             'longitude',
             'latitude',
@@ -31,51 +20,10 @@ class Note extends BaseModel {
             'todo_due',
             'todo_completed',
             'created_time',
-            'updated_time'
-        ];
-        let output = [];
-
-        output.push(note.title);
-        output.push('');
-        output.push(note.body);
-        output.push('');
-        for (let i = 0; i < shownKeys.length; i++) {
-            let v = note[shownKeys[i]];
-            v = this.toFriendlyString_format(shownKeys[i], v);
-            output.push(shownKeys[i] + ': ' + v);
-        }
-
-        return output.join('\n');
-    }
-
-    // static fromFriendlyString(item) {
-    // 	let lines = [];
-    // 	// mynote
-
-    // 	// abcdefg\nsecond line\n\nline after two newline
-
-    // 	// author:
-    // 	// longitude: -3.4596633911132812
-    // 	// latitude: 48.73219093634444
-    // 	// is_todo: 0
-    // 	// todo_due: 0
-    // 	// todo_completed: 0
-    // 	// created_time: 2017-06-12 05:02:38
-    // 	// updated_time: 2017-06-12 05:02:38
-    // }
-
-    static filename(note) {
-        return folderItemFilename(note) + '.md';
-    }
-
-    static systemPath(parentFolder, note) {
-        return (
-            Folder.systemPath(null, parentFolder) + '/' + this.filename(note)
-        );
-    }
-
-    static useUuid() {
-        return true;
+            'updated_time',
+            'id',
+            'parent_id'
+        ]);
     }
 
     static itemType() {

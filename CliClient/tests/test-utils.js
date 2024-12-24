@@ -31,7 +31,6 @@ function setupDatabase(done) {
             // Don't care if the file doesn't exist
         })
         .then(() => {
-            //console.info('Opening database ' + filePath);
             database_ = new Database(new DatabaseDriverNode());
             return database_.open({ name: filePath }).then(() => {
                 BaseModel.db_ = database_;
@@ -48,7 +47,7 @@ function setupDatabaseAndSynchronizer(done) {
                 '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
                 fileDriver
             );
-            synchronizer_ = new Synchronizer(db(), fileApi);
+            synchronizer_ = new Synchronizer(db(), fileApi());
         }
         done();
     });
