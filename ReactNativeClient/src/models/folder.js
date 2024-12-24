@@ -1,7 +1,7 @@
 import { BaseModel } from '@/src/base-model.js';
 import { Note } from '@/src/models/note.js';
 import { actions } from '@/src/root.js';
-import { promiseChain } from '@/src/promise-chain.js';
+import { promiseChain } from '@/src/promise-utils.js';
 import { folderItemFilename } from '@/src/string-utils.js';
 import { _ } from '@/src/locale.js';
 import moment from 'moment';

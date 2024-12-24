@@ -6,49 +6,50 @@ import {
     synchronizer,
     fileApi
 } from 'test-utils.js';
+import { createFoldersAndNotes } from 'test-data.js';
+
+// Note: set 1 matches set 1 of createRemoteItems()
+function createLocalItems(id, updatedTime, syncTime) {
+    let output = [];
+    if (id === 1) {
+        output.push({
+            path: 'test',
+            isDir: true,
+            updatedTime: updatedTime,
+            syncTime: syncTime
+        });
+        output.push({
+            path: 'test/un',
+            updatedTime: updatedTime,
+            syncTime: syncTime
+        });
+    } else {
+        throw new Error('Invalid ID');
+    }
+    return output;
+}
+
+function createRemoteItems(id = 1, updatedTime = null) {
+    if (!updatedTime) updatedTime = time.unix();
+
+    if (id === 1) {
+        return fileApi()
+            .format()
+            .then(() => fileApi().mkdir('test'))
+            .then(() => fileApi().put('test/un', 'abcd'))
+            .then(() => fileApi().list('', true))
+            .then(items => {
+                for (let i = 0; i < items.length; i++) {
+                    items[i].updatedTime = updatedTime;
+                }
+                return items;
+            });
+    } else {
+        throw new Error('Invalid ID');
+    }
+}
 
 describe('Synchronizer syncActions', function () {
-    // Note: set 1 matches set 1 of createRemoteItems()
-    function createLocalItems(id, updatedTime, lastSyncTime) {
-        let output = [];
-        if (id === 1) {
-            output.push({
-                path: 'test',
-                isDir: true,
-                updatedTime: updatedTime,
-                lastSyncTime: lastSyncTime
-            });
-            output.push({
-                path: 'test/un',
-                updatedTime: updatedTime,
-                lastSyncTime: lastSyncTime
-            });
-        } else {
-            throw new Error('Invalid ID');
-        }
-        return output;
-    }
-
-    function createRemoteItems(id = 1, updatedTime = null) {
-        if (!updatedTime) updatedTime = time.unix();
-
-        if (id === 1) {
-            return fileApi()
-                .format()
-                .then(() => fileApi().mkdir('test'))
-                .then(() => fileApi().put('test/un', 'abcd'))
-                .then(() => fileApi().list('', true))
-                .then(items => {
-                    for (let i = 0; i < items.length; i++) {
-                        items[i].updatedTime = updatedTime;
-                    }
-                    return items;
-                });
-        } else {
-            throw new Error('Invalid ID');
-        }
-    }
-
     beforeEach(function (done) {
         setupDatabaseAndSynchronizer(done);
     });
@@ -68,12 +69,8 @@ describe('Synchronizer syncActions', function () {
 
     it('should update remote items', function (done) {
         createRemoteItems(1).then(remoteItems => {
-            let lastSyncTime = time.unix() + 1000;
-            let localItems = createLocalItems(
-                1,
-                lastSyncTime + 1000,
-                lastSyncTime
-            );
+            let syncTime = time.unix() + 1000;
+            let localItems = createLocalItems(1, syncTime + 1000, syncTime);
             let actions = synchronizer().syncActions(
                 localItems,
                 remoteItems,
@@ -162,13 +159,9 @@ describe('Synchronizer syncActions', function () {
     });
 
     it('should delete local files', function (done) {
-        let lastSyncTime = time.unix();
-        createRemoteItems(1, lastSyncTime - 1000).then(remoteItems => {
-            let localItems = createLocalItems(
-                1,
-                lastSyncTime - 1000,
-                lastSyncTime
-            );
+        let syncTime = time.unix();
+        createRemoteItems(1, syncTime - 1000).then(remoteItems => {
+            let localItems = createLocalItems(1, syncTime - 1000, syncTime);
             let actions = synchronizer().syncActions(localItems, [], []);
 
             expect(actions.length).toBe(2);
@@ -182,13 +175,9 @@ describe('Synchronizer syncActions', function () {
     });
 
     it('should update local files', function (done) {
-        let lastSyncTime = time.unix();
-        createRemoteItems(1, lastSyncTime + 1000).then(remoteItems => {
-            let localItems = createLocalItems(
-                1,
-                lastSyncTime - 1000,
-                lastSyncTime
-            );
+        let syncTime = time.unix();
+        createRemoteItems(1, syncTime + 1000).then(remoteItems => {
+            let localItems = createLocalItems(1, syncTime - 1000, syncTime);
             let actions = synchronizer().syncActions(
                 localItems,
                 remoteItems,
@@ -204,6 +193,18 @@ describe('Synchronizer syncActions', function () {
             done();
         });
     });
+});
 
-    it('should sync items', function (done) {});
+describe('Synchronizer start', function () {
+    beforeEach(function (done) {
+        setupDatabaseAndSynchronizer(done);
+    });
+
+    it('should create remote items', function (done) {
+        createFoldersAndNotes().then(() => {
+            return synchronizer().start();
+        });
+    }).then(() => {
+        done();
+    });
 });

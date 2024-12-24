@@ -1,6 +1,6 @@
 import { Log } from '@/src/log.js';
 import { uuid } from '@/src/uuid.js';
-import { promiseChain } from '@/src/promise-chain.js';
+import { promiseChain } from '@/src/promise-utils.js';
 import { _ } from '@/src/locale.js';
 
 const structureSql = `
@@ -105,6 +105,7 @@ class Database {
         this.initialized_ = false;
         this.tableFields_ = null;
         this.driver_ = driver;
+        this.inTransaction_ = false;
     }
 
     setDebugEnabled(v) {
@@ -152,6 +153,36 @@ class Database {
     }
 
     transactionExecBatch(queries) {
+        if (queries.length <= 0) return Promise.resolve();
+
+        if (queries.length == 1) {
+            return this.exec(queries[0].sql, queries[0].params);
+        }
+
+        // There can be only one transaction running at a time so queue
+        // any new transaction here.
+        if (this.inTransaction_) {
+            return new Promise((resolve, reject) => {
+                let iid = setInterval(() => {
+                    console.info('Waiting...');
+                    if (!this.inTransaction_) {
+                        console.info('OKKKKKKKKKKK');
+                        clearInterval(iid);
+
+                        this.transactionExecBatch(queries)
+                            .then(() => {
+                                resolve();
+                            })
+                            .catch(error => {
+                                reject(error);
+                            });
+                    }
+                }, 100);
+            });
+        }
+
+        this.inTransaction_ = true;
+
         queries.splice(0, 0, 'BEGIN TRANSACTION');
         queries.push('COMMIT'); // Note: ROLLBACK is currently not supported
 
@@ -162,7 +193,9 @@ class Database {
                 return this.exec(query.sql, query.params);
             });
         }
-        return promiseChain(chain);
+        return promiseChain(chain).then(() => {
+            this.inTransaction_ = false;
+        });
     }
 
     static enumId(type, s) {
@@ -221,7 +254,11 @@ class Database {
 
     logQuery(sql, params = null) {
         if (!this.debugMode()) return;
-        Log.debug('DB: ' + sql, params);
+        if (params !== null) {
+            Log.debug('DB: ' + sql, params);
+        } else {
+            Log.debug('DB: ' + sql);
+        }
     }
 
     static insertQuery(tableName, data) {

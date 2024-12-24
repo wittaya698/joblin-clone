@@ -4,7 +4,7 @@ import { Change } from '@/src/models/change';
 import { Folder } from '@/src/models/folder';
 import { Note } from '@/src/models/note';
 import { BaseModel } from '@/src/base-model';
-import { promiseChain } from '@/src/promise-chain';
+import { promiseChain } from '@/src/promise-utils';
 
 class Synchronizer {
     constructor(db, api) {
