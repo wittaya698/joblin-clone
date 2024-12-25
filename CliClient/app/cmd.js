@@ -1,6 +1,6 @@
 require('source-map-support').install();
 //require("babel-polyfill");
-require('babel-plugin-transform-runtime');
+require('@babel/plugin-transform-runtime');
 
 import { FileApi } from '@/src/file-api.js';
 import { FileApiDriverLocal } from '@/src/file-api-driver-local.js';
@@ -22,7 +22,7 @@ let db = new Database(new DatabaseDriverNode());
 
 let fileDriver = new FileApiDriverLocal();
 let fileApi = new FileApi(
-    '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples',
+    '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/md',
     fileDriver
 );
 let synchronizer = new Synchronizer(db, fileApi);

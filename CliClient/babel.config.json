@@ -1,5 +1,5 @@
 {
-  "presets": ["@babel/preset-react"],
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
   "plugins": [
     // [
     //   "transform-imports",
@@ -19,8 +19,8 @@
     //   }
     // ],
     "@babel/plugin-transform-modules-commonjs",
+    "@babel/plugin-transform-runtime",
     "syntax-async-functions",
-    // "transform-runtime",
     [
       "module-resolver",
       {
