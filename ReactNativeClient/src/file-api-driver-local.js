@@ -64,10 +64,6 @@ class FileApiDriverLocal {
                     chain.push(output => {
                         if (!output) output = [];
                         return this.stat(path + '/' + items[i]).then(stat => {
-                            // Critical: To be removed
-                            if (stat.path.indexOf(path + '/') === 0)
-                                stat.path = stat.path.substr(path.length + 1);
-
                             output.push(stat);
                             return output;
                         });

@@ -10,7 +10,7 @@ import { time } from '@/src/time-utils.js';
 import { actions } from '@/src/root.js';
 
 class NoteFolderService extends BaseService {
-    static save(type, item, oldItem) {
+    static save(type, item, oldItem, options = null) {
         let diff = null;
         if (oldItem) {
             diff = BaseModel.diffObjects(oldItem, item);
@@ -31,7 +31,9 @@ class NoteFolderService extends BaseService {
             toSave.id = item.id;
         }
 
-        return ItemClass.save(toSave)
+        console.log(toSave);
+
+        return ItemClass.save(toSave, options)
             .then(savedItem => {
                 output = Object.assign(item, savedItem);
                 if (isNew && type == 'note')

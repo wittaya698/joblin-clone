@@ -258,6 +258,9 @@ class Database {
     }
 
     static insertQuery(tableName, data) {
+        if (!data || !Object.keys(data).length)
+            throw new Error('Data is empty');
+
         let keySql = '';
         let valueSql = '';
         let params = [];
@@ -283,6 +286,9 @@ class Database {
     }
 
     static updateQuery(tableName, data, where) {
+        if (!data || !Object.keys(data).length)
+            throw new Error('Data is empty');
+
         let sql = '';
         let params = [];
         for (let key in data) {

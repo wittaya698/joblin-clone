@@ -168,19 +168,28 @@ class Synchronizer {
                     // which means it has been deleted.
                     action.type = 'delete';
                     action.dest = 'local';
+                    action.reason =
+                        'Local item has been synced to remote previously, but remote no longer exist, which means it has been deleted';
                 } else {
                     // The item has never been synced and is not present in the dest
                     // which means it is new
                     action.type = 'create';
                     action.dest = 'remote';
+                    action.reason =
+                        'Local item has never been synced to remote, and remote does not exists, which means it is new';
                 }
             } else {
                 if (this.itemIsStrictlyOlderThan(local, local.syncTime))
                     continue;
 
-                if (this.itemIsStrictlyOlderThan(remote, local.syncTime)) {
+                if (this.itemIsStrictlyOlderThan(remote, local.updatedTime)) {
                     action.type = 'update';
                     action.dest = 'remote';
+                    sprintf(
+                        'Remote (%s) was modified after last sync of local (%s).',
+                        moment.unix(remote.updatedTime).toISOString(),
+                        moment.unix(local.syncTime).toISOString()
+                    );
                 } else if (
                     this.itemIsStrictlyNewerThan(remote, local.syncTime)
                 ) {
@@ -192,10 +201,6 @@ class Synchronizer {
                         moment.unix(local.syncTime).toISOString()
                     );
                     if (local.type == 'folder') {
-                        // For folders, currently we don't completely handle conflicts, we just
-                        // we just update the local dir (.folder metadata file) with the remote
-                        // version. It means the local version is lost but shouldn't be a big deal
-                        // and should be rare (at worst, the folder name needs to renamed).
                         action.solution = [{ type: 'update', dest: 'local' }];
                     } else {
                         action.solution = [
@@ -239,10 +244,27 @@ class Synchronizer {
             } else {
                 if (this.itemIsStrictlyOlderThan(remote, local.syncTime))
                     continue; // Already have this version
+
                 // Note: no conflict is possible here since if the local item has been
                 // modified since the last sync, it's been processed in the previous loop.
-                action.type = 'update';
-                action.dest = 'local';
+                // So throw an exception is this normally impossible condition happens anyway.
+                // It's handled at condition this.itemIsStrictlyNewerThan(remote, local.syncTime) in above loop
+                if (this.itemIsStrictlyNewerThan(remote, local.syncTime))
+                    throw new Error(
+                        'Remote item cannot be newer than last sync time.'
+                    );
+
+                if (this.itemIsStrictlyNewerThan(remote, local.updatedTime)) {
+                    action.type = 'update';
+                    action.dest = 'local';
+                    action.reason = sprintf(
+                        'Remote (%s) was modified after last sync of local (%s).',
+                        moment.unix(remote.updatedTime).toISOString(),
+                        moment.unix(local.syncTime).toISOString()
+                    );
+                } else {
+                    continue;
+                }
             }
 
             output.push(action);
@@ -276,7 +298,14 @@ class Synchronizer {
 
         if (!action) return Promise.resolve();
 
-        console.info('Sync action: ' + action.type + ' ' + action.dest);
+        console.info(
+            'Sync action: ' +
+                action.type +
+                ' ' +
+                action.dest +
+                ': ' +
+                action.reason
+        );
 
         if (action.type == 'conflict') {
             console.info(action);
@@ -306,9 +335,15 @@ class Synchronizer {
                     let dbItem = syncItem.remoteItem.content;
                     dbItem.sync_time = time.unix();
                     if (syncItem.type == 'folder') {
-                        return Folder.save(dbItem, { isNew: true });
+                        return Folder.save(dbItem, {
+                            isNew: true,
+                            autoTimeStamps: false
+                        });
                     } else {
-                        return Note.save(dbItem, { isNew: true });
+                        return Note.save(dbItem, {
+                            isNew: true,
+                            autoTimeStamps: false
+                        });
                     }
                 }
             }
@@ -327,10 +362,12 @@ class Synchronizer {
                 } else {
                     let dbItem = syncItem.remoteItem.content;
                     dbItem.sync_time = time.unix();
+                    dbItem.updated_time = dbItem.sync_time;
                     return NoteFolderService.save(
                         syncItem.type,
                         dbItem,
-                        action.local.dbItem
+                        action.local.dbItem,
+                        { autoTimeStamps: false }
                     );
                     // let dbItem = syncItem.remoteItem.content;
                     // dbItem.sync_time = time.unix();
@@ -363,6 +400,8 @@ class Synchronizer {
 
     async processRemoteItem(remoteItem) {
         let content = await this.api().get(remoteItem.path);
+        if (!content)
+            throw new Error('Cannot get content for: ' + remoteItem.path);
         remoteItem.content = Note.fromFriendlyString(content);
         let remoteSyncItem = this.remoteItemToSyncItem(remoteItem);
         let dbItem = await BaseItem.loadItemByPath(remoteItem.path);
@@ -374,6 +413,7 @@ class Synchronizer {
     async processState_uploadChanges() {
         while (true) {
             let result = await NoteFolderService.itemsThatNeedSync(50);
+            console.info('Items that need sync: ' + result.items.length);
             for (let i = 0; i < result.items.length; i++) {
                 let item = result.items[i];
                 await this.processLocalItem(item);
@@ -381,6 +421,8 @@ class Synchronizer {
 
             if (!result.hasMore) break;
         }
+
+        //console.info('DOWNLOAD CHANGE DISABLED'); return Promise.resolve();
 
         return this.processState('downloadChanges');
     }
@@ -411,7 +453,10 @@ class Synchronizer {
         // 	return;
         // }
 
-        return this.processState('uploadChanges');
+        return this.processState('uploadChanges').catch(error => {
+            console.info('Synchronizer error:', error);
+            throw error;
+        });
     }
 }
 

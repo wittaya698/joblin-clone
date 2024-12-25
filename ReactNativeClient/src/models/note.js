@@ -100,6 +100,12 @@ class Note extends BaseItem {
             });
     }
 
+    static all(parentId) {
+        return this.modelSelectAll('SELECT * FROM notes WHERE parent_id = ?', [
+            parentId
+        ]);
+    }
+
     static save(o, options = null) {
         return super
             .save(o, options)
