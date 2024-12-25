@@ -6,7 +6,7 @@ import { Note } from '@/src/models/note.js';
 import { Folder } from '@/src/models/folder.js';
 import { Log } from '@/src/log.js';
 import { time } from '@/src/time-utils.js';
-import { actions } from '@/src/root.js';
+// import { actions } from '@/src/root.js';
 
 class NoteFolderService extends BaseService {
     static save(type, item, oldItem) {
@@ -79,17 +79,25 @@ class NoteFolderService extends BaseService {
         // folders (TODO).
 
         function getFolders(limit) {
-            return BaseModel.db().selectAll(
+            return Folder.modelSelectAll(
                 'SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' +
                     limit
             );
+            // return BaseModel.db().selectAll(
+            //     'SELECT * FROM folders WHERE sync_time < updated_time LIMIT ' +
+            //         limit
+            // );
         }
 
         function getNotes(limit) {
-            return BaseModel.db().selectAll(
+            return Note.modelSelectAll(
                 'SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' +
                     limit
             );
+            // return BaseModel.db().selectAll(
+            //     'SELECT * FROM notes WHERE sync_time < updated_time LIMIT ' +
+            //         limit
+            // );
         }
 
         return getFolders(limit).then(items => {
