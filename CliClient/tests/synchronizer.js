@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import { time } from 'src/time-utils.js';
 import {
     setupDatabase,

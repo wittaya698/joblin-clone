@@ -88,7 +88,7 @@ db.open({
     .then(() => {
         BaseModel.db_ = db;
         //return clearDatabase();
-        //return clearDatabase().then(createLocalItems);
+        return clearDatabase().then(createLocalItems);
     })
     .then(() => {
         return synchronizer.start();
