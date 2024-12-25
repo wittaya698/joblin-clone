@@ -19,6 +19,8 @@
     //   }
     // ],
     "@babel/plugin-transform-modules-commonjs",
+    "syntax-async-functions",
+    // "transform-runtime",
     [
       "module-resolver",
       {
