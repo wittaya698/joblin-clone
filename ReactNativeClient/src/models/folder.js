@@ -1,3 +1,4 @@
+import { BaseModel } from '@/src/base-model.js';
 import { Note } from '@/src/models/note.js';
 import { actions } from '@/src/root.js';
 import { promiseChain } from '@/src/promise-utils.js';
@@ -15,7 +16,8 @@ class Folder extends BaseItem {
         return super.toFriendlyString(folder, 'folder', [
             'id',
             'created_time',
-            'updated_time'
+            'updated_time',
+            'type_'
         ]);
     }
 
@@ -103,7 +105,7 @@ class Folder extends BaseItem {
                 );
 
             return super.save(o, options).then(folder => {
-                // this.dispatch(actions.folders_update_one({ folder: folder }));
+                this.dispatch(actions.folders_update_one({ folder: folder }));
                 return folder;
             });
         });

@@ -1,3 +1,4 @@
+import { BaseModel } from '@/src/base-model.js';
 import { Log } from '@/src/log.js';
 import { Folder } from '@/src/models/folder.js';
 import { Geolocation } from '@/src/geolocation.js';
@@ -22,7 +23,8 @@ class Note extends BaseItem {
             'created_time',
             'updated_time',
             'id',
-            'parent_id'
+            'parent_id',
+            'type_'
         ]);
     }
 

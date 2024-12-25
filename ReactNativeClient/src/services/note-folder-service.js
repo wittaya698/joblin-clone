@@ -2,11 +2,12 @@
 
 import { BaseService } from '@/src/base-service.js';
 import { BaseModel } from '@/src/base-model.js';
+import { BaseItem } from 'src/models/base-item.js';
 import { Note } from '@/src/models/note.js';
 import { Folder } from '@/src/models/folder.js';
 import { Log } from '@/src/log.js';
 import { time } from '@/src/time-utils.js';
-// import { actions } from '@/src/root.js';
+import { actions } from '@/src/root.js';
 
 class NoteFolderService extends BaseService {
     static save(type, item, oldItem) {
@@ -19,12 +20,7 @@ class NoteFolderService extends BaseService {
             }
         }
 
-        let ItemClass = null;
-        if (type == 'note') {
-            ItemClass = Note;
-        } else if (type == 'folder') {
-            ItemClass = Folder;
-        }
+        let ItemClass = BaseItem.itemClass(item);
 
         let isNew = !item.id;
         let output = null;
