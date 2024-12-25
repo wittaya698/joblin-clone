@@ -169,14 +169,14 @@ class Synchronizer {
                     action.type = 'delete';
                     action.dest = 'local';
                     action.reason =
-                        'Local item has been synced to remote previously, but remote no longer exist, which means it has been deleted';
+                        'Local has been synced to remote previously, but remote no longer exist, which means has been deleted';
                 } else {
                     // The item has never been synced and is not present in the dest
                     // which means it is new
                     action.type = 'create';
                     action.dest = 'remote';
                     action.reason =
-                        'Local item has never been synced to remote, and remote does not exists, which means it is new';
+                        'Local has never been synced to remote, and remote does not exists, which means remote must be created';
                 }
             } else {
                 if (this.itemIsStrictlyOlderThan(local, local.syncTime))
@@ -195,7 +195,7 @@ class Synchronizer {
                 ) {
                     action.type = 'conflict';
                     action.reason = sprintf(
-                        'Both remote (%s) and local items (%s) were modified after the last sync (%s).',
+                        'Both remote (%s) and local (%s) were modified after the last sync (%s).',
                         moment.unix(remote.updatedTime).toISOString(),
                         moment.unix(local.updatedTime).toISOString(),
                         moment.unix(local.syncTime).toISOString()
@@ -251,16 +251,16 @@ class Synchronizer {
                 // It's handled at condition this.itemIsStrictlyNewerThan(remote, local.syncTime) in above loop
                 if (this.itemIsStrictlyNewerThan(remote, local.syncTime))
                     throw new Error(
-                        'Remote item cannot be newer than last sync time.'
+                        'Remote cannot be newer than last sync time.'
                     );
 
                 if (this.itemIsStrictlyNewerThan(remote, local.updatedTime)) {
                     action.type = 'update';
                     action.dest = 'local';
                     action.reason = sprintf(
-                        'Remote (%s) was modified after last sync of local (%s).',
+                        'Remote (%s) was modified after local (%s).',
                         moment.unix(remote.updatedTime).toISOString(),
-                        moment.unix(local.syncTime).toISOString()
+                        moment.unix(local.updatedTime).toISOString()
                     );
                 } else {
                     continue;
