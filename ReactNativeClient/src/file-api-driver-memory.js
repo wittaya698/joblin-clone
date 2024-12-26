@@ -22,12 +22,12 @@ class FileApiDriverMemory {
     }
 
     newItem(path, isDir = false) {
-        let now = time.unix();
+        let now = time.unixMs();
         return {
             path: path,
             isDir: isDir,
-            updatedTime: now,
-            createdTime: now,
+            updated_time: now, // In milliseconds!!
+            created_time: now, // In milliseconds!!
             content: ''
         };
     }
@@ -40,7 +40,7 @@ class FileApiDriverMemory {
     setTimestamp(path, timestamp) {
         let item = this.itemByPath(path);
         if (!item) return Promise.reject(new Error('File not found: ' + path));
-        item.updatedTime = timestamp;
+        item.updated_time = timestamp;
         return Promise.resolve();
     }
 
@@ -87,7 +87,7 @@ class FileApiDriverMemory {
             this.items_.push(item);
         } else {
             this.items_[index].content = content;
-            this.items_[index].updatedTime = time.unix();
+            this.items_[index].updated_time = time.unix();
         }
         return Promise.resolve();
     }

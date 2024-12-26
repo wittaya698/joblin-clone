@@ -173,7 +173,7 @@ class BaseModel {
         let itemId = o.id;
 
         if (options.autoTimestamp && this.hasField('updated_time')) {
-            o.updated_time = time.unix();
+            o.updated_time = time.unixMs();
         }
 
         if (options.isNew) {
@@ -184,7 +184,7 @@ class BaseModel {
             }
 
             if (!o.created_time && this.hasField('created_time')) {
-                o.created_time = time.unix();
+                o.created_time = time.unixMs();
             }
 
             query = Database.insertQuery(this.tableName(), o);

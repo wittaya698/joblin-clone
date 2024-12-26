@@ -65,9 +65,7 @@ class Synchronizer {
                         } else if (c.type == Change.TYPE_CREATE) {
                             p = this.loadParentAndItem(c).then(result => {
                                 let options = {
-                                    contents: Note.toFriendlyString(
-                                        result.item
-                                    ),
+                                    contents: Note.serialize(result.item),
                                     path: Note.systemPath(
                                         result.parent,
                                         result.item
@@ -86,7 +84,7 @@ class Synchronizer {
 
                             // 	console.info(item);
                             // 	let options = {
-                            // 		contents: Note.toFriendlyString(item),
+                            // 		contents: Note.serialize(item),
                             // 		path: Note.systemPath(item),
                             // 		mode: 'overwrite',
                             // 		// client_modified:
@@ -94,7 +92,7 @@ class Synchronizer {
 
                             // 	// console.info(options);
 
-                            // 	//let content = Note.toFriendlyString(item);
+                            // 	//let content = Note.serialize(item);
                             // 	//console.info(content);
 
                             // 	//console.info('SYNC', item);
