@@ -1,6 +1,6 @@
 let time = {
     unix() {
-        return Math.round(new Date().getTime() / 1000);
+        return Math.floor(new Date().getTime() / 1000);
     },
 
     unixMs() {
@@ -8,7 +8,7 @@ let time = {
     },
 
     unixMsToS(ms) {
-        return Math.round(ms / 1000);
+        return Math.floor(ms / 1000);
     }
 };
 
