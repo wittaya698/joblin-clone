@@ -12,10 +12,11 @@ import {
     switchClient
 } from 'test-utils.js';
 import { createFoldersAndNotes } from 'test-data.js';
-import { Folder } from '@/src/models/folder.js';
-import { Note } from '@/src/models/note.js';
-import { BaseItem } from '@/src/models/base-item.js';
-import { BaseModel } from '@/src/base-model.js';
+import { Folder } from 'src/models/folder.js';
+import { Note } from 'src/models/note.js';
+import { Setting } from 'src/models/setting.js';
+import { BaseItem } from 'src/models/base-item.js';
+import { BaseModel } from 'src/base-model.js';
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);

@@ -31,8 +31,6 @@ class NoteFolderService extends BaseService {
             toSave.id = item.id;
         }
 
-        console.log(toSave);
-
         return ItemClass.save(toSave, options)
             .then(savedItem => {
                 output = Object.assign(item, savedItem);

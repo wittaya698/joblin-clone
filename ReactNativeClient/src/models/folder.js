@@ -1,11 +1,12 @@
 import { BaseModel } from '@/src/base-model.js';
 import { Note } from '@/src/models/note.js';
-import { actions } from '@/src/root.js';
+import { Setting } from '@/src/models/setting.js';
 import { promiseChain } from '@/src/promise-utils.js';
 import { folderItemFilename } from '@/src/string-utils.js';
 import { _ } from '@/src/locale.js';
 import moment from 'moment';
 import { BaseItem } from '@/src/models/base-item.js';
+import { actions } from '@/src/root.js';
 
 class Folder extends BaseItem {
     static tableName() {
@@ -98,6 +99,18 @@ class Folder extends BaseItem {
 
         let notes = await Note.modelSelectAll('SELECT * FROM notes');
         return folders.concat(notes);
+    }
+
+    static conflictFolder() {
+        let folderId = Setting.value('sync.conflictFolderId');
+        if (!folderId) {
+            return Folder.save({ title: _('Conflicts') }).then(folder => {
+                Setting.setValue('sync.conflictFolderId', folder.id);
+                return folder;
+            });
+        }
+
+        return Folder.load(folderId);
     }
 
     static save(o, options = null) {
