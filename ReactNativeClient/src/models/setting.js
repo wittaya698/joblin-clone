@@ -7,6 +7,10 @@ class Setting extends BaseModel {
         return 'settings';
     }
 
+    static itemType() {
+        return BaseModel.MODEL_TYPE_SETTING;
+    }
+
     static defaultSetting(key) {
         if (!(key in this.defaults_)) throw new Error('Unknown key: ' + key);
 
@@ -26,12 +30,11 @@ class Setting extends BaseModel {
     }
 
     static load() {
+        this.cancelScheduleUpdate();
         this.cache_ = [];
-        return this.db()
-            .selectAll('SELECT * FROM settings')
-            .then(rows => {
-                this.cache_ = rows;
-            });
+        return this.modelSelectAll('SELECT * FROM settings').then(rows => {
+            this.cache_ = rows;
+        });
     }
 
     static setValue(key, value) {
@@ -115,11 +118,16 @@ class Setting extends BaseModel {
     }
 
     static scheduleUpdate() {
-        if (this.updateTimeoutId) clearTimeout(this.updateTimeoutId);
+        if (this.updateTimeoutId_) clearTimeout(this.updateTimeoutId_);
 
         this.updateTimeoutId_ = setTimeout(() => {
             this.saveAll();
         }, 500);
+    }
+
+    static cancelScheduleUpdate() {
+        if (this.updateTimeoutId_) clearTimeout(this.updateTimeoutId_);
+        this.updateTimeoutId_ = null;
     }
 }
 

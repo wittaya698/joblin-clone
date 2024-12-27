@@ -37,7 +37,7 @@ class Synchronizer {
     }
 
     loadParentAndItem(change) {
-        if (change.item_type == BaseModel.ITEM_TYPE_NOTE) {
+        if (change.item_type == BaseModel.MODEL_TYPE_NOTE) {
             return Note.load(change.item_id).then(note => {
                 if (!note) return { parent: null, item: null };
 
@@ -109,7 +109,7 @@ class Synchronizer {
 
         let itemType = BaseModel.identifyItemType(dbItem);
         return {
-            type: itemType == BaseModel.ITEM_TYPE_FOLDER ? 'folder' : 'note',
+            type: itemType == BaseModel.MODEL_TYPE_FOLDER ? 'folder' : 'note',
             path: Folder.systemPath(dbItem),
             syncTime: dbItem.sync_time,
             updatedTime: dbItem.updated_time,
@@ -121,7 +121,10 @@ class Synchronizer {
         if (!remoteItem) return null;
 
         return {
-            type: remoteItem.content.type,
+            type:
+                remoteItem.content.type_ == BaseModel.MODEL_TYPE_FOLDER
+                    ? 'folder'
+                    : 'note',
             path: remoteItem.path,
             syncTime: 0,
             updatedTime: remoteItem.updatedTime,
