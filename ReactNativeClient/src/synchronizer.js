@@ -74,9 +74,15 @@ class Synchronizer {
                     await this.api().put(path, content);
                     await this.api().setTimestamp(path, local.updated_time);
                 } else if (action == 'folderConflict') {
-                    let remoteContent = await this.api().get(path);
-                    local = BaseItem.unserialize(remoteContent);
-                    updateSyncTimeOnly = false;
+                    if (remote) {
+                        let remoteContent = await this.api().get(path);
+                        local = BaseItem.unserialize(remoteContent);
+
+                        local.sync_time = time.unixMs();
+                        await ItemClass.save(local, { autoTimestamp: false });
+                    } else {
+                        await ItemClass.delete(local.id);
+                    }
                 } else if (action == 'noteConflict') {
                     // - Create a duplicate of local note into Conflicts folder (to preserve the user's changes)
                     // - Overwrite local note with remote note
