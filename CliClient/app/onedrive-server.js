@@ -1,0 +1,1 @@
+// Require SPO license

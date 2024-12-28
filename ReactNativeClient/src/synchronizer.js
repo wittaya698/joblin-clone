@@ -1,8 +1,8 @@
 require('@babel/plugin-transform-runtime');
 
-import { BaseItem } from '@/src/models/base-item.js';
 import { Folder } from '@/src/models/folder.js';
 import { Note } from '@/src/models/note.js';
+import { BaseItem } from '@/src/models/base-item.js';
 import { BaseModel } from '@/src/base-model.js';
 import { sprintf } from 'sprintf-js';
 import { time } from '@/src/time-utils.js';

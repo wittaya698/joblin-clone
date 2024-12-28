@@ -138,7 +138,8 @@ Setting.defaults_ = {
     'user.session': { value: '', type: 'string' },
     'sync.lastRevId': { value: 0, type: 'int' }, // DEPRECATED
     'sync.lastUpdateTime': { value: 0, type: 'int' },
-    'sync.conflictFolderId': { value: '', type: 'string' }
+    'sync.conflictFolderId': { value: '', type: 'string' },
+    'sync.onedrive.auth': { value: '', type: 'string' }
 };
 
 export { Setting };
