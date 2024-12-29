@@ -292,4 +292,4 @@ function folderItemFilename(item) {
     // return output + '.' + item.id.substr(0, 7);
 }
 
-export { removeDiacritics, escapeFilename, folderItemFilename };
+export { removeDiacritics, escapeFilename };

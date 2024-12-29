@@ -3,7 +3,6 @@ import { Log } from '@/src/log.js';
 import { Folder } from '@/src/models/folder.js';
 import { Geolocation } from '@/src/geolocation.js';
 import { actions } from '@/src/root.js';
-import { folderItemFilename } from '@/src/string-utils.js';
 import { BaseItem } from '@/src/models/base-item.js';
 import moment from 'moment';
 
@@ -36,6 +35,10 @@ class Note extends BaseItem {
         return true;
     }
 
+    static trackDeleted() {
+        return true;
+    }
+
     static new(parentId = '') {
         let output = super.new();
         output.parent_id = parentId;
@@ -56,26 +59,22 @@ class Note extends BaseItem {
         return this.modelSelectAll(
             'SELECT ' +
                 this.previewFieldsSql() +
-                ' FROM notes WHERE parent_id = ?',
+                ' FROM is_conflict = 0 AND notes WHERE parent_id = ?',
             [parentId]
         );
-        // return this.db().selectAll(
-        //     'SELECT ' +
-        //         this.previewFieldsSql() +
-        //         ' FROM notes WHERE parent_id = ?',
-        //     [parentId]
-        // );
     }
 
     static preview(noteId) {
         return this.modelSelectOne(
-            'SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE id = ?',
+            'SELECT ' +
+                this.previewFieldsSql() +
+                ' FROM is_conflict = 0 AND notes WHERE id = ?',
             [noteId]
         );
-        // return this.db().selectOne(
-        //     'SELECT ' + this.previewFieldsSql() + ' FROM notes WHERE id = ?',
-        //     [noteId]
-        // );
+    }
+
+    static conflictedNotes() {
+        return this.modelSelectAll('SELECT * FROM notes WHERE is_conflict = 1');
     }
 
     static updateGeolocation(noteId) {
@@ -101,9 +100,10 @@ class Note extends BaseItem {
     }
 
     static all(parentId) {
-        return this.modelSelectAll('SELECT * FROM notes WHERE parent_id = ?', [
-            parentId
-        ]);
+        return this.modelSelectAll(
+            'SELECT * FROM notes WHERE is_conflict = 0 AND parent_id = ?',
+            [parentId]
+        );
     }
 
     static save(o, options = null) {

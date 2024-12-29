@@ -40,12 +40,8 @@ async function main() {
         if (remoteBackend == 'onedrive') {
             throw new Error('OneDrive not supported yet: SPO license required');
         } else {
-            throw new Error('Unknown backend: '.remoteBackend);
+            throw new Error('Unknown backend: ' + remoteBackend);
         }
-
-        synchronizer_ = new Synchronizer(db, fileApi);
-
-        return synchronizer_;
     }
 
     let s = await synchronizer();

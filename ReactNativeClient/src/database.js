@@ -22,6 +22,7 @@ CREATE TABLE notes (
 	created_time INT NOT NULL DEFAULT 0,
 	updated_time INT NOT NULL DEFAULT 0,
     sync_time INT NOT NULL DEFAULT 0,
+    is_conflict INT NOT NULL DEFAULT 0,
 	latitude NUMERIC NOT NULL DEFAULT 0,
 	longitude NUMERIC NOT NULL DEFAULT 0,
 	altitude NUMERIC NOT NULL DEFAULT 0,
@@ -34,6 +35,13 @@ CREATE TABLE notes (
 	source_application TEXT NOT NULL DEFAULT "",
 	application_data TEXT NOT NULL DEFAULT "",
 	\`order\` INT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE deleted_items (
+	id INTEGER PRIMARY KEY,
+	item_type INT NOT NULL,
+	item_id TEXT NOT NULL,
+	deleted_time INT NOT NULL
 );
 
 CREATE TABLE tags (
@@ -266,6 +274,7 @@ class Database {
         let params = [];
         for (let key in data) {
             if (!data.hasOwnProperty(key)) continue;
+            if (key[key.length - 1] == '_') continue;
             if (keySql != '') keySql += ', ';
             if (valueSql != '') valueSql += ', ';
             keySql += '`' + key + '`';
@@ -293,6 +302,7 @@ class Database {
         let params = [];
         for (let key in data) {
             if (!data.hasOwnProperty(key)) continue;
+            if (key[key.length - 1] == '_') continue;
             if (sql != '') sql += ', ';
             sql += '`' + key + '`=?';
             params.push(data[key]);

@@ -2,7 +2,6 @@ import { BaseModel } from '@/src/base-model.js';
 import { Note } from '@/src/models/note.js';
 import { Setting } from '@/src/models/setting.js';
 import { promiseChain } from '@/src/promise-utils.js';
-import { folderItemFilename } from '@/src/string-utils.js';
 import { _ } from '@/src/locale.js';
 import moment from 'moment';
 import { BaseItem } from '@/src/models/base-item.js';
@@ -34,6 +33,10 @@ class Folder extends BaseItem {
         return true;
     }
 
+    static trackDeleted() {
+        return true;
+    }
+
     static newFolder() {
         return {
             id: null,
@@ -41,9 +44,26 @@ class Folder extends BaseItem {
         };
     }
 
+    static syncedNoteIds() {
+        return this.db()
+            .selectAll(
+                'SELECT id FROM notes WHERE is_conflict = 0 AND sync_time > 0'
+            )
+            .then(rows => {
+                let output = [];
+                for (let i = 0; i < rows.length; i++) {
+                    output.push(rows[i].id);
+                }
+                return output;
+            });
+    }
+
     static noteIds(id) {
         return this.db()
-            .selectAll('SELECT id FROM notes WHERE parent_id = ?', [id])
+            .selectAll(
+                'SELECT id FROM notes WHERE is_conflict = 0 AND parent_id = ?',
+                [id]
+            )
             .then(rows => {
                 let output = [];
                 for (let i = 0; i < rows.length; i++) {
@@ -84,33 +104,21 @@ class Folder extends BaseItem {
 
     static loadNoteByField(folderId, field, value) {
         return this.modelSelectOne(
-            'SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?',
+            'SELECT * FROM notes WHERE is_conflict = 0 AND `parent_id` = ? AND `' +
+                field +
+                '` = ?',
             [folderId, value]
         );
-        // return this.db().selectOne(
-        //     'SELECT * FROM notes WHERE `parent_id` = ? AND `' + field + '` = ?',
-        //     [folderId, value]
-        // );
     }
 
     static async all(includeNotes = false) {
         let folders = await Folder.modelSelectAll('SELECT * FROM folders');
         if (!includeNotes) return folders;
 
-        let notes = await Note.modelSelectAll('SELECT * FROM notes');
+        let notes = await Note.modelSelectAll(
+            'SELECT * FROM notes WHERE is_conflict = 0'
+        );
         return folders.concat(notes);
-    }
-
-    static conflictFolder() {
-        let folderId = Setting.value('sync.conflictFolderId');
-        if (!folderId) {
-            return Folder.save({ title: _('Conflicts') }).then(folder => {
-                Setting.setValue('sync.conflictFolderId', folder.id);
-                return folder;
-            });
-        }
-
-        return Folder.load(folderId);
     }
 
     static save(o, options = null) {
