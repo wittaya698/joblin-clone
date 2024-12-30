@@ -1,7 +1,0 @@
-twig:
-  file_name_pattern: "*.twig"
-  default_path: "%kernel.project_dir%/app/Resources/views"
-
-when@test:
-  twig:
-    strict_variables: true

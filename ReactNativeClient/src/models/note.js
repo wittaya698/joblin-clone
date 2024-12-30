@@ -1,8 +1,8 @@
 import { BaseModel } from '@/src/base-model.js';
 import { Log } from '@/src/log.js';
 import { Folder } from '@/src/models/folder.js';
-import { Geolocation } from '@/src/geolocation.js';
-import { actions } from '@/src/root.js';
+// import { Geolocation } from '@/src/geolocation.js';
+// import { actions } from '@/src/root.js';
 import { BaseItem } from '@/src/models/base-item.js';
 import moment from 'moment';
 
@@ -81,22 +81,22 @@ class Note extends BaseItem {
         Log.info('Updating lat/long of note ' + noteId);
 
         let geoData = null;
-        Geolocation.currentPosition()
-            .then(data => {
-                Log.info('Got lat/long');
-                geoData = data;
-                return Note.load(note.id);
-            })
-            .then(note => {
-                if (!note) return; // Race condition - note has been deleted in the meantime
-                note.longitude = geoData.coords.longitude;
-                note.latitude = geoData.coords.latitude;
-                note.altitude = geoData.coords.altitude;
-                Note.save(note, { updateLatLong: false });
-            })
-            .catch(error => {
-                Log.info('Cannot get location:', error);
-            });
+        // Geolocation.currentPosition()
+        //     .then(data => {
+        //         Log.info('Got lat/long');
+        //         geoData = data;
+        //         return Note.load(note.id);
+        //     })
+        //     .then(note => {
+        //         if (!note) return; // Race condition - note has been deleted in the meantime
+        //         note.longitude = geoData.coords.longitude;
+        //         note.latitude = geoData.coords.latitude;
+        //         note.altitude = geoData.coords.altitude;
+        //         Note.save(note, { updateLatLong: false });
+        //     })
+        //     .catch(error => {
+        //         Log.info('Cannot get location:', error);
+        //     });
     }
 
     static filter(note) {
@@ -133,7 +133,7 @@ class Note extends BaseItem {
                 return this.load(result.id);
             })
             .then(note => {
-                this.dispatch(actions.notes_update_one({ note: note }));
+                // this.dispatch(actions.notes_update_one({ note: note }));
                 return note;
             });
     }
