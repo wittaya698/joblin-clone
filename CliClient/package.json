@@ -41,7 +41,7 @@
   },
   "scripts": {
     "babelbuild": "babel app -d build",
-    "build": "npx babel app --out-dir build --source-maps && npx babel app/src/models --out-dir build/src/models --source-maps && npx babel app/src/services --out-dir build/src/services --source-maps",
+    "build": "npx babel app --out-dir build --source-maps && npx babel app/lib/models --out-dir build/lib/models --source-maps && npx babel app/lib/services --out-dir build/lib/services --source-maps",
     "clean": "babel-changed --reset",
     "test": "npx babel tests --out-dir tests-build --source-maps && jasmine"
   },

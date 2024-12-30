@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons.js';
 import { FAB, Provider } from 'react-native-paper';
 import { connect } from 'react-redux';
 
-import { actions } from '@/src/root.js';
+import { actions } from '@/lib/root.js';
 
 const styles = StyleSheet.create({
     actionButtonIcon: {

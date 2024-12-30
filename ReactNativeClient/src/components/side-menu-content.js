@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-native';
-import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { NoteFolderService } from '@/lib/services/note-folder-service.js';
 
 import { StyleSheet, ScrollView } from 'react-native';
 

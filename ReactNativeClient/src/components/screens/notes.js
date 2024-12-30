@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
-import { NoteList } from '@/src/components/note-list.js';
-import { ScreenHeader } from '@/src/components/screen-header.js';
-import { Folder } from '@/src/models/folder.js';
-import { actions } from '@/src/root.js';
-import { _ } from '@/src/locale.js';
-import { ActionButton } from '@/src/components/action-button.js';
+import { NoteList } from '@/lib/components/note-list.js';
+import { ScreenHeader } from '@/lib/components/screen-header.js';
+import { Folder } from '@/lib/models/folder.js';
+import { actions } from '@/lib/root.js';
+import { _ } from '@/lib/locale.js';
+import { ActionButton } from '@/lib/components/action-button.js';
 
 class NotesScreenComponent extends React.Component {
     static navigationOptions(options) {

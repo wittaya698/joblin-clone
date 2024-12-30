@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { _ } from '@/src/locale.js';
-import { Setting } from '@/src/models/setting.js';
-import { actions } from '@/src/root.js';
+import { _ } from '@/lib/locale.js';
+import { Setting } from '@/lib/models/setting.js';
+import { actions } from '@/lib/root.js';
 
 import {
     Menu,

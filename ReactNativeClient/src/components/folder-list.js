@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import { ItemListComponent } from '@/src/components/item-list.js';
-import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { ItemListComponent } from '@/lib/components/item-list.js';
+import { NoteFolderService } from '@/lib/services/note-folder-service.js';
 
 class FolderListComponent extends ItemListComponent {
     listView_itemPress(folderId) {

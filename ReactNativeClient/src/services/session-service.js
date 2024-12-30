@@ -1,4 +1,4 @@
-import { BaseService } from '@/src/base-service';
+import { BaseService } from '@/lib/base-service';
 
 class SessionService extends BaseService {
     login(email, password, clientId) {

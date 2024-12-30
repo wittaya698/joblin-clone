@@ -6,10 +6,10 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-import { Root } from '@/src/root.js';
+import { Root } from '@/lib/root.js';
 import React, { Component } from 'react';
-import { Registry } from '@/src/registry';
-import { Log } from '@/src/log';
+import { Registry } from '@/lib/registry';
+import { Log } from '@/lib/log';
 
 export default class Main extends Component {
     render() {

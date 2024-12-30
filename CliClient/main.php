@@ -286,7 +286,7 @@ $longopts = array(
 
 $flags = getopt($shortopts, $longopts);
 
-// if (!isset($flags['config'])) $flags['config'] = '/home/laurent/src/notes/cli-client/.config';
+// if (!isset($flags['config'])) $flags['config'] = '/home/laurent/lib/notes/cli-client/.config';
 
 $config = new Config($flags['config']);
 

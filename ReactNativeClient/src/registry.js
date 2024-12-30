@@ -4,7 +4,7 @@
 // registry should be designed in such a way that they can be converted to use
 // dependency injection later on (eg. `BaseModel.db()`, `Synchroniser.api()`)
 
-import { WebApi } from '@/src/web-api.js';
+import { WebApi } from '@/lib/web-api.js';
 
 class Registry {
     static setDebugMode(v) {

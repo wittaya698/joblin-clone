@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { actions } from '@/src/root.js';
-import { ItemListComponent } from '@/src/components/item-list.js';
+import { actions } from '@/lib/root.js';
+import { ItemListComponent } from '@/lib/components/item-list.js';
 
 class NoteListComponent extends ItemListComponent {
     listView_itemPress(noteId) {

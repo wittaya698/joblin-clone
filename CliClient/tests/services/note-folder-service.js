@@ -1,8 +1,8 @@
-import { time } from 'src/time-utils.js';
-import { Note } from 'src/models/note.js';
-import { Folder } from 'src/models/folder.js';
-import { promiseChain } from 'src/promise-utils.js';
-import { NoteFolderService } from 'src/services/note-folder-service.js';
+import { time } from 'lib/time-utils.js';
+import { Note } from 'lib/models/note.js';
+import { Folder } from 'lib/models/folder.js';
+import { promiseChain } from 'lib/promise-utils.js';
+import { NoteFolderService } from 'lib/services/note-folder-service.js';
 import { setupDatabaseAndSynchronizer } from 'test-utils.js';
 import { createFoldersAndNotes } from 'test-data.js';
 

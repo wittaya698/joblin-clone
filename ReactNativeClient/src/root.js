@@ -7,24 +7,24 @@ import { MenuProvider } from 'react-native-popup-menu';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Dropbox } from 'dropbox';
 
-import { Log } from '@/src/log.js';
-import { Folder } from '@/src/models/folder.js';
-import { Database } from '@/src/database.js';
-import { Registry } from '@/src/registry.js';
-import { Setting } from '@/src/models/setting.js';
+import { Log } from '@/lib/log.js';
+import { Folder } from '@/lib/models/folder.js';
+import { Database } from '@/lib/database.js';
+import { Registry } from '@/lib/registry.js';
+import { Setting } from '@/lib/models/setting.js';
 
-import { NoteScreen } from '@/src/components/screens/note.js';
-import { NotesScreen } from '@/src/components/screens/notes.js';
-import { FolderScreen } from '@/src/components/screens/folder.js';
-import { FoldersScreen } from '@/src/components/screens/folders.js';
-import { LoginScreen } from '@/src/components/screens/login.js';
-import { LoadingScreen } from '@/src/components/screens/loading.js';
-import { ItemListComponent } from '@/src/components/item-list.js';
-import { BaseModel } from '@/src/base-model.js';
-import { Synchronizer } from '@/src/synchronizer.js';
-import { SideMenuContent } from '@/src/components/side-menu-content.js';
-import { NoteFolderService } from '@/src/services/note-folder-service.js';
-import { DatabaseDriverReactNative } from '@/src/database-driver-react-native.js';
+import { NoteScreen } from '@/lib/components/screens/note.js';
+import { NotesScreen } from '@/lib/components/screens/notes.js';
+import { FolderScreen } from '@/lib/components/screens/folder.js';
+import { FoldersScreen } from '@/lib/components/screens/folders.js';
+import { LoginScreen } from '@/lib/components/screens/login.js';
+import { LoadingScreen } from '@/lib/components/screens/loading.js';
+import { ItemListComponent } from '@/lib/components/item-list.js';
+import { BaseModel } from '@/lib/base-model.js';
+import { Synchronizer } from '@/lib/synchronizer.js';
+import { SideMenuContent } from '@/lib/components/side-menu-content.js';
+import { NoteFolderService } from '@/lib/services/note-folder-service.js';
+import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
 
 let defaultState = {
     nav: {},

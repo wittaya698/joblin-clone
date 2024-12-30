@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, TextInput, View } from 'react-native';
 
-import { Folder } from '@/src/models/folder.js';
-import { ScreenHeader } from '@/src/components/screen-header.js';
-import { NoteFolderService } from '@/src/services/note-folder-service.js';
+import { Folder } from '@/lib/models/folder.js';
+import { ScreenHeader } from '@/lib/components/screen-header.js';
+import { NoteFolderService } from '@/lib/services/note-folder-service.js';
 
 class FolderScreenComponent extends React.Component {
     static navigationOptions(options) {

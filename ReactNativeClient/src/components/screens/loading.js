@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { NoteFolderService } from '@/src/services/note-folder-service.js';
-import { actions } from '@/src/root.js';
+import { NoteFolderService } from '@/lib/services/note-folder-service.js';
+import { actions } from '@/lib/root.js';
 
 class LoadingScreenComponent extends React.Component {
     static navigationOptions(options) {

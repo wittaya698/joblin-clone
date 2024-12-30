@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Main } from '@/src/main.js';
+import { Main } from '@/lib/main.js';
 
 export default class AndroidHome extends Component {
     render() {
