@@ -10,19 +10,34 @@ import { Folder } from 'src/models/folder.js';
 import { Note } from 'src/models/note.js';
 import { Setting } from 'src/models/setting.js';
 import { Synchronizer } from 'src/synchronizer.js';
+import { Logger } from '@/src/logger.js';
 import { uuid } from 'src/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { _ } from 'src/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
+const APPNAME = 'joplin';
+const dataDir = os.homedir() + '/.local/share/' + APPNAME;
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
+});
+
+const logger = new Logger();
+logger.addTarget('file', { path: dataDir + '/log.txt' });
+logger.setLevel(Logger.LEVEL_DEBUG);
+
+const syncLogger = new Logger();
+syncLogger.addTarget('file', { path: dataDir + '/log-sync.txt' });
+syncLogger.setLevel(Logger.LEVEL_DEBUG);
+
 let db = new Database(new DatabaseDriverNode());
+db.setLogger(logger);
 let synchronizer_ = null;
 const vorpal = require('vorpal')();
-const APPNAME = 'joplin';
 
 async function main() {
-    let dataDir = os.homedir() + '/.local/share/' + APPNAME;
     await fs.mkdirp(dataDir, 0o755);
 
     await db.open({ name: dataDir + '/database.sqlite' });
@@ -42,10 +57,16 @@ async function main() {
         } else {
             throw new Error('Unknown backend: ' + remoteBackend);
         }
+
+        synchronizer_ = new Synchronizer(db, fileApi);
+        synchronizer_.setLogger(syncLogger);
+
+        return synchronizer_;
     }
 
-    let s = await synchronizer();
-    return;
+    // let s = await synchronizer('onedrive');
+    // await synchronizer_.start();
+    // return;
 
     function switchCurrentFolder(folder) {
         currentFolder = folder;
@@ -339,10 +360,12 @@ async function main() {
         usage: 'sync',
         description: 'Synchronizes with remote storage.',
         action: function (args, end) {
-            synchronizer
-                .start()
+            synchronizer('onedrive')
+                .then(s => {
+                    return s.start();
+                })
                 .catch(error => {
-                    console.error(error);
+                    logger.error(error);
                 })
                 .then(() => {
                     end();

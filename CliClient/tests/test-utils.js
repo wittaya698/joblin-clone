@@ -92,7 +92,7 @@ function db(id = null) {
 
 function synchronizer(id = null) {
     if (id === null) id = currentClient_;
-    console.info('SYNC', id);
+    // console.info('SYNC', id);
     return synchronizers_[id];
 }
 

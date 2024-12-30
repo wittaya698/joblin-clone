@@ -101,25 +101,24 @@ describe('Synchronizer', function () {
 
         await synchronizer().start();
 
-        await sleep(1);
+        await sleep(0.1);
 
         let note2 = await Note.load(note1.id);
         note2.title = 'Updated on client 2';
         await Note.save(note2);
+        note2 = await Note.load(note2.id);
 
         await synchronizer().start();
-
-        let files = await fileApi().list();
 
         await switchClient(1);
 
         await synchronizer().start();
 
         note1 = await Note.load(note1.id);
+        let all = await Folder.all(true);
+        let files = await fileApi().list();
 
-        expect(!!note1).toBe(true);
-        expect(note1.title).toBe(note2.title);
-        expect(note1.body).toBe(note2.body);
+        await localItemsSameAsRemote(all, expect);
     });
 
     it('should resolve note conflicts', async () => {

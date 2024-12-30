@@ -59,7 +59,7 @@ class Note extends BaseItem {
         return this.modelSelectAll(
             'SELECT ' +
                 this.previewFieldsSql() +
-                ' FROM is_conflict = 0 AND notes WHERE parent_id = ?',
+                ' FROM notes WHERE is_conflict = 0 AND parent_id = ?',
             [parentId]
         );
     }
@@ -68,7 +68,7 @@ class Note extends BaseItem {
         return this.modelSelectOne(
             'SELECT ' +
                 this.previewFieldsSql() +
-                ' FROM is_conflict = 0 AND notes WHERE id = ?',
+                ' FROM notes WHERE is_conflict = 0 AND notes WHERE id = ?',
             [noteId]
         );
     }

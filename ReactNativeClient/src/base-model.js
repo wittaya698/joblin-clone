@@ -141,7 +141,6 @@ class BaseModel {
                 '` = ?',
             [fieldValue]
         );
-        //return this.db().selectOne('SELECT * FROM ' + this.tableName() + ' WHERE `' + fieldName + '` = ?', [fieldValue]);
     }
 
     static applyPatch(model, patch) {
