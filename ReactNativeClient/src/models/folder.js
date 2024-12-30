@@ -5,7 +5,7 @@ import { promiseChain } from '@/src/promise-utils.js';
 import { _ } from '@/src/locale.js';
 import moment from 'moment';
 import { BaseItem } from '@/src/models/base-item.js';
-import { actions } from '@/src/root.js';
+// import { actions } from '@/src/root.js';
 
 class Folder extends BaseItem {
     static tableName() {
@@ -98,7 +98,7 @@ class Folder extends BaseItem {
                 return super.delete(folderId, options);
             })
             .then(() => {
-                this.dispatch(actions.folder_delete({ folderId: folderId }));
+                // this.dispatch(actions.folder_delete({ folderId: folderId }));
             });
     }
 
@@ -129,7 +129,7 @@ class Folder extends BaseItem {
                 );
 
             return super.save(o, options).then(folder => {
-                this.dispatch(actions.folders_update_one({ folder: folder }));
+                // this.dispatch(actions.folders_update_one({ folder: folder }));
                 return folder;
             });
         });

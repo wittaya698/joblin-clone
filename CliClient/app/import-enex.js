@@ -2,8 +2,10 @@ import { uuid } from '@/src/uuid.js';
 import sax from 'sax';
 import moment from 'moment';
 import { promiseChain } from '@/src/promise-utils.js';
-import { WebApi } from '@/src/web-api.js';
 import { folderItemFilename } from '@/src/string-utils.js';
+import { BaseModel } from '@/src/base-model.js';
+import { Note } from '@/src/models/note.js';
+import { Folder } from '@/src/models/folder.js';
 import jsSHA from 'jssha';
 
 import Promise from 'promise';
@@ -14,8 +16,6 @@ import stringToStream from 'string-to-stream';
 // const __dirname = dirname(__filename);
 
 // appModulePath.addPath(__dirname);
-
-let webApi = new WebApi('http://localhost:8000');
 
 const BLOCK_OPEN = '<div>';
 const BLOCK_CLOSE = '</div>';
@@ -474,66 +474,6 @@ function enexXmlToMd(stream, resources) {
     });
 }
 
-// var walk = function (dir, done) {
-//     fs.readdir(dir, function (error, list) {
-//         if (error) return done(error);
-//         var i = 0;
-//         (function next() {
-//             var file = list[i++];
-
-//             if (!file) return done(null);
-//             file = dir + '/' + file;
-
-//             fs.stat(file, function (error, stat) {
-//                 if (stat && stat.isDirectory()) {
-//                     walk(file, function (error) {
-//                         next();
-//                     });
-//                 } else {
-//                     if (path.basename(file) != 'sample4.xml') {
-//                         next();
-//                         return;
-//                     }
-
-//                     if (path.extname(file) == '.xml') {
-//                         console.info('Processing: ' + file);
-//                         let stream = fs.createReadStream(file);
-//                         enexXmlToMd(stream)
-//                             .then(md => {
-//                                 console.info(md);
-//                                 console.info(processMdArrayNewLines(md));
-//                                 next();
-//                             })
-//                             .catch(error => {
-//                                 console.error(error);
-//                                 return done(error);
-//                             });
-//                     } else {
-//                         next();
-//                     }
-//                 }
-//             });
-//         })();
-//     });
-// };
-
-// walk(
-//     '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/',
-//     function (error) {
-//         if (error) {
-//             throw error;
-//         } else {
-//             console.log(
-//                 '-------------------------------------------------------------'
-//             );
-//             console.log('finished.');
-//             console.log(
-//                 '-------------------------------------------------------------'
-//             );
-//         }
-//     }
-// );
-
 function parseXml(xml) {
     return new Promise((resolve, reject) => {
         xml2js.parseString(xml, (err, result) => {
@@ -627,11 +567,30 @@ function xmlNodeText(xmlNode) {
     return xmlNode[0];
 }
 
+let existingTimestamps = [];
+
+function uniqueCreatedTimestamp(timestamp) {
+    if (existingTimestamps.indexOf(timestamp) < 0) {
+        existingTimestamps.push(timestamp);
+        return timestamp;
+    }
+
+    for (let i = 1; i <= 999; i++) {
+        let t = timestamp + i;
+        if (existingTimestamps.indexOf(t) < 0) {
+            existingTimestamps.push(t);
+            return t;
+        }
+    }
+    return timestamp;
+}
+
 function dateToTimestamp(s) {
     let m = moment(s, 'YYYYMMDDTHHmmssZ');
     if (!m.isValid()) {
         throw new Error('Invalid date: ' + s);
     }
+    return m.toDate().getTime();
 }
 
 function evernoteXmlToMdArray(xml) {
@@ -643,73 +602,6 @@ function evernoteXmlToMdArray(xml) {
 function extractRecognitionObjId(recognitionXml) {
     const r = recognitionXml.match(/objID="(.*?)"/);
     return r && r.length >= 2 ? r[1] : null;
-}
-
-function saveNoteToWebApi(note) {
-    let data = Object.assign({}, note);
-    delete data.resources;
-    delete data.tags;
-
-    webApi
-        .post('notes', null, data)
-        .then(r => {
-            // console.info(r);
-        })
-        .catch(error => {
-            console.error('Error for note: ' + note.title);
-            console.error(error);
-        });
-}
-
-function noteserialize_format(propName, propValue) {
-    if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
-        if (!propValue) return '';
-        propValue = moment.unix(propValue).format('YYYY-MM-DD hh:mm:ss');
-    } else if (propValue === null || propValue === undefined) {
-        propValue = '';
-    }
-
-    return propValue;
-}
-
-function noteserialize(note) {
-    let shownKeys = [
-        'author',
-        'longitude',
-        'latitude',
-        'is_todo',
-        'todo_due',
-        'todo_completed',
-        'created_time',
-        'updated_time'
-    ];
-    let output = [];
-
-    output.push(note.title);
-    output.push('');
-    output.push(note.body);
-    output.push('');
-    for (let i = 0; i < shownKeys.length; i++) {
-        let v = note[shownKeys[i]];
-        v = noteserialize_format(shownKeys[i], v);
-        output.push(shownKeys[i] + ': ' + v);
-    }
-
-    return output.join('\n');
-}
-
-// function folderItemFilename(item) {
-// 	let output = escapeFilename(item.title).trim();
-// 	if (!output.length) output = '_';
-// 	return output + '.' + item.id.substr(0, 7);
-// }
-
-function noteFilename(note) {
-    return folderItemFilename(note) + '.md';
-}
-
-function folderFilename(folder) {
-    return folderItemFilename(folder);
 }
 
 function filePutContents(filePath, content) {
@@ -757,33 +649,15 @@ function createDirectory(path) {
     });
 }
 
-const baseNoteDir =
-    '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples';
-
-// createDirectory('/home/laurent/Temp/TestImport').then(() => {
-// 	console.info('OK');
-// }).catch((error) => {
-// 	console.error(error);
-// });
-
-function saveNoteToDisk(folder, note) {
-    const noteContent = noteserialize(note);
-    const notePath =
-        baseNoteDir + '/' + folderFilename(folder) + '/' + noteFilename(note);
-
-    // console.info('===================================================');
-    // console.info(note);//noteContent);
-    return filePutContents(notePath, noteContent).then(() => {
-        return setModifiedTime(
-            notePath,
-            note.updated_time ? note.updated_time : note.created_time
-        );
-    });
-}
-
-function saveFolderToDisk(folder) {
-    let path = baseNoteDir + '/' + folderFilename(folder);
-    return createDirectory(path);
+function removeUndefinedProperties(note) {
+    let output = {};
+    for (let n in note) {
+        if (!note.hasOwnProperty(n)) continue;
+        let v = note[n];
+        if (v === undefined || v === null) continue;
+        output[n] = v;
+    }
+    return output;
 }
 
 function createNoteId(note) {
@@ -802,7 +676,59 @@ function createNoteId(note) {
     return hash.substr(0, 32);
 }
 
-function importEnex(parentFolder, stream) {
+async function fuzzyMatch(note) {
+    let notes = await Note.modelSelectAll(
+        'SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?',
+        note.created_time
+    );
+    if (!notes.length) return null;
+    if (notes.length === 1) return notes[0];
+
+    for (let i = 0; i < notes.length; i++) {
+        if (notes[i].title == note.title && note.title.trim() != '')
+            return notes[i];
+    }
+
+    for (let i = 0; i < notes.length; i++) {
+        if (notes[i].body == note.body && note.body.trim() != '')
+            return notes[i];
+    }
+
+    return null;
+}
+
+async function saveNoteToDb(note) {
+    note = Note.filter(note);
+    let existingNote = await fuzzyMatch(note);
+
+    if (existingNote) {
+        let diff = BaseModel.diffObjects(existingNote, note);
+        delete diff.tags;
+        delete diff.resources;
+        delete diff.id;
+
+        // console.info('======================================');
+        // console.info(note);
+        // console.info(existingNote);
+        // console.info(diff);
+        // console.info('======================================');
+
+        if (!Object.getOwnPropertyNames(diff).length) return;
+        diff.id = existingNote.id;
+        diff.type_ = existingNote.type_;
+        return Note.save(diff, { autoTimestamp: false });
+    } else {
+        console.info('NNNNNNNNNNNNNNNNN4');
+        // return Note.save(note, {
+        // 	isNew: true,
+        // 	autoTimestamp: false,
+        // });
+    }
+}
+
+function importEnex(db, parentFolderId, resourceDir, filePath) {
+    let stream = fs.createReadStream(filePath);
+
     return new Promise((resolve, reject) => {
         let options = {};
         let strict = true;
@@ -815,6 +741,10 @@ function importEnex(parentFolder, stream) {
         let noteResourceAttributes = null;
         let noteResourceRecognition = null;
         let notes = [];
+
+        stream.on('error', error => {
+            reject(new Error(error.toString()));
+        });
 
         function currentNodeName() {
             if (!nodes.length) return null;
@@ -851,29 +781,14 @@ function importEnex(parentFolder, stream) {
                                 firstAttachment = false;
                             }
 
-                            note.parent_id = parentFolder.id;
+                            note.parent_id = parentFolderId;
                             note.body = processMdArrayNewLines(result.lines);
 
                             note.id = uuid.create();
 
-                            saveNoteToDisk(parentFolder, note);
-
-                            // console.info(noteserialize(note));
-                            // console.info('=========================================================================================================================');
-
-                            // saveNoteToWebApi(note);
-
-                            // console.info('======== NOTE ============================================================================');
-                            // let c = note.content;
-                            // delete note.content
-                            // console.info(note);
-                            // console.info('------------------------------------------------------------------------------------------');
-                            // console.info(c);
-
-                            // if (note.resources.length) {
-                            // 	console.info('=========================================================');
-                            // 	console.info(note.content);
-                            // }
+                            return saveNoteToDb(note);
+                            // SAVE NOTE HERE
+                            // saveNoteToDisk(parentFolder, note);
                         }
                     );
                 });
@@ -883,7 +798,7 @@ function importEnex(parentFolder, stream) {
         }
 
         saxStream.on('error', function (e) {
-            reject(e);
+            reject(new Error(e.toString()));
         });
 
         saxStream.on('text', function (text) {
@@ -903,7 +818,9 @@ function importEnex(parentFolder, stream) {
                 if (n == 'title') {
                     note.title = text;
                 } else if (n == 'created') {
-                    note.created_time = dateToTimestamp(text);
+                    note.created_time = uniqueCreatedTimestamp(
+                        dateToTimestamp(text)
+                    );
                 } else if (n == 'updated') {
                     note.updated_time = dateToTimestamp(text);
                 } else if (n == 'tag') {
@@ -948,6 +865,8 @@ function importEnex(parentFolder, stream) {
             nodes.pop();
 
             if (n == 'note') {
+                note = removeUndefinedProperties(note);
+
                 notes.push(note);
                 if (notes.length >= 10) {
                     stream.pause();
@@ -992,7 +911,7 @@ function importEnex(parentFolder, stream) {
                     filename: noteResource.filename
                 };
 
-                r.data = noteResource.data.substr(0, 20); // TODO: REMOVE REMOVE REMOVE REMOVE REMOVE REMOVE
+                // r.data = noteResource.data.substr(0, 20); // TODO: REMOVE REMOVE REMOVE REMOVE REMOVE REMOVE
 
                 note.resources.push(r);
                 noteResource = null;
@@ -1009,57 +928,4 @@ function importEnex(parentFolder, stream) {
     });
 }
 
-// TODO: make it persistent and random
-const clientId = 'AB78AB78AB78AB78AB78AB78AB78AB78';
-
-const folderTitle = 'Laurent';
-// const folderTitle = 'Voiture';
-
-webApi
-    .post('sessions', null, {
-        email: 'wittayathongjeen698@gmail.com',
-        password: '0906198331',
-        client_id: clientId
-    })
-    .then(session => {
-        webApi.setSession(session.id);
-        console.info('Got session: ' + session.id);
-        return webApi.get('folders');
-    })
-    .then(folders => {
-        let folder = null;
-
-        for (let i = 0; i < folders.length; i++) {
-            if (folders[i].title == folderTitle) {
-                folder = folders[i];
-                break;
-            }
-        }
-
-        return folder
-            ? Promise.resolve(folder)
-            : webApi.post('folders', null, { title: folderTitle });
-    })
-    .then(folder => {
-        return saveFolderToDisk(folder).then(() => {
-            return folder;
-        });
-    })
-    .then(folder => {
-        let fileStream = fs.createReadStream(
-            '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/' +
-                folderTitle +
-                '.enex'
-        );
-
-        importEnex(folder, fileStream)
-            .then(() => {
-                //console.info('DONE IMPORTING');
-            })
-            .catch(error => {
-                console.error('Cannot import', error);
-            });
-    })
-    .catch(error => {
-        console.error(error);
-    });
+export { importEnex };

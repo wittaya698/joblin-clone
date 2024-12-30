@@ -11,7 +11,7 @@ import { Note } from '@/src/models/note.js';
 import { Folder } from '@/src/models/folder.js';
 import { Log } from '@/src/log.js';
 import { time } from '@/src/time-utils.js';
-import { actions } from '@/src/root.js';
+// import { actions } from '@/src/root.js';
 
 class NoteFolderService extends BaseService {
     static save(type, item, oldItem, options = null) {

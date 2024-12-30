@@ -146,7 +146,7 @@ class HomeStackComponent extends React.Component {
     componentDidMount() {
         let db = new Database(new DatabaseDriverReactNative());
         // db.setDebugEnabled(Registry.debugMode());
-        db.setDebugEnabled(true);
+        db.setDebugMode(true);
 
         BaseModel.dispatch = this.props.dispatch;
         BaseModel.db_ = db;

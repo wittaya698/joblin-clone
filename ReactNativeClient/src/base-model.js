@@ -110,6 +110,16 @@ class BaseModel {
         return options;
     }
 
+    static count() {
+        return this.db()
+            .selectOne(
+                'SELECT count(*) as total FROM `' + this.tableName() + '`'
+            )
+            .then(r => {
+                return r ? r['total'] : 0;
+            });
+    }
+
     static load(id) {
         return this.loadByField('id', id);
     }
@@ -119,7 +129,7 @@ class BaseModel {
         return this.db()
             .selectOne(sql, params)
             .then(model => {
-                return this.addModelMd(model);
+                return this.filter(this.addModelMd(model));
             });
     }
 
@@ -128,15 +138,15 @@ class BaseModel {
         return this.db()
             .selectAll(sql, params)
             .then(models => {
-                return this.addModelMd(models);
+                return this.filter(this.addModelMd(model));
             });
     }
 
     static loadByField(fieldName, fieldValue) {
         return this.modelSelectOne(
-            'SELECT * FROM ' +
+            'SELECT * FROM `' +
                 this.tableName() +
-                ' WHERE `' +
+                '` WHERE `' +
                 fieldName +
                 '` = ?',
             [fieldValue]
@@ -213,8 +223,9 @@ class BaseModel {
 
     static save(o, options = null) {
         options = this.modOptions(options);
-
         options.isNew = options.isNew == 'auto' ? !o.id : options.isNew;
+
+        o = this.filter(o);
 
         let queries = [];
         let saveQuery = this.saveQuery(o, options);
@@ -257,7 +268,7 @@ class BaseModel {
                 o = Object.assign({}, o);
                 o.id = itemId;
                 o = this.addModelMd(o);
-                return o;
+                return this.filter(o);
             })
             .catch(error => {
                 Log.error('Cannot save model', error);
@@ -272,6 +283,17 @@ class BaseModel {
         return this.db().exec('DELETE FROM deleted_items WHERE item_id = ?', [
             itemId
         ]);
+    }
+
+    static filterArray(models) {
+        let output = [];
+        for (let i = 0; i < models.length; i++) {
+            output.push(this.filter(models[i]));
+        }
+        return output;
+    }
+    static filter(model) {
+        return model;
     }
 
     static delete(id, options = null) {

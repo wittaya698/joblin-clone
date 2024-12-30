@@ -16,7 +16,7 @@ class DatabaseDriverReactNative {
         });
     }
 
-    setDebugEnabled(v) {
+    setDebugMode(v) {
         SQLite.DEBUG(v);
     }
 
