@@ -10,7 +10,6 @@ import { Dropbox } from 'dropbox';
 import { Log } from '@/lib/log.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Database } from '@/lib/database.js';
-import { Registry } from '@/lib/registry.js';
 import { Setting } from '@/lib/models/setting.js';
 
 import { NoteScreen } from '@/lib/components/screens/note.js';
@@ -145,7 +144,6 @@ const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     componentDidMount() {
         let db = new Database(new DatabaseDriverReactNative());
-        // db.setDebugEnabled(Registry.debugMode());
         db.setDebugMode(true);
 
         BaseModel.dispatch = this.props.dispatch;
@@ -155,7 +153,6 @@ class HomeStackComponent extends React.Component {
         db.open({ name: 'joplin-23.sqlite' })
             .then(() => {
                 Log.info('Database is ready.');
-                Registry.setDb(db);
             })
             .then(() => {
                 Log.info('Loading settings...');
@@ -178,9 +175,7 @@ class HomeStackComponent extends React.Component {
                 Log.info('Client ID', Setting.value('clientId'));
                 Log.info('User', user);
 
-                Registry.api().setSession(user.session);
-
-                this.props.dispatch(actions.user_set({ user: user }));
+                // this.props.dispatch(actions.user_set({ user: user }));
 
                 Log.info('Loading folders...');
 
@@ -220,9 +215,9 @@ class HomeStackComponent extends React.Component {
                 // });
                 // return this.api_;
                 // let synchronizer = new Synchronizer(db, Registry.api());
-                let synchronizer = new Synchronizer(db, dropboxApi);
-                Registry.setSynchronizer(synchronizer);
-                synchronizer.start();
+                // let synchronizer = new Synchronizer(db, dropboxApi);
+                // Registry.setSynchronizer(synchronizer);
+                // synchronizer.start();
             })
             .catch(error => {
                 Log.error('Initialization error:', error);
