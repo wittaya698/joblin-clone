@@ -5,11 +5,12 @@ import { promiseChain } from '@/lib/promise-utils.js';
 import { folderItemFilename } from '@/lib/string-utils.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Note } from '@/lib/models/note.js';
+import { Resource } from '@/lib/models/resource.js';
 import { Folder } from '@/lib/models/folder.js';
 import jsSHA from 'jssha';
 
 import Promise from 'promise';
-import fs from 'fs';
+import fs from 'fs-extra';
 import stringToStream from 'string-to-stream';
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -697,7 +698,7 @@ async function fuzzyMatch(note) {
     return null;
 }
 
-async function saveNoteToDb(note) {
+async function saveNoteToStorage(note) {
     note = Note.filter(note);
     let existingNote = await fuzzyMatch(note);
 
@@ -718,15 +719,36 @@ async function saveNoteToDb(note) {
         diff.type_ = existingNote.type_;
         return Note.save(diff, { autoTimestamp: false });
     } else {
-        console.info('NNNNNNNNNNNNNNNNN4');
-        // return Note.save(note, {
-        // 	isNew: true,
-        // 	autoTimestamp: false,
-        // });
+        // id: noteResource.id,
+        // data: decodedData,
+        // mime: noteResource.mime,
+        // title: noteResource.filename,
+        // filename: noteResource.filename,
+
+        // CREATE TABLE resources (
+        // 	id TEXT PRIMARY KEY,
+        // 	title TEXT,
+        // 	mime TEXT,
+        // 	filename TEXT,
+        // 	created_time INT,
+        // 	updated_time INT
+
+        for (let i = 0; i < note.resources.length; i++) {
+            let resource = note.resources[i];
+            let toSave = Object.assign({}, resource);
+            delete toSave.data;
+            await Resource.save(toSave, { isNew: true });
+            await filePutContents(Resource.fullPath(toSave), resource.data);
+        }
+
+        return Note.save(note, {
+            isNew: true,
+            autoTimestamp: false
+        });
     }
 }
 
-function importEnex(db, parentFolderId, resourceDir, filePath) {
+function importEnex(parentFolderId, filePath) {
     let stream = fs.createReadStream(filePath);
 
     return new Promise((resolve, reject) => {
@@ -786,7 +808,7 @@ function importEnex(db, parentFolderId, resourceDir, filePath) {
 
                             note.id = uuid.create();
 
-                            return saveNoteToDb(note);
+                            return saveNoteToStorage(note);
                             // SAVE NOTE HERE
                             // saveNoteToDisk(parentFolder, note);
                         }
@@ -875,7 +897,7 @@ function importEnex(db, parentFolderId, resourceDir, filePath) {
                             stream.resume();
                         })
                         .catch(error => {
-                            console.info('Error processing note', error);
+                            console.error('Error processing note', error);
                         });
                 }
                 note = null;
@@ -906,7 +928,7 @@ function importEnex(db, parentFolderId, resourceDir, filePath) {
                 let r = {
                     id: noteResource.id,
                     data: decodedData,
-                    mime_type: noteResource.mime,
+                    mime: noteResource.mime,
                     title: noteResource.filename,
                     filename: noteResource.filename
                 };

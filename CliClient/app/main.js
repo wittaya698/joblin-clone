@@ -18,9 +18,11 @@ import { _ } from 'lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
-const APPNAME = 'joplin';
-const dataDir = os.homedir() + '/.local/share/' + APPNAME;
+const dataDir = os.homedir() + '/.local/share/' + Setting.value('appName');
 const resourceDir = dataDir + '/resources';
+
+Setting.setConstant('dataDir', dataDir);
+Setting.setConstant('resourceDir', resourceDir);
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -53,19 +55,22 @@ async function main() {
     BaseModel.db_ = db;
     await Setting.load();
 
-    // console.info('DELETING ALL DATA');
-    // await db.exec('DELETE FROM notes');
-    // await db.exec('DELETE FROM changes');
-    // await db.exec('DELETE FROM folders');
-    // await db.exec('DELETE FROM resources');
-    // await db.exec('DELETE FROM deleted_items');
-    // await db.exec('DELETE FROM tags');
-    // await db.exec('DELETE FROM note_tags');
+    console.info('DELETING ALL DATA');
+    await db.exec('DELETE FROM notes');
+    await db.exec('DELETE FROM changes');
+    await db.exec('DELETE FROM folders');
+    await db.exec('DELETE FROM resources');
+    await db.exec('DELETE FROM deleted_items');
+    await db.exec('DELETE FROM tags');
+    await db.exec('DELETE FROM note_tags');
+    let folder = await Folder.save({ title: 'test' });
 
-    // // let folder = await Folder.save({ title: 'test' });
-    // let folder = await Folder.loadByField('title', 'test');
-    // await importEnex(db, folder.id, resourceDir, '/mnt/c/Users/Laurent/Desktop/Laurent.enex'); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
-    // return;
+    // let folder = await Folder.save({ title: 'test' });
+    await importEnex(
+        folder.id,
+        '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/Laurent.enex'
+    ); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
+    return;
 
     let commands = [];
     let currentFolder = null;
@@ -95,6 +100,7 @@ async function main() {
         currentFolder = folder;
         updatePrompt();
     }
+
     function promptString() {
         let path = '~';
         if (currentFolder) {
@@ -106,6 +112,7 @@ async function main() {
     function updatePrompt() {
         vorpal.delimiter(promptString());
     }
+
     // For now, to go around this issue: https://github.com/dthree/vorpal/issues/114
     function quotePromptArg(s) {
         if (s.indexOf(' ') >= 0) {
@@ -125,6 +132,7 @@ async function main() {
             return output;
         });
     }
+
     function autocompleteItems() {
         let promise = null;
         if (!currentFolder) {
