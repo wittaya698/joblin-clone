@@ -58,7 +58,7 @@ async function main() {
     console.info('DELETING ALL DATA');
     await db.exec('DELETE FROM notes');
     await db.exec('DELETE FROM changes');
-    await db.exec('DELETE FROM folders');
+    await db.exec('DELETE FROM folders WHERE is_default = 1');
     await db.exec('DELETE FROM resources');
     await db.exec('DELETE FROM deleted_items');
     await db.exec('DELETE FROM tags');
