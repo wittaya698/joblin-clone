@@ -294,7 +294,6 @@ class Database {
     }
 
     logQuery(sql, params = null) {
-        console.log(sql, params);
         if (!this.debugMode()) return;
 
         if (params !== null) {
