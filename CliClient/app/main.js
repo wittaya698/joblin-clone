@@ -74,6 +74,11 @@ async function main() {
     // ); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
     // return;
 
+    // let testglob = await Note.glob('title', 'La *', {
+    // 	fields: ['title', 'updated_time'],
+    // });
+    // console.info(testglob);
+
     let commands = [];
     let currentFolder = null;
 
@@ -330,40 +335,68 @@ async function main() {
     });
 
     commands.push({
-        usage: 'rm <item-title>',
+        usage: 'rm <pattern>',
         description:
             'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook-name>` to delete a notebook.',
         action: async function (args, end) {
-            let title = args['item-title'];
+            let pattern = args['pattern'];
             let itemType = null;
 
-            if (title.substr(0, 3) == '../') {
-                itemType = BaseModel.MODEL_TYPE_FOLDER;
-                title = title.substr(3);
-            } else {
-                itemType = BaseModel.MODEL_TYPE_NOTE;
-            }
+            if (pattern.indexOf('*') < 0) {
+                // Handle it as a simple title
+                if (title.substr(0, 3) == '../') {
+                    itemType = BaseModel.MODEL_TYPE_FOLDER;
+                    title = title.substr(3);
+                } else {
+                    itemType = BaseModel.MODEL_TYPE_NOTE;
+                }
 
-            let item = await BaseItem.loadItemByField(itemType, 'title', title);
-            if (!item)
-                return cmdError(
-                    this,
-                    _('No item with title "%s" found.', title),
-                    end
+                let item = await BaseItem.loadItemByField(
+                    itemType,
+                    'title',
+                    pattern
                 );
-            await BaseItem.deleteItem(itemType, item.id);
+                if (!item)
+                    return cmdError(
+                        this,
+                        _('No item with title "%s" found.', pattern),
+                        end
+                    );
+                await BaseItem.deleteItem(itemType, item.id);
 
-            if (currentFolder && currentFolder.id == item.id) {
-                let f = await Folder.defaultFolder();
-                switchCurrentFolder(f);
+                if (currentFolder && currentFolder.id == item.id) {
+                    let f = await Folder.defaultFolder();
+                    switchCurrentFolder(f);
+                }
+            } else {
+                // Handle it as a glob pattern
+                let notes = await Note.previews(currentFolder.id, {
+                    titlePattern: pattern
+                });
+                if (!notes.length)
+                    return cmdError(
+                        this,
+                        _('No note matches this pattern: "%s"', pattern),
+                        end
+                    );
+                let ok = await cmdPromptConfirm(
+                    this,
+                    _('%d notes match this pattern. Delete them?', notes.length)
+                );
+                if (!ok) {
+                    for (let i = 0; i < notes.length; i++) {
+                        await Note.delete(notes[i].id);
+                    }
+                }
             }
+
             end();
         },
         autocomplete: autocompleteItems
     });
 
     commands.push({
-        usage: 'ls [notebook-title]',
+        usage: 'ls [pattern]',
         description:
             'Displays the notes in [notebook-title]. Use `ls ..` to display the list of notebooks.',
         options: [
@@ -379,7 +412,7 @@ async function main() {
             ]
         ],
         action: async function (args, end) {
-            let folderTitle = args['notebook-title'];
+            let pattern = args['pattern'];
             let suffix = '';
             let items = [];
             let options = args.options;
@@ -402,26 +435,11 @@ async function main() {
                     queryOptions.itemTypes.push('todo');
             }
 
-            if (folderTitle == '..') {
+            if (pattern == '..') {
                 items = await Folder.all(queryOptions);
                 suffix = '/';
             } else {
-                let folder = null;
-
-                if (folderTitle) {
-                    folder = await Folder.loadByField('title', folderTitle);
-                } else if (currentFolder) {
-                    folder = currentFolder;
-                }
-
-                if (!folder)
-                    return cmdError(
-                        this,
-                        _('Unknown notebook: "%s"', folderTitle),
-                        end
-                    );
-
-                items = await Note.previews(folder.id, queryOptions);
+                items = await Note.previews(currentFolder.id, queryOptions);
             }
 
             for (let i = 0; i < items.length; i++) {
