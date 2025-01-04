@@ -1,3 +1,5 @@
+import sax from 'sax';
+
 const BLOCK_OPEN = '<div>';
 const BLOCK_CLOSE = '</div>';
 const NEWLINE = '<br/>';

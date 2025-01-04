@@ -7,6 +7,7 @@ import { BaseModel } from '@/lib/base-model.js';
 import { Note } from '@/lib/models/note.js';
 import { Resource } from '@/lib/models/resource.js';
 import { Folder } from '@/lib/models/folder.js';
+import { enexXmlToMd } from '@/import-enex-md-gen.js';
 import jsSHA from 'jssha';
 
 import Promise from 'promise';
@@ -102,9 +103,9 @@ async function fuzzyMatch(note) {
     return null;
 }
 
-async function saveNoteToStorage(note) {
+async function saveNoteToStorage(note, fuzzyMatching = false) {
     note = Note.filter(note);
-    let existingNote = await fuzzyMatch(note);
+    let existingNote = fuzzyMatching ? await fuzzyMatch(note) : null;
 
     if (existingNote) {
         let diff = BaseModel.diffObjects(existingNote, note);
@@ -132,11 +133,7 @@ async function saveNoteToStorage(note) {
             // In that case, just skip it - it means two different notes might be linked to the
             // same resource.
             let existingResource = await Resource.load(toSave.id);
-            if (existingResource) {
-                // console.warn('Trying to save: ' + JSON.stringify(toSave));
-                // console.warn('But duplicate:  ' + JSON.stringify(existingResource));
-                continue;
-            }
+            if (existingResource) continue;
 
             await Resource.save(toSave, { isNew: true });
             await filePutContents(Resource.fullPath(toSave), resource.data);
@@ -149,7 +146,11 @@ async function saveNoteToStorage(note) {
     }
 }
 
-function importEnex(parentFolderId, filePath) {
+function importEnex(parentFolderId, filePath, importOptions = null) {
+    if (!importOptions) importOptions = {};
+    if (!('fuzzyMatching' in importOptions))
+        importOptions.fuzzyMatching = false;
+
     let stream = fs.createReadStream(filePath);
 
     return new Promise((resolve, reject) => {
@@ -191,9 +192,12 @@ function importEnex(parentFolderId, filePath) {
 
                             note.id = uuid.create();
                             note.parent_id = parentFolderId;
-                            note.body = processMdArrayNewLines(body);
+                            note.body = body;
 
-                            return saveNoteToStorage(note);
+                            return saveNoteToStorage(
+                                note,
+                                importOptions.fuzzyMatching
+                            );
                         }
                     );
                 });
