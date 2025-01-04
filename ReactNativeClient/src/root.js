@@ -144,7 +144,7 @@ const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     componentDidMount() {
         let db = new Database(new DatabaseDriverReactNative());
-        db.setDebugMode(true);
+        // db.setDebugMode(false);
 
         BaseModel.dispatch = this.props.dispatch;
         BaseModel.db_ = db;

@@ -1,3 +1,5 @@
+require('source-map-support').install();
+
 import { Note } from 'lib/models/note.js';
 import { Folder } from 'lib/models/folder.js';
 import { promiseChain } from 'lib/promise-utils.js';
