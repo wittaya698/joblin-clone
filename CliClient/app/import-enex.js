@@ -105,7 +105,14 @@ async function fuzzyMatch(note) {
 
 async function saveNoteToStorage(note, fuzzyMatching = false) {
     note = Note.filter(note);
+
     let existingNote = fuzzyMatching ? await fuzzyMatch(note) : null;
+
+    let result = {
+        noteCreated: false,
+        noteUpdated: false,
+        resourcesCreated: 0
+    };
 
     if (existingNote) {
         let diff = BaseModel.diffObjects(existingNote, note);
@@ -113,16 +120,16 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
         delete diff.resources;
         delete diff.id;
 
-        // console.info('======================================');
-        // console.info(note);
-        // console.info(existingNote);
-        // console.info(diff);
-        // console.info('======================================');
+        // TODO: also save resouces
 
         if (!Object.getOwnPropertyNames(diff).length) return;
+
         diff.id = existingNote.id;
         diff.type_ = existingNote.type_;
-        return Note.save(diff, { autoTimestamp: false });
+        return Note.save(diff, { autoTimestamp: false }).then(() => {
+            result.noteUpdated = true;
+            return result;
+        });
     } else {
         for (let i = 0; i < note.resources.length; i++) {
             let resource = note.resources[i];
@@ -137,11 +144,15 @@ async function saveNoteToStorage(note, fuzzyMatching = false) {
 
             await Resource.save(toSave, { isNew: true });
             await filePutContents(Resource.fullPath(toSave), resource.data);
+            result.resourcesCreated++;
         }
 
         return Note.save(note, {
             isNew: true,
             autoTimestamp: false
+        }).then(() => {
+            result.noteCreated = true;
+            return result;
         });
     }
 }
@@ -159,7 +170,9 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
     return new Promise((resolve, reject) => {
         let progressState = {
             loaded: 0,
-            imported: 0
+            created: 0,
+            updated: 0,
+            resourcesCreated: 0
         };
 
         let stream = fs.createReadStream(filePath);
@@ -214,8 +227,14 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
                                 importOptions.fuzzyMatching
                             );
                         })
-                        .then(() => {
-                            progressState.imported++;
+                        .then(result => {
+                            if (result.noteUpdated) {
+                                progressState.updated++;
+                            } else if (result.noteCreated) {
+                                progressState.created++;
+                            }
+                            progressState.resourcesCreated +=
+                                result.resourcesCreated;
                             importOptions.onProgress(progressState);
                         });
                 });
