@@ -5,6 +5,7 @@ require('@babel/plugin-transform-runtime');
 
 import { FileApi } from '@/lib/file-api.js';
 import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
+import { FileApiDriverMemory } from '@/lib/file-api-driver-memory.js';
 import { Database } from '@/lib/database.js';
 import { DatabaseDriverNode } from '@/lib/database-driver-node.js';
 import { BaseModel } from '@/lib/base-model.js';
@@ -356,7 +357,8 @@ commands.push({
     usage: 'sync',
     description: 'Synchronizes with remote storage.',
     action: function (args, end) {
-        synchronizer('onedrive')
+        //synchronizer('onedrive').then((s) => {
+        synchronizer('memory')
             .then(s => {
                 return s.start();
             })
@@ -511,6 +513,10 @@ async function synchronizer(remoteBackend) {
         // logger.info('App dir: ' + appDir);
         // fileApi = new FileApi(appDir, driver);
         // fileApi.setLogger(logger);
+    } else if (remoteBackend == 'memory') {
+        let driver = new FileApiDriverMemory();
+        fileApi = new FileApi('joplin', driver);
+        fileApi.setLogger(logger);
     } else {
         throw new Error('Unknown backend: ' + remoteBackend);
     }
