@@ -319,19 +319,19 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
                     : 'evernote';
                 note.source_application = 'joplin.cli';
 
-                if (noteAttributes['reminder-time']) {
-                    console.info(
-                        '======================================================'
-                    );
-                    console.info(noteAttributes);
-                    console.info(
-                        '------------------------------------------------------'
-                    );
-                    console.info(note);
-                    console.info(
-                        '======================================================'
-                    );
-                }
+                // if (noteAttributes['reminder-time']) {
+                //     console.info(
+                //         '======================================================'
+                //     );
+                //     console.info(noteAttributes);
+                //     console.info(
+                //         '------------------------------------------------------'
+                //     );
+                //     console.info(note);
+                //     console.info(
+                //         '======================================================'
+                //     );
+                // }
 
                 noteAttributes = null;
             } else if (n == 'resource') {
