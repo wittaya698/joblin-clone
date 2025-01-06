@@ -421,12 +421,20 @@ commands.push({
 
             if (folderTitle) {
                 folder = await Folder.loadByField('title', folderTitle);
-                if (!folder)
-                    return cmdError(
+                if (!folder) {
+                    let ok = await cmdPromptConfirm(
                         this,
-                        _('Folder does not exists: "%s"', folderTitle),
-                        end
+                        _(
+                            'Folder does not exists: "%s". Create it?',
+                            folderTitle
+                        )
                     );
+                    if (!ok) {
+                        end();
+                        return;
+                    }
+                    folder = await Folder.save({ title: folderTitle });
+                }
             } else {
                 folderTitle = filename(filePath);
                 folderTitle = _('Imported - %s', folderTitle);
