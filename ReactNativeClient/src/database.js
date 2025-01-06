@@ -503,6 +503,7 @@ class Database {
 
                 this.logger().info('Database is new - creating the schema...');
 
+                let now = time.unixMs();
                 let queries = this.wrapQueries(
                     this.sqlStringToLines(structureSql)
                 );
@@ -517,12 +518,14 @@ class Database {
                 );
                 queries.push(
                     this.wrapQuery(
-                        'INSERT INTO folders (`id`, `title`, `is_default`, `created_time`) VALUES ("' +
+                        'INSERT INTO folders (`id`, `title`, `is_default`, `created_time`, `updated_time`) VALUES ("' +
                             uuid.create() +
                             '", "' +
                             _('Notebook') +
                             '", 1, ' +
-                            new Date().getTime() +
+                            now +
+                            ', ' +
+                            now +
                             ')'
                     )
                 );

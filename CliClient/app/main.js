@@ -6,6 +6,7 @@ require('@babel/plugin-transform-runtime');
 import { FileApi } from '@/lib/file-api.js';
 import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
 import { FileApiDriverMemory } from '@/lib/file-api-driver-memory.js';
+import { FileApiDriverLocal } from 'lib/file-api-driver-local.js';
 import { Database } from '@/lib/database.js';
 import { DatabaseDriverNode } from '@/lib/database-driver-node.js';
 import { BaseModel } from '@/lib/base-model.js';
@@ -29,21 +30,34 @@ process.on('unhandledRejection', (reason, p) => {
 
 const packageJson = require('./package.json');
 
-let profileDir = os.homedir() + '/.config/' + Setting.value('appName');
+let initArgs = {
+    profileDir: null,
+    syncTarget: null
+};
+
 let currentFolder = null;
 let commands = [];
 let database_ = null;
-let synchronizer_ = null;
+let synchronizers_ = {};
 let logger = new Logger();
 let dbLogger = new Logger();
 let syncLogger = new Logger();
 
 commands.push({
     usage: 'root',
-    options: [['-p, --profile <filePath>', 'Sets the profile path directory.']],
+    options: [
+        ['-p, --profile <filePath>', 'Sets the profile path directory.'],
+        ['--sync-target <target>', 'Sets the sync target.']
+    ],
     action: function (args, end) {
-        let p = args.profile || args.p;
-        if (p) profileDir = p;
+        if (args.profile) {
+            initArgs.profileDir = args.profile;
+        }
+
+        if (args['sync-target']) {
+            initArgs.syncTarget = args['sync-target'];
+        }
+
         end();
     }
 });
@@ -357,13 +371,14 @@ commands.push({
     usage: 'sync',
     description: 'Synchronizes with remote storage.',
     action: function (args, end) {
-        //synchronizer('onedrive').then((s) => {
-        synchronizer('memory')
+        this.log(_('Synchronization target: %s', Setting.value('sync.target')));
+
+        synchronizer(Setting.value('sync.target'))
             .then(s => {
                 return s.start();
             })
             .catch(error => {
-                logger.error(error);
+                this.log(error);
             })
             .then(() => {
                 end();
@@ -482,12 +497,12 @@ function execCommand(name, args) {
     });
 }
 
-async function synchronizer(remoteBackend) {
-    if (synchronizer_) return synchronizer_;
+async function synchronizer(syncTarget) {
+    if (synchronizers_[syncTarget]) return synchronizers_[syncTarget];
 
     let fileApi = null;
 
-    if (remoteBackend == 'onedrive') {
+    if (syncTarget == 'onedrive') {
         const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
         const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
 
@@ -497,7 +512,7 @@ async function synchronizer(remoteBackend) {
         if (auth) {
             auth = JSON.parse(auth);
         } else {
-            auth = await driver.api().oauthDance();
+            auth = await driver.api().oauthDance(vorpal);
             Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
         }
 
@@ -513,23 +528,24 @@ async function synchronizer(remoteBackend) {
         // logger.info('App dir: ' + appDir);
         // fileApi = new FileApi(appDir, driver);
         // fileApi.setLogger(logger);
-    } else if (remoteBackend == 'memory') {
-        let driver = new FileApiDriverMemory();
-        fileApi = new FileApi('joplin', driver);
+    } else if (syncTarget == 'memory') {
+        fileApi = new FileApi('joplin', new FileApiDriverMemory());
+        fileApi.setLogger(logger);
+    } else if (syncTarget == 'local') {
+        let syncDir = Setting.value('profileDir') + '/sync';
+        vorpal.log(syncDir);
+        await fs.mkdirp(syncDir, 0o755);
+        fileApi = new FileApi(syncDir, new FileApiDriverLocal());
         fileApi.setLogger(logger);
     } else {
-        throw new Error('Unknown backend: ' + remoteBackend);
+        throw new Error('Unknown backend: ' + syncTarget);
     }
 
-    synchronizer_ = new Synchronizer(db, fileApi);
-    synchronizer_.setLogger(syncLogger);
+    synchronizers_[syncTarget] = new Synchronizer(database_, fileApi);
+    synchronizers_[syncTarget].setLogger(syncLogger);
 
-    return synchronizer_;
+    return synchronizers_[syncTarget];
 }
-
-// let s = await synchronizer('onedrive');
-// await synchronizer_.start();
-// return;
 
 function switchCurrentFolder(folder) {
     if (!folder) throw new Error(_('No active folder is defined.'));
@@ -640,27 +656,6 @@ process.stdin.on('keypress', (_, key) => {
 const vorpal = require('vorpal')();
 
 async function main() {
-    // console.info('DELETING ALL DATA');
-    // await db.exec('DELETE FROM notes');
-    // await db.exec('DELETE FROM changes');
-    // await db.exec('DELETE FROM folders');
-    // await db.exec('DELETE FROM resources');
-    // await db.exec('DELETE FROM deleted_items');
-    // await db.exec('DELETE FROM tags');
-    // await db.exec('DELETE FROM note_tags');
-    // let folder1 = await Folder.save({ title: 'test1'});
-    // let folder2 = await Folder.save({ title: 'test2' });
-    // await importEnex(
-    //     folder1.id,
-    //     '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/Laurent.enex'
-    // ); //'/mnt/c/Users/Laurent/Desktop/Laurent.enex');
-    // return;
-
-    // let testglob = await Note.glob('title', 'La *', {
-    // 	fields: ['title', 'updated_time'],
-    // });
-    // console.info(testglob);
-
     for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
         let c = commands[commandIndex];
         let o = vorpal.command(c.usage, c.description);
@@ -689,6 +684,9 @@ async function main() {
 
     await handleStartArgs(process.argv);
 
+    const profileDir = initArgs.profileDir
+        ? initArgs.profileDir
+        : os.homedir() + '/.config/' + Setting.value('appName');
     const resourceDir = profileDir + '/resources';
 
     Setting.setConstant('profileDir', profileDir);
@@ -717,6 +715,9 @@ async function main() {
     BaseModel.db_ = database_;
     await Setting.load();
 
+    if (initArgs.syncTarget)
+        Setting.setValue('sync.target', initArgs.syncTarget);
+
     let activeFolderId = Setting.value('activeFolderId');
     let activeFolder = null;
     if (activeFolderId) activeFolder = await Folder.load(activeFolderId);
@@ -727,5 +728,6 @@ async function main() {
 }
 
 main().catch(error => {
-    console.error('Fatal error: ', error);
+    vorpal.log('Fatal error:');
+    vorpal.log(error);
 });
