@@ -458,6 +458,20 @@ class Database {
         });
     }
 
+    static defaultFolderData() {
+        let now = time.unixMs();
+        return {
+            id: uuid.create(),
+            title: _('Notebook'),
+            created_time: now,
+            updated_time: now
+        };
+    }
+
+    static defaultFolderQuery() {
+        return Database.insertQuery('folders', this.defaultFolderData());
+    }
+
     initialize() {
         this.logger().info('Checking for database schema update...');
 
@@ -503,10 +517,10 @@ class Database {
 
                 this.logger().info('Database is new - creating the schema...');
 
-                let now = time.unixMs();
                 let queries = this.wrapQueries(
                     this.sqlStringToLines(structureSql)
                 );
+
                 queries.push(
                     this.wrapQuery(
                         'INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' +
@@ -516,19 +530,7 @@ class Database {
                             '")'
                     )
                 );
-                queries.push(
-                    this.wrapQuery(
-                        'INSERT INTO folders (`id`, `title`, `is_default`, `created_time`, `updated_time`) VALUES ("' +
-                            uuid.create() +
-                            '", "' +
-                            _('Notebook') +
-                            '", 1, ' +
-                            now +
-                            ', ' +
-                            now +
-                            ')'
-                    )
-                );
+                queries.push(Database.defaultFolderQuery());
 
                 return this.transactionExecBatch(queries)
                     .then(() => {

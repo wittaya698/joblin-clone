@@ -741,7 +741,14 @@ async function main() {
     let activeFolderId = Setting.value('activeFolderId');
     let activeFolder = null;
     if (activeFolderId) activeFolder = await Folder.load(activeFolderId);
-    if (!activeFolder) activeFolder = await Folder.defaultFolder();
+    if (!activeFolder) activeFolder = await Folder.createDefaultFolder();
+    if (!activeFolder)
+        throw new Error(
+            _(
+                'No default notebook is defined and could not create a new one. The database might be corrupted, please delete it and try again.'
+            )
+        );
+
     if (activeFolder) await execCommand('cd', { notebook: activeFolder.title }); // Use execCommand() so that no history entry is created
 
     vorpal.delimiter(promptString()).show();
