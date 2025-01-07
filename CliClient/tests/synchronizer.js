@@ -22,6 +22,8 @@ process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
+
 async function allItems() {
     let folders = await Folder.all();
     let notes = await Note.all();
@@ -55,10 +57,6 @@ async function localItemsSameAsRemote(locals, expect) {
 }
 
 describe('Synchronizer', function () {
-    beforeAll(async () => {
-        jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
-    });
-
     beforeEach(async () => {
         await setupDatabaseAndSynchronizer(1);
         await setupDatabaseAndSynchronizer(2);

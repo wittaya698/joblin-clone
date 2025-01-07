@@ -34,6 +34,8 @@ let initArgs = {
     profileDir: null
 };
 
+Setting.setConstant('appId', 'net.cozic.joplin-cli');
+
 let currentFolder = null;
 let commands = [];
 let database_ = null;
@@ -399,7 +401,7 @@ commands.push({
 
 commands.push({
     usage: 'import-enex <file> [notebook]',
-    description: _('Imports en Evernote notebook file (.enex file).'),
+    description: _('Imports an Evernote notebook file (.enex file).'),
     options: [['--fuzzy-matching', 'For debugging purposes. Do not use.']],
     action: async function (args, end) {
         try {
@@ -770,7 +772,7 @@ async function main() {
         o.action(c.action);
     }
 
-    vorpal.history('net.cozic.joplin'); // Enables persistent history
+    vorpal.history(Setting.value('appId')); // Enables persistent history
 
     let argv = process.argv;
     argv = await handleStartFlags(argv);

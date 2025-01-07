@@ -339,7 +339,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
                 note.source = !!noteAttributes.source
                     ? 'evernote.' + noteAttributes.source
                     : 'evernote';
-                note.source_application = 'joplin.cli';
 
                 // if (noteAttributes['reminder-time']) {
                 //     console.info(
