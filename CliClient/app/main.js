@@ -404,6 +404,7 @@ commands.push({
     description: _('Imports an Evernote notebook file (.enex file).'),
     options: [['--fuzzy-matching', 'For debugging purposes. Do not use.']],
     action: async function (args, end) {
+        let redrawnCalled = false;
         try {
             let filePath = args.file;
             let folder = null;
@@ -454,7 +455,6 @@ commands.push({
                 return;
             }
 
-            let redrawnCalled = false;
             let options = {
                 fuzzyMatching: args.options['fuzzy-matching'] === true,
                 onProgress: progressState => {
@@ -473,6 +473,7 @@ commands.push({
                     vorpal.ui.redraw(line.join(' '));
                 },
                 onError: error => {
+                    if (redrawnCalled) vorpal.ui.redraw.done();
                     let s = error.trace ? error.trace : error.toString();
                     this.log(s);
                 }
@@ -484,11 +485,12 @@ commands.push({
             this.log(_('Importing notes...'));
             await importEnex(folder.id, filePath, options);
             this.log(_('The notes have been imported into "%s"', folderTitle));
-            if (redrawnCalled) vorpal.ui.redraw.done();
             this.log(_('Done.'));
         } catch (error) {
             this.log(error);
         }
+
+        if (redrawnCalled) vorpal.ui.redraw.done();
 
         end();
     }

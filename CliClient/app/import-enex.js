@@ -167,7 +167,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
         let processingNotes = false;
 
         stream.on('error', error => {
-            importOptions.onError(error);
+            reject(new Error(error.toString()));
         });
 
         function currentNodeName() {
