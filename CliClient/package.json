@@ -7,7 +7,7 @@
     "url": "https://github.com/wittaya698/joblin-clone"
   },
   "url": "git://github.com/wittaya698/joblin-clone",
-  "version": "0.8.14",
+  "version": "0.8.21",
   "bin": {
     "joblin": "./main.sh"
   },

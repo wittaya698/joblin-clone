@@ -13,4 +13,4 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
   [[ $SOURCE != /* ]] && SOURCE="$CLIENT_DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
 CLIENT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-NODE_PATH="$CLIENT_DIR:$NODE_PATH" node "$CLIENT_DIR/main.js"
+NODE_PATH="$CLIENT_DIR:$NODE_PATH" node "$CLIENT_DIR/main.js" "$@"
