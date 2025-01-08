@@ -21,6 +21,7 @@ import { sprintf } from 'sprintf-js';
 import { importEnex } from '@/import-enex';
 import { filename, basename } from '@/lib/path-utils.js';
 import { _ } from '@/lib/locale.js';
+import { time } from '@/lib/time-utils.js';
 import os from 'os';
 import fs from 'fs-extra';
 
@@ -225,10 +226,14 @@ commands.push({
     usage: 'rm <pattern>',
     description:
         'Deletes the given item. For a notebook, all the notes within that notebook will be deleted. Use `rm ../<notebook>` to delete a notebook.',
+    options: [
+        ['-f, --force', 'Deletes the items without asking for confirmation.']
+    ],
     action: async function (args, end) {
         try {
             let pattern = args['pattern'];
             let itemType = null;
+            let force = args.options && args.options.force === true;
 
             if (pattern.indexOf('*') < 0) {
                 // Handle it as a simple title
@@ -248,11 +253,16 @@ commands.push({
                     throw new Error(
                         _('No item with title "%s" found.', pattern)
                     );
-                await BaseItem.deleteItem(itemType, item.id);
 
-                if (currentFolder && currentFolder.id == item.id) {
-                    let f = await Folder.defaultFolder();
-                    switchCurrentFolder(f);
+                let ok = force
+                    ? true
+                    : await cmdPromptConfirm(this, _('Delete item?'));
+                if (ok) {
+                    await BaseItem.deleteItem(itemType, item.id);
+                    if (currentFolder && currentFolder.id == item.id) {
+                        let f = await Folder.defaultFolder();
+                        switchCurrentFolder(f);
+                    }
                 }
             } else {
                 // Handle it as a glob pattern
@@ -265,10 +275,15 @@ commands.push({
                         _('No note matches this pattern: "%s"', pattern),
                         end
                     );
-                let ok = await cmdPromptConfirm(
-                    this,
-                    _('%d notes match this pattern. Delete them?', notes.length)
-                );
+                let ok = force
+                    ? true
+                    : await cmdPromptConfirm(
+                          this,
+                          _(
+                              '%d notes match this pattern. Delete them?',
+                              notes.length
+                          )
+                      );
                 if (!ok) {
                     for (let i = 0; i < notes.length; i++) {
                         await Note.delete(notes[i].id);
@@ -317,6 +332,29 @@ commands.push({
 });
 
 commands.push({
+    usage: 'dump',
+    description: 'Dumps the complete database as JSON.',
+    action: async function (args, end) {
+        try {
+            let items = [];
+            let folders = await Folder.all();
+            for (let i = 0; i < folders.length; i++) {
+                let folder = folders[i];
+                let notes = await Note.previews(folder.id);
+                items.push(folder);
+                // console.info(folder.title);
+                items = items.concat(notes);
+            }
+
+            this.log(JSON.stringify(items));
+        } catch (error) {
+            this.log(error);
+        }
+    },
+    autocomplete: autocompleteFolders
+});
+
+commands.push({
     usage: 'ls [pattern]',
     description:
         'Displays the notes in [notebook]. Use `ls ..` to display the list of notebooks.',
@@ -330,7 +368,8 @@ commands.push({
         [
             '-t, --type <type>',
             'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'
-        ]
+        ],
+        ['-f, --format <format>', 'Either "text" or "json"']
     ],
     action: async function (args, end) {
         try {
@@ -364,14 +403,21 @@ commands.push({
                 items = await Note.previews(currentFolder.id, queryOptions);
             }
 
-            for (let i = 0; i < items.length; i++) {
-                let item = items[i];
-                let line = '';
-                if (!!item.is_todo) {
-                    line += sprintf('[%s] ', !!item.todo_completed ? 'X' : ' ');
+            if (options.format && options.format == 'json') {
+                this.log(JSON.stringify(items));
+            } else {
+                for (let i = 0; i < items.length; i++) {
+                    let item = items[i];
+                    let line = '';
+                    if (!!item.is_todo) {
+                        line += sprintf(
+                            '[%s] ',
+                            !!item.todo_completed ? 'X' : ' '
+                        );
+                    }
+                    line += item.title + suffix;
+                    this.log(line);
                 }
-                line += item.title + suffix;
-                this.log(line);
             }
         } catch (error) {
             this.log(error);
@@ -405,12 +451,12 @@ commands.push({
                             report.remotesToDelete
                         )
                     );
-                if (report.localsToUdpate)
+                if (report.localsToUpdate)
                     line.push(
                         _(
                             'Items to download: %d/%d.',
                             report.createLocal + report.updateLocal,
-                            report.localsToUdpate
+                            report.localsToUpdate
                         )
                     );
                 if (report.localsToDelete)
@@ -878,6 +924,7 @@ async function main() {
         let cmd = shellArgsToString(argv);
         await vorpal.exec(cmd);
         await vorpal.exec('exit');
+        await time.sleep(1); // Let loggers finish writing
         return;
     } else {
         vorpal.delimiter(promptString()).show();

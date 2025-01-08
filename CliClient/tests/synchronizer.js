@@ -34,6 +34,7 @@ async function localItemsSameAsRemote(locals, expect) {
     try {
         let files = await fileApi().list();
         files = files.items;
+
         expect(locals.length).toBe(files.length);
 
         for (let i = 0; i < locals.length; i++) {
@@ -42,6 +43,8 @@ async function localItemsSameAsRemote(locals, expect) {
             let remote = await fileApi().stat(path);
 
             expect(!!remote).toBe(true);
+            if (!remote) continue;
+
             expect(remote.updated_time).toBe(dbItem.updated_time);
 
             let remoteContent = await fileApi().get(path);
@@ -213,7 +216,7 @@ describe('Synchronizer', function () {
         expect(folder1_final.title).toBe(folder1_modRemote.title);
     });
 
-    it('should delete remote items', async () => {
+    it('should delete remote notes', async () => {
         let folder1 = await Folder.save({ title: 'folder1' });
         let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
         await synchronizer().start();
@@ -235,6 +238,34 @@ describe('Synchronizer', function () {
         expect(files[0].path).toBe(Folder.systemPath(folder1));
 
         let deletedItems = await BaseModel.deletedItems();
+        expect(deletedItems.length).toBe(0);
+    });
+
+    it('should delete local notes', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
+
+        await switchClient(2);
+
+        await synchronizer().start();
+
+        await sleep(0.1);
+
+        await Note.delete(note1.id);
+
+        await synchronizer().start();
+
+        await switchClient(1);
+
+        await synchronizer().start();
+
+        let items = await allItems();
+
+        expect(items.length).toBe(1);
+
+        let deletedItems = await BaseModel.deletedItems();
+
         expect(deletedItems.length).toBe(0);
     });
 
@@ -265,6 +296,47 @@ describe('Synchronizer', function () {
 
         expect(deletedItems.length).toBe(0);
     });
+
+    // it('should delete remote folder', async () => {
+    //     let folder1 = await Folder.save({ title: 'folder1' });
+    //     let folder2 = await Folder.save({ title: 'folder2' });
+    //     await synchronizer().start();
+
+    //     await switchClient(2);
+
+    //     await synchronizer().start();
+
+    //     await sleep(0.1);
+
+    //     await Folder.delete(folder2.id);
+
+    //     await synchronizer().start();
+
+    //     localItemsSameAsRemote();
+    // });
+
+    // it('should delete local folder', async () => {
+    //     let folder1 = await Folder.save({ title: 'folder1' });
+    //     let folder2 = await Folder.save({ title: 'folder2' });
+    //     await synchronizer().start();
+
+    //     await switchClient(2);
+
+    //     await synchronizer().start();
+
+    //     await sleep(0.1);
+
+    //     await Folder.delete(folder2.id);
+
+    //     await synchronizer().start();
+
+    //     await switchClient(1);
+
+    //     await synchronizer().start();
+
+    //     let items = await allItems();
+    //     localItemsSameAsRemote(items, expect);
+    // });
 
     it('should handle conflict when remote note is deleted then local note is modified', async () => {
         let folder1 = await Folder.save({ title: 'folder1' });
