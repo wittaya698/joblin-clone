@@ -141,53 +141,58 @@ commands.push({
 });
 
 commands.push({
-    usage: 'set <item-title> <prop-name> [prop-value]',
-    description: 'Sets the given <prop-name> of the given item.',
-    action: function (args, end) {
-        let promise = null;
-        let title = args['item-title'];
-        let propName = args['prop-name'];
-        let propValue = args['prop-value'];
-        if (!propValue) propValue = '';
-        if (!currentFolder) {
-            promise = Folder.loadByField('title', title);
-        } else {
-            promise = Note.loadFolderNoteByField(
-                currentFolder.id,
-                'title',
-                title
-            );
-        }
-        promise
-            .then(item => {
-                if (!item) {
-                    this.log(_('No item with title "%s" found.', title));
-                    end();
-                    return;
-                }
-                let newItem = {
-                    id: item.id,
-                    type_: item.type_
-                };
-                newItem[propName] = propValue;
-                let ItemClass = BaseItem.itemClass(newItem);
-                return ItemClass.save(newItem);
-            })
-            .catch(error => {
-                this.log(error);
-            })
-            .then(() => {
+    usage: 'set <title> <name> [value]',
+    description:
+        'Sets the property <name> of the given item to the given [value].',
+    action: async function (args, end) {
+        try {
+            let promise = null;
+            let title = args['title'];
+            let propName = args['name'];
+            let propValue = args['value'];
+            if (!propValue) propValue = '';
+
+            let item = null;
+            if (!currentFolder) {
+                item = await Folder.loadByField('title', title);
+            } else {
+                item = await Note.loadFolderNoteByField(
+                    currentFolder.id,
+                    'title',
+                    title
+                );
+            }
+
+            if (!item) {
+                item = await BaseItem.loadItemById(title);
+            }
+
+            if (!item) {
+                this.log(_('No item with title "%s" found.', title));
                 end();
-            });
+                return;
+            }
+
+            let newItem = {
+                id: item.id,
+                type_: item.type_
+            };
+            newItem[propName] = propValue;
+            let ItemClass = BaseItem.itemClass(newItem);
+            return ItemClass.save(newItem);
+        } catch (error) {
+            this.log(error);
+        }
+        end();
     },
     autocomplete: autocompleteItems
 });
 
 commands.push({
-    usage: 'cat <item-title>',
+    usage: 'cat <title>',
     description: 'Displays the given item data.',
     action: function (args, end) {
-        let title = args['item-title'];
+        let title = args['title'];
         let promise = null;
         if (!currentFolder) {
             promise = Folder.loadByField('title', title);
@@ -435,6 +440,7 @@ commands.push({
 commands.push({
     usage: 'sync',
     description: 'Synchronizes with remote storage.',
+    options: [['--random-failures', 'For debugging purposes. Do not use.']],
     action: function (args, end) {
         let redrawnCalled = false;
         let options = {
@@ -472,13 +478,14 @@ commands.push({
                             report.localsToDelete
                         )
                     );
-                redrawnCalled = true;
-                vorpal.ui.redraw(line.join(' '));
+                // redrawnCalled = true;
+                // vorpal.ui.redraw(line.join(' '));
             },
             onMessage: msg => {
                 if (redrawnCalled) vorpal.ui.redraw.done();
                 this.log(msg);
-            }
+            },
+            randomFailures: args.options['random-failures'] === true
         };
 
         this.log(_('Synchronization target: %s', Setting.value('sync.target')));
@@ -872,8 +879,6 @@ async function main() {
         o.action(c.action);
     }
 
-    vorpal.history(Setting.value('appId')); // Enables persistent history
-
     let argv = process.argv;
     argv = await handleStartFlags(argv);
 
@@ -912,12 +917,6 @@ async function main() {
     let activeFolder = null;
     if (activeFolderId) activeFolder = await Folder.load(activeFolderId);
     if (!activeFolder) activeFolder = await Folder.defaultFolder();
-    // if (!activeFolder)
-    //     throw new Error(
-    //         _(
-    //             'No default notebook is defined and could not create a new one. The database might be corrupted, please delete it and try again.'
-    //         )
-    //     );
     Setting.setValue('activeFolderId', activeFolder ? activeFolder.id : '');
     if (activeFolder) await execCommand('cd', { notebook: activeFolder.title }); // Use execCommand() so that no history entry is created
 
@@ -928,6 +927,7 @@ async function main() {
         await vorpal.exec('exit');
         return;
     } else {
+        vorpal.history(Setting.value('appId')); // Enables persistent history
         vorpal.delimiter(promptString()).show();
         if (!activeFolder) {
             vorpal.log(
