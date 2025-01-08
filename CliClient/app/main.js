@@ -21,7 +21,6 @@ import { sprintf } from 'sprintf-js';
 import { importEnex } from '@/import-enex';
 import { filename, basename } from '@/lib/path-utils.js';
 import { _ } from '@/lib/locale.js';
-import { time } from '@/lib/time-utils.js';
 import os from 'os';
 import fs from 'fs-extra';
 
@@ -342,7 +341,6 @@ commands.push({
                 let folder = folders[i];
                 let notes = await Note.previews(folder.id);
                 items.push(folder);
-                // console.info(folder.title);
                 items = items.concat(notes);
             }
 
@@ -924,7 +922,6 @@ async function main() {
         let cmd = shellArgsToString(argv);
         await vorpal.exec(cmd);
         await vorpal.exec('exit');
-        await time.sleep(1); // Let loggers finish writing
         return;
     } else {
         vorpal.delimiter(promptString()).show();
