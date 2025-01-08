@@ -265,27 +265,29 @@ commands.push({
                 }
             } else {
                 // Handle it as a glob pattern
-                let notes = await Note.previews(currentFolder.id, {
-                    titlePattern: pattern
-                });
-                if (!notes.length)
-                    return cmdError(
-                        this,
-                        _('No note matches this pattern: "%s"', pattern),
-                        end
-                    );
-                let ok = force
-                    ? true
-                    : await cmdPromptConfirm(
-                          this,
-                          _(
-                              '%d notes match this pattern. Delete them?',
-                              notes.length
-                          )
-                      );
-                if (!ok) {
-                    for (let i = 0; i < notes.length; i++) {
-                        await Note.delete(notes[i].id);
+                if (currentFolder) {
+                    let notes = await Note.previews(currentFolder.id, {
+                        titlePattern: pattern
+                    });
+                    if (!notes.length)
+                        return cmdError(
+                            this,
+                            _('No note matches this pattern: "%s"', pattern),
+                            end
+                        );
+                    let ok = force
+                        ? true
+                        : await cmdPromptConfirm(
+                              this,
+                              _(
+                                  '%d notes match this pattern. Delete them?',
+                                  notes.length
+                              )
+                          );
+                    if (!ok) {
+                        for (let i = 0; i < notes.length; i++) {
+                            await Note.delete(notes[i].id);
+                        }
                     }
                 }
             }
@@ -303,6 +305,9 @@ commands.push({
     description: 'Moves the notes matching <pattern> to <notebook>.',
     action: async function (args, end) {
         try {
+            if (!currentFolder)
+                throw new Error(_('Please select a notebook first.'));
+
             let pattern = args['pattern'];
 
             let folder = await Folder.loadByField('title', args['notebook']);
@@ -394,10 +399,12 @@ commands.push({
                     queryOptions.itemTypes.push('todo');
             }
 
-            if (pattern == '..') {
+            if (pattern == '..' || !currentFolder) {
                 items = await Folder.all(queryOptions);
                 suffix = '/';
             } else {
+                if (!currentFolder)
+                    throw new Error(_('Please select a notebook first.'));
                 items = await Note.previews(currentFolder.id, queryOptions);
             }
 
@@ -700,10 +707,8 @@ async function synchronizer(syncTarget) {
 }
 
 function switchCurrentFolder(folder) {
-    if (!folder) throw new Error(_('No active folder is defined.'));
-
     currentFolder = folder;
-    Setting.setValue('activeFolderId', folder.id);
+    Setting.setValue('activeFolderId', folder ? folder.id : '');
     updatePrompt();
 }
 
@@ -907,15 +912,14 @@ async function main() {
     let activeFolder = null;
     if (activeFolderId) activeFolder = await Folder.load(activeFolderId);
     if (!activeFolder) activeFolder = await Folder.defaultFolder();
-    if (!activeFolder) activeFolder = await Folder.createDefaultFolder();
-    if (!activeFolder)
-        throw new Error(
-            _(
-                'No default notebook is defined and could not create a new one. The database might be corrupted, please delete it and try again.'
-            )
-        );
-    Setting.setValue('activeFolderId', activeFolder.id);
-    await execCommand('cd', { notebook: activeFolder.title }); // Use execCommand() so that no history entry is created
+    // if (!activeFolder)
+    //     throw new Error(
+    //         _(
+    //             'No default notebook is defined and could not create a new one. The database might be corrupted, please delete it and try again.'
+    //         )
+    //     );
+    Setting.setValue('activeFolderId', activeFolder ? activeFolder.id : '');
+    if (activeFolder) await execCommand('cd', { notebook: activeFolder.title }); // Use execCommand() so that no history entry is created
 
     // If we still have arguments, pass it to Vorpal and exit
     if (argv.length) {
@@ -925,6 +929,13 @@ async function main() {
         return;
     } else {
         vorpal.delimiter(promptString()).show();
+        if (!activeFolder) {
+            vorpal.log(
+                _(
+                    'No notebook is defined. Create one with `mkbook <notebook>`.'
+                )
+            );
+        }
     }
 }
 
