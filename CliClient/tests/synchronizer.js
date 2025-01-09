@@ -66,288 +66,288 @@ describe('Synchronizer', function () {
         await switchClient(1);
     });
 
-    // it('should create remote items', async () => {
-    //     let folder = await Folder.save({ title: 'folder1' });
-    //     await Note.save({ title: 'un', parent_id: folder.id });
+    it('should create remote items', async () => {
+        let folder = await Folder.save({ title: 'folder1' });
+        await Note.save({ title: 'un', parent_id: folder.id });
 
-    //     let all = await allItems();
+        let all = await allItems();
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await localItemsSameAsRemote(all, expect);
-    // });
+        await localItemsSameAsRemote(all, expect);
+    });
 
-    // it('should update remote item', async () => {
-    //     let folder = await Folder.save({ title: 'folder1' });
-    //     let note = await Note.save({ title: 'un', parent_id: folder.id });
-    //     await synchronizer().start();
+    it('should update remote item', async () => {
+        let folder = await Folder.save({ title: 'folder1' });
+        let note = await Note.save({ title: 'un', parent_id: folder.id });
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Note.save({ title: 'un UPDATE', id: note.id });
+        await Note.save({ title: 'un UPDATE', id: note.id });
 
-    //     let all = await allItems();
-    //     await synchronizer().start();
+        let all = await allItems();
+        await synchronizer().start();
 
-    //     await localItemsSameAsRemote(all, expect);
-    // });
+        await localItemsSameAsRemote(all, expect);
+    });
 
-    // it('should create local items', async () => {
-    //     let folder = await Folder.save({ title: 'folder1' });
-    //     await Note.save({ title: 'un', parent_id: folder.id });
-    //     await synchronizer().start();
+    it('should create local items', async () => {
+        let folder = await Folder.save({ title: 'folder1' });
+        await Note.save({ title: 'un', parent_id: folder.id });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let all = await allItems();
-    //     await localItemsSameAsRemote(all, expect);
-    // });
+        let all = await allItems();
+        await localItemsSameAsRemote(all, expect);
+    });
 
-    // it('should update local items', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-    //     await synchronizer().start();
+    it('should update local items', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     let note2 = await Note.load(note1.id);
-    //     note2.title = 'Updated on client 2';
-    //     await Note.save(note2);
-    //     note2 = await Note.load(note2.id);
+        let note2 = await Note.load(note1.id);
+        note2.title = 'Updated on client 2';
+        await Note.save(note2);
+        note2 = await Note.load(note2.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let all = await allItems();
+        let all = await allItems();
 
-    //     await localItemsSameAsRemote(all, expect);
-    // });
+        await localItemsSameAsRemote(all, expect);
+    });
 
-    // it('should resolve note conflicts', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-    //     await synchronizer().start();
+    it('should resolve note conflicts', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     let note2 = await Note.load(note1.id);
-    //     note2.title = 'Updated on client 2';
-    //     await Note.save(note2);
-    //     note2 = await Note.load(note2.id);
+        let note2 = await Note.load(note1.id);
+        note2.title = 'Updated on client 2';
+        await Note.save(note2);
+        note2 = await Note.load(note2.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     let note2conf = await Note.load(note1.id);
-    //     note2conf.title = 'Updated on client 1';
-    //     await Note.save(note2conf);
-    //     note2conf = await Note.load(note1.id);
+        let note2conf = await Note.load(note1.id);
+        note2conf.title = 'Updated on client 1';
+        await Note.save(note2conf);
+        note2conf = await Note.load(note1.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let conflictedNotes = await Note.conflictedNotes();
+        let conflictedNotes = await Note.conflictedNotes();
 
-    //     expect(conflictedNotes.length).toBe(1);
+        expect(conflictedNotes.length).toBe(1);
 
-    //     // Other than the id (since the conflicted note is a duplicate), and the is_conflict property
-    //     // the conflicted and original note must be the same in every way, to make sure no data has been lost.
-    //     let conflictedNote = conflictedNotes[0];
-    //     expect(conflictedNote.id == note2conf.id).toBe(false);
-    //     for (let n in conflictedNote) {
-    //         if (!conflictedNote.hasOwnProperty(n)) continue;
-    //         if (n == 'id' || n == 'is_conflict') continue;
-    //         expect(conflictedNote[n]).toBe(note2conf[n], 'Property: ' + n);
-    //     }
+        // Other than the id (since the conflicted note is a duplicate), and the is_conflict property
+        // the conflicted and original note must be the same in every way, to make sure no data has been lost.
+        let conflictedNote = conflictedNotes[0];
+        expect(conflictedNote.id == note2conf.id).toBe(false);
+        for (let n in conflictedNote) {
+            if (!conflictedNote.hasOwnProperty(n)) continue;
+            if (n == 'id' || n == 'is_conflict') continue;
+            expect(conflictedNote[n]).toBe(note2conf[n], 'Property: ' + n);
+        }
 
-    //     let noteUpdatedFromRemote = await Note.load(note1.id);
-    //     for (let n in noteUpdatedFromRemote) {
-    //         if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
-    //         if (n == 'sync_time') continue;
-    //         expect(noteUpdatedFromRemote[n]).toBe(note2[n], 'Property: ' + n);
-    //     }
-    // });
+        let noteUpdatedFromRemote = await Note.load(note1.id);
+        for (let n in noteUpdatedFromRemote) {
+            if (!noteUpdatedFromRemote.hasOwnProperty(n)) continue;
+            if (n == 'sync_time') continue;
+            expect(noteUpdatedFromRemote[n]).toBe(note2[n], 'Property: ' + n);
+        }
+    });
 
-    // it('should resolve folders conflicts', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-    //     await synchronizer().start();
+    it('should resolve folders conflicts', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
 
-    //     await switchClient(2); // ----------------------------------
+        await switchClient(2); // ----------------------------------
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     let folder1_modRemote = await Folder.load(folder1.id);
-    //     folder1_modRemote.title = 'folder1 UPDATE CLIENT 2';
-    //     await Folder.save(folder1_modRemote);
-    //     folder1_modRemote = await Folder.load(folder1_modRemote.id);
+        let folder1_modRemote = await Folder.load(folder1.id);
+        folder1_modRemote.title = 'folder1 UPDATE CLIENT 2';
+        await Folder.save(folder1_modRemote);
+        folder1_modRemote = await Folder.load(folder1_modRemote.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(1); // ----------------------------------
+        await switchClient(1); // ----------------------------------
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     let folder1_modLocal = await Folder.load(folder1.id);
-    //     folder1_modLocal.title = 'folder1 UPDATE CLIENT 1';
-    //     await Folder.save(folder1_modLocal);
-    //     folder1_modLocal = await Folder.load(folder1.id);
+        let folder1_modLocal = await Folder.load(folder1.id);
+        folder1_modLocal.title = 'folder1 UPDATE CLIENT 1';
+        await Folder.save(folder1_modLocal);
+        folder1_modLocal = await Folder.load(folder1.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let folder1_final = await Folder.load(folder1.id);
-    //     expect(folder1_final.title).toBe(folder1_modRemote.title);
-    // });
+        let folder1_final = await Folder.load(folder1.id);
+        expect(folder1_final.title).toBe(folder1_modRemote.title);
+    });
 
-    // it('should delete remote notes', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-    //     await synchronizer().start();
+    it('should delete remote notes', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Note.delete(note1.id);
+        await Note.delete(note1.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let files = await fileApi().list();
-    //     files = files.items;
+        let files = await fileApi().list();
+        files = files.items;
 
-    //     expect(files.length).toBe(1);
-    //     expect(files[0].path).toBe(Folder.systemPath(folder1));
+        expect(files.length).toBe(1);
+        expect(files[0].path).toBe(Folder.systemPath(folder1));
 
-    //     let deletedItems = await BaseModel.deletedItems();
-    //     expect(deletedItems.length).toBe(0);
-    // });
+        let deletedItems = await BaseModel.deletedItems();
+        expect(deletedItems.length).toBe(0);
+    });
 
-    // it('should delete local notes', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-    //     await synchronizer().start();
+    it('should delete local notes', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Note.delete(note1.id);
+        await Note.delete(note1.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let items = await allItems();
+        let items = await allItems();
 
-    //     expect(items.length).toBe(1);
+        expect(items.length).toBe(1);
 
-    //     let deletedItems = await BaseModel.deletedItems();
+        let deletedItems = await BaseModel.deletedItems();
 
-    //     expect(deletedItems.length).toBe(0);
-    // });
+        expect(deletedItems.length).toBe(0);
+    });
 
-    // it('should delete remote folder', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let folder2 = await Folder.save({ title: 'folder2' });
-    //     await synchronizer().start();
+    it('should delete remote folder', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let folder2 = await Folder.save({ title: 'folder2' });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Folder.delete(folder2.id);
+        await Folder.delete(folder2.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let all = await allItems();
-    //     localItemsSameAsRemote(all, expect);
-    // });
+        let all = await allItems();
+        localItemsSameAsRemote(all, expect);
+    });
 
-    // it('should delete local folder', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let folder2 = await Folder.save({ title: 'folder2' });
-    //     await synchronizer().start();
+    it('should delete local folder', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let folder2 = await Folder.save({ title: 'folder2' });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Folder.delete(folder2.id);
+        await Folder.delete(folder2.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let items = await allItems();
-    //     localItemsSameAsRemote(items, expect);
-    // });
+        let items = await allItems();
+        localItemsSameAsRemote(items, expect);
+    });
 
-    // it('should cross delete all folders', async () => {
-    //     // If client1 and 2 have two folders, client 1 deletes item 1 and client
-    //     // 2 deletes item 2, they should both end up with no items after sync.
+    it('should cross delete all folders', async () => {
+        // If client1 and 2 have two folders, client 1 deletes item 1 and client
+        // 2 deletes item 2, they should both end up with no items after sync.
 
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let folder2 = await Folder.save({ title: 'folder2' });
-    //     await synchronizer().start();
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let folder2 = await Folder.save({ title: 'folder2' });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Folder.delete(folder1.id);
+        await Folder.delete(folder1.id);
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await Folder.delete(folder2.id);
+        await Folder.delete(folder2.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let items2 = await allItems();
+        let items2 = await allItems();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let items1 = await allItems();
+        let items1 = await allItems();
 
-    //     expect(items1.length).toBe(0);
-    //     expect(items1.length).toBe(items2.length);
-    // });
+        expect(items1.length).toBe(0);
+        expect(items1.length).toBe(items2.length);
+    });
 
     it('should handle conflict when remote note is deleted then local note is modified', async () => {
         let folder1 = await Folder.save({ title: 'folder1' });
@@ -377,67 +377,67 @@ describe('Synchronizer', function () {
         expect(conflictedNotes[0].title).toBe(newTitle);
     });
 
-    // it('should handle conflict when remote folder is deleted then local folder is renamed', async () => {
-    //     let folder1 = await Folder.save({ title: 'folder1' });
-    //     let folder2 = await Folder.save({ title: 'folder2' });
-    //     let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
-    //     await synchronizer().start();
+    it('should handle conflict when remote folder is deleted then local folder is renamed', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let folder2 = await Folder.save({ title: 'folder2' });
+        let note1 = await Note.save({ title: 'un', parent_id: folder1.id });
+        await synchronizer().start();
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await Folder.delete(folder1.id);
+        await Folder.delete(folder1.id);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     let newTitle = 'Modified after having been deleted';
-    //     await Folder.save({ id: folder1.id, title: newTitle });
+        let newTitle = 'Modified after having been deleted';
+        await Folder.save({ id: folder1.id, title: newTitle });
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let items = await allItems();
+        let items = await allItems();
 
-    //     expect(items.length).toBe(1);
-    // });
+        expect(items.length).toBe(1);
+    });
 
-    // it('should allow duplicate folder title and rename the new one', async () => {
-    //     let localF1 = await Folder.save({ title: 'folder' });
+    it('should allow duplicate folder title and rename the new one', async () => {
+        let localF1 = await Folder.save({ title: 'folder' });
 
-    //     await switchClient(2);
+        await switchClient(2);
 
-    //     let remoteF2 = await Folder.save({ title: 'folder' });
-    //     await synchronizer().start();
+        let remoteF2 = await Folder.save({ title: 'folder' });
+        await synchronizer().start();
 
-    //     await switchClient(1);
+        await switchClient(1);
 
-    //     await sleep(0.1);
+        await sleep(0.1);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     let localF2 = await Folder.load(remoteF2.id);
+        let localF2 = await Folder.load(remoteF2.id);
 
-    //     expect(localF2.title == remoteF2.title).toBe(false);
+        expect(localF2.title == remoteF2.title).toBe(false);
 
-    //     // Then that folder that has been renamed locally should be set in such a way
-    //     // that synchronizing it applies the title change remotely, and that new title
-    //     // should be retrieved by client 2.
+        // Then that folder that has been renamed locally should be set in such a way
+        // that synchronizing it applies the title change remotely, and that new title
+        // should be retrieved by client 2.
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     await switchClient(2);
-    //     await sleep(0.1);
+        await switchClient(2);
+        await sleep(0.1);
 
-    //     await synchronizer().start();
+        await synchronizer().start();
 
-    //     remoteF2 = await Folder.load(remoteF2.id);
+        remoteF2 = await Folder.load(remoteF2.id);
 
-    //     expect(remoteF2.title == localF2.title).toBe(true);
-    // });
+        expect(remoteF2.title == localF2.title).toBe(true);
+    });
 });
