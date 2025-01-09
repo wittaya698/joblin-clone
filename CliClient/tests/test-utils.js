@@ -33,7 +33,7 @@ function sleep(n) {
 }
 
 async function switchClient(id) {
-    await time.msleep(200);
+    await time.msleep(200); // Always leave a little time so that updated_time properties don't overlap
     await Setting.saveAll();
 
     currentClient_ = id;
