@@ -411,7 +411,7 @@ describe('Synchronizer', function () {
         expect(items.length).toBe(1);
     });
 
-    it('should allow duplicate folder title and rename the new one', async () => {
+    it('should allow duplicate folder titles', async () => {
         let localF1 = await Folder.save({ title: 'folder' });
 
         await switchClient(2);
@@ -427,7 +427,7 @@ describe('Synchronizer', function () {
 
         let localF2 = await Folder.load(remoteF2.id);
 
-        expect(localF2.title == remoteF2.title).toBe(false);
+        expect(localF2.title == remoteF2.title).toBe(true);
 
         // Then that folder that has been renamed locally should be set in such a way
         // that synchronizing it applies the title change remotely, and that new title

@@ -3,13 +3,13 @@ require('@babel/plugin-transform-runtime');
 
 import { time } from '@/lib/time-utils.js';
 import { Logger } from '@/lib/logger.js';
+import { dirname } from '@/lib/path-utils.js';
 import lodash from 'lodash';
 
 const exec = require('child_process').exec;
 const fs = require('fs-extra');
 
-const baseDir =
-    '/Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/tests/fuzzing';
+const baseDir = dirname(__dirname) + '/tests/fuzzing';
 const syncDir = baseDir + '/sync';
 const joplinAppPath = __dirname + '/main.js';
 let syncDurations = [];
@@ -2091,6 +2091,15 @@ function execCommand(client, command, options = {}) {
     });
 }
 
+async function clientItems(client) {
+    let itemsJson = await execCommand(client, 'dump');
+    try {
+        return JSON.parse(itemsJson);
+    } catch (error) {
+        throw new Error('Cannot parse JSON: ' + itemsJson);
+    }
+}
+
 async function execRandomCommand(client) {
     let possibleCommands = [
         ['mkbook {word}', 40], // CREATE FOLDER
@@ -2098,8 +2107,7 @@ async function execRandomCommand(client) {
         [
             async () => {
                 // DELETE RANDOM ITEM
-                let items = await execCommand(client, 'dump');
-                items = JSON.parse(items);
+                let items = clientItems(client);
                 let item = randomElement(items);
                 if (!item) return;
 
@@ -2130,8 +2138,7 @@ async function execRandomCommand(client) {
         [
             async () => {
                 // UPDATE RANDOM ITEM
-                let items = await execCommand(client, 'dump');
-                items = JSON.parse(items);
+                let items = clientItems(client);
                 let item = randomElement(items);
                 if (!item) return;
                 return execCommand(
