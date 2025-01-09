@@ -50,8 +50,8 @@ async function localItemsSameAsRemote(locals, expect) {
             let remoteContent = await fileApi().get(path);
             remoteContent =
                 dbItem.type_ == BaseModel.MODEL_TYPE_NOTE
-                    ? Note.unserialize(remoteContent)
-                    : Folder.unserialize(remoteContent);
+                    ? await Note.unserialize(remoteContent)
+                    : await Folder.unserialize(remoteContent);
             expect(remoteContent.title).toBe(dbItem.title);
         }
     } catch (error) {
