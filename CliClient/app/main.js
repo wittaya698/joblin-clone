@@ -478,8 +478,6 @@ commands.push({
                             report.localsToDelete
                         )
                     );
-                // redrawnCalled = true;
-                // vorpal.ui.redraw(line.join(' '));
             },
             onMessage: msg => {
                 if (redrawnCalled) vorpal.ui.redraw.done();

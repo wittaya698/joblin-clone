@@ -759,7 +759,7 @@ function randomWord() {
         'faded',
         'talk',
         'air',
-        'mess up',
+        'messup',
         'decorous',
         'sneaky',
         'mark',
@@ -2094,7 +2094,7 @@ function execCommand(client, command, options = {}) {
 async function execRandomCommand(client) {
     let possibleCommands = [
         ['mkbook {word}', 40], // CREATE FOLDER
-        ['mknote {word}', 100], // CREATE NOTE
+        ['mknote {word}', 70], // CREATE NOTE
         [
             async () => {
                 // DELETE RANDOM ITEM
@@ -2119,13 +2119,13 @@ async function execRandomCommand(client) {
                 let avgSyncDuration = averageSyncDuration();
                 let options = {};
                 if (!isNaN(avgSyncDuration)) {
-                    // if (Math.random() >= 0.5) {
-                    //     options.killAfter = avgSyncDuration * Math.random();
-                    // }
+                    if (Math.random() >= 0.5) {
+                        options.killAfter = avgSyncDuration * Math.random();
+                    }
                 }
                 return execCommand(client, 'sync --random-failures', options);
             },
-            40
+            30
         ],
         [
             async () => {
@@ -2288,8 +2288,7 @@ async function main(argv) {
             })
             .then(r => {
                 if (r) {
-                    logger.info('Client ' + clientId + ':');
-                    logger.info(r);
+                    logger.info('Client ' + clientId + ':\n' + r.trim());
                 }
                 clients[clientId].activeCommandCount--;
             });
