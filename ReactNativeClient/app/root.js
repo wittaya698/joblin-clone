@@ -1,29 +1,30 @@
 import React from 'react';
-
+import { View, Button, TextInput } from 'react-native';
+import { connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { connect, Provider } from 'react-redux';
 import { createStackNavigator } from '@react-navigation/stack';
-import { MenuProvider } from 'react-native-popup-menu';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { Dropbox } from 'dropbox';
-
 import { Log } from '@/lib/log.js';
+import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
-import { Database } from '@/lib/database.js';
-import { Setting } from '@/lib/models/setting.js';
-
-import { NoteScreen } from '@/lib/components/screens/note.js';
-import { NotesScreen } from '@/lib/components/screens/notes.js';
-import { FolderScreen } from '@/lib/components/screens/folder.js';
-import { FoldersScreen } from '@/lib/components/screens/folders.js';
-import { LoginScreen } from '@/lib/components/screens/login.js';
-import { LoadingScreen } from '@/lib/components/screens/loading.js';
-import { ItemListComponent } from '@/lib/components/item-list.js';
 import { BaseModel } from '@/lib/base-model.js';
+import { Database } from '@/lib/database.js';
+import { ItemList } from '@/app/components/item-list.js';
+import { NoteScreen } from '@/app/components/screens/note.js';
+import { NotesScreen } from '@/app/components/screens/notes.js';
+import { FolderScreen } from '@/app/components/screens/folder.js';
+import { FoldersScreen } from '@/app/components/screens/folders.js';
+import { LoginScreen } from '@/app/components/screens/login.js';
+import { LoadingScreen } from '@/app/components/screens/loading.js';
+import { Setting } from '@/lib/models/setting.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
-import { SideMenuContent } from '@/lib/components/side-menu-content.js';
-import { NoteFolderService } from '@/lib/services/note-folder-service.js';
+import { MenuProvider } from 'react-native-popup-menu';
+import { SideMenuContent } from '@/app/components/side-menu-content.js';
+// import { NoteFolderService } from '@/lib/services/note-folder-service.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
+
+import { Dropbox } from 'dropbox';
 
 let defaultState = {
     nav: {},
@@ -148,7 +149,7 @@ class HomeStackComponent extends React.Component {
 
         BaseModel.dispatch = this.props.dispatch;
         BaseModel.db_ = db;
-        NoteFolderService.dispatch = this.props.dispatch;
+        // NoteFolderService.dispatch = this.props.dispatch;
 
         db.open({ name: 'joplin-23.sqlite' })
             .then(() => {
@@ -195,7 +196,7 @@ class HomeStackComponent extends React.Component {
 
                 if (!folder) throw new Error('No default folder is defined');
 
-                return NoteFolderService.openNoteList(folder.id);
+                // return NoteFolderService.openNoteList(folder.id);
 
                 // this.props.dispatch({
                 // 	type: 'Navigation/NAVIGATE',
@@ -225,7 +226,6 @@ class HomeStackComponent extends React.Component {
     }
 
     render() {
-        ItemListComponent.dispatch = this.props.dispatch;
         return (
             <MenuProvider>
                 <Stack.Navigator initialRouteName="Loading">

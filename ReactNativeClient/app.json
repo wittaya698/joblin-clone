@@ -1,13 +1,22 @@
 {
+  "name": "AwesomeProject",
+  "displayName": "AwesomeProject",
   "expo": {
     "name": "AwesomeProject",
+    "description": "No description",
     "slug": "AwesomeProject",
+    "sdkVersion": "18.0.0",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "primaryColor": "#cccccc",
+    "icon": "./assets/images/app-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "notification": {
+      "icon": "./assets/icons/notification-icon.png",
+      "color": "#000000"
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.AwesomeProject"
