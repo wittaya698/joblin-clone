@@ -236,6 +236,14 @@ commands.push({
     usage: 'edit <title>',
     description: 'Edit note.',
     action: async function (args, end) {
+        let watcher = null;
+        const onFinishedEditing = () => {
+            if (watcher) watcher.close();
+            vorpal.show();
+            this.log(_('Done editing.'));
+            end();
+        };
+
         try {
             let title = args['title'];
 
@@ -251,42 +259,48 @@ commands.push({
 
             let editorPath = getTextEditorPath();
             let editorArgs = editorPath.split(' ');
+
             editorPath = editorArgs[0];
-            editorArgs = [editorArgs[1]];
+            editorArgs = editorArgs.splice(1);
 
             let content = await Note.serializeForEdit(note);
 
-            const temp = require('temp');
+            let tempFilePath =
+                Setting.value('profileDir') + '/tmp/' + Note.systemPath(note);
+            editorArgs.push(tempFilePath);
+
             const spawn = require('child_process').spawn;
 
-            this.log(_('Starting to edit note...'));
+            this.log(
+                _(
+                    'Starting to edit note. Close the editor to get back to the prompt.'
+                )
+            );
 
             vorpal.hide();
 
-            temp.track();
+            await fs.writeFile(tempFilePath, content);
 
-            temp.open(Setting.value('appName'), async (error, info) => {
-                if (error) throw error;
+            let watchTimeout = null;
+            watcher = fs.watch(tempFilePath, (eventType, filename) => {
+                // We need a timeout because for each change to the file, multiple events are generated.
 
-                await fs.writeFile(info.path, content);
+                if (watchTimeout) return;
 
-                fs.watch(info.path, (eventType, filename) => {
-                    console.info('cHANGE...');
-                });
+                watchTimeout = setTimeout(async () => {
+                    let updatedNote = await fs.readFile(tempFilePath, 'utf8');
+                    updatedNote = await Note.unserializeForEdit(updatedNote);
+                    updatedNote.id = note.id;
+                    await Note.save(updatedNote);
+                    watchTimeout = null;
+                }, 200);
+            });
 
-                // https://github.com/dthree/vorpal/issues/190
-
-                editorArgs.push(info.path);
-
-                const childProcess = spawn(editorPath, editorArgs, {
-                    stdio: 'inherit'
-                });
-
-                childProcess.on('exit', (error, code) => {
-                    this.log(_('Done editing note.'));
-                    vorpal.show();
-                    end();
-                });
+            const childProcess = spawn(editorPath, editorArgs, {
+                stdio: 'inherit'
+            });
+            childProcess.on('exit', (error, code) => {
+                onFinishedEditing();
             });
         } catch (error) {
             this.log(error);
@@ -991,7 +1005,7 @@ function getTextEditorPath() {
 }
 
 process.stdin.on('keypress', (_, key) => {
-    console.info(_, key);
+    // console.info(_, key);
 
     if (key && key.name === 'return') {
         updatePrompt();
