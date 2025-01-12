@@ -11,6 +11,15 @@ class OneDriveApi {
         };
     }
 
+    static instance() {
+        if (this.instance_) return this.instance_;
+
+        const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
+        const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
+        this.instance_ = new OneDriveApi(CLIENT_ID, CLIENT_SECRET);
+        return this.instance_;
+    }
+
     dispatch(eventName, param) {
         let ls = this.listeners_[eventName];
         for (let i = 0; i < ls.length; i++) {
@@ -46,10 +55,6 @@ class OneDriveApi {
         return this.clientSecret_;
     }
 
-    // possibleOAuthDancePorts() {
-    //     return [1917, 9917, 8917];
-    // }
-
     async appDirectory() {
         let r = await this.execJson('GET', '/drive/special/approot');
         return r.parentReference.path + '/' + r.name;
@@ -66,6 +71,40 @@ class OneDriveApi {
             'https://login.microsoftonline.com/6315ae7d-2ca8-436c-babf-b4fe1c0e0a77/oauth2/v2.0/authorize?' +
             stringify(query)
         );
+    }
+
+    async execTokenRequest(code, redirectUri, isPublic = false) {
+        let body = new shim.FormData();
+        body.append('client_id', this.clientId());
+        if (!isPublic) body.append('client_secret', this.clientSecret());
+        body.append('code', code);
+        body.append('redirect_uri', redirectUri);
+        body.append('grant_type', 'authorization_code');
+
+        const r = await shim.fetch(this.tokenBaseUrl(), {
+            method: 'POST',
+            body: body
+        });
+
+        if (!r.ok) {
+            const text = await r.text();
+            throw new Error(
+                'Could not retrieve auth code: ' +
+                    r.status +
+                    ': ' +
+                    r.statusText +
+                    ': ' +
+                    text
+            );
+        }
+        try {
+            const json = await r.json();
+            this.setAuth(json);
+        } catch (error) {
+            const text = await r.text();
+            error.message += ': ' + text;
+            throw error;
+        }
     }
 
     oneDriveErrorResponseToError(errorResponse) {
@@ -171,107 +210,6 @@ class OneDriveApi {
     async refreshAccessToken() {
         throw new Error('refreshAccessToken() needed to be implemented');
     }
-
-    // async oauthDance(targetConsole = null) {
-    //     if (targetConsole === null) targetConsole = console;
-
-    //     this.auth_ = null;
-
-    //     let ports = this.possibleOAuthDancePorts();
-    //     let port = null;
-    //     for (let i = 0; i < ports.length; i++) {
-    //         let inUse = await tcpPortUsed.check(ports[i]);
-    //         if (!inUse) {
-    //             port = ports[i];
-    //             break;
-    //         }
-    //     }
-
-    //     if (!port)
-    //         throw new Error(
-    //             'All potential ports are in use - please report the issue at https://github.com/laurent22/joplin'
-    //         );
-
-    //     let authCodeUrl = this.authCodeUrl('http://localhost:' + port);
-
-    //     return new Promise((resolve, reject) => {
-    //         let server = http.createServer();
-    //         let errorMessage = null;
-
-    //         server.on('request', (request, response) => {
-    //             const query = urlParser.parse(request.url, true).query;
-
-    //             function writeResponse(code, message) {
-    //                 response.writeHead(code, { 'Content-Type': 'text/html' });
-    //                 response.write(message);
-    //                 response.end();
-    //             }
-
-    //             if (!query.code)
-    //                 return writeResponse(
-    //                     400,
-    //                     '"code" query parameter is missing'
-    //                 );
-
-    //             let body = new shim.FormData();
-    //             body.append('client_id', this.clientId());
-    //             // body.append('client_secret', this.clientSecret());
-    //             body.append('code', query.code ? query.code : '');
-    //             body.append(
-    //                 'redirect_uri',
-    //                 'http://localhost:' + port.toString()
-    //             );
-    //             body.append('grant_type', 'authorization_code');
-
-    //             let options = {
-    //                 method: 'POST',
-    //                 body: body
-    //             };
-
-    //             fetch(this.tokenBaseUrl(), options).then(r => {
-    //                 if (!r.ok) {
-    //                     errorMessage =
-    //                         'Could not retrieve auth code: ' +
-    //                         r.status +
-    //                         ': ' +
-    //                         r.statusText;
-    //                     writeResponse(400, errorMessage);
-    //                     targetConsole.log('');
-    //                     targetConsole.log(errorMessage);
-    //                     server.destroy();
-    //                     return;
-    //                 }
-
-    //                 return r.json().then(json => {
-    //                     this.auth_ = json;
-    //                     writeResponse(
-    //                         200,
-    //                         'The application has been authorised - you may now close this browser tab.'
-    //                     );
-    //                     server.destroy();
-    //                 });
-    //             });
-    //         });
-
-    //         server.on('close', () => {
-    //             if (errorMessage) {
-    //                 reject(new Error(errorMessage));
-    //             } else {
-    //                 resolve(this.auth_);
-    //             }
-    //         });
-
-    //         server.listen(port);
-
-    //         enableServerDestroy(server);
-
-    //         targetConsole.info(
-    //             'Please open this URL in your browser to authentify the application:'
-    //         );
-    //         targetConsole.log('');
-    //         targetConsole.log(authCodeUrl);
-    //     });
-    // }
 }
 
 export { OneDriveApi };

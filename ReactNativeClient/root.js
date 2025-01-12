@@ -18,6 +18,7 @@ import { FolderScreen } from '@/lib/components/screens/folder.js';
 import { FoldersScreen } from '@/lib/components/screens/folders.js';
 import { LoginScreen } from '@/lib/components/screens/login.js';
 import { LoadingScreen } from '@/lib/components/screens/loading.js';
+import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
 import { Setting } from '@/lib/models/setting.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -193,6 +194,10 @@ class HomeStackComponent extends React.Component {
                 <Stack.Screen name="Folders" component={FoldersScreen} />
                 <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Loading" component={LoadingScreen} />
+                <Stack.Screen
+                    name="OneDriveLogin"
+                    component={OneDriveLoginScreen}
+                />
             </Stack.Navigator>
         );
     }

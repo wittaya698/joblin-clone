@@ -4,13 +4,13 @@ import { time } from '@/lib/time-utils.js';
 import moment from 'moment';
 
 // Critical -> To be removed
-// const modelClasses = {
-//     Folder: require('@/lib/models/folder.js').Folder,
-//     NoteTag: require('@/lib/models/note-tag.js').NoteTag,
-//     Note: require('@/lib/models/note.js').Note,
-//     Resource: require('@/lib/models/resource.js').Resource,
-//     Tag: require('@/lib/models/tag.js').Tag
-// };
+const modelClasses = {
+    Folder: (() => require('@/lib/models/folder.js')).Folder,
+    NoteTag: (() => require('@/lib/models/note-tag.js')).NoteTag,
+    Note: (() => require('@/lib/models/note.js')).Note,
+    Resource: (() => require('@/lib/models/resource.js')).Resource,
+    Tag: (() => require('@/lib/models/tag.js')).Tag
+};
 
 class BaseItem extends BaseModel {
     static useUuid() {
@@ -25,8 +25,8 @@ class BaseItem extends BaseModel {
         if (name == 'NoteTag') filename = 'note-tag';
 
         // Critical -> To be removed
-        // this.classes_[name] = modelClasses[name];
-        this.classes_[name] = require('lib/models/' + filename + '.js')[name];
+        this.classes_[name] = Promise.resolve(modelClasses[name]);
+        // this.classes_[name] = require('lib/models/' + filename + '.js')[name];
 
         return this.classes_[name];
     }

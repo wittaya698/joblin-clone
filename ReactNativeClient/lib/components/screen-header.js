@@ -47,6 +47,8 @@ class ScreenHeaderComponent extends Component {
     }
 
     menu_synchronize() {
+        this.props.navigator.navigate('OneDriveLogin');
+
         // const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
         // const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
         // let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);

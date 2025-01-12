@@ -805,30 +805,31 @@ async function synchronizer(syncTarget) {
     let fileApi = null;
 
     if (syncTarget == 'onedrive') {
-        const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
-        const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
+        let oneDriveApi = oneDriveApi.instance();
+        // const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
+        // const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
 
-        let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+        // let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+        let driver = new FileApiDriverOneDrive(oneDriveApi);
         let auth = Setting.value('sync.onedrive.auth');
 
         if (auth) {
             auth = JSON.parse(auth);
         } else {
-            //auth = await driver.api().oauthDance(vorpal);
-            const oneDriveApiUtils = new OneDriveApiNodeUtils(driver.api());
+            const oneDriveApiUtils = new OneDriveApiNodeUtils(oneDriveApi);
             auth = await oneDriveApiUtils.oauthDance(vorpal);
             Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
         }
 
-        driver.api().setAuth(auth);
-        driver.api().on('authRefreshed', a => {
+        //oneDriveApi.setAuth(auth);
+        oneDriveApi.on('authRefreshed', a => {
             Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
         });
 
         throw new Error(
             'OneDrive not supported yet: Tenant does not have a SPO license.'
         );
-        // let appDir = await driver.api().appDirectory();
+        // let appDir = await oneDriveApi.appDirectory();
         // logger.info('App dir: ' + appDir);
         // fileApi = new FileApi(appDir, driver);
         // fileApi.setLogger(logger);
