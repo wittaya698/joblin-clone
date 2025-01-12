@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { _ } from '@/lib/locale.js';
 import { Setting } from '@/lib/models/setting.js';
-import { actions } from '@/lib/root.js';
+import { actions } from '@/root.js';
 
 import {
     Menu,

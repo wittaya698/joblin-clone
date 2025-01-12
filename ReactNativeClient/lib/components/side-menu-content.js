@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'react-native';
-import { NoteFolderService } from '@/lib/services/note-folder-service.js';
+import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 
 import { StyleSheet, ScrollView } from 'react-native';
 
@@ -34,7 +34,7 @@ class SideMenuContentComponent extends Component {
 
     folder_press(folder) {
         navigator.navigate('Notes');
-        NoteFolderService.openNoteList(folder.id);
+        NotesScreenUtils.openNoteList(folder.id);
     }
 
     render() {

@@ -130,12 +130,7 @@ class Database {
     // so that it prints a stacktrace when passed to
     // console.error()
     sqliteErrorToJsError(error, sql = null, params = null) {
-        let msg = [error.toString()];
-        if (sql) msg.push(sql);
-        if (params) msg.push(params);
-        let output = new Error(msg.join(': '));
-        if (error.code) output.code = error.code;
-        return output;
+        return this.driver().sqliteErrorToJsError(error, sql, params);
     }
 
     setLogger(l) {
@@ -472,7 +467,7 @@ class Database {
                 // TODO: only do this if db has been updated:
                 // return this.refreshTableFields();
             } catch (error) {
-                if (error && error.code != 0 && error.code != 'SQLITE_ERROR')
+                if (error && error.code != 0 && error.code != 5)
                     throw this.sqliteErrorToJsError(error);
 
                 // Assume that error was:

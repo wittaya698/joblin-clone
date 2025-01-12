@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { NoteList } from '@/lib/components/note-list.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Folder } from '@/lib/models/folder.js';
-import { actions } from '@/lib/root.js';
+import { actions } from '@/root.js';
 import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 

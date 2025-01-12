@@ -11,8 +11,9 @@ import { Folder } from '@/lib/models/folder.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Database } from '@/lib/database.js';
 import { ItemList } from '@/lib/components/item-list.js';
-import { NoteScreen } from '@/lib/components/screens/note.js';
 import { NotesScreen } from '@/lib/components/screens/notes.js';
+import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
+import { NoteScreen } from '@/lib/components/screens/note.js';
 import { FolderScreen } from '@/lib/components/screens/folder.js';
 import { FoldersScreen } from '@/lib/components/screens/folders.js';
 import { LoginScreen } from '@/lib/components/screens/login.js';
@@ -21,7 +22,6 @@ import { Setting } from '@/lib/models/setting.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SideMenuContent } from '@/lib/components/side-menu-content.js';
-// import { NoteFolderService } from '@/lib/services/note-folder-service.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
 
 import { Dropbox } from 'dropbox';
@@ -148,10 +148,11 @@ class HomeStackComponent extends React.Component {
         // db.setDebugMode(false);
 
         BaseModel.dispatch = this.props.dispatch;
+        NotesScreenUtils.dispatch = this.props.dispatch;
         BaseModel.db_ = db;
-        // NoteFolderService.dispatch = this.props.dispatch;
+        navigator = this.props.navigation;
 
-        db.open({ name: 'joplin-23.sqlite' })
+        db.open({ name: 'joplin-25.sqlite' })
             .then(() => {
                 Log.info('Database is ready.');
             })
@@ -160,23 +161,7 @@ class HomeStackComponent extends React.Component {
                 return Setting.load();
             })
             .then(() => {
-                let user = Setting.object('user');
-
-                if (!user || !user.session) {
-                    user = {
-                        email: 'wittayathongjeen698@gmail.com',
-                        session: '96e5b998c9a5025e37f76d4c97ced906'
-                    };
-                    Setting.setObject('user', user);
-                    this.props.dispatch(actions.user_set({ user: user }));
-                }
-
-                Setting.setValue('sync.lastRevId', '123456');
-
-                Log.info('Client ID', Setting.value('clientId'));
-                Log.info('User', user);
-
-                // this.props.dispatch(actions.user_set({ user: user }));
+                Setting.setConstant('appId', 'net.cozic.joplin-android');
 
                 Log.info('Loading folders...');
 
@@ -192,33 +177,7 @@ class HomeStackComponent extends React.Component {
                     });
             })
             .then(folders => {
-                let folder = folders[0];
-
-                if (!folder) throw new Error('No default folder is defined');
-
-                // return NoteFolderService.openNoteList(folder.id);
-
-                // this.props.dispatch({
-                // 	type: 'Navigation/NAVIGATE',
-                // 	routeName: 'Notes',
-                // 	folderId: folder.id,
-                // });
-            })
-            .then(() => {
-                var dropboxApi = new Dropbox({ accessToken: '' });
-                // dbx.filesListFolder({path: '/Joplin/Laurent.4e847cc'})
-                // .then(function(response) {
-                // //console.log('DROPBOX RESPONSE', response);
-                // console.log('DROPBOX RESPONSE', response.entries.length, response.has_more);
-                // })
-                // .catch(function(error) {
-                // console.log('DROPBOX ERROR', error);
-                // });
-                // return this.api_;
-                // let synchronizer = new Synchronizer(db, Registry.api());
-                // let synchronizer = new Synchronizer(db, dropboxApi);
-                // Registry.setSynchronizer(synchronizer);
-                // synchronizer.start();
+                navigator.navigate('Folders');
             })
             .catch(error => {
                 Log.error('Initialization error:', error);
@@ -227,16 +186,14 @@ class HomeStackComponent extends React.Component {
 
     render() {
         return (
-            <MenuProvider>
-                <Stack.Navigator initialRouteName="Loading">
-                    <Stack.Screen name="Notes" component={NotesScreen} />
-                    <Stack.Screen name="Note" component={NoteScreen} />
-                    <Stack.Screen name="Folder" component={FolderScreen} />
-                    <Stack.Screen name="Folders" component={FoldersScreen} />
-                    <Stack.Screen name="Login" component={LoginScreen} />
-                    <Stack.Screen name="Loading" component={LoadingScreen} />
-                </Stack.Navigator>
-            </MenuProvider>
+            <Stack.Navigator initialRouteName="Loading">
+                <Stack.Screen name="Notes" component={NotesScreen} />
+                <Stack.Screen name="Note" component={NoteScreen} />
+                <Stack.Screen name="Folder" component={FolderScreen} />
+                <Stack.Screen name="Folders" component={FoldersScreen} />
+                <Stack.Screen name="Login" component={LoginScreen} />
+                <Stack.Screen name="Loading" component={LoadingScreen} />
+            </Stack.Navigator>
         );
     }
 }
@@ -248,11 +205,14 @@ export const HomeStack = connect(state => {
 const Drawer = createDrawerNavigator();
 const App = () => {
     return (
-        <Drawer.Navigator
-            drawerContent={props => <SideMenuContent {...props} />}
-        >
-            <Drawer.Screen name="Home" component={HomeStack} />
-        </Drawer.Navigator>
+        <MenuProvider>
+            <Drawer.Navigator
+                drawerContent={props => <SideMenuContent {...props} />}
+            >
+                <Drawer.Screen name="Home" component={HomeStack} />
+                <Drawer.Screen name="Folders" component={FoldersScreen} />
+            </Drawer.Navigator>
+        </MenuProvider>
     );
 };
 

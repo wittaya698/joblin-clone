@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { actions } from '@/lib/root.js';
+import { actions } from '@/root.js';
 import { ItemListComponent } from '@/lib/components/item-list.js';
 
 class NoteListComponent extends ItemListComponent {

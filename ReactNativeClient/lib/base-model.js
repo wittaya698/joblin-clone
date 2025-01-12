@@ -1,6 +1,6 @@
 import { Log } from '@/lib/log.js';
 import { Database } from '@/lib/database.js';
-// import 'react-native-get-random-values';
+import 'react-native-get-random-values';
 import { uuid } from '@/lib/uuid.js';
 import { time } from '@/lib/time-utils.js';
 

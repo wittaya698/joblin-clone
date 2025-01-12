@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
 import { Checkbox } from '@/lib/components/checkbox.js';
-import { NoteFolderService } from '@/lib/services/note-folder-service.js';
+import { Note } from '@/lib/models/note.js';
 
 class ItemListComponent extends Component {
     constructor() {
@@ -24,14 +24,9 @@ class ItemListComponent extends Component {
         });
     }
 
-    todoCheckbox_change(itemId, checked) {
-        NoteFolderService.setField('note', itemId, 'todo_completed', checked);
-
-        // Note.load(itemId).then(oldNote => {
-        //     let newNote = Object.assign({}, oldNote);
-        //     newNote.todo_completed = checked;
-        //     return NoteFolderService.save('note', newNote, oldNote);
-        // });
+    async todoCheckbox_change(itemId, checked) {
+        let note = await Note.load(itemId);
+        await Note.save({ id: note.id, todo_completed: checked });
     }
 
     listView_itemPress(itemId) {}

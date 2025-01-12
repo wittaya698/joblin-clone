@@ -1,7 +1,14 @@
 import { BaseModel } from '@/lib/base-model.js';
 import { Database } from '@/lib/database.js';
-import { time } from 'lib/time-utils.js';
+import { time } from '@/lib/time-utils.js';
 import moment from 'moment';
+
+// Critical -> To be removed
+const modelClasses = {
+    folder: require('@/lib/models/folder.js').Folder
+    // Product: require('lib/models/Product.js').Product
+    // Add other models here
+};
 
 class BaseItem extends BaseModel {
     static useUuid() {
@@ -15,7 +22,7 @@ class BaseItem extends BaseModel {
         let filename = name.toLowerCase();
         if (name == 'NoteTag') filename = 'note-tag';
 
-        this.classes_[name] = require('lib/models/' + filename + '.js')[name];
+        this.classes_[name] = modelClasses[name];
         return this.classes_[name];
     }
 

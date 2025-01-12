@@ -6,7 +6,7 @@ import { Log } from '@/lib/log.js';
 import { Setting } from '@/lib/models/setting.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { _ } from '@/lib/locale.js';
-import { actions } from '@/lib/root.js';
+import { actions } from '@/root.js';
 
 class LoginScreenComponent extends React.Component {
     static navigationOptions(options) {

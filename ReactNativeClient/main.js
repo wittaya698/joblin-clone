@@ -6,15 +6,12 @@
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
 
-import { Root } from '@/root.js';
 import React, { Component } from 'react';
-import { Registry } from '@/lib/registry';
-import { Log } from '@/lib/log';
+import { Log } from '@/lib/log.js';
+import { Root } from '@/root.js';
 
 export default class Main extends Component {
     render() {
-        Registry.setDebugMode(true);
-        Log.setLevel(Registry.debugMode() ? Log.LEVEL_DEBUG : Log.LEVEL_WARN);
         console.ignoredYellowBox = ['Remote debugger'];
         Log.info(
             'START ======================================================================================================'
