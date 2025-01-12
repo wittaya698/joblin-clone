@@ -467,7 +467,12 @@ class Database {
                 // TODO: only do this if db has been updated:
                 // return this.refreshTableFields();
             } catch (error) {
-                if (error && error.code != 0 && error.code != 5)
+                if (
+                    error &&
+                    error.code != 0 &&
+                    error.code != 5 &&
+                    error.code != 'SQLITE_ERROR'
+                )
                     throw this.sqliteErrorToJsError(error);
 
                 // Assume that error was:

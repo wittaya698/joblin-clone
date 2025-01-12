@@ -1,4 +1,5 @@
 require('source-map-support').install();
+require('@babel/plugin-transform-runtime');
 
 import { time } from 'lib/time-utils.js';
 import {

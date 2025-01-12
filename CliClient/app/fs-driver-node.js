@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+const fs = require('fs-extra');
 
 class FsDriverNode {
     appendFileSync(path, string) {
@@ -14,4 +14,5 @@ class FsDriverNode {
         return fs.readFile(path);
     }
 }
-export { FsDriverNode };
+
+module.exports.FsDriverNode = FsDriverNode;
