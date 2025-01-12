@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { _ } from '@/lib/locale.js';
 import { Setting } from '@/lib/models/setting.js';
+import { FileApi } from '@/lib/file-api.js';
+import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
 import { actions } from '@/root.js';
 
 import {
@@ -44,14 +46,18 @@ class ScreenHeaderComponent extends Component {
         }
     }
 
-    menu_login() {
-        this.props.navigator.navigate('Login');
-    }
-
-    menu_logout() {
-        let user = { email: null, session: null };
-        Setting.setObject('user', user);
-        this.props.dispatch(actions.user_set({ user: user }));
+    menu_synchronize() {
+        // const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
+        // const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
+        // let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+        // let auth = Setting.value('sync.onedrive.auth');
+        // if (auth) {
+        // 	auth = JSON.parse(auth);
+        // } else {
+        // 	driver.api().oauthDance(vorpal);
+        // 	//auth = driver.api().oauthDance(vorpal);
+        // 	//Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
+        // }
     }
 
     render() {
@@ -72,25 +78,14 @@ class ScreenHeaderComponent extends Component {
             );
         }
 
-        if (this.props.user && this.props.user.session) {
-            menuOptionComponents.push(
-                <MenuOption
-                    value={() => this.menu_logout()}
-                    key={'menuOption_' + key++}
-                >
-                    <Text>{_('Logout')}</Text>
-                </MenuOption>
-            );
-        } else {
-            menuOptionComponents.push(
-                <MenuOption
-                    value={() => this.menu_login()}
-                    key={'menuOption_' + key++}
-                >
-                    <Text>{_('Login')}</Text>
-                </MenuOption>
-            );
-        }
+        menuOptionComponents.push(
+            <MenuOption
+                value={() => this.menu_synchronize()}
+                key={'menuOption_' + key++}
+            >
+                <Text>{_('Synchronize')}</Text>
+            </MenuOption>
+        );
 
         menuOptionComponents.push(
             <MenuOption value={1} key={'menuOption_' + key++}>
