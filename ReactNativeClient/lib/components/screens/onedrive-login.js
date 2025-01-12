@@ -4,8 +4,9 @@ import { WebView } from 'react-native-webview';
 import { Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
+import { Setting } from '@/lib/models/setting.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
-import { OneDriveApi } from '@/lib/onedrive-api.js';
+import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
 
 class OneDriveLoginScreenComponent extends React.Component {
@@ -21,16 +22,12 @@ class OneDriveLoginScreenComponent extends React.Component {
 
     UNSAFE_componentWillMount() {
         this.setState({
-            webviewUrl: this.api().authCodeUrl(this.redirectUrl())
+            webviewUrl: reg.oneDriveApi().authCodeUrl(this.redirectUrl())
         });
     }
 
-    api() {
-        return OneDriveApi.instance();
-    }
-
     redirectUrl() {
-        return 'https://login.microsoftonline.com/6315ae7d-2ca8-436c-babf-b4fe1c0e0a77/oauth2/nativeclient';
+        return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
     }
 
     async webview_load(noIdeaWhatThisIs) {
@@ -39,31 +36,21 @@ class OneDriveLoginScreenComponent extends React.Component {
         // at the moment so it's likely to change.
         const url = noIdeaWhatThisIs.url;
 
-        console.info('URL: ' + url);
+        if (
+            !this.authCode_ &&
+            url.indexOf(this.redirectUrl() + '?code=') === 0
+        ) {
+            console.info('URL: ' + url);
 
-        if (!this.authCode_) {
-            if (url.indexOf(this.redirectUrl() + '?code=') === 0) {
-                let code = url.split('?code=');
-                this.authCode_ = code[1];
+            let code = url.split('?code=');
+            code = code[1].split('&session_state');
+            this.authCode_ = code[0];
 
-                await this.api().execTokenRequest(
-                    this.authCode_,
-                    this.redirectUrl(),
-                    true
-                );
-                Setting.setValue(
-                    'sync.onedrive.auth',
-                    JSON.stringify(this.api().auth())
-                );
-                OneDriveApi.on('authRefreshed', a => {
-                    Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
-                });
+            await reg
+                .oneDriveApi()
+                .execTokenRequest(this.authCode_, this.redirectUrl(), true);
 
-                let appDir = await this.api().appDirectory();
-                Log.info('APP DIR: ' + appDir);
-                // fileApi = new FileApi(appDir, driver);
-                // fileApi.setLogger(logger);
-            }
+            this.authCode_ = null;
         }
     }
 
@@ -71,8 +58,6 @@ class OneDriveLoginScreenComponent extends React.Component {
         const source = {
             uri: this.state.webviewUrl
         };
-
-        // <Button title="Start" onPress={() => this.startButton_press()}></Button>
 
         let nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;

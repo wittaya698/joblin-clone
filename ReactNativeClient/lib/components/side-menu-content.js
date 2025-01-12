@@ -41,7 +41,7 @@ class SideMenuContentComponent extends Component {
         let buttons = [];
         for (let i = 0; i < this.props.folders.length; i++) {
             let f = this.props.folders[i];
-            let title = f.title;
+            let title = f.title ? f.title : '';
             buttons.push(
                 <Button
                     style={styles.button}

@@ -5,6 +5,7 @@ import { _ } from '@/lib/locale.js';
 import { Setting } from '@/lib/models/setting.js';
 import { FileApi } from '@/lib/file-api.js';
 import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
+import { reg } from '@/lib/registry.js';
 import { actions } from '@/root.js';
 
 import {
@@ -46,20 +47,15 @@ class ScreenHeaderComponent extends Component {
         }
     }
 
-    menu_synchronize() {
-        this.props.navigator.navigate('OneDriveLogin');
-
-        // const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
-        // const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
-        // let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
-        // let auth = Setting.value('sync.onedrive.auth');
-        // if (auth) {
-        // 	auth = JSON.parse(auth);
-        // } else {
-        // 	driver.api().oauthDance(vorpal);
-        // 	//auth = driver.api().oauthDance(vorpal);
-        // 	//Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
-        // }
+    async menu_synchronize() {
+        if (reg.oneDriveApi().auth()) {
+            let errMessage =
+                "OneDrive API haven'n been able to be synced yet: Tenant does not have a SPO license";
+            console.error(errMessage);
+            throw new Error(errMessage);
+        } else {
+            navigator.navigate('OneDriveLogin');
+        }
     }
 
     render() {

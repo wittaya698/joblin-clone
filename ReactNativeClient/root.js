@@ -24,6 +24,7 @@ import { Synchronizer } from '@/lib/synchronizer.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SideMenuContent } from '@/lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
+import { reg } from '@/lib/registry.js';
 
 import { Dropbox } from 'dropbox';
 
@@ -146,7 +147,7 @@ const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     componentDidMount() {
         let db = new Database(new DatabaseDriverReactNative());
-        // db.setDebugMode(false);
+        reg.setDb(db);
 
         BaseModel.dispatch = this.props.dispatch;
         NotesScreenUtils.dispatch = this.props.dispatch;

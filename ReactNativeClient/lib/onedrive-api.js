@@ -11,15 +11,6 @@ class OneDriveApi {
         };
     }
 
-    static instance() {
-        if (this.instance_) return this.instance_;
-
-        const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
-        const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
-        this.instance_ = new OneDriveApi(CLIENT_ID, CLIENT_SECRET);
-        return this.instance_;
-    }
-
     dispatch(eventName, param) {
         let ls = this.listeners_[eventName];
         for (let i = 0; i < ls.length; i++) {
