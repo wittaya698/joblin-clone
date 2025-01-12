@@ -1,11 +1,17 @@
 import moment from 'moment';
-// import fs from 'fs-extra';
+import { _ } from '@/lib/locale.js';
+import FsDriverDummy from '@/lib/fs-driver-dummy.js';
 
 class Logger {
     constructor() {
         this.targets_ = [];
         this.level_ = Logger.LEVEL_ERROR;
         this.fileApendQueue_ = [];
+    }
+
+    static fsDriver() {
+        if (!Logger.fsDriver_) Logger.fsDriver_ = new FsDriverDummy();
+        return Logger.fsDriver_;
     }
 
     setLevel(level) {
@@ -65,8 +71,10 @@ class Logger {
                     serializedObject = object;
                 }
 
-                // RNFIX: Temporary disabled for React Native
-                // fs.appendFileSync(t.path, line + serializedObject + '\n');
+                Logger.fsDriver().appendFileSync(
+                    t.path,
+                    line + serializedObject + '\n'
+                );
 
                 // this.fileApendQueue_.push({
                 //     path: t.path,
