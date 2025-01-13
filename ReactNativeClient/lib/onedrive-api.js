@@ -3,13 +3,22 @@ import { stringify } from 'query-string';
 import { time } from '@/lib/time-utils.js';
 
 class OneDriveApi {
-    constructor(clientId, clientSecret) {
+    // `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
+    // apps are considered "public"), in which case the secret should not be sent to the API.
+    // In practice the React Native app is public, and the Node one is not because we
+    // use a local server for the OAuth dance.
+    constructor(clientId, clientSecret, isPublic) {
         this.clientId_ = clientId;
         this.clientSecret_ = clientSecret;
         this.auth_ = null;
+        this.isPublic_ = isPublic;
         this.listeners_ = {
             authRefreshed: []
         };
+    }
+
+    isPublic() {
+        return this.isPublic_;
     }
 
     dispatch(eventName, param) {
@@ -33,6 +42,7 @@ class OneDriveApi {
 
     setAuth(auth) {
         this.auth_ = auth;
+        this.dispatch('authRefreshed', this.auth());
     }
 
     token() {
@@ -65,10 +75,10 @@ class OneDriveApi {
         );
     }
 
-    async execTokenRequest(code, redirectUri, isPublic = false) {
+    async execTokenRequest(code, redirectUri) {
         let body = new shim.FormData();
         body.append('client_id', this.clientId());
-        if (!isPublic) body.append('client_secret', this.clientSecret());
+        if (!this.isPublic()) body.append('client_secret', this.clientSecret());
         body.append('code', code);
         body.append('redirect_uri', redirectUri);
         body.append('grant_type', 'authorization_code');
@@ -92,8 +102,8 @@ class OneDriveApi {
         try {
             const json = await r.json();
             this.setAuth(json);
-            this.dispatch('authRefreshed', this.auth());
         } catch (error) {
+            this.setAuth(null);
             const text = await r.text();
             error.message += ': ' + text;
             throw error;

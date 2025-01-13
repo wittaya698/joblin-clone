@@ -219,6 +219,7 @@ class HomeStackComponent extends React.Component {
             await Setting.load();
 
             Setting.setConstant('appId', 'net.cozic.joplin-android');
+            Setting.setConstant('appType', 'mobile');
             Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
 
             Log.info('Loading folders...');

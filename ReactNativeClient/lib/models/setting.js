@@ -70,7 +70,12 @@ class Setting extends BaseModel {
     }
 
     static value(key) {
-        if (key in this.constants_) return this.constants_[key];
+        if (key in this.constants_) {
+            let output = this.constants_[key];
+            if (output == 'SET_ME')
+                throw new Error('Setting constant has not been set: ' + key);
+            return output;
+        }
 
         if (!this.cache_)
             throw new Error('Settings have not been initialized!');
@@ -155,6 +160,7 @@ Setting.defaults_ = {
 // cannot be modified by the user:
 Setting.constants_ = {
     appName: 'joplin',
+    appType: 'SET_ME', // 'cli' or 'mobile'
     appId: 'SET_ME', // Each app should set this identifier
     resourceDir: '',
     profileDir: '',

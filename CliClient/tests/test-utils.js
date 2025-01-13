@@ -38,6 +38,9 @@ BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
 
+Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appType', 'cli');
+
 function sleep(n) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
@@ -105,7 +108,11 @@ async function setupDatabaseAndSynchronizer(id = null) {
     await setupDatabase(id);
 
     if (!synchronizers_[id]) {
-        synchronizers_[id] = new Synchronizer(db(id), fileApi());
+        synchronizers_[id] = new Synchronizer(
+            db(id),
+            fileApi(),
+            Setting.value('appType')
+        );
         synchronizers_[id].setLogger(logger);
     }
 

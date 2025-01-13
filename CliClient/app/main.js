@@ -46,6 +46,7 @@ Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
 
 Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appType', 'cli');
 
 let currentFolder = null;
 let commands = [];
@@ -588,7 +589,7 @@ commands.push({
     usage: 'sync',
     description: 'Synchronizes with remote storage.',
     options: [['--random-failures', 'For debugging purposes. Do not use.']],
-    action: function (args, end) {
+    action: async function (args, end) {
         let options = {
             onProgress: report => {
                 let line = [];
@@ -634,19 +635,22 @@ commands.push({
         };
 
         this.log(_('Synchronization target: %s', Setting.value('sync.target')));
-        synchronizer(Setting.value('sync.target'))
-            .then(s => {
-                this.log(_('Starting synchronization...'));
-                return s.start(options);
-            })
-            .catch(error => {
-                this.log(error);
-            })
-            .then(() => {
-                vorpalUtils.redrawDone();
-                this.log(_('Done.'));
-                end();
-            });
+
+        let sync = await synchronizer(Setting.value('sync.target'));
+        if (!sync) {
+            end();
+            return;
+        }
+        try {
+            this.log(_('Starting synchronization...'));
+            await sync.start(options);
+        } catch {
+            this.log(error);
+        }
+
+        vorpalUtils.redrawDone();
+        this.log(_('Done.'));
+        end();
     }
 });
 
@@ -811,12 +815,14 @@ async function synchronizer(syncTarget) {
         let driver = new FileApiDriverOneDrive(oneDriveApi);
         let auth = Setting.value('sync.onedrive.auth');
 
-        if (auth) {
-            auth = JSON.parse(auth);
-        } else {
+        if (!oneDriveApi.auth()) {
             const oneDriveApiUtils = new OneDriveApiNodeUtils(oneDriveApi);
             auth = await oneDriveApiUtils.oauthDance(vorpal);
-            Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
+            Setting.setValue(
+                'sync.onedrive.auth',
+                auth ? JSON.stringify(auth) : auth
+            );
+            if (!auth) return;
         }
 
         throw new Error(
@@ -840,7 +846,11 @@ async function synchronizer(syncTarget) {
         throw new Error('Unknown backend: ' + syncTarget);
     }
 
-    synchronizers_[syncTarget] = new Synchronizer(database_, fileApi);
+    synchronizers_[syncTarget] = new Synchronizer(
+        database_,
+        fileApi,
+        Setting.value('appType')
+    );
     synchronizers_[syncTarget].setLogger(syncLogger);
 
     return synchronizers_[syncTarget];
