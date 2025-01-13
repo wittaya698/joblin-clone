@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { shim } from '@/lib/shim.js';
 import { Log } from '@/lib/log.js';
+import { Logger } from '@/lib/logger.js';
 import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Resource } from '@/lib/models/resource.js';
@@ -14,8 +15,8 @@ import { Tag } from '@/lib/models/tag.js';
 import { NoteTag } from '@/lib/models/note-tag.js';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { BaseModel } from '@/lib/base-model.js';
-import { Database } from '@/lib/database.js';
 import { JoplinDatabase } from '@/lib/joplin-database.js';
+import { Database } from '@/lib/database.js';
 import { ItemList } from '@/lib/components/item-list.js';
 import { NotesScreen } from '@/lib/components/screens/notes.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
@@ -23,6 +24,7 @@ import { NoteScreen } from '@/lib/components/screens/note.js';
 import { FolderScreen } from '@/lib/components/screens/folder.js';
 import { FoldersScreen } from '@/lib/components/screens/folders.js';
 import { LoginScreen } from '@/lib/components/screens/login.js';
+import { LogScreen } from '@/lib/components/screens/log.js';
 import { LoadingScreen } from '@/lib/components/screens/loading.js';
 import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
 import { Setting } from '@/lib/models/setting.js';
@@ -52,6 +54,7 @@ const navReducer = createSlice({
     initialState: defaultState,
     reducers: {
         set_navigator: (state, action) => {
+            reg.logger().info('New route name', action.payload.navigator);
             state.navigator = action.payload.navigator;
         },
         navigate: (state, action) => {
@@ -190,6 +193,19 @@ class HomeStackComponent extends React.Component {
             }
         };
 
+        Setting.setConstant('appId', 'net.cozic.joplin-android');
+        Setting.setConstant('appType', 'mobile');
+
+        const logDatabase = new Database(new DatabaseDriverReactNative());
+        await logDatabase.open({ name: 'log.sqlite' });
+        await logDatabase.exec(Logger.databaseCreateTableSql());
+        reg.logger().addTarget('database', {
+            database: logDatabase,
+            source: 'm'
+        });
+
+        reg.logger().info('Starting application' + Setting.value('appId'));
+
         let db = new JoplinDatabase(new DatabaseDriverReactNative());
         reg.setDb(db);
 
@@ -206,7 +222,7 @@ class HomeStackComponent extends React.Component {
 
         try {
             await db.open({ name: 'joplin-26.sqlite' });
-            Log.info('Database is ready.');
+            reg.logger().info('Database is ready.');
 
             //await db.exec('DELETE FROM notes');
             //await db.exec('DELETE FROM folders');
@@ -215,14 +231,10 @@ class HomeStackComponent extends React.Component {
             //await db.exec('DELETE FROM resources');
             //await db.exec('DELETE FROM deleted_items');
 
-            Log.info('Loading settings...');
+            reg.logger().info('Loading settings...');
             await Setting.load();
 
-            Setting.setConstant('appId', 'net.cozic.joplin-android');
-            Setting.setConstant('appType', 'mobile');
-            Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
-
-            Log.info('Loading folders...');
+            reg.logger().info('Loading folders...');
 
             let folders = await Folder.all();
 
@@ -249,6 +261,7 @@ class HomeStackComponent extends React.Component {
                     name="OneDriveLogin"
                     component={OneDriveLoginScreen}
                 />
+                <Stack.Screen name="Log" component={LogScreen} />
             </Stack.Navigator>
         );
     }

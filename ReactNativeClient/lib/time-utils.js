@@ -22,6 +22,15 @@ let time = {
         );
     },
 
+    unixMsToIsoSec(ms) {
+        return (
+            moment
+                .unix(ms / 1000)
+                .utc()
+                .format('YYYY-MM-DDTHH:mm:ss') + 'Z'
+        );
+    },
+
     msleep(ms) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {

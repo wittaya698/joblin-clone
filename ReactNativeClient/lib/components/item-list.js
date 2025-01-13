@@ -6,12 +6,13 @@ import { Note } from '@/lib/models/note.js';
 class ItemListComponent extends Component {
     constructor() {
         super();
-        this.state = { dataSource: {}, items: [], selectedItemIds: [] };
+        this.state = { dataSource: [], items: [], selectedItemIds: [] };
     }
 
     UNSAFE_componentWillMount() {
+        const newDataSource = Object.assign([], this.props.items);
         this.state = {
-            dataSource: this.props.items,
+            dataSource: newDataSource,
             items: [],
             selectedItemIds: []
         };
@@ -20,7 +21,7 @@ class ItemListComponent extends Component {
     UNSAFE_componentWillReceiveProps(newProps) {
         // https://stackoverflow.com/questions/38186114/react-native-redux-and-listview
         this.setState({
-            dataSource: newProps.items
+            dataSource: Object.assign([], newProps.items)
         });
     }
 
