@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
@@ -109,9 +108,13 @@ class NoteScreenComponent extends React.Component {
                     />
                 </View>
                 <TextInput
-                    style={{ flex: 1, textAlignVertical: 'top' }}
+                    style={{
+                        flex: 1,
+                        textAlignVertical: 'top',
+                        fontFamily: 'monospace'
+                    }}
                     multiline={true}
-                    value={this.state.note.body}
+                    value={note.body}
                     onChangeText={text => this.body_changeText(text)}
                 />
                 {todoComponents}

@@ -1,5 +1,3 @@
-// import 'react-native-get-random-values';
-
 let shim = {};
 
 shim.fetch = typeof fetch !== 'undefined' ? fetch : null;

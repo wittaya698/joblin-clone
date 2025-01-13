@@ -15,6 +15,7 @@ import { NoteTag } from '@/lib/models/note-tag.js';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Database } from '@/lib/database.js';
+import { JoplinDatabase } from '@/lib/joplin-database.js';
 import { ItemList } from '@/lib/components/item-list.js';
 import { NotesScreen } from '@/lib/components/screens/notes.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
@@ -30,6 +31,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 import { SideMenuContent } from '@/lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
 import { reg } from '@/lib/registry.js';
+import RNFS from 'react-native-fs';
 
 import { Dropbox } from 'dropbox';
 
@@ -148,8 +150,6 @@ const store = configureStore({
     }
 });
 
-import RNFS from 'react-native-fs';
-
 const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     async componentDidMount() {
@@ -190,7 +190,7 @@ class HomeStackComponent extends React.Component {
             }
         };
 
-        let db = new Database(new DatabaseDriverReactNative());
+        let db = new JoplinDatabase(new DatabaseDriverReactNative());
         reg.setDb(db);
 
         BaseModel.dispatch = this.props.dispatch;
@@ -205,7 +205,7 @@ class HomeStackComponent extends React.Component {
         BaseItem.loadClass('NoteTag', NoteTag);
 
         try {
-            await db.open({ name: 'joplin-25.sqlite' });
+            await db.open({ name: 'joplin-26.sqlite' });
             Log.info('Database is ready.');
 
             //await db.exec('DELETE FROM notes');

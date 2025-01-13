@@ -217,7 +217,6 @@ class BaseModel {
 
         if (options.isNew) {
             if (this.useUuid() && !o.id) {
-                // o = Object.assign({}, o);
                 modelId = uuid.create();
                 o.id = modelId;
             }

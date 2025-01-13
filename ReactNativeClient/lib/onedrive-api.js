@@ -221,8 +221,32 @@ class OneDriveApi {
     }
 
     async refreshAccessToken() {
-        console.log('refreshAccessToken() needed to be implemented');
-        throw new Error('refreshAccessToken() needed to be implemented');
+        if (!this.auth_)
+            throw new Error(
+                'Cannot refresh token: authentication data is missing'
+            );
+
+        let body = new shim.FormData();
+        body.append('client_id', this.clientId());
+        if (!this.isPublic()) body.append('client_secret', this.clientSecret());
+        body.append('refresh_token', this.auth_.refresh_token);
+        body.append('redirect_uri', 'http://localhost:1917');
+        body.append('grant_type', 'refresh_token');
+
+        let options = {
+            method: 'POST',
+            body: body
+        };
+
+        let response = await shim.fetch(this.tokenBaseUrl(), options);
+        if (!response.ok) {
+            this.setAuth(null);
+            let msg = await response.text();
+            throw new Error(msg);
+        }
+
+        let auth = await response.json();
+        this.setAuth(auth);
     }
 }
 

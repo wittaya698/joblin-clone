@@ -47,17 +47,6 @@ class ScreenHeaderComponent extends Component {
         }
     }
 
-    async menu_synchronize() {
-        if (reg.oneDriveApi().auth()) {
-            let errMessage =
-                "OneDrive API haven'n been able to be synced yet: Tenant does not have a SPO license";
-            console.error(errMessage);
-            throw new Error(errMessage);
-        } else {
-            navigator.navigate('OneDriveLogin');
-        }
-    }
-
     render() {
         let key = 0;
         let menuOptionComponents = [];
@@ -76,20 +65,11 @@ class ScreenHeaderComponent extends Component {
             );
         }
 
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.menu_synchronize()}
-                key={'menuOption_' + key++}
-            >
-                <Text>{_('Synchronize')}</Text>
-            </MenuOption>
-        );
-
-        menuOptionComponents.push(
-            <MenuOption value={1} key={'menuOption_' + key++}>
-                <Text>{_('Configuration')}</Text>
-            </MenuOption>
-        );
+        // menuOptionComponents.push(
+        //     <MenuOption value={1} key={'menuOption_' + key++}>
+        //         <Text>{_('Configuration')}</Text>
+        //     </MenuOption>
+        // );
 
         let title =
             'title' in this.props && this.props.title !== null
