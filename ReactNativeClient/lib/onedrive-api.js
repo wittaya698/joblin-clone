@@ -92,6 +92,7 @@ class OneDriveApi {
         try {
             const json = await r.json();
             this.setAuth(json);
+            this.dispatch('authRefreshed', this.auth());
         } catch (error) {
             const text = await r.text();
             error.message += ': ' + text;
@@ -119,6 +120,8 @@ class OneDriveApi {
         if (!options) options = {};
         if (!options.headers) options.headers = {};
 
+        if (!options.target) options.target = 'string';
+
         if (method != 'GET') {
             options.method = method;
         }
@@ -145,7 +148,15 @@ class OneDriveApi {
 
         for (let i = 0; i < 5; i++) {
             options.headers['Authorization'] = 'bearer ' + this.token();
-            let response = await shim.fetch(url, options);
+
+            let response = null;
+            if (options.target == 'string') {
+                response = await shim.fetch(url, options);
+            } else {
+                // file
+                response = await shim.fetchBlob(url, options);
+            }
+
             if (!response.ok) {
                 let errorResponse = await response.json();
                 let error = this.oneDriveErrorResponseToError(errorResponse);
@@ -200,6 +211,7 @@ class OneDriveApi {
     }
 
     async refreshAccessToken() {
+        console.log('refreshAccessToken() needed to be implemented');
         throw new Error('refreshAccessToken() needed to be implemented');
     }
 }

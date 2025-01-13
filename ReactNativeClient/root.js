@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { shim } from '@/lib/shim.js';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
@@ -147,9 +148,48 @@ const store = configureStore({
     }
 });
 
+import RNFS from 'react-native-fs';
+
 const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
-    componentDidMount() {
+    async componentDidMount() {
+        shim.fetchBlob = async function (url, option) {
+            if (!options || !options.path)
+                throw new Error('fetchBlob: target file path is missing');
+            if (!options.method) options.method = 'GET';
+
+            let headers = options.headers ? options.headers : {};
+            let method = options.method ? options.method : 'GET';
+
+            let dirs = RNFetchBlob.fs.dirs;
+            let localFilePath = options.path;
+            if (localFilePath.indexOf('/') !== 0)
+                localFilePath = dirs.DocumentDir + '/' + localFilePath;
+
+            delete options.path;
+
+            try {
+                let response = await RNFetchBlob.config({
+                    path: localFilePath
+                }).fetch(method, url, headers);
+                // Returns an object that roughtly compatible with a standard Response object
+                let output = {
+                    ok: response.respInfo.status < 400,
+                    path: response.data,
+                    text: response.text,
+                    json: response.json,
+                    status: response.respInfo.status,
+                    headers: response.respInfo.headers
+                };
+
+                return output;
+            } catch (error) {
+                throw new Error(
+                    'fetchBlob: ' + method + ' ' + url + ': ' + error.toString()
+                );
+            }
+        };
+
         let db = new Database(new DatabaseDriverReactNative());
         reg.setDb(db);
 
@@ -164,36 +204,35 @@ class HomeStackComponent extends React.Component {
         BaseItem.loadClass('Tag', Tag);
         BaseItem.loadClass('NoteTag', NoteTag);
 
-        db.open({ name: 'joplin-25.sqlite' })
-            .then(() => {
-                Log.info('Database is ready.');
-            })
-            .then(() => {
-                Log.info('Loading settings...');
-                return Setting.load();
-            })
-            .then(() => {
-                Setting.setConstant('appId', 'net.cozic.joplin-android');
+        try {
+            await db.open({ name: 'joplin-25.sqlite' });
+            Log.info('Database is ready.');
 
-                Log.info('Loading folders...');
+            //await db.exec('DELETE FROM notes');
+            //await db.exec('DELETE FROM folders');
+            //await db.exec('DELETE FROM tags');
+            //await db.exec('DELETE FROM note_tags');
+            //await db.exec('DELETE FROM resources');
+            //await db.exec('DELETE FROM deleted_items');
 
-                return Folder.all()
-                    .then(folders => {
-                        this.props.dispatch(
-                            actions.folders_update_all({ folders: folders })
-                        );
-                        return folders;
-                    })
-                    .catch(error => {
-                        Log.warn('Cannot load folders', error);
-                    });
-            })
-            .then(folders => {
-                navigator.navigate('Folders');
-            })
-            .catch(error => {
-                Log.error('Initialization error:', error);
-            });
+            Log.info('Loading settings...');
+            await Setting.load();
+
+            Setting.setConstant('appId', 'net.cozic.joplin-android');
+            Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
+
+            Log.info('Loading folders...');
+
+            let folders = await Folder.all();
+
+            this.props.dispatch(
+                actions.folders_update_all({ folders: folders })
+            );
+
+            navigator.navigate('Folders');
+        } catch {
+            Log.error('Initialization error:', error);
+        }
     }
 
     render() {
