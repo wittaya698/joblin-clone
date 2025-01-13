@@ -8,6 +8,10 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
+import { Resource } from '@/lib/models/resource.js';
+import { Tag } from '@/lib/models/tag.js';
+import { NoteTag } from '@/lib/models/note-tag.js';
+import { BaseItem } from '@/lib/models/base-item.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Database } from '@/lib/database.js';
 import { ItemList } from '@/lib/components/item-list.js';
@@ -153,6 +157,12 @@ class HomeStackComponent extends React.Component {
         NotesScreenUtils.dispatch = this.props.dispatch;
         BaseModel.db_ = db;
         navigator = this.props.navigation;
+
+        BaseItem.loadClass('Note', Note);
+        BaseItem.loadClass('Folder', Folder);
+        BaseItem.loadClass('Resource', Resource);
+        BaseItem.loadClass('Tag', Tag);
+        BaseItem.loadClass('NoteTag', NoteTag);
 
         db.open({ name: 'joplin-25.sqlite' })
             .then(() => {

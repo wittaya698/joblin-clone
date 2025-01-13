@@ -186,19 +186,19 @@ class Synchronizer {
                     }
                     this.logSyncOperation(action, local, remote, reason);
 
-                    if (
-                        local.type_ == BaseModel.TYPE_RESOURCE &&
-                        (action == 'createRemote' ||
-                            (action == 'itemConflict' && remote))
-                    ) {
-                        let remoteContentPath =
-                            this.resourceDirName_ + '/' + local.id;
-                        let resourceContent = await Resource.content(local);
-                        await this.api().put(
-                            remoteContentPath,
-                            resourceContent
-                        );
-                    }
+                    // if (
+                    //     local.type_ == BaseModel.TYPE_RESOURCE &&
+                    //     (action == 'createRemote' ||
+                    //         (action == 'itemConflict' && remote))
+                    // ) {
+                    //     let remoteContentPath =
+                    //         this.resourceDirName_ + '/' + local.id;
+                    //     let resourceContent = await Resource.content(local);
+                    //     await this.api().put(
+                    //         remoteContentPath,
+                    //         resourceContent
+                    //     );
+                    // }
 
                     if (action == 'createRemote' || action == 'updateRemote') {
                         // Make the operation atomic by doing the work on a copy of the file

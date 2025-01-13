@@ -16,6 +16,7 @@ import { Resource } from '@/lib/models/resource.js';
 import { BaseItem } from '@/lib/models/base-item';
 import { Note } from '@/lib/models/note.js';
 import { Tag } from '@/lib/models/tag.js';
+import { NoteTag } from '@/lib/models/note-tag.js';
 import { Setting } from '@/lib/models/setting.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
 import { Logger } from '@/lib/logger.js';
@@ -23,6 +24,7 @@ import { uuid } from '@/lib/uuid.js';
 import { sprintf } from 'sprintf-js';
 import { importEnex } from '@/import-enex';
 import { vorpalUtils } from '@/vorpal-utils.js';
+import { reg } from '@/lib/registry.js';
 import { FsDriverNode } from '@/fs-driver-node.js';
 import { filename, basename } from '@/lib/path-utils.js';
 import { _ } from '@/lib/locale.js';
@@ -805,11 +807,7 @@ async function synchronizer(syncTarget) {
     let fileApi = null;
 
     if (syncTarget == 'onedrive') {
-        let oneDriveApi = oneDriveApi.instance();
-        // const CLIENT_ID = 'bf3ae325-ea99-4aaf-9eb8-1e24b897576d';
-        // const CLIENT_SECRET = '20L8Q~jMvYokkbJoahqsYZigA~PMcqKIgAL5HcHJ';
-
-        // let driver = new FileApiDriverOneDrive(CLIENT_ID, CLIENT_SECRET);
+        const oneDriveApi = reg.oneDriveApi();
         let driver = new FileApiDriverOneDrive(oneDriveApi);
         let auth = Setting.value('sync.onedrive.auth');
 
@@ -820,11 +818,6 @@ async function synchronizer(syncTarget) {
             auth = await oneDriveApiUtils.oauthDance(vorpal);
             Setting.setValue('sync.onedrive.auth', JSON.stringify(auth));
         }
-
-        //oneDriveApi.setAuth(auth);
-        oneDriveApi.on('authRefreshed', a => {
-            Setting.setValue('sync.onedrive.auth', JSON.stringify(a));
-        });
 
         throw new Error(
             'OneDrive not supported yet: Tenant does not have a SPO license.'
@@ -1084,6 +1077,14 @@ async function main() {
     );
     logger.info('Profile directory: ' + profileDir);
 
+    // That's not good, but it's to avoid circular dependency issues
+    // in the BaseItem class.
+    BaseItem.loadClass('Note', Note);
+    BaseItem.loadClass('Folder', Folder);
+    BaseItem.loadClass('Resource', Resource);
+    BaseItem.loadClass('Tag', Tag);
+    BaseItem.loadClass('NoteTag', NoteTag);
+
     database_ = new Database(new DatabaseDriverNode());
     database_.setLogger(dbLogger);
     await database_.open({ name: profileDir + '/database.sqlite' });
@@ -1099,7 +1100,7 @@ async function main() {
 
     // If we still have arguments, pass it to Vorpal and exit
     if (argv.length) {
-        vorpal.show();
+        // vorpal.show();
         let cmd = shellArgsToString(argv);
         await vorpal.exec(cmd);
         await vorpal.exec('exit');
