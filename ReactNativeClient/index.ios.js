@@ -11,7 +11,7 @@ import {
     Text,
     View
 } from 'react-native';
-export default class IOSHome extends Component {
+export default class Joplin extends Component {
     render() {
         return (
             <View style={styles.container}>

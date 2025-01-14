@@ -5,6 +5,7 @@
   <uses-permission android:name="android.permission.VIBRATE"/>
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <!-- <uses-permission android:name="android.permission.READ_PHONE_STATE" tools:node="remove"/> -->
   <queries>
     <intent>
       <action android:name="android.intent.action.VIEW"/>
@@ -27,8 +28,8 @@
         <category android:name="android.intent.category.DEFAULT"/>
         <category android:name="android.intent.category.BROWSABLE"/>
         <data android:scheme="myapp"/>
-        <data android:scheme="com.anonymous.AwesomeProject"/>
-        <data android:scheme="exp+awesomeproject"/>
+        <data android:scheme="net.witthaya.joplin_clone"/>
+        <data android:scheme="exp+joplin_clone"/>
       </intent-filter>
     </activity>
   </application>

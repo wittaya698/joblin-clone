@@ -1,4 +1,4 @@
-package com.anonymous.AwesomeProject
+package net.witthaya.joplin_clone
 
 import android.app.Application
 import android.content.res.Configuration

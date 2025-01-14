@@ -1,6 +1,6 @@
 {
-  "name": "joblin-cli",
-  "description": "CLI client for Joplin",
+  "name": "joblin_clone-cli",
+  "description": "CLI client for Joplin_Clone",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -40,7 +40,7 @@ BaseItem.loadClass('Resource', Resource);
 BaseItem.loadClass('Tag', Tag);
 BaseItem.loadClass('NoteTag', NoteTag);
 
-Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
 Setting.setConstant('appType', 'cli');
 
 function sleep(n) {

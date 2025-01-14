@@ -3,5 +3,5 @@ set -e
 CLIENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # bash $CLIENT_DIR/build.sh && NODE_PATH="$CLIENT_DIR/build/" node build/main.js --profile ~/Temp/TestNotes2 "$@"
-bash $CLIENT_DIR/build.sh && NODE_PATH="$CLIENT_DIR/build/" node build/main.js --profile ~/Temp/TestNotes2 --stack-trace-enabled --log-level debug --redraw-disabled "$@"
+bash $CLIENT_DIR/build.sh && NODE_PATH="$CLIENT_DIR/build/" node build/main.js --profile ~/Temp/TestNotes2 --stack-trace-enabled --log-level debug --redraw-disabled --env dev "$@"
 # bash $CLIENT_DIR/build.sh && NODE_PATH="$CLIENT_DIR/build/" node build/main.js --profile ~/Temp/TestNotes import-enex --fuzzy-matching /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/Samples/Laurent.enex

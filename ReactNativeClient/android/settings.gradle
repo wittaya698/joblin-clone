@@ -21,7 +21,7 @@ extensions.configure(com.facebook.react.ReactSettingsExtension) { ex ->
   }
 }
 
-rootProject.name = 'AwesomeProject'
+rootProject.name = 'Joplin_Clone'
 
 dependencyResolutionManagement {
   versionCatalogs {

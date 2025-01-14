@@ -1,5 +1,3 @@
-// require('@babel/plugin-transform-runtime');
-
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
 import { Resource } from '@/lib/models/resource.js';
@@ -121,7 +119,8 @@ class Synchronizer {
             updateRemote: 0,
             deleteRemote: 0,
             itemConflict: 0,
-            noteConflict: 0
+            noteConflict: 0,
+            state: this.state()
         };
 
         try {
@@ -134,7 +133,6 @@ class Synchronizer {
                 let locals = result.items;
 
                 report.remotesToUpdate += locals.length;
-                options.onProgress(report);
 
                 for (let i = 0; i < locals.length; i++) {
                     let local = locals[i];
@@ -447,6 +445,9 @@ class Synchronizer {
         );
         await this.logSyncSummary(report);
         this.state_ = 'idle';
+
+        report.state = this.state();
+        options.onProgress(report);
     }
 }
 

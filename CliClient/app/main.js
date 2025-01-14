@@ -38,18 +38,15 @@ process.on('unhandledRejection', (reason, p) => {
 const packageJson = require('./package.json');
 
 let initArgs = {
-    profileDir: null
+    profileDir: null,
+    env: 'prod'
 };
 
 const fsDriver = new FsDriverNode();
 Logger.fsDriver_ = fsDriver;
 Resource.fsDriver_ = fsDriver;
 
-// let logDatabase = new Database(new DatabaseDriverNode());
-// await logDatabase.open({ name: profileDir + '/database-log.sqlite' });
-// await logDatabase.exec(Logger.databaseCreateTableSql());
-
-Setting.setConstant('appId', 'net.cozic.joplin-cli');
+Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
 Setting.setConstant('appType', 'cli');
 
 let currentFolder = null;
@@ -957,16 +954,25 @@ function handleStartFlags(argv) {
             continue;
         }
 
+        if (arg == '--env') {
+            if (!nextArg) throw new Error(_('Usage: --env <dev|prod>'));
+            initArgs.env = nextArg;
+            argv.splice(0, 2);
+            continue;
+        }
+
         if (arg == '--redraw-disabled') {
             vorpalUtils.setRedrawEnabled(false);
             argv.splice(0, 1);
             continue;
         }
+
         if (arg == '--stack-trace-enabled') {
             vorpalUtils.setStackTraceEnabled(true);
             argv.splice(0, 1);
             continue;
         }
+
         if (arg == '--log-level') {
             if (!nextArg)
                 throw new Error(
@@ -1071,6 +1077,7 @@ async function main() {
         : os.homedir() + '/.config/' + Setting.value('appName');
     const resourceDir = profileDir + '/resources';
 
+    Setting.setConstant('env', initArgs.env);
     Setting.setConstant('profileDir', profileDir);
     Setting.setConstant('resourceDir', resourceDir);
 
@@ -1078,7 +1085,6 @@ async function main() {
     await fs.mkdirp(resourceDir, 0o755);
 
     logger.addTarget('file', { path: profileDir + '/log.txt' });
-    // logger.addTarget('database', { database: logDatabase, source: 'main' });
     logger.setLevel(logLevel);
 
     dbLogger.addTarget('file', { path: profileDir + '/log-database.txt' });
@@ -1090,6 +1096,7 @@ async function main() {
     logger.info(
         sprintf('Starting %s %s...', packageJson.name, packageJson.version)
     );
+    logger.info('Environment: ' + Setting.value('env'));
     logger.info('Profile directory: ' + profileDir);
 
     // That's not good, but it's to avoid circular dependency issues
@@ -1115,7 +1122,9 @@ async function main() {
 
     // If we still have arguments, pass it to Vorpal and exit
     if (argv.length) {
-        // vorpal.show();
+        //vorpal.delimiter(' AAAAAAAAAAAAAAAAAAAAA');
+        //console.info(vorpal.ui.inquirer);
+        //vorpal.show();
         let cmd = shellArgsToString(argv);
         await vorpal.exec(cmd);
         await vorpal.exec('exit');

@@ -74,6 +74,7 @@ class SideMenuContentComponent extends Component {
                             report.localsToDelete
                         )
                     );
+                    line.push(_('Sync state: %s.', report.state));
                     this.setState({ syncReportText: line.join('\n') });
                 }
             };

@@ -1,4 +1,4 @@
-package com.anonymous.AwesomeProject
+package net.witthaya.joplin_clone
 import expo.modules.splashscreen.SplashScreenManager
 
 import android.os.Build

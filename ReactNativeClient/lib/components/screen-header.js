@@ -114,7 +114,7 @@ ScreenHeaderComponent.defaultProps = {
 };
 
 const ScreenHeader = connect(state => {
-    return { user: state.nav.user, navigator: state.nav.navigator };
+    return { navigator: state.nav.navigator };
 })(ScreenHeaderComponent);
 
 export { ScreenHeader };

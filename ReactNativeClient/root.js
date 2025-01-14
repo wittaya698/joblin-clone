@@ -23,7 +23,6 @@ import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { NoteScreen } from '@/lib/components/screens/note.js';
 import { FolderScreen } from '@/lib/components/screens/folder.js';
 import { FoldersScreen } from '@/lib/components/screens/folders.js';
-import { LoginScreen } from '@/lib/components/screens/login.js';
 import { LogScreen } from '@/lib/components/screens/log.js';
 import { LoadingScreen } from '@/lib/components/screens/loading.js';
 import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
@@ -35,8 +34,6 @@ import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js
 import { reg } from '@/lib/registry.js';
 import RNFS from 'react-native-fs';
 
-import { Dropbox } from 'dropbox';
-
 let defaultState = {
     nav: {},
     navigator: null,
@@ -45,7 +42,6 @@ let defaultState = {
     selectedNoteId: null,
     selectedItemType: 'note',
     selectedFolderId: null,
-    user: { email: 'wittayathongjeen698@gmail.com', session: null },
     showSideMenu: false
 };
 
@@ -54,12 +50,10 @@ const navReducer = createSlice({
     initialState: defaultState,
     reducers: {
         set_navigator: (state, action) => {
-            reg.logger().info('New route name', action.payload.navigator);
             state.navigator = action.payload.navigator;
         },
         navigate: (state, action) => {
-            // const r = state.nav.routes;
-            // state.nav = newNav?;
+            reg.logger().info('New route name', action.payload.navigator);
             if ('noteId' in action.payload) {
                 state.selectedNoteId = action.payload.noteId;
             }
@@ -79,6 +73,8 @@ const navReducer = createSlice({
         // Insert the note into the note list if it's new, or
         // update it if it already exists.
         notes_update_one: (state, action) => {
+            if (action.payload.note.parent_id != state.selectedFolderId) return;
+
             let newNotes = state.notes.splice(0);
             var found = false;
             for (let i = 0; i < newNotes.length; i++) {
@@ -125,10 +121,6 @@ const navReducer = createSlice({
             }
 
             state.folders = newFolders;
-        },
-
-        user_set: (state, action) => {
-            state.user = action.payload.user;
         },
 
         side_menu_toggle: (state, action) => {
@@ -193,8 +185,10 @@ class HomeStackComponent extends React.Component {
             }
         };
 
-        Setting.setConstant('appId', 'net.cozic.joplin-android');
+        Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
+        Setting.setConstant('appId', 'net.witthaya.joplin_clone');
         Setting.setConstant('appType', 'mobile');
+        Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
 
         const logDatabase = new Database(new DatabaseDriverReactNative());
         await logDatabase.open({ name: 'log.sqlite' });
@@ -204,7 +198,13 @@ class HomeStackComponent extends React.Component {
             source: 'm'
         });
 
-        reg.logger().info('Starting application' + Setting.value('appId'));
+        reg.logger().info(
+            'Starting application ' +
+                Setting.value('appId') +
+                ' (' +
+                Setting.value('env') +
+                ')'
+        );
 
         let db = new JoplinDatabase(new DatabaseDriverReactNative());
         reg.setDb(db);
@@ -221,16 +221,20 @@ class HomeStackComponent extends React.Component {
         BaseItem.loadClass('NoteTag', NoteTag);
 
         try {
-            await db.open({ name: 'joplin-26.sqlite' });
+            if (Setting.value('env') == 'prod') {
+                await db.open({ name: 'joplin.sqlite' });
+            } else {
+                await db.open({ name: 'joplin-26.sqlite' });
+
+                //await db.exec('DELETE FROM notes');
+                //await db.exec('DELETE FROM folders');
+                //await db.exec('DELETE FROM tags');
+                //await db.exec('DELETE FROM note_tags');
+                //await db.exec('DELETE FROM resources');
+                //await db.exec('DELETE FROM deleted_items');
+            }
+
             reg.logger().info('Database is ready.');
-
-            //await db.exec('DELETE FROM notes');
-            //await db.exec('DELETE FROM folders');
-            //await db.exec('DELETE FROM tags');
-            //await db.exec('DELETE FROM note_tags');
-            //await db.exec('DELETE FROM resources');
-            //await db.exec('DELETE FROM deleted_items');
-
             reg.logger().info('Loading settings...');
             await Setting.load();
 
@@ -255,7 +259,6 @@ class HomeStackComponent extends React.Component {
                 <Stack.Screen name="Note" component={NoteScreen} />
                 <Stack.Screen name="Folder" component={FolderScreen} />
                 <Stack.Screen name="Folders" component={FoldersScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
                 <Stack.Screen name="Loading" component={LoadingScreen} />
                 <Stack.Screen
                     name="OneDriveLogin"
