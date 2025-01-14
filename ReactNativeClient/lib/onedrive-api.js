@@ -1,5 +1,5 @@
 import { shim } from '@/lib/shim.js';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { time } from '@/lib/time-utils.js';
 
 class OneDriveApi {
@@ -71,7 +71,7 @@ class OneDriveApi {
         };
         return (
             'https://login.microsoftonline.com/6315ae7d-2ca8-436c-babf-b4fe1c0e0a77/oauth2/v2.0/authorize?' +
-            stringify(query)
+            queryString.stringify(query)
         );
     }
 

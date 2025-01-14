@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { FolderList } from '@/lib/components/folder-list.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
+import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 
 class FoldersScreenComponent extends React.Component {
@@ -17,7 +18,12 @@ class FoldersScreenComponent extends React.Component {
         return (
             <View style={{ flex: 1 }}>
                 <ScreenHeader navState={{ routeName: routeName }} />
-                <FolderList style={{ flex: 1 }} />
+                <FolderList
+                    noItemMessage={_(
+                        'There is currently no notebook. Create one by clicking on the (+) button.'
+                    )}
+                    style={{ flex: 1 }}
+                />
                 <ActionButton></ActionButton>
             </View>
         );

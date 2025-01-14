@@ -16,7 +16,7 @@ class NotesScreenComponent extends React.Component {
     deleteFolder_onPress(folderId) {
         Folder.delete(folderId)
             .then(() => {
-                navigator.navigate('Folders');
+                this.props.dispatch(actions.navigate({ routeName: 'Folders' }));
             })
             .catch(error => {
                 alert(error.message);
@@ -24,8 +24,9 @@ class NotesScreenComponent extends React.Component {
     }
 
     editFolder_onPress(folderId) {
-        this.props.dispatch(actions.navigate({ folderId: folderId }));
-        navigator.navigate('Folder');
+        this.props.dispatch(
+            actions.navigate({ routeName: 'Folder', folderId: folderId })
+        );
     }
 
     menuOptions() {
@@ -61,7 +62,12 @@ class NotesScreenComponent extends React.Component {
                     navState={{ routeName: routeName }}
                     menuOptions={this.menuOptions()}
                 />
-                <NoteList style={{ flex: 1 }} />
+                <NoteList
+                    noItemMessage={_(
+                        'There are currently no notes. Create one by clicking on the (+) button.'
+                    )}
+                    style={{ flex: 1 }}
+                />
                 <ActionButton
                     parentFolderId={this.props.selectedFolderId}
                 ></ActionButton>

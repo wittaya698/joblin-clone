@@ -62,7 +62,7 @@ class Database {
         while (true) {
             try {
                 this.logQuery(sql, params);
-                let result = this.driver()[callName](sql, params);
+                let result = await this.driver()[callName](sql, params);
                 return result; // No exception was thrown
             } catch (error) {
                 if (

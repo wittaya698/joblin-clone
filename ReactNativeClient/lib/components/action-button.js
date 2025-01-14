@@ -25,12 +25,12 @@ class ActionButtonComponent extends React.Component {
     newTodo_press() {
         this.props.dispatch(
             actions.navigate({
+                routeName: 'Note',
                 noteId: null,
                 folderId: this.props.parentFolderId,
                 itemType: 'todo'
             })
         );
-        navigator.navigate('Note');
         // this.props.dispatch({
         // 	type: 'Navigation/NAVIGATE',
         // 	routeName: 'Note',
@@ -43,16 +43,17 @@ class ActionButtonComponent extends React.Component {
     newNote_press() {
         this.props.dispatch(
             actions.navigate({
+                routeName: 'Note',
                 noteId: null,
                 folderId: this.props.parentFolderId
             })
         );
-        navigator.navigate('Note');
     }
 
     newFolder_press() {
-        this.props.dispatch(actions.navigate({ noteId: null }));
-        navigator.navigate('Folder');
+        this.props.dispatch(
+            actions.navigate({ routeName: 'Folder', noteId: null })
+        );
     }
 
     handleStateChange = ({ open }) => {

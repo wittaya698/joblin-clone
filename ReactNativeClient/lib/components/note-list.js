@@ -4,8 +4,9 @@ import { ItemListComponent } from '@/lib/components/item-list.js';
 
 class NoteListComponent extends ItemListComponent {
     listView_itemPress(noteId) {
-        this.props.dispatch(actions.navigate({ noteId: noteId }));
-        navigator.navigate('Note');
+        this.props.dispatch(
+            actions.navigate({ routeName: 'Note', noteId: noteId })
+        );
     }
 }
 

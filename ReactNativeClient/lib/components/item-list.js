@@ -67,16 +67,20 @@ class ItemListComponent extends Component {
         };
 
         // `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
-        return (
-            <View>
+        if (this.state.dataSource.length > 0) {
+            return (
                 <FlatList
                     data={this.state.dataSource}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => renderRow(item)}
                 />
-                ;
-            </View>
-        );
+            );
+        } else {
+            const noItemMessage = this.props.noItemMessage
+                ? this.props.noItemMessage
+                : '';
+            return <Text>{noItemMessage}</Text>;
+        }
     }
 }
 

@@ -29,6 +29,7 @@ class ScreenHeaderComponent extends Component {
         // Note: this is hardcoded for now because navigation.state doesn't tell whether
         // it's possible to go back or not. Maybe it's possible to get this information
         // from somewhere else.
+        return true;
         navigator = this.props.navigator;
         return this.props.navState.routeName != 'Notes';
     }
@@ -48,7 +49,7 @@ class ScreenHeaderComponent extends Component {
     }
 
     log_press() {
-        this.props.navigator.navigate('Log');
+        this.props.dispatch(actions.navigate({ routeName: 'Log' }));
     }
 
     render() {

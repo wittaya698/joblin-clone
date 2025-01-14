@@ -5,6 +5,7 @@ import { Button, Text } from 'react-native';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
+import { actions } from '@/root.js';
 
 import { StyleSheet, ScrollView } from 'react-native';
 
@@ -37,7 +38,6 @@ class SideMenuContentComponent extends Component {
     }
 
     folder_press(folder) {
-        navigator.navigate('Notes');
         NotesScreenUtils.openNoteList(folder.id);
     }
 
@@ -86,7 +86,9 @@ class SideMenuContentComponent extends Component {
                 Log.error(error);
             }
         } else {
-            navigator.navigate('OneDriveLogin');
+            this.props.dispatch(
+                actions.navigate({ routeName: 'OneDriveLogin' })
+            );
         }
     }
 

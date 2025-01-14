@@ -53,7 +53,6 @@ const navReducer = createSlice({
             state.navigator = action.payload.navigator;
         },
         navigate: (state, action) => {
-            reg.logger().info('New route name', action.payload.navigator);
             if ('noteId' in action.payload) {
                 state.selectedNoteId = action.payload.noteId;
             }
@@ -64,6 +63,11 @@ const navReducer = createSlice({
 
             if ('itemType' in action.payload) {
                 state.selectedItemType = action.payload.itemType;
+            }
+            if (state.navigator) {
+                state.navigator.navigate(action.payload.routeName);
+            } else {
+                alert("Navigator hasn't been set yet");
             }
         },
         // Replace all the notes with the provided array
@@ -224,14 +228,14 @@ class HomeStackComponent extends React.Component {
             if (Setting.value('env') == 'prod') {
                 await db.open({ name: 'joplin.sqlite' });
             } else {
-                await db.open({ name: 'joplin-26.sqlite' });
+                await db.open({ name: 'joplin-27.sqlite' });
 
-                //await db.exec('DELETE FROM notes');
-                //await db.exec('DELETE FROM folders');
-                //await db.exec('DELETE FROM tags');
-                //await db.exec('DELETE FROM note_tags');
-                //await db.exec('DELETE FROM resources');
-                //await db.exec('DELETE FROM deleted_items');
+                // await db.exec('DELETE FROM notes');
+                // await db.exec('DELETE FROM folders');
+                // await db.exec('DELETE FROM tags');
+                // await db.exec('DELETE FROM note_tags');
+                // await db.exec('DELETE FROM resources');
+                // await db.exec('DELETE FROM deleted_items');
             }
 
             reg.logger().info('Database is ready.');

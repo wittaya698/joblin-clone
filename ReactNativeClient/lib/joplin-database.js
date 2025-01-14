@@ -128,7 +128,7 @@ class JoplinDatabase extends Database {
 
     async open(options) {
         await super.open(options);
-        return this.initialize();
+        return await this.initialize();
     }
 
     tableFieldNames(tableName) {

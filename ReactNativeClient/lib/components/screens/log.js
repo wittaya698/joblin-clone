@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View, Text } from 'react-native';
+import { FlatList, View, Text, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { reg } from '@/lib/registry.js';
@@ -19,6 +19,10 @@ class LogScreenComponent extends React.Component {
     }
 
     UNSAFE_componentWillMount() {
+        this.resfreshLogEntries();
+    }
+
+    resfreshLogEntries() {
         reg.logger()
             .lastEntries(1000)
             .then(entries => {
@@ -53,12 +57,18 @@ class LogScreenComponent extends React.Component {
 
         // `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
         return (
-            <View>
+            <View style={{ flex: 1 }}>
                 <ScreenHeader navState={{ routeName: routeName }} />
                 <FlatList
                     data={this.state.dataSource}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => renderRow(item)}
+                />
+                <Button
+                    title="Refresh"
+                    onPress={() => {
+                        this.resfreshLogEntries();
+                    }}
                 />
             </View>
         );
