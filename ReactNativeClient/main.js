@@ -13,9 +13,6 @@ import { Root } from '@/root.js';
 export default class Main extends Component {
     render() {
         console.ignoredYellowBox = ['Remote debugger'];
-        Log.info(
-            'START ======================================================================================================'
-        );
         // Note: The final part of the initialization process is in
         // AppComponent.componentDidMount(), when the application is ready.
         return <Root />;

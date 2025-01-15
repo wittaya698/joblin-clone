@@ -89,7 +89,9 @@ const navReducer = createSlice({
                 reg.logger().info(
                     'Route: ' + currentRouteName + ' => ' + newRouteName
                 );
-                state.historyCanGoBack = nav_state.routes.length >= 2;
+
+                navHistory = nav_state.routes;
+                state.historyCanGoBack = navHistory.length >= 2;
                 nav.navigate(newRouteName);
             } else {
                 alert("Navigator hasn't been set yet");
@@ -180,84 +182,93 @@ const store = configureStore({
     }
 });
 
+let initializationState_ = 'waiting';
+
+async function initialize(dispatch) {
+    if (initializationState_ != 'waiting') return;
+
+    initializationState_ = 'in_progress';
+
+    shim.fetchBlob = async function (url, option) {
+        alert('root shim.fetchBlob has been called');
+    };
+
+    Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
+    Setting.setConstant('appId', 'net.witthaya.joplin_clone');
+    Setting.setConstant('appType', 'mobile');
+    Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
+
+    const logDatabase = new Database(new DatabaseDriverReactNative());
+    await logDatabase.open({ name: 'log.sqlite' });
+    await logDatabase.exec(Logger.databaseCreateTableSql());
+    reg.logger().addTarget('database', {
+        database: logDatabase,
+        source: 'm'
+    });
+
+    reg.logger().info(
+        'Starting application ' +
+            Setting.value('appId') +
+            ' (' +
+            Setting.value('env') +
+            ')'
+    );
+
+    let db = new JoplinDatabase(new DatabaseDriverReactNative());
+    reg.setDb(db);
+
+    BaseModel.dispatch = dispatch;
+    NotesScreenUtils.dispatch = dispatch;
+    BaseModel.db_ = db;
+
+    BaseItem.loadClass('Note', Note);
+    BaseItem.loadClass('Folder', Folder);
+    BaseItem.loadClass('Resource', Resource);
+    BaseItem.loadClass('Tag', Tag);
+    BaseItem.loadClass('NoteTag', NoteTag);
+
+    try {
+        if (Setting.value('env') == 'prod') {
+            await db.open({ name: 'joplin.sqlite' });
+        } else {
+            await db.open({ name: 'joplin-27.sqlite' });
+
+            // await db.exec('DELETE FROM notes');
+            // await db.exec('DELETE FROM folders');
+            // await db.exec('DELETE FROM tags');
+            // await db.exec('DELETE FROM note_tags');
+            // await db.exec('DELETE FROM resources');
+            // await db.exec('DELETE FROM deleted_items');
+        }
+
+        reg.logger().info('Database is ready.');
+        reg.logger().info('Loading settings...');
+        await Setting.load();
+
+        reg.logger().info('Loading folders...');
+
+        let initialFolders = await Folder.all();
+
+        dispatch(actions.folders_update_all({ folders: initialFolders }));
+        dispatch(actions.application_loading_done());
+
+        if (initialFolders.length) {
+            const selectedFolder = await Folder.defaultFolder();
+            if (selectedFolder)
+                NotesScreenUtils.openNoteList(selectedFolder.id);
+        }
+    } catch {
+        Log.error('Initialization error:', error);
+    }
+
+    initializationState_ = 'done';
+    reg.logger().info('Application initialized');
+}
+
 const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     async componentDidMount() {
-        shim.fetchBlob = async function (url, option) {
-            alert('root shim.fetchBlo() need to be implemented');
-        };
-
-        Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
-        Setting.setConstant('appId', 'net.witthaya.joplin_clone');
-        Setting.setConstant('appType', 'mobile');
-        Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
-
-        const logDatabase = new Database(new DatabaseDriverReactNative());
-        await logDatabase.open({ name: 'log.sqlite' });
-        await logDatabase.exec(Logger.databaseCreateTableSql());
-        reg.logger().addTarget('database', {
-            database: logDatabase,
-            source: 'm'
-        });
-
-        reg.logger().info(
-            'Starting application ' +
-                Setting.value('appId') +
-                ' (' +
-                Setting.value('env') +
-                ')'
-        );
-
-        let db = new JoplinDatabase(new DatabaseDriverReactNative());
-        reg.setDb(db);
-
-        BaseModel.dispatch = this.props.dispatch;
-        NotesScreenUtils.dispatch = this.props.dispatch;
-        BaseModel.db_ = db;
-        navigator = this.props.navigation;
-
-        BaseItem.loadClass('Note', Note);
-        BaseItem.loadClass('Folder', Folder);
-        BaseItem.loadClass('Resource', Resource);
-        BaseItem.loadClass('Tag', Tag);
-        BaseItem.loadClass('NoteTag', NoteTag);
-
-        try {
-            if (Setting.value('env') == 'prod') {
-                await db.open({ name: 'joplin.sqlite' });
-            } else {
-                await db.open({ name: 'joplin-27.sqlite' });
-
-                // await db.exec('DELETE FROM notes');
-                // await db.exec('DELETE FROM folders');
-                // await db.exec('DELETE FROM tags');
-                // await db.exec('DELETE FROM note_tags');
-                // await db.exec('DELETE FROM resources');
-                // await db.exec('DELETE FROM deleted_items');
-            }
-
-            reg.logger().info('Database is ready.');
-            reg.logger().info('Loading settings...');
-            await Setting.load();
-
-            reg.logger().info('Loading folders...');
-
-            let initialFolders = await Folder.all();
-
-            this.props.dispatch(
-                actions.folders_update_all({ folders: initialFolders })
-            );
-
-            this.props.dispatch(actions.application_loading_done());
-
-            if (initialFolders.length) {
-                const selectedFolder = await Folder.defaultFolder();
-                if (selectedFolder)
-                    NotesScreenUtils.openNoteList(selectedFolder.id);
-            }
-        } catch {
-            Log.error('Initialization error:', error);
-        }
+        await initialize(this.props.dispatch);
     }
 
     render() {
@@ -266,7 +277,6 @@ class HomeStackComponent extends React.Component {
                 <Stack.Screen name="Notes" component={NotesScreen} />
                 <Stack.Screen name="Note" component={NoteScreen} />
                 <Stack.Screen name="Folder" component={FolderScreen} />
-                {/* <Stack.Screen name="Folders" component={FoldersScreen} /> */}
                 <Stack.Screen name="Loading" component={LoadingScreen} />
                 <Stack.Screen
                     name="OneDriveLogin"
