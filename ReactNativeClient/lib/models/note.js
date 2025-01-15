@@ -1,10 +1,10 @@
 import { BaseModel } from '@/lib/base-model.js';
 import { Log } from '@/lib/log.js';
 import { Folder } from '@/lib/models/folder.js';
-// import { Geolocation } from '@/lib/geolocation.js';
 // import { actions } from '@/src/root.js';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { Setting } from '@/lib/models/setting.js';
+import { shim } from '@/lib/shim.js';
 import moment from 'moment';
 import lodash from 'lodash';
 
@@ -117,25 +117,25 @@ class Note extends BaseItem {
     }
 
     static updateGeolocation(noteId) {
-        Log.info('Updating lat/long of note ' + noteId);
+        this.logger().info('Updating lat/long of note ' + noteId);
 
         let geoData = null;
-        // Geolocation.currentPosition()
-        //     .then(data => {
-        //         Log.info('Got lat/long');
-        //         geoData = data;
-        //         return Note.load(note.id);
-        //     })
-        //     .then(note => {
-        //         if (!note) return; // Race condition - note has been deleted in the meantime
-        //         note.longitude = geoData.coords.longitude;
-        //         note.latitude = geoData.coords.latitude;
-        //         note.altitude = geoData.coords.altitude;
-        //         Note.save(note, { updateLatLong: false });
-        //     })
-        //     .catch(error => {
-        //         Log.info('Cannot get location:', error);
-        //     });
+        return shim.Geolocation.currentPosition()
+            .then(data => {
+                this.logger().info('Got lat/long');
+                geoData = data;
+                return Note.load(noteId);
+            })
+            .then(note => {
+                if (!note) return; // Race condition - note has been deleted in the meantime
+                note.longitude = geoData.coords.longitude;
+                note.latitude = geoData.coords.latitude;
+                note.altitude = geoData.coords.altitude;
+                Note.save(note, { updateLatLong: false });
+            })
+            .catch(error => {
+                this.logger().info('Cannot get location:', error);
+            });
     }
 
     static filter(note) {

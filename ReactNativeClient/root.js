@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import { shim } from '@/lib/shim.js';
+import { shimInit } from '@/lib/shim-init-react.js';
 import { Log } from '@/lib/log.js';
 import { Logger } from '@/lib/logger.js';
 import { Note } from '@/lib/models/note.js';
@@ -187,11 +187,8 @@ let initializationState_ = 'waiting';
 async function initialize(dispatch) {
     if (initializationState_ != 'waiting') return;
 
+    shimInit();
     initializationState_ = 'in_progress';
-
-    shim.fetchBlob = async function (url, option) {
-        alert('root shim.fetchBlob has been called');
-    };
 
     Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
     Setting.setConstant('appId', 'net.witthaya.joplin_clone');
