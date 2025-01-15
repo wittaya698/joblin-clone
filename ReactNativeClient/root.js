@@ -44,8 +44,11 @@ let defaultState = {
     selectedFolderId: null,
     showSideMenu: false,
     screens: {},
-    loading: true
+    loading: true,
+    historyCanGoBack: false
 };
+
+let navHistory = [];
 
 const navReducer = createSlice({
     name: 'nav',
@@ -74,8 +77,20 @@ const navReducer = createSlice({
                 }
             }
 
-            if (state.navigator) {
-                state.navigator.navigate(action.payload.routeName);
+            if (!('routeName' in action.payload)) {
+                return;
+            }
+
+            newRouteName = action.payload.routeName;
+            nav = state.navigator;
+            if (nav && newRouteName) {
+                nav_state = nav.getState();
+                currentRouteName = nav_state.routes[nav_state.index].name;
+                reg.logger().info(
+                    'Route: ' + currentRouteName + ' => ' + newRouteName
+                );
+                state.historyCanGoBack = !!navHistory.length;
+                nav.navigate(newRouteName);
             } else {
                 alert("Navigator hasn't been set yet");
             }
@@ -268,15 +283,11 @@ class HomeStackComponent extends React.Component {
 
             this.props.dispatch(actions.application_loading_done());
 
-            // console.info(initialFolders);
-            // if (initialFolders.length) {
-            // 	// const selectedFolder = await Folder.defaultFolder();
-            // 	// this.props.dispatch({
-            // 	// 	type: 'Navigation/NAVIGATE',
-            // 	// 	routeName: 'Notes',
-            // 	// 	params: selectedFolder.id,
-            // 	// });
-            // }
+            if (initialFolders.length) {
+                const selectedFolder = await Folder.defaultFolder();
+                if (selectedFolder)
+                    NotesScreenUtils.openNoteList(selectedFolder.id);
+            }
         } catch {
             Log.error('Initialization error:', error);
         }
