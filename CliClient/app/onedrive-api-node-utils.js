@@ -1,4 +1,3 @@
-import fetch from 'cross-fetch';
 import tcpPortUsed from 'tcp-port-used';
 import http from 'http';
 import urlParser from 'url';

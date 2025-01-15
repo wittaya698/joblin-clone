@@ -72,6 +72,15 @@ class Synchronizer {
         this.logger().info('Total folders: ' + folderCount);
         this.logger().info('Total notes: ' + noteCount);
         this.logger().info('Total resources: ' + resourceCount);
+
+        if (report.errors.length) {
+            this.logger().warn('There was some errors:');
+            for (let i = 0; i < report.errors.length; i++) {
+                let e = report.errors[i];
+                let msg = e && e.message ? e.message : JSON.stringify(e);
+                this.logger().warn(msg);
+            }
+        }
     }
 
     randomFailure(options, name) {
@@ -133,7 +142,9 @@ class Synchronizer {
             deleteRemote: 0,
             itemConflict: 0,
             noteConflict: 0,
-            state: this.state()
+
+            state: this.state(),
+            errors: []
         };
 
         try {
@@ -442,8 +453,8 @@ class Synchronizer {
                 }
             }
         } catch (error) {
+            report.errors.push(error);
             this.logger().error(error);
-            throw error;
         }
 
         if (this.cancelling()) {
