@@ -71,7 +71,7 @@ class Database {
                         error.code == 'SQLITE_BUSY')
                 ) {
                     if (totalWaitTime >= 20000)
-                        this.sqliteErrorToJsError(error, sql, params);
+                        throw this.sqliteErrorToJsError(error, sql, params);
                     this.logger().warn(
                         sprintf(
                             'Error %s: will retry in %s milliseconds',

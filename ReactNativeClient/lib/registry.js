@@ -16,6 +16,10 @@ reg.logger = () => {
     return reg.logger_;
 };
 
+reg.setLogger = l => {
+    reg.logger_ = l;
+};
+
 reg.oneDriveApi = () => {
     if (reg.oneDriveApi_) return reg.oneDriveApi_;
 
@@ -26,6 +30,8 @@ reg.oneDriveApi = () => {
         parameters().oneDrive.secret,
         isPublic
     );
+
+    reg.oneDriveApi_.setLogger(reg.logger());
 
     reg.oneDriveApi_.on('authRefreshed', a => {
         reg.logger().info('Saving updated OneDrive auth.');

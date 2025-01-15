@@ -1,6 +1,7 @@
 import { shim } from '@/lib/shim.js';
 import queryString from 'query-string';
 import { time } from '@/lib/time-utils.js';
+import { Logger } from '@/lib/logger.js';
 
 class OneDriveApi {
     // `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
@@ -15,6 +16,15 @@ class OneDriveApi {
         this.listeners_ = {
             authRefreshed: []
         };
+        this.logger_ = new Logger();
+    }
+
+    setLogger(l) {
+        this.logger_ = l;
+    }
+
+    logger() {
+        return this.logger_;
     }
 
     isPublic() {
@@ -175,6 +185,7 @@ class OneDriveApi {
                     error.code == 'InvalidAuthenticationToken' ||
                     error.code == 'unauthenticated'
                 ) {
+                    this.logger().info('Token expired: refreshing...');
                     await this.refreshAccessToken();
                     continue;
                 } else if (
@@ -182,9 +193,29 @@ class OneDriveApi {
                     ((error.error && error.error.code == 'generalException') ||
                         error.code == 'generalException')
                 ) {
-                    console.error(
-                        'OneDrive API exec error handling needed to be implemented'
-                    );
+                    // Rare error (one Google hit) - I guess the request can be repeated
+                    // { error:
+                    //    { code: 'generalException',
+                    //      message: 'An error occurred in the data store.',
+                    //      innerError:
+                    //       { 'request-id': 'b4310552-c18a-45b1-bde1-68e2c2345eef',
+                    //         date: '2017-06-29T00:15:50' } } }
+                    this.logger().info('Got error below - retrying...');
+                    this.logger().info(error);
+                    await time.msleep(1000 * i);
+                    continue;
+                } else if (error.code == 'EAGAIN') {
+                    // Rare error (one Google hit) - I guess the request can be repeated
+                    // { error:
+                    //    { code: 'generalException',
+                    //      message: 'An error occurred in the data store.',
+                    //      innerError:
+                    //       { 'request-id': 'b4310552-c18a-45b1-bde1-68e2c2345eef',
+                    //         date: '2017-06-29T00:15:50' } } }
+                    this.logger().info('Got error below - retrying...');
+                    this.logger().info(error);
+                    await time.msleep(1000 * i);
+                    continue;
                 } else {
                     error.request =
                         method +

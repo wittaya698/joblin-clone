@@ -27,6 +27,7 @@ import { vorpalUtils } from '@/vorpal-utils.js';
 import { reg } from '@/lib/registry.js';
 import { FsDriverNode } from '@/fs-driver-node.js';
 import { filename, basename } from '@/lib/path-utils.js';
+import { shim } from '@/lib/shim.js';
 import { _ } from '@/lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
@@ -626,7 +627,7 @@ commands.push({
                             report.localsToDelete
                         )
                     );
-                vorpalUtils.redraw(line.join(' '));
+                if (line.length) vorpalUtils.redraw(line.join(' '));
             },
             onMessage: msg => {
                 vorpalUtils.redrawDone();
@@ -652,6 +653,12 @@ commands.push({
         vorpalUtils.redrawDone();
         this.log(_('Done.'));
         end();
+    },
+    cancel: async function () {
+        vorpalUtils.redrawDone();
+        this.log(_('Cancelling...'));
+        let sync = await synchronizer(Setting.value('sync.target'));
+        sync.cancel();
     }
 });
 
@@ -1043,9 +1050,14 @@ const vorpal = require('vorpal')();
 vorpalUtils.initialize(vorpal);
 
 async function main() {
+    shim.fetchBlob = async function (url, options) {
+        console.log('Main shim.fetchBlob has been called');
+        return;
+    };
     for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
         let c = commands[commandIndex];
         let o = vorpal.command(c.usage, c.description);
+
         if (c.options) {
             for (let i = 0; i < c.options.length; i++) {
                 let options = c.options[i];
@@ -1054,16 +1066,23 @@ async function main() {
                     o.option(options[0], options[1], options[2]);
             }
         }
+
         if (c.aliases) {
             for (let i = 0; i < c.aliases.length; i++) {
                 o.alias(c.aliases[i]);
             }
         }
+
         if (c.autocomplete) {
             o.autocomplete({
                 data: c.autocomplete
             });
         }
+
+        if (c.cancel) {
+            o.cancel(c.cancel);
+        }
+
         o.action(c.action);
     }
 
@@ -1087,6 +1106,8 @@ async function main() {
     logger.addTarget('file', { path: profileDir + '/log.txt' });
     logger.setLevel(logLevel);
 
+    reg.setLogger(logger);
+
     dbLogger.addTarget('file', { path: profileDir + '/log-database.txt' });
     dbLogger.setLevel(logLevel);
 
@@ -1094,9 +1115,13 @@ async function main() {
     syncLogger.setLevel(logLevel);
 
     logger.info(
-        sprintf('Starting %s %s...', packageJson.name, packageJson.version)
+        sprintf(
+            'Starting %s %s (%s)...',
+            packageJson.name,
+            packageJson.version,
+            Setting.value('env')
+        )
     );
-    logger.info('Environment: ' + Setting.value('env'));
     logger.info('Profile directory: ' + profileDir);
 
     // That's not good, but it's to avoid circular dependency issues
