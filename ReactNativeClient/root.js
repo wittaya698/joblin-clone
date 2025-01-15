@@ -42,7 +42,9 @@ let defaultState = {
     selectedNoteId: null,
     selectedItemType: 'note',
     selectedFolderId: null,
-    showSideMenu: false
+    showSideMenu: false,
+    screens: {},
+    loading: true
 };
 
 const navReducer = createSlice({
@@ -64,12 +66,26 @@ const navReducer = createSlice({
             if ('itemType' in action.payload) {
                 state.selectedItemType = action.payload.itemType;
             }
+
+            if ('screens' in action.payload) {
+                for (let n in action.payload.screens) {
+                    if (!action.payload.screens.hasOwnProperty(n)) continue;
+                    state.screens[n] = action.payload.screens[n];
+                }
+            }
+
             if (state.navigator) {
                 state.navigator.navigate(action.payload.routeName);
             } else {
                 alert("Navigator hasn't been set yet");
             }
         },
+
+        // Replace all the notes with the provided array
+        application_loading_done: (state, action) => {
+            state.loading = false;
+        },
+
         // Replace all the notes with the provided array
         notes_update_all: (state, action) => {
             state.notes = action.payload.notes;
@@ -244,13 +260,23 @@ class HomeStackComponent extends React.Component {
 
             reg.logger().info('Loading folders...');
 
-            let folders = await Folder.all();
+            let initialFolders = await Folder.all();
 
             this.props.dispatch(
-                actions.folders_update_all({ folders: folders })
+                actions.folders_update_all({ folders: initialFolders })
             );
 
-            navigator.navigate('Folders');
+            this.props.dispatch(actions.application_loading_done());
+
+            // console.info(initialFolders);
+            // if (initialFolders.length) {
+            // 	// const selectedFolder = await Folder.defaultFolder();
+            // 	// this.props.dispatch({
+            // 	// 	type: 'Navigation/NAVIGATE',
+            // 	// 	routeName: 'Notes',
+            // 	// 	params: selectedFolder.id,
+            // 	// });
+            // }
         } catch {
             Log.error('Initialization error:', error);
         }
@@ -262,7 +288,7 @@ class HomeStackComponent extends React.Component {
                 <Stack.Screen name="Notes" component={NotesScreen} />
                 <Stack.Screen name="Note" component={NoteScreen} />
                 <Stack.Screen name="Folder" component={FolderScreen} />
-                <Stack.Screen name="Folders" component={FoldersScreen} />
+                {/* <Stack.Screen name="Folders" component={FoldersScreen} /> */}
                 <Stack.Screen name="Loading" component={LoadingScreen} />
                 <Stack.Screen
                     name="OneDriveLogin"

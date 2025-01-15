@@ -475,7 +475,7 @@ commands.push({
             } else {
                 throw new Error(_('Invalid command: "%s"', args.command));
             }
-        } catch {
+        } catch (error) {
             this.log(error);
         }
 

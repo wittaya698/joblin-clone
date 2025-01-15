@@ -63,29 +63,35 @@ class ActionButtonComponent extends React.Component {
     render() {
         const { open } = this.state;
         const style = styles.actionButtonIcon;
-        const actions = [
-            {
+
+        let buttons = [];
+
+        if (this.props.folders.length) {
+            buttons.push({
                 label: 'New todo',
                 icon: () => <Icon name="checkbox-outline" style={style} />,
                 onPress: () => {
                     this.newTodo_press();
                 }
-            },
-            {
+            });
+
+            buttons.push({
                 label: 'New note',
                 icon: () => <Icon name="document" style={style} />,
                 onPress: () => {
                     this.newNote_press();
                 }
-            },
-            {
-                label: 'New folder',
-                icon: () => <Icon name="folder" style={style} />,
-                onPress: () => {
-                    this.newFolder_press();
-                }
+            });
+        }
+
+        buttons.push({
+            label: 'New folder',
+            icon: () => <Icon name="folder" style={style} />,
+            onPress: () => {
+                this.newFolder_press();
             }
-        ];
+        });
+
         return (
             <Provider>
                 {/* <Portal> */}
@@ -93,7 +99,7 @@ class ActionButtonComponent extends React.Component {
                     visible={true}
                     open={open}
                     icon={open ? 'close' : 'plus'}
-                    actions={actions}
+                    actions={buttons}
                     onStateChange={this.handleStateChange}
                 />
                 {/* </Portal> */}
@@ -103,7 +109,7 @@ class ActionButtonComponent extends React.Component {
 }
 
 const ActionButton = connect(state => {
-    return {};
+    return { folders: state.nav.folders };
 })(ActionButtonComponent);
 
 export { ActionButton };
