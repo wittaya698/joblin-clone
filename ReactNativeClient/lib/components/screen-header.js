@@ -25,15 +25,6 @@ const styles = StyleSheet.create({
 });
 
 class ScreenHeaderComponent extends Component {
-    showBackButton() {
-        // Note: this is hardcoded for now because navigation.state doesn't tell whether
-        // it's possible to go back or not. Maybe it's possible to get this information
-        // from somewhere else.
-        return true;
-        navigator = this.props.navigator;
-        return this.props.navState.routeName != 'Notes';
-    }
-
     sideMenuButton_press() {
         this.props.dispatch(actions.side_menu_toggle());
     }
@@ -94,7 +85,7 @@ class ScreenHeaderComponent extends Component {
             >
                 <Button title="☰" onPress={() => this.sideMenuButton_press()} />
                 <Button
-                    disabled={!this.showBackButton()}
+                    disabled={!this.props.historyCanGoBack}
                     title="<"
                     onPress={() => this.backButton_press()}
                 ></Button>
@@ -115,7 +106,10 @@ ScreenHeaderComponent.defaultProps = {
 };
 
 const ScreenHeader = connect(state => {
-    return { navigator: state.nav.navigator };
+    return {
+        navigator: state.nav.navigator,
+        historyCanGoBack: state.nav.historyCanGoBack
+    };
 })(ScreenHeaderComponent);
 
 export { ScreenHeader };

@@ -89,7 +89,7 @@ const navReducer = createSlice({
                 reg.logger().info(
                     'Route: ' + currentRouteName + ' => ' + newRouteName
                 );
-                state.historyCanGoBack = !!navHistory.length;
+                state.historyCanGoBack = nav_state.routes.length >= 2;
                 nav.navigate(newRouteName);
             } else {
                 alert("Navigator hasn't been set yet");

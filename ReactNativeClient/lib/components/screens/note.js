@@ -90,6 +90,7 @@ class NoteScreenComponent extends React.Component {
             );
         }
 
+        nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
             <View style={{ flex: 1 }}>

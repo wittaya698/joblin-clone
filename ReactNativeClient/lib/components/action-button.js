@@ -52,7 +52,7 @@ class ActionButtonComponent extends React.Component {
 
     newFolder_press() {
         this.props.dispatch(
-            actions.navigate({ routeName: 'Folder', noteId: null })
+            actions.navigate({ routeName: 'Folder', folderId: null })
         );
     }
 
