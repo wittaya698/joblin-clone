@@ -45,7 +45,7 @@ class Command extends BaseCommand {
             }
 
             let item = await app().loadItem(itemType, pattern); // await BaseItem.loadItemByField(itemType, 'title', pattern);
-            if (!item) throw new Error(_('No item with "%s" found.', pattern));
+            if (!item) throw new Error(_('No item "%s" found.', pattern));
 
             let ok = force
                 ? true
@@ -60,7 +60,7 @@ class Command extends BaseCommand {
                     app().currentFolder().id == item.id
                 ) {
                     let f = await Folder.defaultFolder();
-                    switchCurrentFolder(f);
+                    app().switchCurrentFolder(f);
                 }
             }
         } else {

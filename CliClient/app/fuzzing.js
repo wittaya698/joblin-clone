@@ -2069,7 +2069,12 @@ function randomWord() {
 
 function execCommand(client, command, options = {}) {
     let exePath = 'node ' + joplinAppPath;
-    let cmd = exePath + ' --env dev --profile ' + client.profileDir + ' ' + command;
+    let cmd =
+        exePath +
+        '--update-geolocation-disabled --env dev --profile ' +
+        client.profileDir +
+        ' ' +
+        command;
     logger.info(client.id + ': ' + command);
 
     if (options.killAfter) {
@@ -2138,9 +2143,9 @@ async function execRandomCommand(client) {
                 if (!item) return;
 
                 if (item.type_ == 1) {
-                    return execCommand(client, 'rm -f ' + item.title);
+                    return execCommand(client, 'rm -f ' + item.id);
                 } else if (item.type_ == 2) {
-                    return execCommand(client, 'rm -f ' + '../' + item.title);
+                    return execCommand(client, 'rm -f ' + '../' + item.id);
                 } else if (item.type_ == 5) {
                     // tag
                 } else {
@@ -2191,7 +2196,7 @@ async function execRandomCommand(client) {
 
                 return execCommand(
                     client,
-                    'tag add ' + tagTitle + ' "' + note.title + '"'
+                    'tag add ' + tagTitle + ' "' + note.id + '"'
                 );
             },
             50

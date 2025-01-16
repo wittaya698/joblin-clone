@@ -117,6 +117,8 @@ class Note extends BaseItem {
     }
 
     static updateGeolocation(noteId) {
+        if (!Note.updateGeolocationEnabled_) return;
+
         this.logger().info('Updating lat/long of note ' + noteId);
 
         let geoData = null;
@@ -174,5 +176,7 @@ class Note extends BaseItem {
             });
     }
 }
+
+Note.updateGeolocationEnabled_ = true;
 
 export { Note };
