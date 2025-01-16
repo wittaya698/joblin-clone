@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { View, Button, TextInput } from 'react-native';
+import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Checkbox } from '@/lib/components/checkbox.js';
 import { _ } from '@/lib/locale.js';
+import marked from '@/lib/marked.js';
 
 class NoteScreenComponent extends React.Component {
     static navigationOptions(options) {
@@ -14,7 +16,7 @@ class NoteScreenComponent extends React.Component {
 
     constructor() {
         super();
-        this.state = { note: Note.new() };
+        this.state = { note: Note.new(), mode: 'view' };
     }
 
     UNSAFE_componentWillMount() {
@@ -94,6 +96,38 @@ class NoteScreenComponent extends React.Component {
             );
         }
 
+        let bodyComponent = null;
+        if (this.state.mode == 'view') {
+            const source = {
+                html: note ? marked(note.body, { gfm: true, breaks: true }) : ''
+            };
+
+            bodyComponent = (
+                <View style={{ flex: 1 }}>
+                    <WebView source={source} />
+                    <Button
+                        title="Edit note"
+                        onPress={() => {
+                            this.setState({ mode: 'edit' });
+                        }}
+                    />
+                </View>
+            );
+        } else {
+            bodyComponent = (
+                <TextInput
+                    style={{
+                        flex: 1,
+                        textAlignVertical: 'top',
+                        fontFamily: 'monospace'
+                    }}
+                    multiline={true}
+                    value={note.body}
+                    onChangeText={text => this.body_changeText(text)}
+                />
+            );
+        }
+
         nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
@@ -112,16 +146,7 @@ class NoteScreenComponent extends React.Component {
                         onChangeText={text => this.title_changeText(text)}
                     />
                 </View>
-                <TextInput
-                    style={{
-                        flex: 1,
-                        textAlignVertical: 'top',
-                        fontFamily: 'monospace'
-                    }}
-                    multiline={true}
-                    value={note.body}
-                    onChangeText={text => this.body_changeText(text)}
-                />
+                {bodyComponent}
                 {todoComponents}
                 <Button
                     title="Save note"
