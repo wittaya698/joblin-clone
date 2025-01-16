@@ -1,4 +1,6 @@
 import { BaseCommand } from './base-command.js';
+import { Setting } from '@/lib/models/setting.js';
+import { _ } from '@/lib/locale.js';
 
 class Command extends BaseCommand {
     usage() {
@@ -10,8 +12,8 @@ class Command extends BaseCommand {
     }
 
     async action(args) {
-        const packageJson = require('./package.json');
-        this.log(packageJson.name + ' ' + packageJson.version);
+        const p = require('./package.json');
+        this.log(_('%s %s (%s)', p.name, p.version, Setting.value('env')));
     }
 }
 
