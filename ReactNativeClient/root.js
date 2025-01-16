@@ -1,7 +1,6 @@
 import React from 'react';
-import { View, Button, TextInput } from 'react-native';
-import { connect } from 'react-redux';
-import { Provider } from 'react-redux';
+import { BackHandler } from 'react-native';
+import { connect, Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -85,15 +84,23 @@ const navReducer = createSlice({
             newRouteName = action.payload.routeName;
             nav = state.navigator;
             if (nav && newRouteName) {
-                nav_state = nav.getState();
-                currentRouteName = nav_state.routes[nav_state.index].name;
-                reg.logger().info(
-                    'Route: ' + currentRouteName + ' => ' + newRouteName
-                );
+                navState = nav.getState();
+                currentRouteName = navState.routes[navState.index].name;
 
-                navHistory = nav_state.routes;
-                state.historyCanGoBack = navHistory.length >= 2;
-                nav.navigate(newRouteName);
+                if (currentRouteName == newRouteName) {
+                    // Navigate to make SideMenu closed
+                    nav.navigate(newRouteName);
+                } else if (newRouteName === 'Back' && state.historyCanGoBack) {
+                    state.historyCanGoBack = navState.routes.length - 1 > 2;
+                    reg.logger().info('Go back');
+                    nav.goBack();
+                } else {
+                    state.historyCanGoBack = navState.routes.length + 1 > 2;
+                    reg.logger().info(
+                        'Route: ' + currentRouteName + ' => ' + newRouteName
+                    );
+                    nav.navigate(newRouteName);
+                }
             } else {
                 alert("Navigator hasn't been set yet");
             }
@@ -185,7 +192,7 @@ const store = configureStore({
 
 let initializationState_ = 'waiting';
 
-async function initialize(dispatch) {
+async function initialize(dispatch, backButtonHandler) {
     if (initializationState_ != 'waiting') return;
 
     shimInit();
@@ -259,6 +266,10 @@ async function initialize(dispatch) {
         Log.error('Initialization error:', error);
     }
 
+    BackHandler.addEventListener('hardwareBackPress', () => {
+        return backButtonHandler();
+    });
+
     initializationState_ = 'done';
     reg.logger().info('Application initialized');
 }
@@ -266,29 +277,58 @@ async function initialize(dispatch) {
 const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     async componentDidMount() {
-        await initialize(this.props.dispatch);
+        await initialize(
+            this.props.dispatch,
+            this.backButtonHandler.bind(this)
+        );
+    }
+
+    backButtonHandler() {
+        if (this.props.showSideMenu) {
+            this.props.dispatch(actions.side_menu_close());
+            return true;
+        }
+
+        if (this.props.historyCanGoBack) {
+            this.props.dispatch(actions.navigate({ routeName: 'Back' }));
+            return true;
+        }
+
+        return false;
     }
 
     render() {
+        let options = { headerShown: false };
+        const screens = [
+            { name: 'Notes', component: NotesScreen },
+            { name: 'Note', component: NoteScreen },
+            { name: 'Folder', component: FolderScreen },
+            { name: 'Loading', component: LoadingScreen },
+            { name: 'OneDriveLogin', component: OneDriveLoginScreen },
+            { name: 'Log', component: LogScreen },
+            { name: 'Status', component: StatusScreen }
+        ];
+
         return (
             <Stack.Navigator initialRouteName="Loading">
-                <Stack.Screen name="Notes" component={NotesScreen} />
-                <Stack.Screen name="Note" component={NoteScreen} />
-                <Stack.Screen name="Folder" component={FolderScreen} />
-                <Stack.Screen name="Loading" component={LoadingScreen} />
-                <Stack.Screen
-                    name="OneDriveLogin"
-                    component={OneDriveLoginScreen}
-                />
-                <Stack.Screen name="Log" component={LogScreen} />
-                <Stack.Screen name="Status" component={StatusScreen} />
+                {screens.map(screen => (
+                    <Stack.Screen
+                        key={screen.name}
+                        name={screen.name}
+                        component={screen.component}
+                        options={options}
+                    />
+                ))}
             </Stack.Navigator>
         );
     }
 }
 
 export const HomeStack = connect(state => {
-    return { nav: state.nav };
+    return {
+        historyCanGoBack: state.nav.historyCanGoBack,
+        showSideMenu: state.nav.showSideMenu
+    };
 })(HomeStackComponent);
 
 const Drawer = createDrawerNavigator();
@@ -299,7 +339,6 @@ const App = () => {
                 drawerContent={props => <SideMenuContent {...props} />}
             >
                 <Drawer.Screen name="Home" component={HomeStack} />
-                <Drawer.Screen name="Folders" component={FoldersScreen} />
             </Drawer.Navigator>
         </MenuProvider>
     );

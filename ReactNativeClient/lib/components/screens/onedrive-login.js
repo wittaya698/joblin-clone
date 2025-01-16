@@ -7,6 +7,7 @@ import { Setting } from '@/lib/models/setting.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
+import { actions } from '@/root.js';
 
 class OneDriveLoginScreenComponent extends React.Component {
     static navigationOptions(options) {
@@ -53,11 +54,12 @@ class OneDriveLoginScreenComponent extends React.Component {
                 await reg
                     .oneDriveApi()
                     .execTokenRequest(this.authCode_, this.redirectUrl(), true);
-
-                this.authCode_ = null;
+                this.props.dispatch(actions.navigate({ routeName: 'Back' }));
             } catch (error) {
                 alert(error.message);
             }
+
+            this.authCode_ = null;
         }
     }
 

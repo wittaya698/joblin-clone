@@ -30,7 +30,7 @@ class ScreenHeaderComponent extends Component {
     }
 
     backButton_press() {
-        this.props.navigator.goBack();
+        this.props.dispatch(actions.navigate({ routeName: 'Back' }));
     }
 
     menu_select(value) {
