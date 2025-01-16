@@ -87,6 +87,7 @@ class Command extends BaseCommand {
             this.log(_('Starting synchronization...'));
 
             await sync.start(options);
+            vorpalUtils.redrawDone();
             this.log(_('Done.'));
         }
     }

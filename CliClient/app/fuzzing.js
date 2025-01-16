@@ -7,9 +7,8 @@ import { time } from '@/lib/time-utils.js';
 import { Logger } from '@/lib/logger.js';
 import { Resource } from '@/lib/models/resource.js';
 import { dirname } from '@/lib/path-utils.js';
-import { FsDriverNode } from '@/fs-driver-node.js';
+import { FsDriverNode } from './fs-driver-node.js';
 import lodash from 'lodash';
-
 const exec = require('child_process').exec;
 const fs = require('fs-extra');
 
@@ -44,9 +43,17 @@ async function createClients() {
         let client = createClient(clientId);
         promises.push(fs.remove(client.profileDir));
         promises.push(
-            execCommand(client, 'config sync.target local').then(() => {
-                return execCommand(client, 'config sync.local.path ' + syncDir);
-            })
+            execCommand(client, 'config sync.target local')
+                .then(() => {
+                    return execCommand(
+                        client,
+                        'config sync.local.path ' + syncDir
+                    );
+                })
+                // Critical -> To be removed
+                .then(() => {
+                    return execCommand(client, 'mkbook support');
+                })
         );
         output.push(client);
     }
@@ -2071,7 +2078,7 @@ function execCommand(client, command, options = {}) {
     let exePath = 'node ' + joplinAppPath;
     let cmd =
         exePath +
-        '--update-geolocation-disabled --env dev --profile ' +
+        ' --update-geolocation-disabled --env dev --profile ' +
         client.profileDir +
         ' ' +
         command;
@@ -2119,6 +2126,7 @@ function randomTag(items) {
         if (items[i].type_ != 5) continue;
         tags.push(items[i]);
     }
+
     return randomElement(tags);
 }
 
@@ -2128,6 +2136,7 @@ function randomNote(items) {
         if (items[i].type_ != 1) continue;
         notes.push(items[i]);
     }
+
     return randomElement(notes);
 }
 
@@ -2145,7 +2154,7 @@ async function execRandomCommand(client) {
                 if (item.type_ == 1) {
                     return execCommand(client, 'rm -f ' + item.id);
                 } else if (item.type_ == 2) {
-                    return execCommand(client, 'rm -f ' + '../' + item.id);
+                    return execCommand(client, 'rm -r -f ' + item.id);
                 } else if (item.type_ == 5) {
                     // tag
                 } else {
@@ -2172,8 +2181,9 @@ async function execRandomCommand(client) {
             async () => {
                 // UPDATE RANDOM ITEM
                 let items = await clientItems(client);
-                let item = randomElement(items);
+                let item = randomNote(items);
                 if (!item) return;
+
                 return execCommand(
                     client,
                     'set ' + item.id + ' title "' + randomWord() + '"'
@@ -2196,7 +2206,7 @@ async function execRandomCommand(client) {
 
                 return execCommand(
                     client,
-                    'tag add ' + tagTitle + ' "' + note.id + '"'
+                    'tag add ' + tagTitle + ' ' + note.id
                 );
             },
             50
@@ -2266,6 +2276,7 @@ function compareItems(item1, item2) {
 
 function findMissingItems_(items1, items2) {
     let output = [];
+
     for (let i = 0; i < items1.length; i++) {
         let item1 = items1[i];
         let found = false;
@@ -2276,10 +2287,12 @@ function findMissingItems_(items1, items2) {
                 break;
             }
         }
+
         if (!found) {
             output.push(item1);
         }
     }
+
     return output;
 }
 

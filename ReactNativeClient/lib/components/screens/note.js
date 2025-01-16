@@ -51,11 +51,7 @@ class NoteScreenComponent extends React.Component {
 
     async saveNoteButton_press() {
         let isNew = !this.state.note.id;
-        try {
-            let note = await Note.save(this.state.note);
-        } catch (error) {
-            console.error(error);
-        }
+        let note = await Note.save(this.state.note);
         this.setState({ note: note });
         if (isNew) Note.updateGeolocation(note.id);
     }

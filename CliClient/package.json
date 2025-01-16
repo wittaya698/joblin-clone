@@ -7,7 +7,7 @@
     "url": "https://github.com/wittaya698/joplin-clone"
   },
   "url": "git://github.com/wittaya698/joplin-clone",
-  "version": "0.8.35",
+  "version": "0.8.36",
   "bin": {
     "joplin": "./main_launcher.js"
   },
@@ -52,7 +52,6 @@
   },
   "scripts": {
     "babelbuild": "babel app -d build",
-    "CRITICAL": "this command has been romoved for test --> npx babel app/lib/services --out-dir build/lib/services --source-maps",
     "build": "npx babel app --out-dir build --source-maps && npx babel app/lib/models --out-dir build/lib/models --source-maps",
     "clean": "babel-changed --reset",
     "test": "npx babel tests --out-dir tests-build --source-maps && jasmine"

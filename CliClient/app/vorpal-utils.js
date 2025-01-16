@@ -33,7 +33,7 @@ function setStackTraceEnabled(v) {
 function redraw(s) {
     if (!redrawEnabled()) {
         const now = time.unixMs();
-        if (now - redrawLastUpdateTime_ > 1000) {
+        if (now - redrawLastUpdateTime_ > 4000) {
             if (vorpal_.activeCommand) {
                 vorpal_.activeCommand.log(s);
             } else {

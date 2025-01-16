@@ -3,15 +3,6 @@ import { Database } from '@/lib/database.js';
 import { time } from '@/lib/time-utils.js';
 import moment from 'moment';
 
-// Critical -> To be removed
-const modelClasses = {
-    Folder: (() => require('@/lib/models/folder.js')).Folder,
-    NoteTag: (() => require('@/lib/models/note-tag.js')).NoteTag,
-    Note: (() => require('@/lib/models/note.js')).Note,
-    Resource: (() => require('@/lib/models/resource.js')).Resource,
-    Tag: (() => require('@/lib/models/tag.js')).Tag
-};
-
 class BaseItem extends BaseModel {
     static useUuid() {
         return true;
@@ -168,6 +159,26 @@ class BaseItem extends BaseModel {
     }
 
     static async delete(id, options = null) {
+        return this.batchDelete([id], options);
+        // let trackDeleted = true;
+        // if (
+        //     options &&
+        //     options.trackDeleted !== null &&
+        //     options.trackDeleted !== undefined
+        // )
+        //     trackDeleted = options.trackDeleted;
+
+        // await super.delete(id, options);
+
+        // if (trackDeleted) {
+        //     await this.db().exec(
+        //         'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
+        //         [this.modelType(), id, time.unixMs()]
+        //     );
+        // }
+    }
+
+    static async batchDelete(ids, options = null) {
         let trackDeleted = true;
         if (
             options &&
@@ -176,13 +187,18 @@ class BaseItem extends BaseModel {
         )
             trackDeleted = options.trackDeleted;
 
-        await super.delete(id, options);
+        await super.batchDelete(ids, options);
 
         if (trackDeleted) {
-            await this.db().exec(
-                'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
-                [this.modelType(), id, time.unixMs()]
-            );
+            let queries = [];
+            let now = time.unixMs();
+            for (let i = 0; i < ids.length; i++) {
+                queries.push({
+                    sql: 'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
+                    params: [this.modelType(), ids[i], now]
+                });
+            }
+            await this.db().transactionExecBatch(queries);
         }
     }
 
