@@ -97,7 +97,6 @@ class OneDriveLoginScreenComponent extends React.Component {
                 <ScreenHeader navState={{ routeName: routeName }} />
                 <WebView
                     source={source}
-                    style={{ marginTop: 20 }}
                     onNavigationStateChange={o => {
                         this.webview_load(o);
                     }}

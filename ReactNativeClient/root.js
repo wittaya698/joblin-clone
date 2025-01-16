@@ -1,5 +1,5 @@
 import React from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -104,6 +104,8 @@ const navReducer = createSlice({
             } else {
                 alert("Navigator hasn't been set yet");
             }
+
+            Keyboard.dismiss(); // TODO: should probably be in some middleware
         },
 
         // Replace all the notes with the provided array
