@@ -31,7 +31,7 @@ class Command extends BaseCommand {
     }
 
     async action(args) {
-        let pattern = args['pattern'];
+        let pattern = args['pattern'].toString();
         let itemType = null;
         let force = args.options && args.options.force === true;
 
@@ -44,17 +44,15 @@ class Command extends BaseCommand {
                 itemType = BaseModel.TYPE_NOTE;
             }
 
-            let item = await BaseItem.loadItemByField(
-                itemType,
-                'title',
-                pattern
-            );
-            if (!item)
-                throw new Error(_('No item with title "%s" found.', pattern));
+            let item = await app().loadItem(itemType, pattern); // await BaseItem.loadItemByField(itemType, 'title', pattern);
+            if (!item) throw new Error(_('No item with "%s" found.', pattern));
 
             let ok = force
                 ? true
-                : await vorpalUtils.cmdPromptConfirm(this, _('Delete item?'));
+                : await vorpalUtils.cmdPromptConfirm(
+                      this,
+                      _('Delete "%s"?', item.title)
+                  );
             if (ok) {
                 await BaseItem.deleteItem(itemType, item.id);
                 if (
