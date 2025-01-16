@@ -1,9 +1,18 @@
-module.exports = {
-    usage: 'version',
-    description: 'Displays version information',
-    action: function (args, end) {
+import { BaseCommand } from './base-command.js';
+
+class Command extends BaseCommand {
+    usage() {
+        return 'version';
+    }
+
+    description() {
+        return 'Displays version information';
+    }
+
+    async action(args) {
         const packageJson = require('./package.json');
         this.log(packageJson.name + ' ' + packageJson.version);
-        end();
     }
-};
+}
+
+module.exports = Command;

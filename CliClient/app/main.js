@@ -3,6 +3,7 @@
 require('source-map-support').install();
 require('@babel/plugin-transform-runtime');
 
+import { app } from './app.js';
 import { FileApi } from '@/lib/file-api.js';
 import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
 import { FileApiDriverMemory } from '@/lib/file-api-driver-memory.js';
@@ -33,23 +34,12 @@ import { _ } from '@/lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
 
-process.on('unhandledRejection', (reason, p) => {
-    console.error('Unhandled promise rejection', p, 'reason:', reason);
-});
-
 const packageJson = require('./package.json');
 
 let initArgs = {
     profileDir: null,
     env: 'prod'
 };
-
-const fsDriver = new FsDriverNode();
-Logger.fsDriver_ = fsDriver;
-Resource.fsDriver_ = fsDriver;
-
-Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
-Setting.setConstant('appType', 'cli');
 
 let currentFolder = null;
 let commands = [];
@@ -1060,25 +1050,11 @@ function getTextEditorPath() {
     );
 }
 
-process.stdin.on('keypress', (_, key) => {
-    // console.info(_, key);
-
-    if (key && key.name === 'return') {
-        updatePrompt();
-    }
-    if (key.name === 'tab') {
-        vorpal.ui.imprint();
-        vorpal.log(vorpal.ui.input());
-    }
-});
-
 const vorpal = require('vorpal')();
 
 vorpalUtils.initialize(vorpal);
 
 async function main() {
-    shimInit();
-
     for (let commandIndex = 0; commandIndex < commands.length; commandIndex++) {
         let c = commands[commandIndex];
         let o = vorpal.command(c.usage, c.description);
@@ -1149,14 +1125,6 @@ async function main() {
     );
     logger.info('Profile directory: ' + profileDir);
 
-    // That's not good, but it's to avoid circular dependency issues
-    // in the BaseItem class.
-    BaseItem.loadClass('Note', Note);
-    BaseItem.loadClass('Folder', Folder);
-    BaseItem.loadClass('Resource', Resource);
-    BaseItem.loadClass('Tag', Tag);
-    BaseItem.loadClass('NoteTag', NoteTag);
-
     database_ = new JoplinDatabase(new DatabaseDriverNode());
     database_.setLogger(dbLogger);
     await database_.open({ name: profileDir + '/database.sqlite' });
@@ -1190,7 +1158,41 @@ async function main() {
     }
 }
 
-main().catch(error => {
-    vorpal.log('Fatal error:');
-    vorpal.log(error);
+process.on('unhandledRejection', (reason, p) => {
+    console.error('Unhandled promise rejection', p, 'reason:', reason);
 });
+
+const fsDriver = new FsDriverNode();
+Logger.fsDriver_ = fsDriver;
+Resource.fsDriver_ = fsDriver;
+
+// That's not good, but it's to avoid circular dependency issues
+// in the BaseItem class.
+BaseItem.loadClass('Note', Note);
+BaseItem.loadClass('Folder', Folder);
+BaseItem.loadClass('Resource', Resource);
+BaseItem.loadClass('Tag', Tag);
+BaseItem.loadClass('NoteTag', NoteTag);
+
+Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
+Setting.setConstant('appType', 'cli');
+
+process.stdin.on('keypress', (_, key) => {
+    if (key && key.name === 'return') {
+        app().updatePrompt();
+    }
+
+    // if (key.name === 'tab') {
+    // 	app().vorpal().ui.imprint();
+    // 	app().vorpal().log(app().vorpal().ui.input());
+    // }
+});
+
+shimInit();
+
+app()
+    .start()
+    .catch(error => {
+        console.log('Fatal error:');
+        console.log(error);
+    });

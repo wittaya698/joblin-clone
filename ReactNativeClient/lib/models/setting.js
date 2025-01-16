@@ -163,7 +163,8 @@ Setting.constants_ = {
     appType: 'SET_ME', // 'cli' or 'mobile'
     appId: 'SET_ME', // Each app should set this identifier
     resourceDir: '',
-    profileDir: ''
+    profileDir: '',
+    tempDir: ''
 };
 
 export { Setting };
