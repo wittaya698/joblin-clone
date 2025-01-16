@@ -1,5 +1,6 @@
 import { shim } from '@/lib/shim.js';
 import { GeolocationReact } from '@/lib/geolocation-react.js';
+import RNFS from 'react-native-fs';
 
 function shimInit() {
     shim.Geolocation = GeolocationReact;

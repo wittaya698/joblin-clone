@@ -5,3 +5,4 @@ rm -rf android/build
 rm -rf android/.gradle
 rm -rf node_modules
 npm install
+start_server.sh

@@ -43,6 +43,10 @@ class ScreenHeaderComponent extends Component {
         this.props.dispatch(actions.navigate({ routeName: 'Log' }));
     }
 
+    status_press() {
+        this.props.dispatch(actions.navigate({ routeName: 'Status' }));
+    }
+
     render() {
         let key = 0;
         let menuOptionComponents = [];
@@ -67,6 +71,15 @@ class ScreenHeaderComponent extends Component {
                 key={'menuOption_' + key++}
             >
                 <Text>{_('Log')}</Text>
+            </MenuOption>
+        );
+
+        menuOptionComponents.push(
+            <MenuOption
+                value={() => this.status_press()}
+                key={'menuOption_' + key++}
+            >
+                <Text>{_('Status')}</Text>
             </MenuOption>
         );
 
