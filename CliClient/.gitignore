@@ -12,4 +12,5 @@ tests/fuzzing/sync
 tests/fuzzing/*
 tests/fuzzing-*
 tests/logs/*
+tests/cli-integration/
 Samples/
