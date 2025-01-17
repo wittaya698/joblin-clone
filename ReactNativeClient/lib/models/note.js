@@ -54,7 +54,8 @@ class Note extends BaseItem {
             'is_todo',
             'todo_completed',
             'parent_id',
-            'updated_time'
+            'updated_time',
+            'sync_time'
         ];
     }
 

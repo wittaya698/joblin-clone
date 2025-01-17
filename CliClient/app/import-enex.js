@@ -9,6 +9,8 @@ import { Tag } from '@/lib/models/tag.js';
 import { Resource } from '@/lib/models/resource.js';
 import { Folder } from '@/lib/models/folder.js';
 import { enexXmlToMd } from '@/import-enex-md-gen.js';
+import { time } from '@/lib/time-utils.js';
+import Levenshtein from 'levenshtein';
 import jsSHA from 'jssha';
 
 import Promise from 'promise';
@@ -65,12 +67,42 @@ function createNoteId(note) {
     return hash.substr(0, 32);
 }
 
+function levenshteinPercent(s1, s2) {
+    let l = new Levenshtein(s1, s2);
+    if (!s1.length || !s2.length) return 1;
+    return Math.abs(l.distance / s1.length);
+}
+
 async function fuzzyMatch(note) {
+    if (note.created_time < time.unixMs() - 1000 * 60 * 60 * 24 * 360) {
+        let notes = await Note.modelSelectAll(
+            'SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?',
+            [note.created_time, note.title]
+        );
+        return notes.length !== 1 ? null : notes[0];
+    }
+
     let notes = await Note.modelSelectAll(
-        'SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ? AND title = ?',
-        [note.created_time, note.title]
+        'SELECT * FROM notes WHERE is_conflict = 0 AND created_time = ?',
+        [note.created_time]
     );
-    return notes.length !== 1 ? null : notes[0];
+    if (notes.length === 0) return null;
+    if (notes.length === 1) return notes[0];
+
+    let lowestL = 1;
+    let lowestN = null;
+    for (let i = 0; i < notes.length; i++) {
+        let n = notes[i];
+        let l = levenshteinPercent(note.title, n.title);
+        if (l < lowestL) {
+            lowestL = l;
+            lowestN = n;
+        }
+    }
+
+    if (lowestN && lowestL < 0.2) return lowestN;
+
+    return null;
 }
 
 async function saveNoteResources(note) {

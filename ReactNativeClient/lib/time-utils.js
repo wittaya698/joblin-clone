@@ -31,6 +31,10 @@ let time = {
         );
     },
 
+    unixMsToLocalDateTime(ms) {
+        return moment.unix(ms / 1000).format('DD/MM/YYYY HH:mm');
+    },
+
     msleep(ms) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
