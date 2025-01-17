@@ -178,11 +178,16 @@ class OneDriveApi {
                     response = await shim.fetchBlob(url, options);
                 }
             } catch (error) {
-                // TEMPORARY: To try to find where uncaught error comes from
-                error = new Error(
-                    'OneDrive API caught: ' + JSON.stringify(error)
-                );
-                throw error;
+                if (error.message == 'Network request failed') {
+                    // Unfortunately the error 'Network request failed' doesn't have a type
+                    // or error code, so hopefully that message won't change and is not localized
+                    this.logger().info('Got error below - retrying...');
+                    this.logger().info(error);
+                    await time.sleep((i + 1) * 3);
+                    continue;
+                } else {
+                    throw error;
+                }
             }
 
             if (!response.ok) {

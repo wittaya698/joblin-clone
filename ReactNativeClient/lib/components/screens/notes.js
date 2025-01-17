@@ -60,8 +60,6 @@ class NotesScreenComponent extends React.Component {
         );
         let title = folder ? folder.title : null;
 
-        console.info('FOLDER', folder);
-
         nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
