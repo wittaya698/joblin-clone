@@ -365,7 +365,9 @@ class Application {
         );
 
         if (this.currentFolder_)
-            await this.vorpal().exec('use ' + this.currentFolder_.title);
+            await this.vorpal().exec(
+                'use ' + this.escapeShellArg(this.currentFolder_.title)
+            );
 
         // If we still have arguments, pass it to Vorpal and exit
         if (argv.length) {
