@@ -179,7 +179,9 @@ class OneDriveApi {
                 }
             } catch (error) {
                 // TEMPORARY: To try to find where uncaught error comes from
-                error = new Error('OneDrive API caught: ' + error.message);
+                error = new Error(
+                    'OneDrive API caught: ' + JSON.stringify(error)
+                );
                 throw error;
             }
 

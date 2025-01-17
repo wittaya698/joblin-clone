@@ -5,6 +5,7 @@ import { Button, TextInput, View } from 'react-native';
 import { Folder } from '@/lib/models/folder.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
+import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { actions } from '@/root.js';
 
 class FolderScreenComponent extends React.Component {
@@ -35,9 +36,6 @@ class FolderScreenComponent extends React.Component {
             folder[propName] = propValue;
             return { folder: folder };
         });
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Notes', FolderId: toSave.id })
-        );
     }
 
     title_changeText(text) {
@@ -53,6 +51,8 @@ class FolderScreenComponent extends React.Component {
 
         this.originalFolder = await Folder.save(toSave);
         this.setState({ folder: this.originalFolder });
+
+        await NotesScreenUtils.openDefaultNoteList();
     }
 
     render() {

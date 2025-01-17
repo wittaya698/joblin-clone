@@ -1,4 +1,5 @@
 import { Note } from '@/lib/models/note.js';
+import { Folder } from '@/lib/models/folder.js';
 import { Log } from '@/lib/log.js';
 import { actions } from '@/root.js';
 
@@ -14,6 +15,15 @@ class NotesScreenUtils {
             .catch(error => {
                 Log.warn('Cannot load notes from ' + folderId, error);
             });
+    }
+
+    static async openDefaultNoteList() {
+        const selectedFolder = await Folder.defaultFolder();
+        if (selectedFolder) {
+            this.openNoteList(selectedFolder.id);
+        } else {
+            this.dispatch(actions.navigate({ routeName: 'Loading' }));
+        }
     }
 }
 export { NotesScreenUtils };

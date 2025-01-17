@@ -7,6 +7,8 @@ import { Folder } from '@/lib/models/folder.js';
 import { actions } from '@/root.js';
 import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
+import { dialogs } from '@/lib/dialogs.js';
+import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import DialogBox from 'react-native-dialogbox';
 
 class NotesScreenComponent extends React.Component {
@@ -15,16 +17,17 @@ class NotesScreenComponent extends React.Component {
     }
 
     deleteFolder_onPress(folderId) {
-        let ok = confirm(_('Delete notebook?'));
-        if (!ok) return;
+        dialogs.confirm(this, _('Delete notebook?')).then(ok => {
+            if (!ok) return;
 
-        Folder.delete(folderId)
-            .then(() => {
-                this.props.dispatch(actions.navigate({ routeName: 'Folders' }));
-            })
-            .catch(error => {
-                alert(error.message);
-            });
+            Folder.delete(folderId)
+                .then(() => {
+                    return NotesScreenUtils.openDefaultNoteList();
+                })
+                .catch(error => {
+                    alert(error.message);
+                });
+        });
     }
 
     editFolder_onPress(folderId) {
@@ -57,6 +60,8 @@ class NotesScreenComponent extends React.Component {
         );
         let title = folder ? folder.title : null;
 
+        console.info('FOLDER', folder);
+
         nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
@@ -75,6 +80,12 @@ class NotesScreenComponent extends React.Component {
                 <ActionButton
                     parentFolderId={this.props.selectedFolderId}
                 ></ActionButton>
+
+                <DialogBox
+                    ref={dialogbox => {
+                        this.dialogbox = dialogbox;
+                    }}
+                />
             </View>
         );
     }
