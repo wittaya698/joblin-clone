@@ -91,7 +91,10 @@ class ScreenHeaderComponent extends Component {
             <View
                 style={{
                     flexDirection: 'row',
-                    padding: 10,
+                    paddingLeft: 10,
+                    paddingTop: 10,
+                    paddingBottom: 10,
+                    paddingRight: 0,
                     backgroundColor: '#ffffff',
                     alignItems: 'center'
                 }}
@@ -105,7 +108,7 @@ class ScreenHeaderComponent extends Component {
                 <Text style={{ flex: 1, marginLeft: 10 }}>{title}</Text>
                 <Menu onSelect={value => this.menu_select(value)}>
                     <MenuTrigger>
-                        <Text style={{ fontSize: 20 }}>&#8942;</Text>
+                        <Text style={{ fontSize: 25 }}> &#8942; </Text>
                     </MenuTrigger>
                     <MenuOptions>{menuOptionComponents}</MenuOptions>
                 </Menu>

@@ -7,6 +7,7 @@ import { Folder } from '@/lib/models/folder.js';
 import { actions } from '@/root.js';
 import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
+import DialogBox from 'react-native-dialogbox';
 
 class NotesScreenComponent extends React.Component {
     static navigationOptions(options) {
@@ -14,6 +15,9 @@ class NotesScreenComponent extends React.Component {
     }
 
     deleteFolder_onPress(folderId) {
+        let ok = confirm(_('Delete notebook?'));
+        if (!ok) return;
+
         Folder.delete(folderId)
             .then(() => {
                 this.props.dispatch(actions.navigate({ routeName: 'Folders' }));
