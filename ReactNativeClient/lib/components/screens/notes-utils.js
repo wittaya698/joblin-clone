@@ -22,7 +22,7 @@ class NotesScreenUtils {
         if (selectedFolder) {
             this.openNoteList(selectedFolder.id);
         } else {
-            this.dispatch(actions.navigate({ routeName: 'Loading' }));
+            this.dispatch(actions.navigate({ routeName: 'Welcome' }));
         }
     }
 }

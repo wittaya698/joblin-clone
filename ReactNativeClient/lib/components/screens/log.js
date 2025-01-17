@@ -54,7 +54,7 @@ class LogScreenComponent extends React.Component {
                     }}
                 >
                     <Text style={style}>
-                        {time.unixMsToIsoSec(item.timestamp) +
+                        {time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm') +
                             ': ' +
                             item.message}
                     </Text>

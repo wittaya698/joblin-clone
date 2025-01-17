@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Button, TextInput } from 'react-native';
+import { View, Button, TextInput, Text } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
@@ -16,7 +16,12 @@ class NoteScreenComponent extends React.Component {
 
     constructor() {
         super();
-        this.state = { note: Note.new(), mode: 'view' };
+        this.state = {
+            note: Note.new(),
+            mode: 'view',
+            noteMetadata: '',
+            showNoteMetadata: false
+        };
     }
 
     UNSAFE_componentWillMount() {
@@ -26,11 +31,20 @@ class NoteScreenComponent extends React.Component {
                     ? Note.newTodo(this.props.folderId)
                     : Note.new(this.props.folderId);
             this.setState({ note: note });
+            this.refreshNoteMetadata();
         } else {
             Note.load(this.props.noteId).then(note => {
                 this.setState({ note: note });
             });
+            this.refreshNoteMetadata();
         }
+    }
+
+    async refreshNoteMetadata(force = null) {
+        if (force !== true && !this.state.showNoteMetadata) return;
+
+        let noteMetadata = await Note.serializeAllProps(this.state.note);
+        this.setState({ noteMetadata: noteMetadata });
     }
 
     noteComponent_change(propName, propValue) {
@@ -54,6 +68,7 @@ class NoteScreenComponent extends React.Component {
         let note = await Note.save(this.state.note);
         this.setState({ note: note });
         if (isNew) Note.updateGeolocation(note.id);
+        this.refreshNoteMetadata();
     }
 
     deleteNote_onPress(noteId) {
@@ -61,6 +76,11 @@ class NoteScreenComponent extends React.Component {
     }
 
     attachFile_onPress(noteId) {}
+
+    showMetadata_onPress() {
+        this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
+        this.refreshNoteMetadata(true);
+    }
 
     menuOptions() {
         return [
@@ -74,6 +94,12 @@ class NoteScreenComponent extends React.Component {
                 title: _('Delete note'),
                 onPress: () => {
                     this.deleteNote_onPress(this.state.note.id);
+                }
+            },
+            {
+                title: _('Toggle metadata'),
+                onPress: () => {
+                    this.showMetadata_onPress();
                 }
             }
         ];
@@ -124,6 +150,8 @@ class NoteScreenComponent extends React.Component {
             );
         }
 
+        console.info(this.state.noteMetadata);
+
         nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;
         return (
@@ -148,6 +176,9 @@ class NoteScreenComponent extends React.Component {
                     title="Save note"
                     onPress={() => this.saveNoteButton_press()}
                 />
+                {this.state.showNoteMetadata && (
+                    <Text>{this.state.noteMetadata}</Text>
+                )}
             </View>
         );
     }

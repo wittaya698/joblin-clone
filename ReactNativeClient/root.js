@@ -24,7 +24,7 @@ import { FolderScreen } from '@/lib/components/screens/folder.js';
 import { FoldersScreen } from '@/lib/components/screens/folders.js';
 import { LogScreen } from '@/lib/components/screens/log.js';
 import { StatusScreen } from '@/lib/components/screens/status.js';
-import { LoadingScreen } from '@/lib/components/screens/loading.js';
+import { WelcomeScreen } from '@/lib/components/screens/welcome.js';
 import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
 import { Setting } from '@/lib/models/setting.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
@@ -301,14 +301,14 @@ class HomeStackComponent extends React.Component {
             { name: 'Notes', component: NotesScreen },
             { name: 'Note', component: NoteScreen },
             { name: 'Folder', component: FolderScreen },
-            { name: 'Loading', component: LoadingScreen },
+            { name: 'Welcome', component: WelcomeScreen },
             { name: 'OneDriveLogin', component: OneDriveLoginScreen },
             { name: 'Log', component: LogScreen },
             { name: 'Status', component: StatusScreen }
         ];
 
         return (
-            <Stack.Navigator initialRouteName="Loading">
+            <Stack.Navigator initialRouteName="Welcome">
                 {screens.map(screen => (
                     <Stack.Screen
                         key={screen.name}

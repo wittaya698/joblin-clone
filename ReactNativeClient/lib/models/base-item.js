@@ -28,14 +28,6 @@ class BaseItem extends BaseModel {
         }
 
         throw new Error('Invalid class name: ' + name);
-
-        // if (!this.classes_) this.classes_ = {};
-        // if (this.classes_[name]) return this.classes_[name];
-        // let filename = name.toLowerCase();
-        // if (name == 'NoteTag') filename = 'note-tag';
-        // // this.classes_[name] = require('lib/models/' + filename + '.js')[name];
-
-        // return this.classes_[name];
     }
 
     static async stats() {
@@ -161,20 +153,12 @@ class BaseItem extends BaseModel {
     static async delete(id, options = null) {
         return this.batchDelete([id], options);
         // let trackDeleted = true;
-        // if (
-        //     options &&
-        //     options.trackDeleted !== null &&
-        //     options.trackDeleted !== undefined
-        // )
-        //     trackDeleted = options.trackDeleted;
+        // if (options && options.trackDeleted !== null && options.trackDeleted !== undefined) trackDeleted = options.trackDeleted;
 
         // await super.delete(id, options);
 
         // if (trackDeleted) {
-        //     await this.db().exec(
-        //         'INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)',
-        //         [this.modelType(), id, time.unixMs()]
-        //     );
+        // 	await this.db().exec('INSERT INTO deleted_items (item_type, item_id, deleted_time) VALUES (?, ?, ?)', [this.modelType(), id, time.unixMs()]);
         // }
     }
 
@@ -220,7 +204,9 @@ class BaseItem extends BaseModel {
     }
 
     static serialize_format(propName, propValue) {
-        if (['created_time', 'updated_time'].indexOf(propName) >= 0) {
+        if (
+            ['created_time', 'updated_time', 'sync_time'].indexOf(propName) >= 0
+        ) {
             if (!propValue) return '';
             propValue =
                 moment
@@ -259,18 +245,20 @@ class BaseItem extends BaseModel {
 
         let output = [];
 
-        if ('title' in item) {
+        if ('title' in item && shownKeys.indexOf('title') >= 0) {
             output.push(item.title);
             output.push('');
         }
 
-        if ('body' in item) {
+        if ('body' in item && shownKeys.indexOf('body') >= 0) {
             output.push(item.body);
             if (shownKeys.length) output.push('');
         }
 
         for (let i = 0; i < shownKeys.length; i++) {
             let key = shownKeys[i];
+            if (key == 'title' || key == 'body') continue;
+
             let value = null;
             if (typeof key === 'function') {
                 let r = await key();
@@ -279,6 +267,7 @@ class BaseItem extends BaseModel {
             } else {
                 value = this.serialize_format(key, item[key]);
             }
+
             output.push(key + ': ' + value);
         }
 
