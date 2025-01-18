@@ -7,9 +7,10 @@ import { Setting } from '@/lib/models/setting.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
+import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { actions } from '@/root.js';
 
-class OneDriveLoginScreenComponent extends React.Component {
+class OneDriveLoginScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
     }
@@ -90,11 +91,9 @@ class OneDriveLoginScreenComponent extends React.Component {
             uri: this.state.webviewUrl
         };
 
-        let nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
         return (
-            <View style={{ flex: 1 }}>
-                <ScreenHeader navState={{ routeName: routeName }} />
+            <View style={this.styles().screen}>
+                <ScreenHeader navState={this.props.navigation.state} />
                 <WebView
                     source={source}
                     onNavigationStateChange={o => {

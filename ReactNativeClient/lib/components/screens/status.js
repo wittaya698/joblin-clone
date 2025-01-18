@@ -9,9 +9,10 @@ import { Logger } from '@/lib/logger.js';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { Folder } from '@/lib/models/folder.js';
 import { ReportService } from '@/lib/services/report.js';
+import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { _ } from '@/lib/locale.js';
 
-class StatusScreenComponent extends React.Component {
+class StatusScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
     }
@@ -71,11 +72,9 @@ class StatusScreenComponent extends React.Component {
 
         let body = renderBody(this.state.report);
 
-        nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
         return (
-            <View style={{ flex: 1 }}>
-                <ScreenHeader navState={{ routeName: routeName }} />
+            <View style={this.styles().screen}>
+                <ScreenHeader navState={this.props.navigation.state} />
                 <View style={{ flex: 1 }}>{body}</View>
                 <Button title="Refresh" onPress={() => this.refreshScreen()} />
             </View>

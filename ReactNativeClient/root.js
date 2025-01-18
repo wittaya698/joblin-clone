@@ -2,10 +2,10 @@ import React from 'react';
 import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { shimInit } from '@/lib/shim-init-react.js';
 import { Log } from '@/lib/log.js';
+import { AppNav } from '@/lib/components/app-nav.js';
 import { Logger } from '@/lib/logger.js';
 import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
@@ -32,11 +32,9 @@ import { MenuProvider } from 'react-native-popup-menu';
 import { SideMenuContent } from '@/lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
 import { reg } from '@/lib/registry.js';
-import RNFS from 'react-native-fs';
+import RNFS, { stat } from 'react-native-fs';
 
 let defaultState = {
-    nav: {},
-    navigator: null,
     notes: [],
     folders: [],
     selectedNoteId: null,
@@ -49,10 +47,11 @@ let defaultState = {
 };
 
 const initialRoute = {
-    type: 'Navigation/NAVIGATE',
     routeName: 'Welcome',
     params: {}
 };
+
+defaultState.route = initialRoute;
 
 let navHistory = [];
 navHistory.push(initialRoute);
@@ -61,10 +60,28 @@ const navReducer = createSlice({
     name: 'nav',
     initialState: defaultState,
     reducers: {
-        set_navigator: (state, action) => {
-            state.navigator = action.payload.navigator;
-        },
         navigate: (state, action) => {
+            const currentRoute = state.route;
+            const currentRouteName = currentRoute ? currentRoute.routeName : '';
+
+            newRoute = {};
+            if (currentRouteName == action.payload.routeName) {
+                // If the current screen is already the requested screen, don't do anything
+            } else if (action.payload.routeName === 'Back') {
+                if (!state.historyCanGoBack) return;
+                newRoute = navHistory.pop(); // Current page
+                newRoute = navHistory.pop(); // Previous page
+            } else {
+                newRoute = {
+                    routeName: action.payload.routeName,
+                    params: action.payload
+                };
+            }
+
+            reg.logger().info(
+                'Route: ' + currentRouteName + ' => ' + action.payload.routeName
+            );
+
             if ('noteId' in action.payload) {
                 state.selectedNoteId = action.payload.noteId;
             }
@@ -77,40 +94,9 @@ const navReducer = createSlice({
                 state.selectedItemType = action.payload.itemType;
             }
 
-            if ('screens' in action.payload) {
-                for (let n in action.payload.screens) {
-                    if (!action.payload.screens.hasOwnProperty(n)) continue;
-                    state.screens[n] = action.payload.screens[n];
-                }
-            }
-
-            if (!('routeName' in action.payload)) {
-                return;
-            }
-
-            newRouteName = action.payload.routeName;
-            nav = state.navigator;
-            if (nav && newRouteName) {
-                navState = nav.getState();
-                currentRouteName = navState.routes[navState.index].name;
-
-                if (currentRouteName == newRouteName) {
-                    // Navigate to make SideMenu closed
-                    nav.navigate(newRouteName);
-                } else if (newRouteName === 'Back' && state.historyCanGoBack) {
-                    state.historyCanGoBack = navState.routes.length - 1 > 2;
-                    reg.logger().info('Go back');
-                    nav.goBack();
-                } else {
-                    state.historyCanGoBack = navState.routes.length + 1 > 2;
-                    reg.logger().info(
-                        'Route: ' + currentRouteName + ' => ' + newRouteName
-                    );
-                    nav.navigate(newRouteName);
-                }
-            } else {
-                alert("Navigator hasn't been set yet");
-            }
+            state.route = newRoute;
+            navHistory.push(newRoute);
+            state.historyCanGoBack = navHistory.length > 2;
 
             Keyboard.dismiss(); // TODO: should probably be in some middleware
         },
@@ -279,7 +265,6 @@ async function initialize(dispatch, backButtonHandler) {
     reg.logger().info('Application initialized');
 }
 
-const Stack = createStackNavigator();
 class HomeStackComponent extends React.Component {
     async componentDidMount() {
         await initialize(
@@ -303,29 +288,17 @@ class HomeStackComponent extends React.Component {
     }
 
     render() {
-        let options = { headerShown: false };
-        const screens = [
-            { name: 'Notes', component: NotesScreen },
-            { name: 'Note', component: NoteScreen },
-            { name: 'Folder', component: FolderScreen },
-            { name: 'Welcome', component: WelcomeScreen },
-            { name: 'OneDriveLogin', component: OneDriveLoginScreen },
-            { name: 'Log', component: LogScreen },
-            { name: 'Status', component: StatusScreen }
-        ];
+        const appNavInit = {
+            Welcome: { screen: WelcomeScreen },
+            Notes: { screen: NotesScreen },
+            Note: { screen: NoteScreen },
+            Folder: { screen: FolderScreen },
+            OneDriveLogin: { screen: OneDriveLoginScreen },
+            Log: { screen: LogScreen },
+            Status: { screen: StatusScreen }
+        };
 
-        return (
-            <Stack.Navigator initialRouteName="Welcome">
-                {screens.map(screen => (
-                    <Stack.Screen
-                        key={screen.name}
-                        name={screen.name}
-                        component={screen.component}
-                        options={options}
-                    />
-                ))}
-            </Stack.Navigator>
-        );
+        return <AppNav screens={appNavInit} />;
     }
 }
 

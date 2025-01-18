@@ -11,6 +11,7 @@ import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Checkbox } from '@/lib/components/checkbox.js';
 import { _ } from '@/lib/locale.js';
 import marked from '@/lib/marked.js';
+import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 
 const styles = StyleSheet.create({
     webView: {
@@ -18,7 +19,7 @@ const styles = StyleSheet.create({
     }
 });
 
-class NoteScreenComponent extends React.Component {
+class NoteScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
     }
@@ -271,12 +272,10 @@ class NoteScreenComponent extends React.Component {
 
         const actionButtonComp = renderActionButton();
 
-        nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
         return (
-            <View style={{ flex: 1 }}>
+            <View style={this.styles().screen}>
                 <ScreenHeader
-                    navState={{ routeName: routeName }}
+                    navState={this.props.navigation.state}
                     menuOptions={this.menuOptions()}
                     title={title}
                 />

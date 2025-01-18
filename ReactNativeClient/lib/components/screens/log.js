@@ -6,8 +6,9 @@ import { reg } from '@/lib/registry.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { time } from '@/lib/time-utils';
 import { Logger } from '@/lib/logger.js';
+import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 
-class LogScreenComponent extends React.Component {
+class LogScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
     }
@@ -62,13 +63,10 @@ class LogScreenComponent extends React.Component {
             );
         };
 
-        nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
-
         // `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
         return (
-            <View style={{ flex: 1 }}>
-                <ScreenHeader navState={{ routeName: routeName }} />
+            <View style={this.styles().screen}>
+                <ScreenHeader navState={this.props.navigation.state} />
                 <FlatList
                     data={this.state.dataSource}
                     keyExtractor={item => item.id}

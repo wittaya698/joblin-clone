@@ -12,11 +12,6 @@ class LoadingScreenComponent extends React.Component {
     }
 
     render() {
-        this.props.dispatch(
-            actions.set_navigator({ navigator: this.props.navigation })
-        );
-        nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
         if (this.props.loading) {
             return (
                 <View style={{ flex: 1 }}>
@@ -26,7 +21,7 @@ class LoadingScreenComponent extends React.Component {
         } else {
             return (
                 <View style={{ flex: 1 }}>
-                    <ScreenHeader navState={{ routeName: routeName }} />
+                    <ScreenHeader navState={this.props.navigation.state} />
                     <Text>
                         You currently have no notebook. Create one by clicking
                         on (+) button.

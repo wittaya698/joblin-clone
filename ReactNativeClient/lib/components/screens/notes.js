@@ -10,8 +10,9 @@ import { ActionButton } from '@/lib/components/action-button.js';
 import { dialogs } from '@/lib/dialogs.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import DialogBox from 'react-native-dialogbox';
+import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 
-class NotesScreenComponent extends React.Component {
+class NotesScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
     }
@@ -59,14 +60,11 @@ class NotesScreenComponent extends React.Component {
             this.props.selectedFolderId
         );
         let title = folder ? folder.title : null;
-
-        nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
         return (
-            <View style={{ flex: 1 }}>
+            <View style={this.styles().screen}>
                 <ScreenHeader
                     title={title}
-                    navState={{ routeName: routeName }}
+                    navState={this.props.navigation.state}
                     menuOptions={this.menuOptions()}
                 />
                 <NoteList

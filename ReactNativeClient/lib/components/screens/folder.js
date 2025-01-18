@@ -6,9 +6,10 @@ import { Folder } from '@/lib/models/folder.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
+import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { actions } from '@/root.js';
 
-class FolderScreenComponent extends React.Component {
+class FolderScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
     }
@@ -56,11 +57,9 @@ class FolderScreenComponent extends React.Component {
     }
 
     render() {
-        nav = this.props.navigation;
-        routeName = nav.getState().routes[nav.getState().index].name;
         return (
-            <View style={{ flex: 1 }}>
-                <ScreenHeader navState={{ routeName: routeName }} />
+            <View style={this.styles().screen}>
+                <ScreenHeader navState={this.props.navigation.state} />
                 <TextInput
                     value={this.state.folder.title}
                     onChangeText={text => this.title_changeText(text)}
