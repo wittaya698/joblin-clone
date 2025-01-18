@@ -369,6 +369,14 @@ class BaseItem extends BaseModel {
             return def.className;
         });
     }
+
+    static modelTypeToClassName(type) {
+        for (let i = 0; i < BaseItem.syncItemDefinitions_.length; i++) {
+            if (BaseItem.syncItemDefinitions_[i].type == type)
+                return BaseItem.syncItemDefinitions_[i].className;
+        }
+        throw new Error('Invalid type: ' + type);
+    }
 }
 
 // Also update:
