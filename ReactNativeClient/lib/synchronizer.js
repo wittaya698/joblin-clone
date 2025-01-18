@@ -6,6 +6,7 @@ import { BaseModel } from '@/lib/base-model.js';
 import { sprintf } from 'sprintf-js';
 import { time } from '@/lib/time-utils.js';
 import { Logger } from '@/lib/logger.js';
+import { _ } from '@/lib/locale.js';
 import moment from 'moment';
 
 class Synchronizer {
@@ -18,6 +19,8 @@ class Synchronizer {
         this.logger_ = new Logger();
         this.appType_ = appType;
         this.cancelling_ = false;
+        this.onProgress_ = function (s) {};
+        this.progressReport_ = {};
     }
 
     state() {
@@ -39,10 +42,28 @@ class Synchronizer {
         return this.logger_;
     }
 
-    logSyncOperation(action, local, remote, reason) {
+    reportToLines(report) {
+        let lines = [];
+        if (report.createLocal)
+            lines.push(_('Created local items: %d.', report.createLocal));
+        if (report.updateLocal)
+            lines.push(_('Updated local items: %d.', report.updateLocal));
+        if (report.createRemote)
+            lines.push(_('Created remote items: %d.', report.createRemote));
+        if (report.updatedRemote)
+            lines.push(_('Updated remote items: %d.', report.updatedRemote));
+        if (report.deleteLocal)
+            lines.push(_('Deleted local items: %d.', report.deleteLocal));
+        if (report.deleteRemote)
+            lines.push(_('Deleted remote items: %d.', report.deleteRemote));
+        if (report.state) lines.push(_('State: %s.', report.state));
+        return lines;
+    }
+
+    logSyncOperation(action, local = null, remote = null, message = null) {
         let line = ['Sync'];
         line.push(action);
-        line.push(reason);
+        if (message) line.push(message);
 
         let type = local && local.type_ ? local.type_ : null;
         if (!type) type = remote && remote.type_ ? remote.type_ : null;
@@ -64,9 +85,15 @@ class Synchronizer {
         }
 
         this.logger().debug(line.join(': '));
+
+        if (!this.progressReport_[action]) this.progressReport_[action] = 0;
+        this.progressReport_[action]++;
+        this.progressReport_.state = this.state();
+        this.onProgress_(this.progressReport_);
     }
 
     async logSyncSummary(report) {
+        this.logger().info('Operations completed: ');
         for (let n in report) {
             if (!report.hasOwnProperty(n)) continue;
             if (n == 'errors') continue;
@@ -79,11 +106,10 @@ class Synchronizer {
         this.logger().info('Total notes: ' + noteCount);
         this.logger().info('Total resources: ' + resourceCount);
 
-        if (report.errors.length) {
+        if (report.errors && report.errors.length) {
             this.logger().warn('There was some errors:');
             for (let i = 0; i < report.errors.length; i++) {
                 let e = report.errors[i];
-                //let msg = JSON.stringify(e); //e && e.message ? e.message : JSON.stringify(e);
                 this.logger().warn(e);
             }
         }
@@ -112,7 +138,10 @@ class Synchronizer {
 
     async start(options = null) {
         if (!options) options = {};
-        if (!options.onProgress) options.onProgress = function (o) {};
+        this.onProgress_ = options.onProgress
+            ? options.onProgress
+            : function (o) {};
+        this.progressReport_ = { errors: [] };
 
         if (this.state() != 'idle') {
             this.logger().warn(
@@ -130,28 +159,15 @@ class Synchronizer {
         // ------------------------------------------------------------------------
 
         let synchronizationId = time.unixMs().toString();
-        this.logger().info(
-            'Starting synchronization... [' + synchronizationId + ']'
-        );
+
         this.state_ = 'started';
 
-        let report = {
-            remotesToUpdate: 0,
-            remotesToDelete: 0,
-            localsToUpdate: 0,
-            localsToDelete: 0,
-            createLocal: 0,
-            updateLocal: 0,
-            deleteLocal: 0,
-            createRemote: 0,
-            updateRemote: 0,
-            deleteRemote: 0,
-            itemConflict: 0,
-            noteConflict: 0,
-
-            state: this.state(),
-            errors: []
-        };
+        this.logSyncOperation(
+            'starting',
+            null,
+            null,
+            'Starting synchronization... [' + synchronizationId + ']'
+        );
 
         try {
             await this.api().mkdir(this.syncDirName_);
@@ -163,8 +179,6 @@ class Synchronizer {
 
                 let result = await BaseItem.itemsThatNeedSync();
                 let locals = result.items;
-
-                report.remotesToUpdate += locals.length;
 
                 for (let i = 0; i < locals.length; i++) {
                     if (this.cancelling()) break;
@@ -300,12 +314,7 @@ class Synchronizer {
                             await ItemClass.delete(local.id);
                         }
                     }
-
-                    report[action]++;
-
                     donePaths.push(path);
-
-                    options.onProgress(report);
                 }
 
                 if (!result.hasMore) break;
@@ -316,8 +325,6 @@ class Synchronizer {
             // ------------------------------------------------------------------------
 
             let deletedItems = await BaseItem.deletedItems();
-            report.remotesToDelete = deletedItems.length;
-            options.onProgress(report);
             for (let i = 0; i < deletedItems.length; i++) {
                 if (this.cancelling()) break;
 
@@ -332,9 +339,6 @@ class Synchronizer {
                 await this.api().delete(path);
                 if (this.randomFailure(options, 3)) return;
                 await BaseItem.remoteDeletedItem(item.item_id);
-
-                report['deleteRemote']++;
-                options.onProgress(report);
             }
 
             // ------------------------------------------------------------------------
@@ -380,9 +384,6 @@ class Synchronizer {
                     }
                     if (!action) continue;
 
-                    report.localsToUpdate++;
-                    options.onProgress(report);
-
                     if (action == 'createLocal' || action == 'updateLocal') {
                         let content = await this.api().get(path);
                         if (content === null) {
@@ -423,10 +424,6 @@ class Synchronizer {
                     } else {
                         this.logSyncOperation(action, local, remote, reason);
                     }
-
-                    report[action]++;
-
-                    options.onProgress(report);
                 }
 
                 if (!listResult.hasMore) break;
@@ -452,8 +449,6 @@ class Synchronizer {
                             continue;
                         }
 
-                        report.localsToDelete++;
-                        options.onProgress(report);
                         this.logSyncOperation(
                             'deleteLocal',
                             { id: item.id },
@@ -464,8 +459,6 @@ class Synchronizer {
                         await ItemClass.delete(item.id, {
                             trackDeleted: false
                         });
-                        report['deleteLocal']++;
-                        options.onProgress(report);
                     }
                 }
             }
@@ -485,22 +478,27 @@ class Synchronizer {
                 }
             }
         } catch (error) {
-            report.errors.push(error);
             this.logger().error(error);
+            this.progressReport_.errors.push(error);
         }
 
         if (this.cancelling()) {
             this.logger().info('Synchronization was cancelled.');
             this.cancelling_ = false;
         }
-        this.logger().info(
-            'Synchronization complete [' + synchronizationId + ']:'
-        );
-        await this.logSyncSummary(report);
         this.state_ = 'idle';
 
-        report.state = this.state();
-        options.onProgress(report);
+        this.logSyncOperation(
+            'finished',
+            null,
+            null,
+            'Synchronization finished [' + synchronizationId + ']'
+        );
+        await this.logSyncSummary(this.progressReport_);
+
+        this.onProgress_ = function (s) {};
+
+        this.progressReport_ = {};
     }
 }
 
