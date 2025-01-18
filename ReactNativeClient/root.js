@@ -48,7 +48,14 @@ let defaultState = {
     historyCanGoBack: false
 };
 
+const initialRoute = {
+    type: 'Navigation/NAVIGATE',
+    routeName: 'Welcome',
+    params: {}
+};
+
 let navHistory = [];
+navHistory.push(initialRoute);
 
 const navReducer = createSlice({
     name: 'nav',
