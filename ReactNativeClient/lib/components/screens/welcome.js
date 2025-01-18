@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { ActionButton } from '@/lib/components/action-button.js';
+import { _ } from '@/lib/locale.js';
 import { actions } from '@/root.js';
 
 class WelcomeScreenComponent extends React.Component {
@@ -24,14 +25,18 @@ class WelcomeScreenComponent extends React.Component {
                 </View>
             );
         } else {
+            let message = this.props.folders.length
+                ? _(
+                      'Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks.'
+                  )
+                : _(
+                      'You currently have no notebook. Create one by clicking on (+) button.'
+                  );
             return (
                 <View style={{ flex: 1 }}>
                     <ScreenHeader navState={{ routeName: routeName }} />
-                    <Text>
-                        You currently have no notebook. Create one by clicking
-                        on (+) button.
-                    </Text>
-                    <ActionButton></ActionButton>
+                    <Text>{message}</Text>
+                    <ActionButton addFolderNoteButtons={true}></ActionButton>
                 </View>
             );
         }
@@ -40,7 +45,8 @@ class WelcomeScreenComponent extends React.Component {
 
 const WelcomeScreen = connect(state => {
     return {
-        loading: state.nav.loading
+        loading: state.nav.loading,
+        folders: state.nav.folders
     };
 })(WelcomeScreenComponent);
 

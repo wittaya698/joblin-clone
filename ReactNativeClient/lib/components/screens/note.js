@@ -4,6 +4,9 @@ import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
+import { Folder } from '@/lib/models/folder.js';
+import { ActionButton } from '@/lib/components/action-button.js';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Checkbox } from '@/lib/components/checkbox.js';
 import { _ } from '@/lib/locale.js';
@@ -26,7 +29,8 @@ class NoteScreenComponent extends React.Component {
             note: Note.new(),
             mode: 'view',
             noteMetadata: '',
-            showNoteMetadata: false
+            showNoteMetadata: false,
+            folder: null
         };
     }
 
@@ -44,6 +48,24 @@ class NoteScreenComponent extends React.Component {
             });
             this.refreshNoteMetadata();
         }
+
+        this.refreshFolder();
+    }
+
+    async currentFolder() {
+        let folderId = this.props.folderId;
+        if (!folderId) {
+            if (this.state.note && this.state.note.parent_id)
+                folderId = this.state.note.parent_id;
+        }
+
+        if (!folderId) return Folder.defaultFolder();
+
+        return Folder.load(folderId);
+    }
+
+    async refreshFolder() {
+        this.setState({ folder: await this.currentFolder() });
     }
 
     async refreshNoteMetadata(force = null) {
@@ -70,8 +92,19 @@ class NoteScreenComponent extends React.Component {
     }
 
     async saveNoteButton_press() {
-        let isNew = !this.state.note.id;
-        let note = await Note.save(this.state.note);
+        let note = Object.assign({}, this.state.note);
+
+        if (!this.state.note.parent_id) {
+            let folder = await Folder.defaultFolder();
+            if (!folder) {
+                Log.warn('Cannot save note without a notebook');
+                return;
+            }
+            note.parent_id = folder.id;
+        }
+
+        let isNew = !note.id;
+        note = await Note.save(note);
         this.setState({ note: note });
         if (isNew) Note.updateGeolocation(note.id);
         this.refreshNoteMetadata();
@@ -114,6 +147,7 @@ class NoteScreenComponent extends React.Component {
     render() {
         const note = this.state.note;
         const isTodo = !!Number(note.is_todo);
+        const folder = this.state.folder;
         let todoComponents = null;
 
         if (note.is_todo) {
@@ -186,17 +220,12 @@ class NoteScreenComponent extends React.Component {
             bodyComponent = (
                 <View style={{ flex: 1 }}>
                     <WebView source={source} />
-                    <Button
-                        title="Edit note"
-                        onPress={() => {
-                            this.setState({ mode: 'edit' });
-                        }}
-                    />
                 </View>
             );
         } else {
             bodyComponent = (
                 <TextInput
+                    autoFocus={true}
                     style={{
                         flex: 1,
                         textAlignVertical: 'top',
@@ -209,7 +238,38 @@ class NoteScreenComponent extends React.Component {
             );
         }
 
-        console.info(this.state.noteMetadata);
+        let title = null;
+        let noteHeaderTitle = note && note.title ? note.title : _('New note');
+        if (folder) {
+            title = folder.title + ' > ' + noteHeaderTitle;
+        } else {
+            title = noteHeaderTitle;
+        }
+
+        const renderActionButton = () => {
+            let buttons = [];
+
+            buttons.push({
+                title: _('Edit'),
+                icon: 'file-edit-outline',
+                onPress: () => {
+                    this.setState({ mode: 'edit' });
+                }
+            });
+
+            buttons.push({
+                title: _('Save'),
+                icon: 'content-save-outline',
+                onPress: () => {
+                    this.saveNoteButton_press();
+                    return false;
+                }
+            });
+
+            return <ActionButton isToggle={true} buttons={buttons} />;
+        };
+
+        const actionButtonComp = renderActionButton();
 
         nav = this.props.navigation;
         routeName = nav.getState().routes[nav.getState().index].name;
@@ -218,6 +278,7 @@ class NoteScreenComponent extends React.Component {
                 <ScreenHeader
                     navState={{ routeName: routeName }}
                     menuOptions={this.menuOptions()}
+                    title={title}
                 />
                 <View style={{ flexDirection: 'row' }}>
                     {isTodo && (
@@ -231,10 +292,7 @@ class NoteScreenComponent extends React.Component {
                 </View>
                 {bodyComponent}
                 {todoComponents}
-                <Button
-                    title="Save note"
-                    onPress={() => this.saveNoteButton_press()}
-                />
+                {actionButtonComp}
                 {this.state.showNoteMetadata && (
                     <Text>{this.state.noteMetadata}</Text>
                 )}

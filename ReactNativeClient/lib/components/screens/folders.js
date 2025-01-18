@@ -24,7 +24,7 @@ class FoldersScreenComponent extends React.Component {
                     )}
                     style={{ flex: 1 }}
                 />
-                <ActionButton></ActionButton>
+                <ActionButton addFolderNoteButtons={true}></ActionButton>
             </View>
         );
     }

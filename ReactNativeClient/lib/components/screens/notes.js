@@ -76,6 +76,7 @@ class NotesScreenComponent extends React.Component {
                     style={{ flex: 1 }}
                 />
                 <ActionButton
+                    addFolderNoteButtons={true}
                     parentFolderId={this.props.selectedFolderId}
                 ></ActionButton>
 

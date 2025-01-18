@@ -1,13 +1,13 @@
 import { BaseModel } from '@/lib/base-model.js';
 import { Log } from '@/lib/log.js';
 import { Folder } from '@/lib/models/folder.js';
-// import { actions } from '@/src/root.js';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { Setting } from '@/lib/models/setting.js';
 import { shim } from '@/lib/shim.js';
 import { time } from '@/lib/time-utils.js';
 import moment from 'moment';
 import lodash from 'lodash';
+// import { actions } from '@/src/root.js';
 
 class Note extends BaseItem {
     static tableName() {
