@@ -23,10 +23,16 @@ class Command extends BaseCommand {
 
     async action(args) {
         let watcher = null;
+        let newNote = null;
+        let hasSaved = false;
 
-        const onFinishedEditing = () => {
+        const onFinishedEditing = async () => {
             if (watcher) watcher.close();
             app().vorpal().show();
+            if (!hasSaved && newNote) {
+                await Note.delete(newNote.id);
+                newNote = null;
+            }
             this.log(_('Done editing.'));
         };
 
@@ -47,9 +53,12 @@ class Command extends BaseCommand {
                 throw new Error(_('No active notebook.'));
             let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
-            if (!note)
-                throw new Error(_('No note with title "%s" found.', title));
-
+            if (!note) {
+                newNote = await Note.save({
+                    parent_id: app().currentFolder().id
+                });
+                note = newNote;
+            }
             let editorPath = textEditorPath();
             let editorArgs = editorPath.split(' ');
 
@@ -81,6 +90,7 @@ class Command extends BaseCommand {
                 if (watchTimeout) return;
 
                 watchTimeout = setTimeout(async () => {
+                    hasSaved = true;
                     let updatedNote = await fs.readFile(tempFilePath, 'utf8');
                     updatedNote = await Note.unserializeForEdit(updatedNote);
                     updatedNote.id = note.id;
@@ -92,11 +102,11 @@ class Command extends BaseCommand {
             const childProcess = spawn(editorPath, editorArgs, {
                 stdio: 'inherit'
             });
-            childProcess.on('exit', (error, code) => {
-                onFinishedEditing();
+            childProcess.on('exit', async (error, code) => {
+                await onFinishedEditing();
             });
         } catch (error) {
-            onFinishedEditing();
+            await onFinishedEditing();
             throw error;
         }
     }

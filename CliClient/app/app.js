@@ -204,6 +204,10 @@ class Application {
                 cmd.description()
             );
 
+            // TODO: maybe remove if the PR is not merged
+            if ('disableTypeCasting' in vorpalCmd)
+                vorpalCmd.disableTypeCasting();
+
             for (let i = 0; i < cmd.aliases().length; i++) {
                 vorpalCmd.alias(cmd.aliases()[i]);
             }
