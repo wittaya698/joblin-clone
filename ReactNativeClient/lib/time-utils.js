@@ -36,7 +36,7 @@ let time = {
     },
 
     formatMsToLocal(ms, format) {
-        return moment.unix(ms / 1000).format(format);
+        return moment(ms).format(format);
     },
 
     msleep(ms) {

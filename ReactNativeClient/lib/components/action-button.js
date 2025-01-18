@@ -24,6 +24,12 @@ class ActionButtonComponent extends React.Component {
         };
     }
 
+    UNSAFE_componentWillReceiveProps(newProps) {
+        if ('toggled' in newProps) {
+            this.setState({ toggled: newProps.toggled });
+        }
+    }
+
     newTodo_press() {
         this.props.dispatch(
             actions.navigate({
@@ -33,13 +39,6 @@ class ActionButtonComponent extends React.Component {
                 itemType: 'todo'
             })
         );
-        // this.props.dispatch({
-        // 	type: 'Navigation/NAVIGATE',
-        // 	routeName: 'Note',
-        // 	noteId: null,
-        // 	folderId: this.props.parentFolderId,
-        // 	itemType: 'todo',
-        // });
     }
 
     newNote_press() {
@@ -111,6 +110,11 @@ class ActionButtonComponent extends React.Component {
         }
 
         if (!buttonComps.length && !this.props.mainButton) {
+            return (
+                <Provider>
+                    <FAB style={{ display: 'none' }} />
+                </Provider>
+            );
         }
 
         let mainButton = this.props.mainButton ? this.props.mainButton : {};
@@ -120,48 +124,44 @@ class ActionButtonComponent extends React.Component {
             <Text style={{ fontSize: 20, color: '#ffffff' }}>+</Text>
         );
 
+        let buttonElement = null;
         if (this.props.isToggle) {
             if (!this.props.buttons || this.props.buttons.length !== 2)
                 throw new Error('Toggle state requires two buttons');
             let button = this.props.buttons[this.state.toggled ? 1 : 0];
             let mainIcon = button.icon;
-            return (
-                <Provider>
-                    <FAB
-                        icon={mainIcon}
-                        style={{
-                            backgroundColor: 'rgb(227, 215, 244)',
-                            borderRadius: 10,
-                            width: 56,
-                            height: 56,
-                            position: 'absolute',
-                            right: 16,
-                            bottom: 46
-                        }}
-                        onPress={() => {
-                            let doToggle = button.onPress(this.state.toggled);
-                            if (doToggle !== false)
-                                this.setState({ toggled: !this.state.toggled });
-                        }}
-                    />
-                </Provider>
+
+            buttonElement = (
+                <FAB
+                    icon={mainIcon}
+                    style={{
+                        borderRadius: 10,
+                        width: 56,
+                        height: 56,
+                        position: 'absolute',
+                        right: 16,
+                        bottom: 46
+                    }}
+                    onPress={() => {
+                        let doToggle = button.onPress(this.state.toggled);
+                        if (doToggle !== false)
+                            this.setState({ toggled: !this.state.toggled });
+                    }}
+                />
             );
         } else {
-            return (
-                <Provider>
-                    <FAB.Group
-                        visible={true}
-                        style={{
-                            backgroundColor: 'transparent'
-                        }}
-                        open={open}
-                        icon={open ? 'close' : 'plus'}
-                        actions={buttonComps}
-                        onStateChange={this.handleStateChange}
-                    />
-                </Provider>
+            buttonElement = (
+                <FAB.Group
+                    visible={true}
+                    open={open}
+                    icon={open ? 'close' : 'plus'}
+                    actions={buttonComps}
+                    onStateChange={this.handleStateChange}
+                />
             );
         }
+
+        return <Provider>{buttonElement}</Provider>;
     }
 }
 

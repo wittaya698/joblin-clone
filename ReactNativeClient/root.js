@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
@@ -27,7 +27,6 @@ import { StatusScreen } from '@/lib/components/screens/status.js';
 import { WelcomeScreen } from '@/lib/components/screens/welcome.js';
 import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
 import { Setting } from '@/lib/models/setting.js';
-import { Synchronizer } from '@/lib/synchronizer.js';
 import { MenuProvider } from 'react-native-popup-menu';
 import { SideMenuContent } from '@/lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
@@ -131,6 +130,18 @@ const navReducer = createSlice({
             state.notes = newNotes;
         },
 
+        notes_delete: (state, action) => {
+            var newNotes = [];
+            for (let i = 0; i < state.notes.length; i++) {
+                let f = state.notes[i];
+                if (f.id == action.payload.noteId) continue;
+                newNotes.push(f);
+            }
+
+            newState = Object.assign({}, state);
+            state.notes = newNotes;
+        },
+
         folders_update_all: (state, action) => {
             state.folders = action.payload.folders;
         },
@@ -201,11 +212,15 @@ async function initialize(dispatch, backButtonHandler) {
     const logDatabase = new Database(new DatabaseDriverReactNative());
     await logDatabase.open({ name: 'log.sqlite' });
     await logDatabase.exec(Logger.databaseCreateTableSql());
-    reg.logger().addTarget('database', {
-        database: logDatabase,
-        source: 'm'
-    });
 
+    const mainLogger = new Logger();
+    mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
+    mainLogger.addTarget('console');
+    mainLogger.setLevel(Logger.LEVEL_DEBUG);
+
+    reg.setLogger(mainLogger);
+
+    reg.logger().info('====================================');
     reg.logger().info(
         'Starting application ' +
             Setting.value('appId') +
@@ -214,7 +229,13 @@ async function initialize(dispatch, backButtonHandler) {
             ')'
     );
 
+    const dbLogger = new Logger();
+    dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
+    dbLogger.addTarget('console');
+    dbLogger.setLevel(Logger.LEVEL_INFO);
+
     let db = new JoplinDatabase(new DatabaseDriverReactNative());
+    db.setLogger(dbLogger);
     reg.setDb(db);
 
     BaseModel.dispatch = dispatch;
@@ -252,9 +273,16 @@ async function initialize(dispatch, backButtonHandler) {
         dispatch(actions.folders_update_all({ folders: initialFolders }));
         dispatch(actions.application_loading_done());
 
-        await NotesScreenUtils.openDefaultNoteList();
+        let folderId = Setting.value('activeFolderId');
+        let folder = await Folder.load(folderId);
+
+        if (folder) {
+            await NotesScreenUtils.openNoteList(folderId);
+        } else {
+            await NotesScreenUtils.openDefaultNoteList();
+        }
     } catch {
-        Log.error('Initialization error:', error);
+        reg.logger().error('Initialization error:', error);
     }
 
     BackHandler.addEventListener('hardwareBackPress', () => {

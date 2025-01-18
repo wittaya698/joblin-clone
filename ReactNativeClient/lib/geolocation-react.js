@@ -1,6 +1,6 @@
 import * as Location from 'expo-location';
 
-class Geolocation {
+class GeolocationReact {
     static currentPosition_testResponse() {
         return {
             mocked: false,
@@ -44,4 +44,4 @@ class Geolocation {
     }
 }
 
-export { Geolocation };
+export { GeolocationReact };

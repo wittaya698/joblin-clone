@@ -7,7 +7,7 @@ import { shim } from '@/lib/shim.js';
 import { time } from '@/lib/time-utils.js';
 import moment from 'moment';
 import lodash from 'lodash';
-// import { actions } from '@/src/root.js';
+// import { actions } from '@/root.js';
 
 class Note extends BaseItem {
     static tableName() {
@@ -223,6 +223,12 @@ class Note extends BaseItem {
                 // this.dispatch(actions.notes_update_one({ note: note }));
                 return note;
             });
+    }
+
+    static async delete(id, options = null) {
+        let r = await super.delete(id, options);
+
+        // this.dispatch(actions.notes_delete({ noteId: id }));
     }
 }
 

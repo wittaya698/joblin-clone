@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
-import { View, Button, TextInput, Text, StyleSheet } from 'react-native';
+import {
+    BackHandler,
+    View,
+    Button,
+    TextInput,
+    Text,
+    StyleSheet
+} from 'react-native';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
+import { BaseModel } from '@/lib/base-model.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
@@ -12,6 +20,9 @@ import { Checkbox } from '@/lib/components/checkbox.js';
 import { _ } from '@/lib/locale.js';
 import marked from '@/lib/marked.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
+import { dialogs } from '@/lib/dialogs.js';
+import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
+import DialogBox from 'react-native-dialogbox';
 
 const styles = StyleSheet.create({
     webView: {
@@ -31,26 +42,61 @@ class NoteScreenComponent extends BaseScreenComponent {
             mode: 'view',
             noteMetadata: '',
             showNoteMetadata: false,
-            folder: null
+            folder: null,
+            lastSavedNote: null
+        };
+
+        this.backHandler = () => {
+            if (!this.state.note.id) {
+                return false;
+            }
+            if (this.state.mode == 'edit') {
+                this.setState({ mode: 'view' });
+                return true;
+            }
+            return false;
         };
     }
 
+    isModified() {
+        if (!this.state.note || !this.state.lastSavedNote) return false;
+        let diff = BaseModel.diffObjects(
+            this.state.note,
+            this.state.lastSavedNote
+        );
+        delete diff.type_;
+        return !!Object.getOwnPropertyNames(diff).length;
+    }
+
     UNSAFE_componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.backHandler);
+
         if (!this.props.noteId) {
             let note =
                 this.props.itemType == 'todo'
                     ? Note.newTodo(this.props.folderId)
                     : Note.new(this.props.folderId);
-            this.setState({ note: note });
+            this.setState({
+                lastSavedNote: Object.assign({}, note),
+                note: note,
+                mode: 'edit'
+            });
             this.refreshNoteMetadata();
         } else {
             Note.load(this.props.noteId).then(note => {
-                this.setState({ note: note });
+                this.setState({
+                    lastSavedNote: Object.assign({}, note),
+                    note: note
+                });
             });
             this.refreshNoteMetadata();
         }
 
         this.refreshFolder();
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
     }
 
     async currentFolder() {
@@ -95,7 +141,7 @@ class NoteScreenComponent extends BaseScreenComponent {
     async saveNoteButton_press() {
         let note = Object.assign({}, this.state.note);
 
-        if (!this.state.note.parent_id) {
+        if (!note.parent_id) {
             let folder = await Folder.defaultFolder();
             if (!folder) {
                 Log.warn('Cannot save note without a notebook');
@@ -105,17 +151,30 @@ class NoteScreenComponent extends BaseScreenComponent {
         }
 
         let isNew = !note.id;
+        if (!note.title) note.title = _('Untitled');
         note = await Note.save(note);
-        this.setState({ note: note });
+        this.setState({
+            lastSavedNote: Object.assign({}, note),
+            note: note
+        });
         if (isNew) Note.updateGeolocation(note.id);
         this.refreshNoteMetadata();
     }
 
-    deleteNote_onPress(noteId) {
-        Log.info('DELETE', noteId);
+    async deleteNote_onPress() {
+        let note = this.state.note;
+        if (!note.id) return;
+
+        let ok = await dialogs.confirm(this, _('Delete note?'));
+        if (!ok) return;
+
+        let folderId = note.parent_id;
+
+        await Note.delete(note.id);
+        await NotesScreenUtils.openNoteList(folderId);
     }
 
-    attachFile_onPress(noteId) {}
+    attachFile_onPress() {}
 
     showMetadata_onPress() {
         this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
@@ -127,13 +186,13 @@ class NoteScreenComponent extends BaseScreenComponent {
             {
                 title: _('Attach file'),
                 onPress: () => {
-                    this.attachFile_onPress(this.state.note.id);
+                    this.attachFile_onPress();
                 }
             },
             {
                 title: _('Delete note'),
                 onPress: () => {
-                    this.deleteNote_onPress(this.state.note.id);
+                    this.deleteNote_onPress();
                 }
             },
             {
@@ -144,6 +203,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             }
         ];
     }
+
+    todoCheckbox_change(checked) {}
 
     render() {
         const note = this.state.note;
@@ -267,7 +328,18 @@ class NoteScreenComponent extends BaseScreenComponent {
                 }
             });
 
-            return <ActionButton isToggle={true} buttons={buttons} />;
+            if (this.state.mode == 'edit' && !this.isModified())
+                return <ActionButton style={{ display: 'none' }} />;
+
+            let toggled = this.state.mode == 'edit';
+
+            return (
+                <ActionButton
+                    isToggle={true}
+                    buttons={buttons}
+                    toggled={toggled}
+                />
+            );
         };
 
         const actionButtonComp = renderActionButton();
@@ -281,7 +353,12 @@ class NoteScreenComponent extends BaseScreenComponent {
                 />
                 <View style={{ flexDirection: 'row' }}>
                     {isTodo && (
-                        <Checkbox checked={!!Number(note.todo_completed)} />
+                        <Checkbox
+                            checked={!!Number(note.todo_completed)}
+                            onChange={checked => {
+                                this.todoCheckbox_change(checked);
+                            }}
+                        />
                     )}
                     <TextInput
                         style={{ flex: 1 }}
@@ -295,6 +372,11 @@ class NoteScreenComponent extends BaseScreenComponent {
                 {this.state.showNoteMetadata && (
                     <Text>{this.state.noteMetadata}</Text>
                 )}
+                <DialogBox
+                    ref={dialogbox => {
+                        this.dialogbox = dialogbox;
+                    }}
+                />
             </View>
         );
     }
