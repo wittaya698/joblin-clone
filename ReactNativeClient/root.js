@@ -43,7 +43,11 @@ let defaultState = {
     showSideMenu: false,
     screens: {},
     loading: true,
-    historyCanGoBack: false
+    historyCanGoBack: false,
+    notesOrder: {
+        orderBy: 'updated_time',
+        orderByDir: 'DESC'
+    }
 };
 
 const initialRoute = {
@@ -150,6 +154,7 @@ const navReducer = createSlice({
 
             if (!found) newNotes.push(action.payload.note);
 
+            newNotes = Note.sortNotes(newNotes, state.notesOrder);
             state.notes = newNotes;
         },
 
@@ -237,6 +242,7 @@ async function initialize(dispatch, backButtonHandler) {
     await logDatabase.exec(Logger.databaseCreateTableSql());
 
     const mainLogger = new Logger();
+    mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
     if (Setting.value('env') == 'dev') mainLogger.addTarget('console');
     mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
@@ -266,6 +272,7 @@ async function initialize(dispatch, backButtonHandler) {
 
     BaseModel.dispatch = dispatch;
     NotesScreenUtils.dispatch = dispatch;
+    NotesScreenUtils.store = store;
     FoldersScreenUtils.dispatch = dispatch;
     BaseModel.db_ = db;
 

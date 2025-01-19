@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import { FAB, Provider } from 'react-native-paper';
 import { connect } from 'react-redux';
@@ -161,7 +161,11 @@ class ActionButtonComponent extends React.Component {
             );
         }
 
-        return <Provider>{buttonElement}</Provider>;
+        return (
+            <View>
+                <Provider>{buttonElement}</Provider>;
+            </View>
+        );
     }
 }
 
