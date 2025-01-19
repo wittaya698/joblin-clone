@@ -61,8 +61,8 @@ let navHistory = [];
 navHistory.push(initialRoute);
 
 function historyCanGoBackTo(route) {
-    if (route.routeName == 'Note' && !route.params.noteId) return false;
-    if (route.routeName == 'Folder' && !route.params.folderId) return false;
+    if (route.routeName == 'Note' && !route.payload.noteId) return false;
+    if (route.routeName == 'Folder' && !route.payload.folderId) return false;
     return true;
 }
 

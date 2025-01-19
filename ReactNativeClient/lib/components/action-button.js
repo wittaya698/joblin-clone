@@ -19,14 +19,14 @@ class ActionButtonComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            toggled: false,
+            buttonIndex: 0,
             open: false
         };
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {
-        if ('toggled' in newProps) {
-            this.setState({ toggled: newProps.toggled });
+        if ('buttonIndex' in newProps) {
+            this.setState({ buttonIndex: newProps.buttonIndex });
         }
     }
 
@@ -125,10 +125,17 @@ class ActionButtonComponent extends React.Component {
         );
 
         let buttonElement = null;
-        if (this.props.isToggle) {
-            if (!this.props.buttons || this.props.buttons.length !== 2)
-                throw new Error('Toggle state requires two buttons');
-            let button = this.props.buttons[this.state.toggled ? 1 : 0];
+        if (this.props.multiStates) {
+            if (!this.props.buttons || !this.props.buttons.length)
+                throw new Error(
+                    'Multi-state button requires at least one state'
+                );
+            if (
+                this.state.buttonIndex < 0 ||
+                this.state.buttonIndex >= this.props.buttons.length
+            )
+                throw new Error('Button index out of bounds');
+            let button = this.props.buttons[this.state.buttonIndex];
             let mainIcon = button.icon;
 
             buttonElement = (
@@ -143,9 +150,7 @@ class ActionButtonComponent extends React.Component {
                         bottom: 46
                     }}
                     onPress={() => {
-                        let doToggle = button.onPress(this.state.toggled);
-                        if (doToggle !== false)
-                            this.setState({ toggled: !this.state.toggled });
+                        button.onPress();
                     }}
                 />
             );
