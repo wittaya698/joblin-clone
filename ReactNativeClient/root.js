@@ -181,7 +181,10 @@ const navReducer = createSlice({
             for (let i = 0; i < newFolders.length; i++) {
                 let n = newFolders[i];
                 if (n.id == action.payload.folder.id) {
-                    newFolders[i] = action.payload.folder;
+                    newFolders[i] = Object.assign(
+                        newFolders[i],
+                        action.payload.folder
+                    );
                     found = true;
                     break;
                 }

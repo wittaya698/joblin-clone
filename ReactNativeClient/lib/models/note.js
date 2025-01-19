@@ -271,6 +271,9 @@ class Note extends BaseItem {
         if (isNew && !o.source) o.source = Setting.value('appName');
         if (isNew && !o.source_application)
             o.source_application = Setting.value('appId');
+
+        //return super.save(o, options);
+
         return super
             .save(o, options)
             .then(result => {
