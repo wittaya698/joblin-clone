@@ -134,7 +134,12 @@ class ActionButtonComponent extends React.Component {
                 this.state.buttonIndex < 0 ||
                 this.state.buttonIndex >= this.props.buttons.length
             )
-                throw new Error('Button index out of bounds');
+                throw new Error(
+                    'Button index out of bounds: ' +
+                        this.state.buttonIndex +
+                        '/' +
+                        this.props.buttons.length
+                );
             let button = this.props.buttons[this.state.buttonIndex];
             let mainIcon = button.icon;
 
@@ -166,11 +171,7 @@ class ActionButtonComponent extends React.Component {
             );
         }
 
-        return (
-            <View>
-                <Provider>{buttonElement}</Provider>;
-            </View>
-        );
+        return <Provider>{buttonElement}</Provider>;
     }
 }
 
