@@ -74,10 +74,6 @@ const navReducer = createSlice({
             const currentRoute = state.route;
             const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-            if (currentRouteName == action.payload.routeName) {
-                // If the current screen is already the requested screen, don't do anything
-            }
-
             newRoute = {};
             if (action.payload.routeName === 'Back') {
                 if (!state.historyCanGoBack) return;
@@ -94,10 +90,15 @@ const navReducer = createSlice({
 
                 if (!action) action = Object.assign({}, initialRoute);
             } else {
-                action = {
-                    routeName: action.payload.routeName,
-                    payload: action.payload
-                };
+                if (currentRouteName == action.payload.routeName) {
+                    // If the current screen is already the requested screen, don't do anything
+                } else {
+                    if (action.payload.routeName == 'Welcome') navHistory = [];
+                    action = {
+                        routeName: action.payload.routeName,
+                        payload: action.payload
+                    };
+                }
             }
 
             reg.logger().info(

@@ -41,6 +41,9 @@ class Command extends BaseCommand {
 
         await sync.start(options);
         vorpalUtils.redrawDone();
+
+        await app().refreshCurrentFolder();
+
         this.log(_('Done.'));
     }
 

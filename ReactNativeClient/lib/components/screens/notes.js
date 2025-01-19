@@ -61,6 +61,12 @@ class NotesScreenComponent extends BaseScreenComponent {
             this.props.folders,
             this.props.selectedFolderId
         );
+
+        if (!folder) {
+            NotesScreenUtils.openDefaultNoteList();
+            return null;
+        }
+
         let title = folder ? folder.title : null;
         const addFolderNoteButtons = folder.id != Folder.conflictFolderId();
 
