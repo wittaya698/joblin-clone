@@ -9,7 +9,7 @@ import { _ } from '@/lib/locale.js';
 import moment from 'moment';
 import { BaseItem } from '@/lib/models/base-item.js';
 import lodash from 'lodash';
-// import { actions } from '@/src/root.js';
+// import { actions } from '@/root.js';
 
 class Folder extends BaseItem {
     static tableName() {

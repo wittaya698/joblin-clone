@@ -48,13 +48,19 @@ let defaultState = {
 
 const initialRoute = {
     routeName: 'Welcome',
-    params: {}
+    payload: {}
 };
 
 defaultState.route = initialRoute;
 
 let navHistory = [];
 navHistory.push(initialRoute);
+
+function historyCanGoBackTo(route) {
+    if (route.routeName == 'Note' && !route.params.noteId) return false;
+    if (route.routeName == 'Folder' && !route.params.folderId) return false;
+    return true;
+}
 
 const navReducer = createSlice({
     name: 'nav',
@@ -64,17 +70,29 @@ const navReducer = createSlice({
             const currentRoute = state.route;
             const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-            newRoute = {};
             if (currentRouteName == action.payload.routeName) {
                 // If the current screen is already the requested screen, don't do anything
-            } else if (action.payload.routeName === 'Back') {
+            }
+
+            newRoute = {};
+            if (action.payload.routeName === 'Back') {
                 if (!state.historyCanGoBack) return;
-                newRoute = navHistory.pop(); // Current page
-                newRoute = navHistory.pop(); // Previous page
+                action = navHistory.pop(); // Current page
+                action = navHistory.pop(); // Previous page
+
+                while (!historyCanGoBackTo(action)) {
+                    if (!navHistory.length) {
+                        action = null;
+                        break;
+                    }
+                    action = navHistory.pop();
+                }
+
+                if (!action) action = Object.assign({}, initialRoute);
             } else {
-                newRoute = {
+                action = {
                     routeName: action.payload.routeName,
-                    params: action.payload
+                    payload: action.payload
                 };
             }
 
@@ -94,9 +112,13 @@ const navReducer = createSlice({
                 state.selectedItemType = action.payload.itemType;
             }
 
-            state.route = newRoute;
-            navHistory.push(newRoute);
+            state.route = action;
+            navHistory.push(action);
             state.historyCanGoBack = navHistory.length > 2;
+
+            if (state.route.routeName == 'Notes') {
+                Setting.setValue('activeFolderId', state.selectedFolderId);
+            }
 
             Keyboard.dismiss(); // TODO: should probably be in some middleware
         },
@@ -215,7 +237,7 @@ async function initialize(dispatch, backButtonHandler) {
     await logDatabase.exec(Logger.databaseCreateTableSql());
 
     const mainLogger = new Logger();
-    if (Setting.value('env') == 'env') mainLogger.addTarget('console');
+    if (Setting.value('env') == 'dev') mainLogger.addTarget('console');
     mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
     reg.setLogger(mainLogger);
@@ -231,8 +253,12 @@ async function initialize(dispatch, backButtonHandler) {
 
     const dbLogger = new Logger();
     dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
-    if (Setting.value('env') == 'env') dbLogger.addTarget('console');
-    dbLogger.setLevel(Logger.LEVEL_INFO);
+    if (Setting.value('env') == 'dev') dbLogger.addTarget('console');
+    if (Setting.value('env') == 'dev') {
+        dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
+    } else {
+        dbLogger.setLevel(Logger.LEVEL_INFO);
+    }
 
     let db = new JoplinDatabase(new DatabaseDriverReactNative());
     db.setLogger(dbLogger);
