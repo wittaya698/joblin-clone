@@ -319,6 +319,8 @@ class NoteScreenComponent extends BaseScreenComponent {
         } else {
             title = noteHeaderTitle;
         }
+        let headerTitle = '';
+        if (folder) headerTitle = folder.title;
 
         const renderActionButton = () => {
             let buttons = [];
@@ -331,37 +333,32 @@ class NoteScreenComponent extends BaseScreenComponent {
                 }
             });
 
-            buttons.push({
-                title: _('Save'),
-                icon: 'content-save-outline',
-                onPress: () => {
-                    this.saveNoteButton_press();
-                    return false;
-                }
-            });
-
             if (this.state.mode == 'edit' && !this.isModified())
                 return <ActionButton style={{ display: 'none' }} />;
-
-            let buttonIndex = this.state.mode == 'view' ? 0 : 1;
 
             return (
                 <ActionButton
                     multiStates={true}
                     buttons={buttons}
-                    buttonIndex={buttonIndex}
+                    buttonIndex={0}
                 />
             );
         };
 
         const actionButtonComp = renderActionButton();
 
+        let showSaveButton = this.state.mode == 'edit';
+        let saveButtonDisabled = !this.isModified();
+
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader
+                    title={headerTitle}
                     navState={this.props.navigation.state}
                     menuOptions={this.menuOptions()}
-                    title={title}
+                    showSaveButton={showSaveButton}
+                    saveButtonDisabled={saveButtonDisabled}
+                    onSaveButtonPress={() => this.saveNoteButton_press()}
                 />
                 <View style={{ flexDirection: 'row' }}>
                     {isTodo && (

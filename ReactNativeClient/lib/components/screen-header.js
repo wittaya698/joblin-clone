@@ -47,10 +47,26 @@ let styleObject = {
         color: '#ffffff',
         fontWeight: 'bold',
         flex: 1
+    },
+    saveButton: {
+        flex: 1,
+        backgroundColor: '#0482E3',
+        paddingLeft: 15,
+        paddingRight: 15,
+        marginRight: 10
+    },
+    saveButtonText: {
+        textAlignVertical: 'center',
+        color: '#ffffff',
+        fontWeight: 'bold',
+        flex: 1
     }
 };
 
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, {
+    backgroundColor: '#c6c6c6'
+});
+styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, {
     backgroundColor: '#c6c6c6'
 });
 const styles = StyleSheet.create(styleObject);
@@ -100,6 +116,23 @@ class ScreenHeaderComponent extends Component {
                         }
                     >
                         <Text style={styles.backButtonText}>&lt;</Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
+        function saveButton(styles, onPress, disabled, show) {
+            if (!show) return null;
+            return (
+                <TouchableOpacity onPress={onPress} disabled={disabled}>
+                    <View
+                        style={
+                            disabled
+                                ? styles.saveButtonDisabled
+                                : styles.saveButton
+                        }
+                    >
+                        <Text style={styles.saveButtonText}>Save</Text>
                     </View>
                 </TouchableOpacity>
             );
@@ -161,6 +194,15 @@ class ScreenHeaderComponent extends Component {
                     styles,
                     () => this.backButton_press(),
                     !this.props.historyCanGoBack
+                )}
+                {saveButton(
+                    styles,
+                    () => {
+                        if (this.props.onSaveButtonPress)
+                            this.props.onSaveButtonPress();
+                    },
+                    this.props.saveButtonDisabled === true,
+                    this.props.showSaveButton === true
                 )}
                 <Text style={{ flex: 1, marginLeft: 10 }}>{title}</Text>
                 <Menu onSelect={value => this.menu_select(value)}>

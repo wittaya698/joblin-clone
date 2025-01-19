@@ -90,7 +90,7 @@ const navReducer = createSlice({
 
                 if (!action) action = Object.assign({}, initialRoute);
             } else {
-                if (currentRouteName == action.payload.routeName) {
+                if (state.route == action) {
                     // If the current screen is already the requested screen, don't do anything
                 } else {
                     if (action.payload.routeName == 'Welcome') navHistory = [];
@@ -268,7 +268,7 @@ async function initialize(dispatch, backButtonHandler) {
     dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
     if (Setting.value('env') == 'dev') dbLogger.addTarget('console');
     if (Setting.value('env') == 'dev') {
-        dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
+        dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
     } else {
         dbLogger.setLevel(Logger.LEVEL_INFO);
     }
