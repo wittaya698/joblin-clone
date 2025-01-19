@@ -1,4 +1,5 @@
 import DialogBox from 'react-native-dialogbox';
+import { Keyboard } from 'react-native';
 // Add this at the bottom of the component:
 //
 // <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>
@@ -12,6 +13,8 @@ dialogs.confirm = (parentComponent, message) => {
         );
 
     return new Promise((resolve, reject) => {
+        Keyboard.dismiss();
+
         parentComponent.dialogbox.confirm({
             content: message,
             ok: {
@@ -27,5 +30,12 @@ dialogs.confirm = (parentComponent, message) => {
         });
     });
 };
+
+dialogs.error = (parentComponent, message) => {
+    Keyboard.dismiss();
+    return parentComponent.dialogbox.alert(message);
+};
+
+dialogs.DialogBox = DialogBox;
 
 export { dialogs };

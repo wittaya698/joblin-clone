@@ -7,6 +7,8 @@ import { BaseModel } from '@/lib/base-model.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
+import { dialogs } from '@/lib/dialogs.js';
+import { _ } from '@/lib/locale.js';
 import { actions } from '@/root.js';
 
 class FolderScreenComponent extends BaseScreenComponent {
@@ -50,7 +52,19 @@ class FolderScreenComponent extends BaseScreenComponent {
 
         if (this.originalFolder) toSave.id = this.originalFolder.id;
 
-        this.originalFolder = await Folder.save(toSave);
+        try {
+            let f = await Folder.save(toSave, {
+                duplicateCheck: true,
+                reservedTitleCheck: true
+            });
+            this.originalFolder = f;
+        } catch (error) {
+            dialogs.error(
+                this,
+                _('The folder could not be saved: %s', error.message)
+            );
+            return;
+        }
         this.setState({ folder: this.originalFolder });
 
         await NotesScreenUtils.openDefaultNoteList();
@@ -67,6 +81,11 @@ class FolderScreenComponent extends BaseScreenComponent {
                 <Button
                     title="Save folder"
                     onPress={() => this.saveFolderButton_press()}
+                />
+                <dialogs.DialogBox
+                    ref={dialogbox => {
+                        this.dialogbox = dialogbox;
+                    }}
                 />
             </View>
         );
