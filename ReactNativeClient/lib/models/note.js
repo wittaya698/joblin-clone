@@ -272,19 +272,10 @@ class Note extends BaseItem {
         if (isNew && !o.source_application)
             o.source_application = Setting.value('appId');
 
-        //return super.save(o, options);
-
-        return super
-            .save(o, options)
-            .then(result => {
-                // 'result' could be a partial one at this point (if, for example, only one property of it was saved)
-                // so call this.preview() so that the right fields are populated.
-                return this.load(result.id);
-            })
-            .then(note => {
-                // this.dispatch(actions.notes_update_one({ note: note }));
-                return note;
-            });
+        return super.save(o, options).then(note => {
+            // this.dispatch(actions.notes_update_one({ note: note }));
+            return note;
+        });
     }
 
     static async delete(id, options = null) {

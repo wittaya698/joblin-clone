@@ -147,7 +147,10 @@ const navReducer = createSlice({
             for (let i = 0; i < newNotes.length; i++) {
                 let n = newNotes[i];
                 if (n.id == action.payload.note.id) {
-                    newNotes[i] = action.payload.note;
+                    newNotes[i] = Object.assign(
+                        newNotes[i],
+                        action.payload.note
+                    );
                     found = true;
                     break;
                 }
