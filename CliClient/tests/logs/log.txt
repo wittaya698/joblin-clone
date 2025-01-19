@@ -5108,3 +5108,2975 @@ TypeError: Cannot read properties of undefined (reading 'modelSelectAll')
 2025-01-12 15:09:11: Total resources: 0
 2025-01-12 15:09:11: SELECT * FROM `folders` WHERE `id` = ?
 2025-01-12 15:09:11: ["e9ba8785af8d4e68a54a0a3a1d4d63fa"]
+2025-01-19 21:51:30: Sync: starting: Starting synchronization to memory (1)... [1737298290867]
+2025-01-19 21:51:30: mkdir /root/.sync
+2025-01-19 21:51:30: mkdir /root/.resource
+2025-01-19 21:51:30: stat /root/393a31c195974f1f91450f5c5ef1ab79.md
+2025-01-19 21:51:30: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 393a31c195974f1f91450f5c5ef1ab79, "un")
+2025-01-19 21:51:30: put /root/393a31c195974f1f91450f5c5ef1ab79.md
+2025-01-19 21:51:30: setTimestamp /root/393a31c195974f1f91450f5c5ef1ab79.md
+2025-01-19 21:51:30: stat /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:30: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 831f140ea3d44f299a6e1ccc7eca2d30, "folder1")
+2025-01-19 21:51:30: put /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:30: setTimestamp /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:30: list /root
+2025-01-19 21:51:30: Sync: finished: Synchronization finished [1737298290867]
+2025-01-19 21:51:30: Operations completed: 
+2025-01-19 21:51:30: starting: 1
+2025-01-19 21:51:30: state: idle
+2025-01-19 21:51:30: createRemote: 2
+2025-01-19 21:51:30: finished: 1
+2025-01-19 21:51:30: Total folders: 1
+2025-01-19 21:51:30: Total notes: 1
+2025-01-19 21:51:30: Total resources: 0
+2025-01-19 21:51:31: Sync: starting: Starting synchronization to memory (1)... [1737298291078]
+2025-01-19 21:51:31: mkdir /root/.sync
+2025-01-19 21:51:31: mkdir /root/.resource
+2025-01-19 21:51:31: list /root
+2025-01-19 21:51:31: get /root/393a31c195974f1f91450f5c5ef1ab79.md
+2025-01-19 21:51:31: Sync: createLocal: Remote exists but local does not: Note: (Remote 393a31c195974f1f91450f5c5ef1ab79, "un")
+2025-01-19 21:51:31: get /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:31: Sync: createLocal: Remote exists but local does not: Folder: (Remote 831f140ea3d44f299a6e1ccc7eca2d30, "folder1")
+2025-01-19 21:51:31: Sync: finished: Synchronization finished [1737298291078]
+2025-01-19 21:51:31: Operations completed: 
+2025-01-19 21:51:31: starting: 1
+2025-01-19 21:51:31: state: idle
+2025-01-19 21:51:31: createLocal: 2
+2025-01-19 21:51:31: finished: 1
+2025-01-19 21:51:31: Total folders: 1
+2025-01-19 21:51:31: Total notes: 1
+2025-01-19 21:51:31: Total resources: 0
+2025-01-19 21:51:31: Sync: starting: Starting synchronization to memory (1)... [1737298291185]
+2025-01-19 21:51:31: mkdir /root/.sync
+2025-01-19 21:51:31: mkdir /root/.resource
+2025-01-19 21:51:31: stat /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:31: Sync: updateRemote: local has changes: Folder: (Local 831f140ea3d44f299a6e1ccc7eca2d30, "folder1 UPDATE CLIENT 2"): (Remote 831f140ea3d44f299a6e1ccc7eca2d30.md)
+2025-01-19 21:51:31: put /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:31: setTimestamp /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:31: list /root
+2025-01-19 21:51:31: Sync: finished: Synchronization finished [1737298291185]
+2025-01-19 21:51:31: Operations completed: 
+2025-01-19 21:51:31: starting: 1
+2025-01-19 21:51:31: state: idle
+2025-01-19 21:51:31: updateRemote: 1
+2025-01-19 21:51:31: finished: 1
+2025-01-19 21:51:31: Total folders: 1
+2025-01-19 21:51:31: Total notes: 1
+2025-01-19 21:51:31: Total resources: 0
+2025-01-19 21:51:31: Sync: starting: Starting synchronization to memory (1)... [1737298291494]
+2025-01-19 21:51:31: mkdir /root/.sync
+2025-01-19 21:51:31: mkdir /root/.resource
+2025-01-19 21:51:31: stat /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:31: Sync: itemConflict: both remote and local have changes: Folder: (Local 831f140ea3d44f299a6e1ccc7eca2d30, "folder1 UPDATE CLIENT 1"): (Remote 831f140ea3d44f299a6e1ccc7eca2d30.md)
+2025-01-19 21:51:31: get /root/831f140ea3d44f299a6e1ccc7eca2d30.md
+2025-01-19 21:51:31: list /root
+2025-01-19 21:51:31: Sync: finished: Synchronization finished [1737298291494]
+2025-01-19 21:51:31: Operations completed: 
+2025-01-19 21:51:31: starting: 1
+2025-01-19 21:51:31: state: idle
+2025-01-19 21:51:31: itemConflict: 1
+2025-01-19 21:51:31: finished: 1
+2025-01-19 21:51:31: Total folders: 1
+2025-01-19 21:51:31: Total notes: 1
+2025-01-19 21:51:31: Total resources: 0
+2025-01-19 21:51:31: Sync: starting: Starting synchronization to memory (1)... [1737298291705]
+2025-01-19 21:51:31: mkdir /root/.sync
+2025-01-19 21:51:31: mkdir /root/.resource
+2025-01-19 21:51:31: stat /root/2a09e04d3ed84b80972cf8fb183a7494.md
+2025-01-19 21:51:31: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 2a09e04d3ed84b80972cf8fb183a7494, "un")
+2025-01-19 21:51:31: put /root/2a09e04d3ed84b80972cf8fb183a7494.md
+2025-01-19 21:51:31: setTimestamp /root/2a09e04d3ed84b80972cf8fb183a7494.md
+2025-01-19 21:51:31: stat /root/d59e7dcd2d684038a588291da61b7385.md
+2025-01-19 21:51:31: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local d59e7dcd2d684038a588291da61b7385, "folder1")
+2025-01-19 21:51:31: put /root/d59e7dcd2d684038a588291da61b7385.md
+2025-01-19 21:51:31: setTimestamp /root/d59e7dcd2d684038a588291da61b7385.md
+2025-01-19 21:51:31: list /root
+2025-01-19 21:51:31: Sync: deleteLocal: remote has been deleted: (Local 393a31c195974f1f91450f5c5ef1ab79)
+2025-01-19 21:51:31: Sync: finished: Synchronization finished [1737298291705]
+2025-01-19 21:51:31: Operations completed: 
+2025-01-19 21:51:31: starting: 1
+2025-01-19 21:51:31: state: idle
+2025-01-19 21:51:31: createRemote: 2
+2025-01-19 21:51:31: deleteLocal: 1
+2025-01-19 21:51:31: finished: 1
+2025-01-19 21:51:31: Total folders: 1
+2025-01-19 21:51:31: Total notes: 1
+2025-01-19 21:51:31: Total resources: 0
+2025-01-19 21:51:31: Sync: starting: Starting synchronization to memory (1)... [1737298291911]
+2025-01-19 21:51:31: mkdir /root/.sync
+2025-01-19 21:51:31: mkdir /root/.resource
+2025-01-19 21:51:31: list /root
+2025-01-19 21:51:31: get /root/2a09e04d3ed84b80972cf8fb183a7494.md
+2025-01-19 21:51:31: Sync: createLocal: Remote exists but local does not: Note: (Remote 2a09e04d3ed84b80972cf8fb183a7494, "un")
+2025-01-19 21:51:31: get /root/d59e7dcd2d684038a588291da61b7385.md
+2025-01-19 21:51:31: Sync: createLocal: Remote exists but local does not: Folder: (Remote d59e7dcd2d684038a588291da61b7385, "folder1")
+2025-01-19 21:51:31: Sync: deleteLocal: remote has been deleted: (Local 393a31c195974f1f91450f5c5ef1ab79)
+2025-01-19 21:51:31: Sync: finished: Synchronization finished [1737298291911]
+2025-01-19 21:51:31: Operations completed: 
+2025-01-19 21:51:31: starting: 1
+2025-01-19 21:51:31: state: idle
+2025-01-19 21:51:31: createLocal: 2
+2025-01-19 21:51:31: deleteLocal: 1
+2025-01-19 21:51:31: finished: 1
+2025-01-19 21:51:31: Total folders: 1
+2025-01-19 21:51:31: Total notes: 1
+2025-01-19 21:51:31: Total resources: 0
+2025-01-19 21:51:31: list /root
+2025-01-19 21:51:31: stat /root/d59e7dcd2d684038a588291da61b7385.md
+2025-01-19 21:51:31: get /root/d59e7dcd2d684038a588291da61b7385.md
+2025-01-19 21:51:31: stat /root/2a09e04d3ed84b80972cf8fb183a7494.md
+2025-01-19 21:51:31: get /root/2a09e04d3ed84b80972cf8fb183a7494.md
+2025-01-19 21:51:32: Sync: starting: Starting synchronization to memory (1)... [1737298292137]
+2025-01-19 21:51:32: mkdir /root/.sync
+2025-01-19 21:51:32: mkdir /root/.resource
+2025-01-19 21:51:32: stat /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local f7bbc3a46d4d4000a9b6362e93026237, "un")
+2025-01-19 21:51:32: put /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: setTimestamp /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: stat /root/c454fc97f6f6423297778d34324b3c6a.md
+2025-01-19 21:51:32: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local c454fc97f6f6423297778d34324b3c6a, "folder1")
+2025-01-19 21:51:32: put /root/c454fc97f6f6423297778d34324b3c6a.md
+2025-01-19 21:51:32: setTimestamp /root/c454fc97f6f6423297778d34324b3c6a.md
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: Sync: deleteLocal: remote has been deleted: (Local 2a09e04d3ed84b80972cf8fb183a7494)
+2025-01-19 21:51:32: Sync: finished: Synchronization finished [1737298292137]
+2025-01-19 21:51:32: Operations completed: 
+2025-01-19 21:51:32: starting: 1
+2025-01-19 21:51:32: state: idle
+2025-01-19 21:51:32: createRemote: 2
+2025-01-19 21:51:32: deleteLocal: 1
+2025-01-19 21:51:32: finished: 1
+2025-01-19 21:51:32: Total folders: 1
+2025-01-19 21:51:32: Total notes: 1
+2025-01-19 21:51:32: Total resources: 0
+2025-01-19 21:51:32: Sync: starting: Starting synchronization to memory (1)... [1737298292346]
+2025-01-19 21:51:32: mkdir /root/.sync
+2025-01-19 21:51:32: mkdir /root/.resource
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: get /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: Sync: createLocal: Remote exists but local does not: Note: (Remote f7bbc3a46d4d4000a9b6362e93026237, "un")
+2025-01-19 21:51:32: get /root/c454fc97f6f6423297778d34324b3c6a.md
+2025-01-19 21:51:32: Sync: createLocal: Remote exists but local does not: Folder: (Remote c454fc97f6f6423297778d34324b3c6a, "folder1")
+2025-01-19 21:51:32: Sync: deleteLocal: remote has been deleted: (Local 2a09e04d3ed84b80972cf8fb183a7494)
+2025-01-19 21:51:32: Sync: finished: Synchronization finished [1737298292346]
+2025-01-19 21:51:32: Operations completed: 
+2025-01-19 21:51:32: starting: 1
+2025-01-19 21:51:32: state: idle
+2025-01-19 21:51:32: createLocal: 2
+2025-01-19 21:51:32: deleteLocal: 1
+2025-01-19 21:51:32: finished: 1
+2025-01-19 21:51:32: Total folders: 1
+2025-01-19 21:51:32: Total notes: 1
+2025-01-19 21:51:32: Total resources: 0
+2025-01-19 21:51:32: Sync: starting: Starting synchronization to memory (1)... [1737298292465]
+2025-01-19 21:51:32: mkdir /root/.sync
+2025-01-19 21:51:32: mkdir /root/.resource
+2025-01-19 21:51:32: stat /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: Sync: updateRemote: local has changes: Note: (Local f7bbc3a46d4d4000a9b6362e93026237, "Updated on client 2"): (Remote f7bbc3a46d4d4000a9b6362e93026237.md)
+2025-01-19 21:51:32: put /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: setTimestamp /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: Sync: finished: Synchronization finished [1737298292465]
+2025-01-19 21:51:32: Operations completed: 
+2025-01-19 21:51:32: starting: 1
+2025-01-19 21:51:32: state: idle
+2025-01-19 21:51:32: updateRemote: 1
+2025-01-19 21:51:32: finished: 1
+2025-01-19 21:51:32: Total folders: 1
+2025-01-19 21:51:32: Total notes: 1
+2025-01-19 21:51:32: Total resources: 0
+2025-01-19 21:51:32: Sync: starting: Starting synchronization to memory (1)... [1737298292676]
+2025-01-19 21:51:32: mkdir /root/.sync
+2025-01-19 21:51:32: mkdir /root/.resource
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: get /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: Sync: updateLocal: Remote is more recent than local: Note: (Local f7bbc3a46d4d4000a9b6362e93026237, "un"): (Remote f7bbc3a46d4d4000a9b6362e93026237, "Updated on client 2")
+2025-01-19 21:51:32: Sync: finished: Synchronization finished [1737298292676]
+2025-01-19 21:51:32: Operations completed: 
+2025-01-19 21:51:32: starting: 1
+2025-01-19 21:51:32: state: idle
+2025-01-19 21:51:32: updateLocal: 1
+2025-01-19 21:51:32: finished: 1
+2025-01-19 21:51:32: Total folders: 1
+2025-01-19 21:51:32: Total notes: 1
+2025-01-19 21:51:32: Total resources: 0
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: stat /root/c454fc97f6f6423297778d34324b3c6a.md
+2025-01-19 21:51:32: get /root/c454fc97f6f6423297778d34324b3c6a.md
+2025-01-19 21:51:32: stat /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: get /root/f7bbc3a46d4d4000a9b6362e93026237.md
+2025-01-19 21:51:32: Sync: starting: Starting synchronization to memory (1)... [1737298292896]
+2025-01-19 21:51:32: mkdir /root/.sync
+2025-01-19 21:51:32: mkdir /root/.resource
+2025-01-19 21:51:32: stat /root/fffeeadc348f4aa3bb3a5c9a2f954fa7.md
+2025-01-19 21:51:32: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local fffeeadc348f4aa3bb3a5c9a2f954fa7, "un")
+2025-01-19 21:51:32: put /root/fffeeadc348f4aa3bb3a5c9a2f954fa7.md
+2025-01-19 21:51:32: setTimestamp /root/fffeeadc348f4aa3bb3a5c9a2f954fa7.md
+2025-01-19 21:51:32: stat /root/b918f6afe7dc4242b19f10c8ae488adb.md
+2025-01-19 21:51:32: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local b918f6afe7dc4242b19f10c8ae488adb, "folder1")
+2025-01-19 21:51:32: put /root/b918f6afe7dc4242b19f10c8ae488adb.md
+2025-01-19 21:51:32: setTimestamp /root/b918f6afe7dc4242b19f10c8ae488adb.md
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: Sync: deleteLocal: remote has been deleted: (Local f7bbc3a46d4d4000a9b6362e93026237)
+2025-01-19 21:51:32: Sync: finished: Synchronization finished [1737298292896]
+2025-01-19 21:51:32: Operations completed: 
+2025-01-19 21:51:32: starting: 1
+2025-01-19 21:51:32: state: idle
+2025-01-19 21:51:32: createRemote: 2
+2025-01-19 21:51:32: deleteLocal: 1
+2025-01-19 21:51:32: finished: 1
+2025-01-19 21:51:32: Total folders: 1
+2025-01-19 21:51:32: Total notes: 1
+2025-01-19 21:51:32: Total resources: 0
+2025-01-19 21:51:32: list /root
+2025-01-19 21:51:32: stat /root/b918f6afe7dc4242b19f10c8ae488adb.md
+2025-01-19 21:51:32: get /root/b918f6afe7dc4242b19f10c8ae488adb.md
+2025-01-19 21:51:32: stat /root/fffeeadc348f4aa3bb3a5c9a2f954fa7.md
+2025-01-19 21:51:32: get /root/fffeeadc348f4aa3bb3a5c9a2f954fa7.md
+2025-01-19 21:51:33: Sync: starting: Starting synchronization to memory (1)... [1737298293112]
+2025-01-19 21:51:33: mkdir /root/.sync
+2025-01-19 21:51:33: mkdir /root/.resource
+2025-01-19 21:51:33: stat /root/e108c232131f41e4905ba031537f13d6.md
+2025-01-19 21:51:33: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local e108c232131f41e4905ba031537f13d6, "un")
+2025-01-19 21:51:33: put /root/e108c232131f41e4905ba031537f13d6.md
+2025-01-19 21:51:33: setTimestamp /root/e108c232131f41e4905ba031537f13d6.md
+2025-01-19 21:51:33: stat /root/02b9a7b5f992481687ba96de11a9bcb3.md
+2025-01-19 21:51:33: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 02b9a7b5f992481687ba96de11a9bcb3, "folder1")
+2025-01-19 21:51:33: put /root/02b9a7b5f992481687ba96de11a9bcb3.md
+2025-01-19 21:51:33: setTimestamp /root/02b9a7b5f992481687ba96de11a9bcb3.md
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: Sync: deleteLocal: remote has been deleted: (Local fffeeadc348f4aa3bb3a5c9a2f954fa7)
+2025-01-19 21:51:33: Sync: finished: Synchronization finished [1737298293112]
+2025-01-19 21:51:33: Operations completed: 
+2025-01-19 21:51:33: starting: 1
+2025-01-19 21:51:33: state: idle
+2025-01-19 21:51:33: createRemote: 2
+2025-01-19 21:51:33: deleteLocal: 1
+2025-01-19 21:51:33: finished: 1
+2025-01-19 21:51:33: Total folders: 1
+2025-01-19 21:51:33: Total notes: 1
+2025-01-19 21:51:33: Total resources: 0
+2025-01-19 21:51:33: Sync: starting: Starting synchronization to memory (1)... [1737298293320]
+2025-01-19 21:51:33: mkdir /root/.sync
+2025-01-19 21:51:33: mkdir /root/.resource
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: get /root/e108c232131f41e4905ba031537f13d6.md
+2025-01-19 21:51:33: Sync: createLocal: Remote exists but local does not: Note: (Remote e108c232131f41e4905ba031537f13d6, "un")
+2025-01-19 21:51:33: get /root/02b9a7b5f992481687ba96de11a9bcb3.md
+2025-01-19 21:51:33: Sync: createLocal: Remote exists but local does not: Folder: (Remote 02b9a7b5f992481687ba96de11a9bcb3, "folder1")
+2025-01-19 21:51:33: Sync: deleteLocal: remote has been deleted: (Local f7bbc3a46d4d4000a9b6362e93026237)
+2025-01-19 21:51:33: Sync: finished: Synchronization finished [1737298293320]
+2025-01-19 21:51:33: Operations completed: 
+2025-01-19 21:51:33: starting: 1
+2025-01-19 21:51:33: state: idle
+2025-01-19 21:51:33: createLocal: 2
+2025-01-19 21:51:33: deleteLocal: 1
+2025-01-19 21:51:33: finished: 1
+2025-01-19 21:51:33: Total folders: 1
+2025-01-19 21:51:33: Total notes: 1
+2025-01-19 21:51:33: Total resources: 0
+2025-01-19 21:51:33: Sync: starting: Starting synchronization to memory (1)... [1737298293435]
+2025-01-19 21:51:33: mkdir /root/.sync
+2025-01-19 21:51:33: mkdir /root/.resource
+2025-01-19 21:51:33: Sync: deleteRemote: local has been deleted: (Remote e108c232131f41e4905ba031537f13d6)
+2025-01-19 21:51:33: delete /root/e108c232131f41e4905ba031537f13d6.md
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: Sync: deleteLocal: remote has been deleted: (Local e108c232131f41e4905ba031537f13d6)
+2025-01-19 21:51:33: Sync: finished: Synchronization finished [1737298293435]
+2025-01-19 21:51:33: Operations completed: 
+2025-01-19 21:51:33: starting: 1
+2025-01-19 21:51:33: state: idle
+2025-01-19 21:51:33: deleteRemote: 1
+2025-01-19 21:51:33: deleteLocal: 1
+2025-01-19 21:51:33: finished: 1
+2025-01-19 21:51:33: Total folders: 1
+2025-01-19 21:51:33: Total notes: 0
+2025-01-19 21:51:33: Total resources: 0
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: Sync: starting: Starting synchronization to memory (1)... [1737298293647]
+2025-01-19 21:51:33: mkdir /root/.sync
+2025-01-19 21:51:33: mkdir /root/.resource
+2025-01-19 21:51:33: stat /root/55c0d41a84da4f3987a2f3d04cbc7fb3.md
+2025-01-19 21:51:33: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 55c0d41a84da4f3987a2f3d04cbc7fb3, "un")
+2025-01-19 21:51:33: put /root/55c0d41a84da4f3987a2f3d04cbc7fb3.md
+2025-01-19 21:51:33: setTimestamp /root/55c0d41a84da4f3987a2f3d04cbc7fb3.md
+2025-01-19 21:51:33: stat /root/cf873b524866430e82d6d8361946ac40.md
+2025-01-19 21:51:33: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local cf873b524866430e82d6d8361946ac40, "folder1")
+2025-01-19 21:51:33: put /root/cf873b524866430e82d6d8361946ac40.md
+2025-01-19 21:51:33: setTimestamp /root/cf873b524866430e82d6d8361946ac40.md
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: Sync: deleteLocal: remote has been deleted: (Local e108c232131f41e4905ba031537f13d6)
+2025-01-19 21:51:33: Sync: finished: Synchronization finished [1737298293647]
+2025-01-19 21:51:33: Operations completed: 
+2025-01-19 21:51:33: starting: 1
+2025-01-19 21:51:33: state: idle
+2025-01-19 21:51:33: createRemote: 2
+2025-01-19 21:51:33: deleteLocal: 1
+2025-01-19 21:51:33: finished: 1
+2025-01-19 21:51:33: Total folders: 1
+2025-01-19 21:51:33: Total notes: 1
+2025-01-19 21:51:33: Total resources: 0
+2025-01-19 21:51:33: Sync: starting: Starting synchronization to memory (1)... [1737298293854]
+2025-01-19 21:51:33: mkdir /root/.sync
+2025-01-19 21:51:33: mkdir /root/.resource
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: get /root/55c0d41a84da4f3987a2f3d04cbc7fb3.md
+2025-01-19 21:51:33: Sync: createLocal: Remote exists but local does not: Note: (Remote 55c0d41a84da4f3987a2f3d04cbc7fb3, "un")
+2025-01-19 21:51:33: get /root/cf873b524866430e82d6d8361946ac40.md
+2025-01-19 21:51:33: Sync: createLocal: Remote exists but local does not: Folder: (Remote cf873b524866430e82d6d8361946ac40, "folder1")
+2025-01-19 21:51:33: Sync: finished: Synchronization finished [1737298293854]
+2025-01-19 21:51:33: Operations completed: 
+2025-01-19 21:51:33: starting: 1
+2025-01-19 21:51:33: state: idle
+2025-01-19 21:51:33: createLocal: 2
+2025-01-19 21:51:33: finished: 1
+2025-01-19 21:51:33: Total folders: 1
+2025-01-19 21:51:33: Total notes: 1
+2025-01-19 21:51:33: Total resources: 0
+2025-01-19 21:51:33: Sync: starting: Starting synchronization to memory (1)... [1737298293962]
+2025-01-19 21:51:33: mkdir /root/.sync
+2025-01-19 21:51:33: mkdir /root/.resource
+2025-01-19 21:51:33: Sync: deleteRemote: local has been deleted: (Remote 55c0d41a84da4f3987a2f3d04cbc7fb3)
+2025-01-19 21:51:33: delete /root/55c0d41a84da4f3987a2f3d04cbc7fb3.md
+2025-01-19 21:51:33: list /root
+2025-01-19 21:51:33: Sync: deleteLocal: remote has been deleted: (Local 55c0d41a84da4f3987a2f3d04cbc7fb3)
+2025-01-19 21:51:33: Sync: finished: Synchronization finished [1737298293962]
+2025-01-19 21:51:33: Operations completed: 
+2025-01-19 21:51:33: starting: 1
+2025-01-19 21:51:33: state: idle
+2025-01-19 21:51:33: deleteRemote: 1
+2025-01-19 21:51:33: deleteLocal: 1
+2025-01-19 21:51:33: finished: 1
+2025-01-19 21:51:33: Total folders: 1
+2025-01-19 21:51:33: Total notes: 0
+2025-01-19 21:51:33: Total resources: 0
+2025-01-19 21:51:34: Sync: starting: Starting synchronization to memory (1)... [1737298294166]
+2025-01-19 21:51:34: mkdir /root/.sync
+2025-01-19 21:51:34: mkdir /root/.resource
+2025-01-19 21:51:34: list /root
+2025-01-19 21:51:34: Sync: deleteLocal: remote has been deleted: (Local 55c0d41a84da4f3987a2f3d04cbc7fb3)
+2025-01-19 21:51:34: Sync: finished: Synchronization finished [1737298294166]
+2025-01-19 21:51:34: Operations completed: 
+2025-01-19 21:51:34: starting: 1
+2025-01-19 21:51:34: state: idle
+2025-01-19 21:51:34: deleteLocal: 1
+2025-01-19 21:51:34: finished: 1
+2025-01-19 21:51:34: Total folders: 1
+2025-01-19 21:51:34: Total notes: 0
+2025-01-19 21:51:34: Total resources: 0
+2025-01-19 21:51:34: Sync: starting: Starting synchronization to memory (1)... [1737298294375]
+2025-01-19 21:51:34: mkdir /root/.sync
+2025-01-19 21:51:34: mkdir /root/.resource
+2025-01-19 21:51:34: stat /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 7ce47f9a85214df894d97fe7e6d145ca, "un")
+2025-01-19 21:51:34: put /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: setTimestamp /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: stat /root/1b5c353b9ac7410ca984df4a2e9b1967.md
+2025-01-19 21:51:34: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 1b5c353b9ac7410ca984df4a2e9b1967, "folder1")
+2025-01-19 21:51:34: put /root/1b5c353b9ac7410ca984df4a2e9b1967.md
+2025-01-19 21:51:34: setTimestamp /root/1b5c353b9ac7410ca984df4a2e9b1967.md
+2025-01-19 21:51:34: list /root
+2025-01-19 21:51:34: Sync: finished: Synchronization finished [1737298294375]
+2025-01-19 21:51:34: Operations completed: 
+2025-01-19 21:51:34: starting: 1
+2025-01-19 21:51:34: state: idle
+2025-01-19 21:51:34: createRemote: 2
+2025-01-19 21:51:34: finished: 1
+2025-01-19 21:51:34: Total folders: 1
+2025-01-19 21:51:34: Total notes: 1
+2025-01-19 21:51:34: Total resources: 0
+2025-01-19 21:51:34: Sync: starting: Starting synchronization to memory (1)... [1737298294582]
+2025-01-19 21:51:34: mkdir /root/.sync
+2025-01-19 21:51:34: mkdir /root/.resource
+2025-01-19 21:51:34: list /root
+2025-01-19 21:51:34: get /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: Sync: createLocal: Remote exists but local does not: Note: (Remote 7ce47f9a85214df894d97fe7e6d145ca, "un")
+2025-01-19 21:51:34: get /root/1b5c353b9ac7410ca984df4a2e9b1967.md
+2025-01-19 21:51:34: Sync: createLocal: Remote exists but local does not: Folder: (Remote 1b5c353b9ac7410ca984df4a2e9b1967, "folder1")
+2025-01-19 21:51:34: Sync: finished: Synchronization finished [1737298294582]
+2025-01-19 21:51:34: Operations completed: 
+2025-01-19 21:51:34: starting: 1
+2025-01-19 21:51:34: state: idle
+2025-01-19 21:51:34: createLocal: 2
+2025-01-19 21:51:34: finished: 1
+2025-01-19 21:51:34: Total folders: 1
+2025-01-19 21:51:34: Total notes: 1
+2025-01-19 21:51:34: Total resources: 0
+2025-01-19 21:51:34: Sync: starting: Starting synchronization to memory (1)... [1737298294693]
+2025-01-19 21:51:34: mkdir /root/.sync
+2025-01-19 21:51:34: mkdir /root/.resource
+2025-01-19 21:51:34: stat /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: Sync: updateRemote: local has changes: Note: (Local 7ce47f9a85214df894d97fe7e6d145ca, "Updated on client 2"): (Remote 7ce47f9a85214df894d97fe7e6d145ca.md)
+2025-01-19 21:51:34: put /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: setTimestamp /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:34: list /root
+2025-01-19 21:51:34: Sync: finished: Synchronization finished [1737298294693]
+2025-01-19 21:51:34: Operations completed: 
+2025-01-19 21:51:34: starting: 1
+2025-01-19 21:51:34: state: idle
+2025-01-19 21:51:34: updateRemote: 1
+2025-01-19 21:51:34: finished: 1
+2025-01-19 21:51:34: Total folders: 1
+2025-01-19 21:51:34: Total notes: 1
+2025-01-19 21:51:34: Total resources: 0
+2025-01-19 21:51:35: Sync: starting: Starting synchronization to memory (1)... [1737298295008]
+2025-01-19 21:51:35: mkdir /root/.sync
+2025-01-19 21:51:35: mkdir /root/.resource
+2025-01-19 21:51:35: stat /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:35: Sync: noteConflict: both remote and local have changes: Note: (Local 7ce47f9a85214df894d97fe7e6d145ca, "Updated on client 1"): (Remote 7ce47f9a85214df894d97fe7e6d145ca.md)
+2025-01-19 21:51:35: get /root/7ce47f9a85214df894d97fe7e6d145ca.md
+2025-01-19 21:51:35: stat /root/7c58175f61b54bdd82d8424959c98fd4.md
+2025-01-19 21:51:35: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 7c58175f61b54bdd82d8424959c98fd4, "Updated on client 1")
+2025-01-19 21:51:35: put /root/7c58175f61b54bdd82d8424959c98fd4.md
+2025-01-19 21:51:35: setTimestamp /root/7c58175f61b54bdd82d8424959c98fd4.md
+2025-01-19 21:51:35: list /root
+2025-01-19 21:51:35: Sync: finished: Synchronization finished [1737298295008]
+2025-01-19 21:51:35: Operations completed: 
+2025-01-19 21:51:35: starting: 1
+2025-01-19 21:51:35: state: idle
+2025-01-19 21:51:35: noteConflict: 1
+2025-01-19 21:51:35: createRemote: 1
+2025-01-19 21:51:35: finished: 1
+2025-01-19 21:51:35: Total folders: 1
+2025-01-19 21:51:35: Total notes: 2
+2025-01-19 21:51:35: Total resources: 0
+2025-01-19 21:51:35: Sync: starting: Starting synchronization to memory (1)... [1737298295435]
+2025-01-19 21:51:35: mkdir /root/.sync
+2025-01-19 21:51:35: mkdir /root/.resource
+2025-01-19 21:51:35: stat /root/43f08c559ed644ce8ca983ec03a2a13e.md
+2025-01-19 21:51:35: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 43f08c559ed644ce8ca983ec03a2a13e, "folder")
+2025-01-19 21:51:35: put /root/43f08c559ed644ce8ca983ec03a2a13e.md
+2025-01-19 21:51:35: setTimestamp /root/43f08c559ed644ce8ca983ec03a2a13e.md
+2025-01-19 21:51:35: list /root
+2025-01-19 21:51:35: Sync: deleteLocal: remote has been deleted: (Local 7ce47f9a85214df894d97fe7e6d145ca)
+2025-01-19 21:51:35: Sync: finished: Synchronization finished [1737298295435]
+2025-01-19 21:51:35: Operations completed: 
+2025-01-19 21:51:35: starting: 1
+2025-01-19 21:51:35: state: idle
+2025-01-19 21:51:35: createRemote: 1
+2025-01-19 21:51:35: deleteLocal: 1
+2025-01-19 21:51:35: finished: 1
+2025-01-19 21:51:35: Total folders: 1
+2025-01-19 21:51:35: Total notes: 0
+2025-01-19 21:51:35: Total resources: 0
+2025-01-19 21:51:35: Sync: starting: Starting synchronization to memory (1)... [1737298295747]
+2025-01-19 21:51:35: mkdir /root/.sync
+2025-01-19 21:51:35: mkdir /root/.resource
+2025-01-19 21:51:35: stat /root/ca3171d223fb43158fb2b3742ef5a150.md
+2025-01-19 21:51:35: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local ca3171d223fb43158fb2b3742ef5a150, "folder")
+2025-01-19 21:51:35: put /root/ca3171d223fb43158fb2b3742ef5a150.md
+2025-01-19 21:51:35: setTimestamp /root/ca3171d223fb43158fb2b3742ef5a150.md
+2025-01-19 21:51:35: list /root
+2025-01-19 21:51:35: get /root/43f08c559ed644ce8ca983ec03a2a13e.md
+2025-01-19 21:51:35: Sync: createLocal: Remote exists but local does not: Folder: (Remote 43f08c559ed644ce8ca983ec03a2a13e, "folder")
+2025-01-19 21:51:35: Sync: deleteLocal: remote has been deleted: (Local 7ce47f9a85214df894d97fe7e6d145ca)
+2025-01-19 21:51:35: Sync: deleteLocal: remote has been deleted: (Local 7c58175f61b54bdd82d8424959c98fd4)
+2025-01-19 21:51:35: Sync: finished: Synchronization finished [1737298295747]
+2025-01-19 21:51:35: Operations completed: 
+2025-01-19 21:51:35: starting: 1
+2025-01-19 21:51:35: state: idle
+2025-01-19 21:51:35: createRemote: 1
+2025-01-19 21:51:35: createLocal: 1
+2025-01-19 21:51:35: deleteLocal: 2
+2025-01-19 21:51:35: finished: 1
+2025-01-19 21:51:35: Total folders: 2
+2025-01-19 21:51:35: Total notes: 0
+2025-01-19 21:51:35: Total resources: 0
+2025-01-19 21:51:35: Sync: starting: Starting synchronization to memory (1)... [1737298295767]
+2025-01-19 21:51:35: mkdir /root/.sync
+2025-01-19 21:51:35: mkdir /root/.resource
+2025-01-19 21:51:35: list /root
+2025-01-19 21:51:35: Sync: finished: Synchronization finished [1737298295767]
+2025-01-19 21:51:35: Operations completed: 
+2025-01-19 21:51:35: starting: 1
+2025-01-19 21:51:35: state: idle
+2025-01-19 21:51:35: finished: 1
+2025-01-19 21:51:35: Total folders: 2
+2025-01-19 21:51:35: Total notes: 0
+2025-01-19 21:51:35: Total resources: 0
+2025-01-19 21:51:36: Sync: starting: Starting synchronization to memory (1)... [1737298296074]
+2025-01-19 21:51:36: mkdir /root/.sync
+2025-01-19 21:51:36: mkdir /root/.resource
+2025-01-19 21:51:36: list /root
+2025-01-19 21:51:36: get /root/ca3171d223fb43158fb2b3742ef5a150.md
+2025-01-19 21:51:36: Sync: createLocal: Remote exists but local does not: Folder: (Remote ca3171d223fb43158fb2b3742ef5a150, "folder")
+2025-01-19 21:51:36: Sync: finished: Synchronization finished [1737298296074]
+2025-01-19 21:51:36: Operations completed: 
+2025-01-19 21:51:36: starting: 1
+2025-01-19 21:51:36: state: idle
+2025-01-19 21:51:36: createLocal: 1
+2025-01-19 21:51:36: finished: 1
+2025-01-19 21:51:36: Total folders: 2
+2025-01-19 21:51:36: Total notes: 0
+2025-01-19 21:51:36: Total resources: 0
+2025-01-19 21:51:36: Sync: starting: Starting synchronization to memory (1)... [1737298296291]
+2025-01-19 21:51:36: mkdir /root/.sync
+2025-01-19 21:51:36: mkdir /root/.resource
+2025-01-19 21:51:36: stat /root/2c5bd3c849c341c585c7a01e382f2f25.md
+2025-01-19 21:51:36: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 2c5bd3c849c341c585c7a01e382f2f25, "folder1")
+2025-01-19 21:51:36: put /root/2c5bd3c849c341c585c7a01e382f2f25.md
+2025-01-19 21:51:36: setTimestamp /root/2c5bd3c849c341c585c7a01e382f2f25.md
+2025-01-19 21:51:36: stat /root/8202742558084f8dbfc76fc5385ac7c3.md
+2025-01-19 21:51:36: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 8202742558084f8dbfc76fc5385ac7c3, "folder2")
+2025-01-19 21:51:36: put /root/8202742558084f8dbfc76fc5385ac7c3.md
+2025-01-19 21:51:36: setTimestamp /root/8202742558084f8dbfc76fc5385ac7c3.md
+2025-01-19 21:51:36: list /root
+2025-01-19 21:51:36: Sync: finished: Synchronization finished [1737298296291]
+2025-01-19 21:51:36: Operations completed: 
+2025-01-19 21:51:36: starting: 1
+2025-01-19 21:51:36: state: idle
+2025-01-19 21:51:36: createRemote: 2
+2025-01-19 21:51:36: finished: 1
+2025-01-19 21:51:36: Total folders: 2
+2025-01-19 21:51:36: Total notes: 0
+2025-01-19 21:51:36: Total resources: 0
+2025-01-19 21:51:36: Sync: starting: Starting synchronization to memory (1)... [1737298296501]
+2025-01-19 21:51:36: mkdir /root/.sync
+2025-01-19 21:51:36: mkdir /root/.resource
+2025-01-19 21:51:36: list /root
+2025-01-19 21:51:36: get /root/2c5bd3c849c341c585c7a01e382f2f25.md
+2025-01-19 21:51:36: Sync: createLocal: Remote exists but local does not: Folder: (Remote 2c5bd3c849c341c585c7a01e382f2f25, "folder1")
+2025-01-19 21:51:36: get /root/8202742558084f8dbfc76fc5385ac7c3.md
+2025-01-19 21:51:36: Sync: createLocal: Remote exists but local does not: Folder: (Remote 8202742558084f8dbfc76fc5385ac7c3, "folder2")
+2025-01-19 21:51:36: Sync: finished: Synchronization finished [1737298296501]
+2025-01-19 21:51:36: Operations completed: 
+2025-01-19 21:51:36: starting: 1
+2025-01-19 21:51:36: state: idle
+2025-01-19 21:51:36: createLocal: 2
+2025-01-19 21:51:36: finished: 1
+2025-01-19 21:51:36: Total folders: 2
+2025-01-19 21:51:36: Total notes: 0
+2025-01-19 21:51:36: Total resources: 0
+2025-01-19 21:51:36: Sync: starting: Starting synchronization to memory (1)... [1737298296641]
+2025-01-19 21:51:36: mkdir /root/.sync
+2025-01-19 21:51:36: mkdir /root/.resource
+2025-01-19 21:51:36: Sync: deleteRemote: local has been deleted: (Remote 8202742558084f8dbfc76fc5385ac7c3)
+2025-01-19 21:51:36: delete /root/8202742558084f8dbfc76fc5385ac7c3.md
+2025-01-19 21:51:36: list /root
+2025-01-19 21:51:36: Sync: finished: Synchronization finished [1737298296641]
+2025-01-19 21:51:36: Operations completed: 
+2025-01-19 21:51:36: starting: 1
+2025-01-19 21:51:36: state: idle
+2025-01-19 21:51:36: deleteRemote: 1
+2025-01-19 21:51:36: finished: 1
+2025-01-19 21:51:36: Total folders: 1
+2025-01-19 21:51:36: Total notes: 0
+2025-01-19 21:51:36: Total resources: 0
+2025-01-19 21:51:36: list /root
+2025-01-19 21:51:36: stat /root/2c5bd3c849c341c585c7a01e382f2f25.md
+2025-01-19 21:51:36: get /root/2c5bd3c849c341c585c7a01e382f2f25.md
+2025-01-19 21:51:37: Sync: starting: Starting synchronization to memory (1)... [1737298297263]
+2025-01-19 21:51:37: mkdir /root/.sync
+2025-01-19 21:51:37: mkdir /root/.resource
+2025-01-19 21:51:37: stat /root/e850331cf23c4a74ab28364c5add5897.md
+2025-01-19 21:51:37: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local e850331cf23c4a74ab28364c5add5897, "mynote")
+2025-01-19 21:51:37: put /root/e850331cf23c4a74ab28364c5add5897.md
+2025-01-19 21:51:37: setTimestamp /root/e850331cf23c4a74ab28364c5add5897.md
+2025-01-19 21:51:37: stat /root/07948bad3ec14b76aee7ccb0e9fcf434.md
+2025-01-19 21:51:37: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 07948bad3ec14b76aee7ccb0e9fcf434, "mynote2")
+2025-01-19 21:51:37: put /root/07948bad3ec14b76aee7ccb0e9fcf434.md
+2025-01-19 21:51:37: setTimestamp /root/07948bad3ec14b76aee7ccb0e9fcf434.md
+2025-01-19 21:51:37: stat /root/23109c8c8b9d4d978635479bdd8f06bf.md
+2025-01-19 21:51:37: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 23109c8c8b9d4d978635479bdd8f06bf, "folder")
+2025-01-19 21:51:37: put /root/23109c8c8b9d4d978635479bdd8f06bf.md
+2025-01-19 21:51:37: setTimestamp /root/23109c8c8b9d4d978635479bdd8f06bf.md
+2025-01-19 21:51:37: stat /root/40664b8640f140eaac5370bbbedc39ed.md
+2025-01-19 21:51:37: Sync: createRemote: remote does not exist, and local is new and has never been synced: Tag: (Local 40664b8640f140eaac5370bbbedc39ed, "mytag")
+2025-01-19 21:51:37: put /root/40664b8640f140eaac5370bbbedc39ed.md
+2025-01-19 21:51:37: setTimestamp /root/40664b8640f140eaac5370bbbedc39ed.md
+2025-01-19 21:51:37: list /root
+2025-01-19 21:51:37: Sync: finished: Synchronization finished [1737298297263]
+2025-01-19 21:51:37: Operations completed: 
+2025-01-19 21:51:37: starting: 1
+2025-01-19 21:51:37: state: idle
+2025-01-19 21:51:37: createRemote: 4
+2025-01-19 21:51:37: finished: 1
+2025-01-19 21:51:37: Total folders: 1
+2025-01-19 21:51:37: Total notes: 2
+2025-01-19 21:51:37: Total resources: 0
+2025-01-19 21:51:37: Sync: starting: Starting synchronization to memory (1)... [1737298297472]
+2025-01-19 21:51:37: mkdir /root/.sync
+2025-01-19 21:51:37: mkdir /root/.resource
+2025-01-19 21:51:37: list /root
+2025-01-19 21:51:37: get /root/e850331cf23c4a74ab28364c5add5897.md
+2025-01-19 21:51:37: Sync: createLocal: Remote exists but local does not: Note: (Remote e850331cf23c4a74ab28364c5add5897, "mynote")
+2025-01-19 21:51:37: get /root/07948bad3ec14b76aee7ccb0e9fcf434.md
+2025-01-19 21:51:37: Sync: createLocal: Remote exists but local does not: Note: (Remote 07948bad3ec14b76aee7ccb0e9fcf434, "mynote2")
+2025-01-19 21:51:37: get /root/23109c8c8b9d4d978635479bdd8f06bf.md
+2025-01-19 21:51:37: Sync: createLocal: Remote exists but local does not: Folder: (Remote 23109c8c8b9d4d978635479bdd8f06bf, "folder")
+2025-01-19 21:51:37: get /root/40664b8640f140eaac5370bbbedc39ed.md
+2025-01-19 21:51:37: Sync: createLocal: Remote exists but local does not: Tag: (Remote 40664b8640f140eaac5370bbbedc39ed, "mytag")
+2025-01-19 21:51:37: Sync: finished: Synchronization finished [1737298297472]
+2025-01-19 21:51:37: Operations completed: 
+2025-01-19 21:51:37: starting: 1
+2025-01-19 21:51:37: state: idle
+2025-01-19 21:51:37: createLocal: 4
+2025-01-19 21:51:37: finished: 1
+2025-01-19 21:51:37: Total folders: 1
+2025-01-19 21:51:37: Total notes: 2
+2025-01-19 21:51:37: Total resources: 0
+2025-01-19 21:51:37: Sync: starting: Starting synchronization to memory (1)... [1737298297490]
+2025-01-19 21:51:37: mkdir /root/.sync
+2025-01-19 21:51:37: mkdir /root/.resource
+2025-01-19 21:51:37: stat /root/48fd01d8c72349cea0bf2d504c701b81.md
+2025-01-19 21:51:37: Sync: createRemote: remote does not exist, and local is new and has never been synced: NoteTag: (Local 48fd01d8c72349cea0bf2d504c701b81)
+2025-01-19 21:51:37: put /root/48fd01d8c72349cea0bf2d504c701b81.md
+2025-01-19 21:51:37: setTimestamp /root/48fd01d8c72349cea0bf2d504c701b81.md
+2025-01-19 21:51:37: stat /root/bfa14d99b1c34bc99f416b7e86a05303.md
+2025-01-19 21:51:37: Sync: createRemote: remote does not exist, and local is new and has never been synced: NoteTag: (Local bfa14d99b1c34bc99f416b7e86a05303)
+2025-01-19 21:51:37: put /root/bfa14d99b1c34bc99f416b7e86a05303.md
+2025-01-19 21:51:37: setTimestamp /root/bfa14d99b1c34bc99f416b7e86a05303.md
+2025-01-19 21:51:37: list /root
+2025-01-19 21:51:37: Sync: finished: Synchronization finished [1737298297490]
+2025-01-19 21:51:37: Operations completed: 
+2025-01-19 21:51:37: starting: 1
+2025-01-19 21:51:37: state: idle
+2025-01-19 21:51:37: createRemote: 2
+2025-01-19 21:51:37: finished: 1
+2025-01-19 21:51:37: Total folders: 1
+2025-01-19 21:51:37: Total notes: 2
+2025-01-19 21:51:37: Total resources: 0
+2025-01-19 21:51:37: Sync: starting: Starting synchronization to memory (1)... [1737298297701]
+2025-01-19 21:51:37: mkdir /root/.sync
+2025-01-19 21:51:37: mkdir /root/.resource
+2025-01-19 21:51:37: list /root
+2025-01-19 21:51:37: get /root/48fd01d8c72349cea0bf2d504c701b81.md
+2025-01-19 21:51:37: Sync: createLocal: Remote exists but local does not: NoteTag: (Remote 48fd01d8c72349cea0bf2d504c701b81)
+2025-01-19 21:51:37: get /root/bfa14d99b1c34bc99f416b7e86a05303.md
+2025-01-19 21:51:37: Sync: createLocal: Remote exists but local does not: NoteTag: (Remote bfa14d99b1c34bc99f416b7e86a05303)
+2025-01-19 21:51:37: Sync: finished: Synchronization finished [1737298297701]
+2025-01-19 21:51:37: Operations completed: 
+2025-01-19 21:51:37: starting: 1
+2025-01-19 21:51:37: state: idle
+2025-01-19 21:51:37: createLocal: 2
+2025-01-19 21:51:37: finished: 1
+2025-01-19 21:51:37: Total folders: 1
+2025-01-19 21:51:37: Total notes: 2
+2025-01-19 21:51:37: Total resources: 0
+2025-01-19 21:51:37: Sync: starting: Starting synchronization to memory (1)... [1737298297710]
+2025-01-19 21:51:37: mkdir /root/.sync
+2025-01-19 21:51:37: mkdir /root/.resource
+2025-01-19 21:51:37: Sync: deleteRemote: local has been deleted: (Remote 48fd01d8c72349cea0bf2d504c701b81)
+2025-01-19 21:51:37: delete /root/48fd01d8c72349cea0bf2d504c701b81.md
+2025-01-19 21:51:37: list /root
+2025-01-19 21:51:37: Sync: deleteLocal: remote has been deleted: (Local 48fd01d8c72349cea0bf2d504c701b81)
+2025-01-19 21:51:37: Sync: finished: Synchronization finished [1737298297710]
+2025-01-19 21:51:37: Operations completed: 
+2025-01-19 21:51:37: starting: 1
+2025-01-19 21:51:37: state: idle
+2025-01-19 21:51:37: deleteRemote: 1
+2025-01-19 21:51:37: deleteLocal: 1
+2025-01-19 21:51:37: finished: 1
+2025-01-19 21:51:37: Total folders: 1
+2025-01-19 21:51:37: Total notes: 2
+2025-01-19 21:51:37: Total resources: 0
+2025-01-19 21:51:37: Sync: starting: Starting synchronization to memory (1)... [1737298297916]
+2025-01-19 21:51:37: mkdir /root/.sync
+2025-01-19 21:51:37: mkdir /root/.resource
+2025-01-19 21:51:37: list /root
+2025-01-19 21:51:37: Sync: deleteLocal: remote has been deleted: (Local 48fd01d8c72349cea0bf2d504c701b81)
+2025-01-19 21:51:37: Sync: finished: Synchronization finished [1737298297916]
+2025-01-19 21:51:37: Operations completed: 
+2025-01-19 21:51:37: starting: 1
+2025-01-19 21:51:37: state: idle
+2025-01-19 21:51:37: deleteLocal: 1
+2025-01-19 21:51:37: finished: 1
+2025-01-19 21:51:37: Total folders: 1
+2025-01-19 21:51:37: Total notes: 2
+2025-01-19 21:51:37: Total resources: 0
+2025-01-19 21:51:38: Sync: starting: Starting synchronization to memory (1)... [1737298298126]
+2025-01-19 21:51:38: mkdir /root/.sync
+2025-01-19 21:51:38: mkdir /root/.resource
+2025-01-19 21:51:38: stat /root/735a27614ef54fb6a87b025e29e3c2f3.md
+2025-01-19 21:51:38: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 735a27614ef54fb6a87b025e29e3c2f3, "note")
+2025-01-19 21:51:38: put /root/735a27614ef54fb6a87b025e29e3c2f3.md
+2025-01-19 21:51:38: setTimestamp /root/735a27614ef54fb6a87b025e29e3c2f3.md
+2025-01-19 21:51:38: stat /root/a12978a9c5714622a0da514f1dae798f.md
+2025-01-19 21:51:38: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local a12978a9c5714622a0da514f1dae798f, "folder")
+2025-01-19 21:51:38: put /root/a12978a9c5714622a0da514f1dae798f.md
+2025-01-19 21:51:38: setTimestamp /root/a12978a9c5714622a0da514f1dae798f.md
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local e850331cf23c4a74ab28364c5add5897)
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local 07948bad3ec14b76aee7ccb0e9fcf434)
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local 40664b8640f140eaac5370bbbedc39ed)
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local bfa14d99b1c34bc99f416b7e86a05303)
+2025-01-19 21:51:38: Sync: finished: Synchronization finished [1737298298126]
+2025-01-19 21:51:38: Operations completed: 
+2025-01-19 21:51:38: starting: 1
+2025-01-19 21:51:38: state: idle
+2025-01-19 21:51:38: createRemote: 2
+2025-01-19 21:51:38: deleteLocal: 4
+2025-01-19 21:51:38: finished: 1
+2025-01-19 21:51:38: Total folders: 1
+2025-01-19 21:51:38: Total notes: 1
+2025-01-19 21:51:38: Total resources: 0
+2025-01-19 21:51:38: Sync: starting: Starting synchronization to memory (1)... [1737298298333]
+2025-01-19 21:51:38: mkdir /root/.sync
+2025-01-19 21:51:38: mkdir /root/.resource
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: get /root/735a27614ef54fb6a87b025e29e3c2f3.md
+2025-01-19 21:51:38: Sync: createLocal: Remote exists but local does not: Note: (Remote 735a27614ef54fb6a87b025e29e3c2f3, "note")
+2025-01-19 21:51:38: get /root/a12978a9c5714622a0da514f1dae798f.md
+2025-01-19 21:51:38: Sync: createLocal: Remote exists but local does not: Folder: (Remote a12978a9c5714622a0da514f1dae798f, "folder")
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local e850331cf23c4a74ab28364c5add5897)
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local 07948bad3ec14b76aee7ccb0e9fcf434)
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local 40664b8640f140eaac5370bbbedc39ed)
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local bfa14d99b1c34bc99f416b7e86a05303)
+2025-01-19 21:51:38: Sync: finished: Synchronization finished [1737298298333]
+2025-01-19 21:51:38: Operations completed: 
+2025-01-19 21:51:38: starting: 1
+2025-01-19 21:51:38: state: idle
+2025-01-19 21:51:38: createLocal: 2
+2025-01-19 21:51:38: deleteLocal: 4
+2025-01-19 21:51:38: finished: 1
+2025-01-19 21:51:38: Total folders: 1
+2025-01-19 21:51:38: Total notes: 1
+2025-01-19 21:51:38: Total resources: 0
+2025-01-19 21:51:38: Sync: starting: Starting synchronization to memory (1)... [1737298298340]
+2025-01-19 21:51:38: mkdir /root/.sync
+2025-01-19 21:51:38: mkdir /root/.resource
+2025-01-19 21:51:38: Sync: deleteRemote: local has been deleted: (Remote 735a27614ef54fb6a87b025e29e3c2f3)
+2025-01-19 21:51:38: delete /root/735a27614ef54fb6a87b025e29e3c2f3.md
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local 735a27614ef54fb6a87b025e29e3c2f3)
+2025-01-19 21:51:38: Sync: finished: Synchronization finished [1737298298340]
+2025-01-19 21:51:38: Operations completed: 
+2025-01-19 21:51:38: starting: 1
+2025-01-19 21:51:38: state: idle
+2025-01-19 21:51:38: deleteRemote: 1
+2025-01-19 21:51:38: deleteLocal: 1
+2025-01-19 21:51:38: finished: 1
+2025-01-19 21:51:38: Total folders: 1
+2025-01-19 21:51:38: Total notes: 0
+2025-01-19 21:51:38: Total resources: 0
+2025-01-19 21:51:38: Sync: starting: Starting synchronization to memory (1)... [1737298298545]
+2025-01-19 21:51:38: mkdir /root/.sync
+2025-01-19 21:51:38: mkdir /root/.resource
+2025-01-19 21:51:38: Sync: deleteRemote: local has been deleted: (Remote 735a27614ef54fb6a87b025e29e3c2f3)
+2025-01-19 21:51:38: delete /root/735a27614ef54fb6a87b025e29e3c2f3.md
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: Sync: deleteLocal: remote has been deleted: (Local 735a27614ef54fb6a87b025e29e3c2f3)
+2025-01-19 21:51:38: Sync: finished: Synchronization finished [1737298298545]
+2025-01-19 21:51:38: Operations completed: 
+2025-01-19 21:51:38: starting: 1
+2025-01-19 21:51:38: state: idle
+2025-01-19 21:51:38: deleteRemote: 1
+2025-01-19 21:51:38: deleteLocal: 1
+2025-01-19 21:51:38: finished: 1
+2025-01-19 21:51:38: Total folders: 1
+2025-01-19 21:51:38: Total notes: 0
+2025-01-19 21:51:38: Total resources: 0
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: stat /root/a12978a9c5714622a0da514f1dae798f.md
+2025-01-19 21:51:38: get /root/a12978a9c5714622a0da514f1dae798f.md
+2025-01-19 21:51:38: Sync: starting: Starting synchronization to memory (1)... [1737298298754]
+2025-01-19 21:51:38: mkdir /root/.sync
+2025-01-19 21:51:38: mkdir /root/.resource
+2025-01-19 21:51:38: stat /root/9a6dd851755f4d65a532458bcb491ee3.md
+2025-01-19 21:51:38: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 9a6dd851755f4d65a532458bcb491ee3, "folder1")
+2025-01-19 21:51:38: put /root/9a6dd851755f4d65a532458bcb491ee3.md
+2025-01-19 21:51:38: setTimestamp /root/9a6dd851755f4d65a532458bcb491ee3.md
+2025-01-19 21:51:38: stat /root/84a04ef7a93d4102b2d42590de56630b.md
+2025-01-19 21:51:38: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 84a04ef7a93d4102b2d42590de56630b, "folder2")
+2025-01-19 21:51:38: put /root/84a04ef7a93d4102b2d42590de56630b.md
+2025-01-19 21:51:38: setTimestamp /root/84a04ef7a93d4102b2d42590de56630b.md
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: Sync: finished: Synchronization finished [1737298298754]
+2025-01-19 21:51:38: Operations completed: 
+2025-01-19 21:51:38: starting: 1
+2025-01-19 21:51:38: state: idle
+2025-01-19 21:51:38: createRemote: 2
+2025-01-19 21:51:38: finished: 1
+2025-01-19 21:51:38: Total folders: 2
+2025-01-19 21:51:38: Total notes: 0
+2025-01-19 21:51:38: Total resources: 0
+2025-01-19 21:51:38: Sync: starting: Starting synchronization to memory (1)... [1737298298963]
+2025-01-19 21:51:38: mkdir /root/.sync
+2025-01-19 21:51:38: mkdir /root/.resource
+2025-01-19 21:51:38: list /root
+2025-01-19 21:51:38: get /root/9a6dd851755f4d65a532458bcb491ee3.md
+2025-01-19 21:51:38: Sync: createLocal: Remote exists but local does not: Folder: (Remote 9a6dd851755f4d65a532458bcb491ee3, "folder1")
+2025-01-19 21:51:38: get /root/84a04ef7a93d4102b2d42590de56630b.md
+2025-01-19 21:51:38: Sync: createLocal: Remote exists but local does not: Folder: (Remote 84a04ef7a93d4102b2d42590de56630b, "folder2")
+2025-01-19 21:51:38: Sync: finished: Synchronization finished [1737298298963]
+2025-01-19 21:51:38: Operations completed: 
+2025-01-19 21:51:38: starting: 1
+2025-01-19 21:51:38: state: idle
+2025-01-19 21:51:38: createLocal: 2
+2025-01-19 21:51:38: finished: 1
+2025-01-19 21:51:38: Total folders: 2
+2025-01-19 21:51:38: Total notes: 0
+2025-01-19 21:51:38: Total resources: 0
+2025-01-19 21:51:39: Sync: starting: Starting synchronization to memory (1)... [1737298299073]
+2025-01-19 21:51:39: mkdir /root/.sync
+2025-01-19 21:51:39: mkdir /root/.resource
+2025-01-19 21:51:39: Sync: deleteRemote: local has been deleted: (Remote 84a04ef7a93d4102b2d42590de56630b)
+2025-01-19 21:51:39: delete /root/84a04ef7a93d4102b2d42590de56630b.md
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: Sync: finished: Synchronization finished [1737298299073]
+2025-01-19 21:51:39: Operations completed: 
+2025-01-19 21:51:39: starting: 1
+2025-01-19 21:51:39: state: idle
+2025-01-19 21:51:39: deleteRemote: 1
+2025-01-19 21:51:39: finished: 1
+2025-01-19 21:51:39: Total folders: 1
+2025-01-19 21:51:39: Total notes: 0
+2025-01-19 21:51:39: Total resources: 0
+2025-01-19 21:51:39: Sync: starting: Starting synchronization to memory (1)... [1737298299280]
+2025-01-19 21:51:39: mkdir /root/.sync
+2025-01-19 21:51:39: mkdir /root/.resource
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: Sync: finished: Synchronization finished [1737298299280]
+2025-01-19 21:51:39: Operations completed: 
+2025-01-19 21:51:39: starting: 1
+2025-01-19 21:51:39: state: idle
+2025-01-19 21:51:39: finished: 1
+2025-01-19 21:51:39: Total folders: 1
+2025-01-19 21:51:39: Total notes: 0
+2025-01-19 21:51:39: Total resources: 0
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: stat /root/9a6dd851755f4d65a532458bcb491ee3.md
+2025-01-19 21:51:39: get /root/9a6dd851755f4d65a532458bcb491ee3.md
+2025-01-19 21:51:39: Sync: starting: Starting synchronization to memory (1)... [1737298299504]
+2025-01-19 21:51:39: mkdir /root/.sync
+2025-01-19 21:51:39: mkdir /root/.resource
+2025-01-19 21:51:39: stat /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local b377fe68242c4b6ea563b781e6c1c3d7, "un")
+2025-01-19 21:51:39: put /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: setTimestamp /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: stat /root/503e50b84cf644fc933117d99676362d.md
+2025-01-19 21:51:39: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 503e50b84cf644fc933117d99676362d, "folder1")
+2025-01-19 21:51:39: put /root/503e50b84cf644fc933117d99676362d.md
+2025-01-19 21:51:39: setTimestamp /root/503e50b84cf644fc933117d99676362d.md
+2025-01-19 21:51:39: Sync: deleteRemote: local has been deleted: (Remote 84a04ef7a93d4102b2d42590de56630b)
+2025-01-19 21:51:39: delete /root/84a04ef7a93d4102b2d42590de56630b.md
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: Sync: finished: Synchronization finished [1737298299504]
+2025-01-19 21:51:39: Operations completed: 
+2025-01-19 21:51:39: starting: 1
+2025-01-19 21:51:39: state: idle
+2025-01-19 21:51:39: createRemote: 2
+2025-01-19 21:51:39: deleteRemote: 1
+2025-01-19 21:51:39: finished: 1
+2025-01-19 21:51:39: Total folders: 1
+2025-01-19 21:51:39: Total notes: 1
+2025-01-19 21:51:39: Total resources: 0
+2025-01-19 21:51:39: Sync: starting: Starting synchronization to memory (1)... [1737298299622]
+2025-01-19 21:51:39: mkdir /root/.sync
+2025-01-19 21:51:39: mkdir /root/.resource
+2025-01-19 21:51:39: stat /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: Sync: updateRemote: local has changes: Note: (Local b377fe68242c4b6ea563b781e6c1c3d7, "un UPDATE"): (Remote b377fe68242c4b6ea563b781e6c1c3d7.md)
+2025-01-19 21:51:39: put /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: setTimestamp /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: Sync: finished: Synchronization finished [1737298299622]
+2025-01-19 21:51:39: Operations completed: 
+2025-01-19 21:51:39: starting: 1
+2025-01-19 21:51:39: state: idle
+2025-01-19 21:51:39: updateRemote: 1
+2025-01-19 21:51:39: finished: 1
+2025-01-19 21:51:39: Total folders: 1
+2025-01-19 21:51:39: Total notes: 1
+2025-01-19 21:51:39: Total resources: 0
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: stat /root/503e50b84cf644fc933117d99676362d.md
+2025-01-19 21:51:39: get /root/503e50b84cf644fc933117d99676362d.md
+2025-01-19 21:51:39: stat /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: get /root/b377fe68242c4b6ea563b781e6c1c3d7.md
+2025-01-19 21:51:39: Sync: starting: Starting synchronization to memory (1)... [1737298299842]
+2025-01-19 21:51:39: mkdir /root/.sync
+2025-01-19 21:51:39: mkdir /root/.resource
+2025-01-19 21:51:39: stat /root/2b064165359e45bbab3bc0d6e5f15fa5.md
+2025-01-19 21:51:39: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 2b064165359e45bbab3bc0d6e5f15fa5, "un")
+2025-01-19 21:51:39: put /root/2b064165359e45bbab3bc0d6e5f15fa5.md
+2025-01-19 21:51:39: setTimestamp /root/2b064165359e45bbab3bc0d6e5f15fa5.md
+2025-01-19 21:51:39: stat /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:39: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 44ade92f95724726a1114ff01d16193a, "folder1")
+2025-01-19 21:51:39: put /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:39: setTimestamp /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:39: stat /root/a7289a603c8449358673d87441818a00.md
+2025-01-19 21:51:39: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local a7289a603c8449358673d87441818a00, "folder2")
+2025-01-19 21:51:39: put /root/a7289a603c8449358673d87441818a00.md
+2025-01-19 21:51:39: setTimestamp /root/a7289a603c8449358673d87441818a00.md
+2025-01-19 21:51:39: list /root
+2025-01-19 21:51:39: Sync: deleteLocal: remote has been deleted: (Local b377fe68242c4b6ea563b781e6c1c3d7)
+2025-01-19 21:51:39: Sync: finished: Synchronization finished [1737298299842]
+2025-01-19 21:51:39: Operations completed: 
+2025-01-19 21:51:39: starting: 1
+2025-01-19 21:51:39: state: idle
+2025-01-19 21:51:39: createRemote: 3
+2025-01-19 21:51:39: deleteLocal: 1
+2025-01-19 21:51:39: finished: 1
+2025-01-19 21:51:39: Total folders: 2
+2025-01-19 21:51:39: Total notes: 1
+2025-01-19 21:51:39: Total resources: 0
+2025-01-19 21:51:40: Sync: starting: Starting synchronization to memory (1)... [1737298300055]
+2025-01-19 21:51:40: mkdir /root/.sync
+2025-01-19 21:51:40: mkdir /root/.resource
+2025-01-19 21:51:40: list /root
+2025-01-19 21:51:40: get /root/2b064165359e45bbab3bc0d6e5f15fa5.md
+2025-01-19 21:51:40: Sync: createLocal: Remote exists but local does not: Note: (Remote 2b064165359e45bbab3bc0d6e5f15fa5, "un")
+2025-01-19 21:51:40: get /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:40: Sync: createLocal: Remote exists but local does not: Folder: (Remote 44ade92f95724726a1114ff01d16193a, "folder1")
+2025-01-19 21:51:40: get /root/a7289a603c8449358673d87441818a00.md
+2025-01-19 21:51:40: Sync: createLocal: Remote exists but local does not: Folder: (Remote a7289a603c8449358673d87441818a00, "folder2")
+2025-01-19 21:51:40: Sync: finished: Synchronization finished [1737298300055]
+2025-01-19 21:51:40: Operations completed: 
+2025-01-19 21:51:40: starting: 1
+2025-01-19 21:51:40: state: idle
+2025-01-19 21:51:40: createLocal: 3
+2025-01-19 21:51:40: finished: 1
+2025-01-19 21:51:40: Total folders: 2
+2025-01-19 21:51:40: Total notes: 1
+2025-01-19 21:51:40: Total resources: 0
+2025-01-19 21:51:40: Sync: starting: Starting synchronization to memory (1)... [1737298300173]
+2025-01-19 21:51:40: mkdir /root/.sync
+2025-01-19 21:51:40: mkdir /root/.resource
+2025-01-19 21:51:40: Sync: deleteRemote: local has been deleted: (Remote 2b064165359e45bbab3bc0d6e5f15fa5)
+2025-01-19 21:51:40: delete /root/2b064165359e45bbab3bc0d6e5f15fa5.md
+2025-01-19 21:51:40: Sync: deleteRemote: local has been deleted: (Remote 44ade92f95724726a1114ff01d16193a)
+2025-01-19 21:51:40: delete /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:40: list /root
+2025-01-19 21:51:40: Sync: deleteLocal: remote has been deleted: (Local 2b064165359e45bbab3bc0d6e5f15fa5)
+2025-01-19 21:51:40: Sync: finished: Synchronization finished [1737298300173]
+2025-01-19 21:51:40: Operations completed: 
+2025-01-19 21:51:40: starting: 1
+2025-01-19 21:51:40: state: idle
+2025-01-19 21:51:40: deleteRemote: 2
+2025-01-19 21:51:40: deleteLocal: 1
+2025-01-19 21:51:40: finished: 1
+2025-01-19 21:51:40: Total folders: 1
+2025-01-19 21:51:40: Total notes: 0
+2025-01-19 21:51:40: Total resources: 0
+2025-01-19 21:51:40: Sync: starting: Starting synchronization to memory (1)... [1737298300486]
+2025-01-19 21:51:40: mkdir /root/.sync
+2025-01-19 21:51:40: mkdir /root/.resource
+2025-01-19 21:51:40: stat /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:40: Sync: itemConflict: remote has been deleted, but local has changes: Folder: (Local 44ade92f95724726a1114ff01d16193a, "Modified after having been deleted")
+2025-01-19 21:51:40: Sync: deleteRemote: local has been deleted: (Remote 2b064165359e45bbab3bc0d6e5f15fa5)
+2025-01-19 21:51:40: delete /root/2b064165359e45bbab3bc0d6e5f15fa5.md
+2025-01-19 21:51:40: Sync: deleteRemote: local has been deleted: (Remote 44ade92f95724726a1114ff01d16193a)
+2025-01-19 21:51:40: delete /root/44ade92f95724726a1114ff01d16193a.md
+2025-01-19 21:51:40: list /root
+2025-01-19 21:51:40: Sync: deleteLocal: remote has been deleted: (Local 2b064165359e45bbab3bc0d6e5f15fa5)
+2025-01-19 21:51:40: Sync: finished: Synchronization finished [1737298300486]
+2025-01-19 21:51:40: Operations completed: 
+2025-01-19 21:51:40: starting: 1
+2025-01-19 21:51:40: state: idle
+2025-01-19 21:51:40: itemConflict: 1
+2025-01-19 21:51:40: deleteRemote: 2
+2025-01-19 21:51:40: deleteLocal: 1
+2025-01-19 21:51:40: finished: 1
+2025-01-19 21:51:40: Total folders: 1
+2025-01-19 21:51:40: Total notes: 0
+2025-01-19 21:51:40: Total resources: 0
+2025-01-19 21:51:40: Sync: starting: Starting synchronization to memory (1)... [1737298300714]
+2025-01-19 21:51:40: mkdir /root/.sync
+2025-01-19 21:51:40: mkdir /root/.resource
+2025-01-19 21:51:40: stat /root/c1da9181ee6345c79839d0e796df4b41.md
+2025-01-19 21:51:40: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local c1da9181ee6345c79839d0e796df4b41, "folder1")
+2025-01-19 21:51:40: put /root/c1da9181ee6345c79839d0e796df4b41.md
+2025-01-19 21:51:40: setTimestamp /root/c1da9181ee6345c79839d0e796df4b41.md
+2025-01-19 21:51:40: stat /root/5a053e2ae0264aa6af5ab592bf2dd9d9.md
+2025-01-19 21:51:40: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 5a053e2ae0264aa6af5ab592bf2dd9d9, "folder2")
+2025-01-19 21:51:40: put /root/5a053e2ae0264aa6af5ab592bf2dd9d9.md
+2025-01-19 21:51:40: setTimestamp /root/5a053e2ae0264aa6af5ab592bf2dd9d9.md
+2025-01-19 21:51:40: list /root
+2025-01-19 21:51:40: Sync: finished: Synchronization finished [1737298300714]
+2025-01-19 21:51:40: Operations completed: 
+2025-01-19 21:51:40: starting: 1
+2025-01-19 21:51:40: state: idle
+2025-01-19 21:51:40: createRemote: 2
+2025-01-19 21:51:40: finished: 1
+2025-01-19 21:51:40: Total folders: 2
+2025-01-19 21:51:40: Total notes: 0
+2025-01-19 21:51:40: Total resources: 0
+2025-01-19 21:51:40: Sync: starting: Starting synchronization to memory (1)... [1737298300925]
+2025-01-19 21:51:40: mkdir /root/.sync
+2025-01-19 21:51:40: mkdir /root/.resource
+2025-01-19 21:51:40: list /root
+2025-01-19 21:51:40: get /root/c1da9181ee6345c79839d0e796df4b41.md
+2025-01-19 21:51:40: Sync: createLocal: Remote exists but local does not: Folder: (Remote c1da9181ee6345c79839d0e796df4b41, "folder1")
+2025-01-19 21:51:40: get /root/5a053e2ae0264aa6af5ab592bf2dd9d9.md
+2025-01-19 21:51:40: Sync: createLocal: Remote exists but local does not: Folder: (Remote 5a053e2ae0264aa6af5ab592bf2dd9d9, "folder2")
+2025-01-19 21:51:40: Sync: finished: Synchronization finished [1737298300925]
+2025-01-19 21:51:40: Operations completed: 
+2025-01-19 21:51:40: starting: 1
+2025-01-19 21:51:40: state: idle
+2025-01-19 21:51:40: createLocal: 2
+2025-01-19 21:51:40: finished: 1
+2025-01-19 21:51:40: Total folders: 2
+2025-01-19 21:51:40: Total notes: 0
+2025-01-19 21:51:40: Total resources: 0
+2025-01-19 21:51:41: Sync: starting: Starting synchronization to memory (1)... [1737298301252]
+2025-01-19 21:51:41: mkdir /root/.sync
+2025-01-19 21:51:41: mkdir /root/.resource
+2025-01-19 21:51:41: Sync: deleteRemote: local has been deleted: (Remote 5a053e2ae0264aa6af5ab592bf2dd9d9)
+2025-01-19 21:51:41: delete /root/5a053e2ae0264aa6af5ab592bf2dd9d9.md
+2025-01-19 21:51:41: list /root
+2025-01-19 21:51:41: Sync: finished: Synchronization finished [1737298301252]
+2025-01-19 21:51:41: Operations completed: 
+2025-01-19 21:51:41: starting: 1
+2025-01-19 21:51:41: state: idle
+2025-01-19 21:51:41: deleteRemote: 1
+2025-01-19 21:51:41: finished: 1
+2025-01-19 21:51:41: Total folders: 1
+2025-01-19 21:51:41: Total notes: 0
+2025-01-19 21:51:41: Total resources: 0
+2025-01-19 21:51:41: Sync: starting: Starting synchronization to memory (1)... [1737298301462]
+2025-01-19 21:51:41: mkdir /root/.sync
+2025-01-19 21:51:41: mkdir /root/.resource
+2025-01-19 21:51:41: Sync: deleteRemote: local has been deleted: (Remote c1da9181ee6345c79839d0e796df4b41)
+2025-01-19 21:51:41: delete /root/c1da9181ee6345c79839d0e796df4b41.md
+2025-01-19 21:51:41: list /root
+2025-01-19 21:51:41: Sync: finished: Synchronization finished [1737298301462]
+2025-01-19 21:51:41: Operations completed: 
+2025-01-19 21:51:41: starting: 1
+2025-01-19 21:51:41: state: idle
+2025-01-19 21:51:41: deleteRemote: 1
+2025-01-19 21:51:41: finished: 1
+2025-01-19 21:51:41: Total folders: 0
+2025-01-19 21:51:41: Total notes: 0
+2025-01-19 21:51:41: Total resources: 0
+2025-01-19 21:51:41: Sync: starting: Starting synchronization to memory (1)... [1737298301675]
+2025-01-19 21:51:41: mkdir /root/.sync
+2025-01-19 21:51:41: mkdir /root/.resource
+2025-01-19 21:51:41: list /root
+2025-01-19 21:51:41: Sync: finished: Synchronization finished [1737298301675]
+2025-01-19 21:51:41: Operations completed: 
+2025-01-19 21:51:41: starting: 1
+2025-01-19 21:51:41: state: idle
+2025-01-19 21:51:41: finished: 1
+2025-01-19 21:51:41: Total folders: 0
+2025-01-19 21:51:41: Total notes: 0
+2025-01-19 21:51:41: Total resources: 0
+2025-01-19 21:51:41: Sync: starting: Starting synchronization to memory (1)... [1737298301891]
+2025-01-19 21:51:41: mkdir /root/.sync
+2025-01-19 21:51:41: mkdir /root/.resource
+2025-01-19 21:51:41: stat /root/a4bc85a3d0754a6fbfdf71a47bb56953.md
+2025-01-19 21:51:41: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local a4bc85a3d0754a6fbfdf71a47bb56953, "folder1")
+2025-01-19 21:51:41: put /root/a4bc85a3d0754a6fbfdf71a47bb56953.md
+2025-01-19 21:51:41: setTimestamp /root/a4bc85a3d0754a6fbfdf71a47bb56953.md
+2025-01-19 21:51:41: Sync: deleteRemote: local has been deleted: (Remote c1da9181ee6345c79839d0e796df4b41)
+2025-01-19 21:51:41: delete /root/c1da9181ee6345c79839d0e796df4b41.md
+2025-01-19 21:51:41: list /root
+2025-01-19 21:51:41: Sync: finished: Synchronization finished [1737298301891]
+2025-01-19 21:51:41: Operations completed: 
+2025-01-19 21:51:41: starting: 1
+2025-01-19 21:51:41: state: idle
+2025-01-19 21:51:41: createRemote: 1
+2025-01-19 21:51:41: deleteRemote: 1
+2025-01-19 21:51:41: finished: 1
+2025-01-19 21:51:41: Total folders: 1
+2025-01-19 21:51:41: Total notes: 0
+2025-01-19 21:51:41: Total resources: 0
+2025-01-19 21:51:42: Sync: starting: Starting synchronization to memory (1)... [1737298302099]
+2025-01-19 21:51:42: mkdir /root/.sync
+2025-01-19 21:51:42: mkdir /root/.resource
+2025-01-19 21:51:42: Sync: deleteRemote: local has been deleted: (Remote 5a053e2ae0264aa6af5ab592bf2dd9d9)
+2025-01-19 21:51:42: delete /root/5a053e2ae0264aa6af5ab592bf2dd9d9.md
+2025-01-19 21:51:42: list /root
+2025-01-19 21:51:42: get /root/a4bc85a3d0754a6fbfdf71a47bb56953.md
+2025-01-19 21:51:42: Sync: createLocal: Remote exists but local does not: Folder: (Remote a4bc85a3d0754a6fbfdf71a47bb56953, "folder1")
+2025-01-19 21:51:42: Sync: finished: Synchronization finished [1737298302099]
+2025-01-19 21:51:42: Operations completed: 
+2025-01-19 21:51:42: starting: 1
+2025-01-19 21:51:42: state: idle
+2025-01-19 21:51:42: deleteRemote: 1
+2025-01-19 21:51:42: createLocal: 1
+2025-01-19 21:51:42: finished: 1
+2025-01-19 21:51:42: Total folders: 1
+2025-01-19 21:51:42: Total notes: 0
+2025-01-19 21:51:42: Total resources: 0
+2025-01-19 21:51:42: Sync: starting: Starting synchronization to memory (1)... [1737298302107]
+2025-01-19 21:51:42: mkdir /root/.sync
+2025-01-19 21:51:42: mkdir /root/.resource
+2025-01-19 21:51:42: Sync: deleteRemote: local has been deleted: (Remote a4bc85a3d0754a6fbfdf71a47bb56953)
+2025-01-19 21:51:42: delete /root/a4bc85a3d0754a6fbfdf71a47bb56953.md
+2025-01-19 21:51:42: list /root
+2025-01-19 21:51:42: Sync: finished: Synchronization finished [1737298302107]
+2025-01-19 21:51:42: Operations completed: 
+2025-01-19 21:51:42: starting: 1
+2025-01-19 21:51:42: state: idle
+2025-01-19 21:51:42: deleteRemote: 1
+2025-01-19 21:51:42: finished: 1
+2025-01-19 21:51:42: Total folders: 0
+2025-01-19 21:51:42: Total notes: 0
+2025-01-19 21:51:42: Total resources: 0
+2025-01-19 21:51:42: Sync: starting: Starting synchronization to memory (1)... [1737298302315]
+2025-01-19 21:51:42: mkdir /root/.sync
+2025-01-19 21:51:42: mkdir /root/.resource
+2025-01-19 21:51:42: stat /root/0393390e75114359937d6ab34368ed12.md
+2025-01-19 21:51:42: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 0393390e75114359937d6ab34368ed12, "note1")
+2025-01-19 21:51:42: put /root/0393390e75114359937d6ab34368ed12.md
+2025-01-19 21:51:42: setTimestamp /root/0393390e75114359937d6ab34368ed12.md
+2025-01-19 21:51:42: list /root
+2025-01-19 21:51:42: Sync: finished: Synchronization finished [1737298302315]
+2025-01-19 21:51:42: Operations completed: 
+2025-01-19 21:51:42: starting: 1
+2025-01-19 21:51:42: state: idle
+2025-01-19 21:51:42: createRemote: 1
+2025-01-19 21:51:42: finished: 1
+2025-01-19 21:51:42: Total folders: 0
+2025-01-19 21:51:42: Total notes: 1
+2025-01-19 21:51:42: Total resources: 0
+2025-01-19 21:51:42: Sync: starting: Starting synchronization to memory (1)... [1737298302537]
+2025-01-19 21:51:42: mkdir /root/.sync
+2025-01-19 21:51:42: mkdir /root/.resource
+2025-01-19 21:51:42: stat /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:42: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local df1885bd1b294aa98a22d6cd9b04d708, "un")
+2025-01-19 21:51:42: put /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:42: setTimestamp /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:42: stat /root/d3bdc2e6d1c741d99620c1570fab50fb.md
+2025-01-19 21:51:42: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local d3bdc2e6d1c741d99620c1570fab50fb, "folder1")
+2025-01-19 21:51:42: put /root/d3bdc2e6d1c741d99620c1570fab50fb.md
+2025-01-19 21:51:42: setTimestamp /root/d3bdc2e6d1c741d99620c1570fab50fb.md
+2025-01-19 21:51:42: Sync: deleteRemote: local has been deleted: (Remote a4bc85a3d0754a6fbfdf71a47bb56953)
+2025-01-19 21:51:42: delete /root/a4bc85a3d0754a6fbfdf71a47bb56953.md
+2025-01-19 21:51:42: list /root
+2025-01-19 21:51:42: Sync: deleteLocal: remote has been deleted: (Local 0393390e75114359937d6ab34368ed12)
+2025-01-19 21:51:42: Sync: finished: Synchronization finished [1737298302537]
+2025-01-19 21:51:42: Operations completed: 
+2025-01-19 21:51:42: starting: 1
+2025-01-19 21:51:42: state: idle
+2025-01-19 21:51:42: createRemote: 2
+2025-01-19 21:51:42: deleteRemote: 1
+2025-01-19 21:51:42: deleteLocal: 1
+2025-01-19 21:51:42: finished: 1
+2025-01-19 21:51:42: Total folders: 1
+2025-01-19 21:51:42: Total notes: 1
+2025-01-19 21:51:42: Total resources: 0
+2025-01-19 21:51:42: Sync: starting: Starting synchronization to memory (1)... [1737298302752]
+2025-01-19 21:51:42: mkdir /root/.sync
+2025-01-19 21:51:42: mkdir /root/.resource
+2025-01-19 21:51:42: list /root
+2025-01-19 21:51:42: get /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:42: Sync: createLocal: Remote exists but local does not: Note: (Remote df1885bd1b294aa98a22d6cd9b04d708, "un")
+2025-01-19 21:51:42: get /root/d3bdc2e6d1c741d99620c1570fab50fb.md
+2025-01-19 21:51:42: Sync: createLocal: Remote exists but local does not: Folder: (Remote d3bdc2e6d1c741d99620c1570fab50fb, "folder1")
+2025-01-19 21:51:42: Sync: finished: Synchronization finished [1737298302752]
+2025-01-19 21:51:42: Operations completed: 
+2025-01-19 21:51:42: starting: 1
+2025-01-19 21:51:42: state: idle
+2025-01-19 21:51:42: createLocal: 2
+2025-01-19 21:51:42: finished: 1
+2025-01-19 21:51:42: Total folders: 1
+2025-01-19 21:51:42: Total notes: 1
+2025-01-19 21:51:42: Total resources: 0
+2025-01-19 21:51:42: Sync: starting: Starting synchronization to memory (1)... [1737298302869]
+2025-01-19 21:51:42: mkdir /root/.sync
+2025-01-19 21:51:42: mkdir /root/.resource
+2025-01-19 21:51:42: Sync: deleteRemote: local has been deleted: (Remote df1885bd1b294aa98a22d6cd9b04d708)
+2025-01-19 21:51:42: delete /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:42: list /root
+2025-01-19 21:51:42: Sync: deleteLocal: remote has been deleted: (Local df1885bd1b294aa98a22d6cd9b04d708)
+2025-01-19 21:51:42: Sync: finished: Synchronization finished [1737298302869]
+2025-01-19 21:51:42: Operations completed: 
+2025-01-19 21:51:42: starting: 1
+2025-01-19 21:51:42: state: idle
+2025-01-19 21:51:42: deleteRemote: 1
+2025-01-19 21:51:42: deleteLocal: 1
+2025-01-19 21:51:42: finished: 1
+2025-01-19 21:51:42: Total folders: 1
+2025-01-19 21:51:42: Total notes: 0
+2025-01-19 21:51:42: Total resources: 0
+2025-01-19 21:51:43: Sync: starting: Starting synchronization to memory (1)... [1737298303079]
+2025-01-19 21:51:43: mkdir /root/.sync
+2025-01-19 21:51:43: mkdir /root/.resource
+2025-01-19 21:51:43: stat /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:43: Sync: noteConflict: remote has been deleted, but local has changes: Note: (Local df1885bd1b294aa98a22d6cd9b04d708, "Modified after having been deleted")
+2025-01-19 21:51:43: stat /root/32273477e1a240dbb540769a23f6f5ab.md
+2025-01-19 21:51:43: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 32273477e1a240dbb540769a23f6f5ab, "Modified after having been deleted")
+2025-01-19 21:51:43: put /root/32273477e1a240dbb540769a23f6f5ab.md
+2025-01-19 21:51:43: setTimestamp /root/32273477e1a240dbb540769a23f6f5ab.md
+2025-01-19 21:51:43: Sync: deleteRemote: local has been deleted: (Remote df1885bd1b294aa98a22d6cd9b04d708)
+2025-01-19 21:51:43: delete /root/df1885bd1b294aa98a22d6cd9b04d708.md
+2025-01-19 21:51:43: list /root
+2025-01-19 21:51:43: Sync: deleteLocal: remote has been deleted: (Local df1885bd1b294aa98a22d6cd9b04d708)
+2025-01-19 21:51:43: Sync: finished: Synchronization finished [1737298303079]
+2025-01-19 21:51:43: Operations completed: 
+2025-01-19 21:51:43: starting: 1
+2025-01-19 21:51:43: state: idle
+2025-01-19 21:51:43: noteConflict: 1
+2025-01-19 21:51:43: createRemote: 1
+2025-01-19 21:51:43: deleteRemote: 1
+2025-01-19 21:51:43: deleteLocal: 1
+2025-01-19 21:51:43: finished: 1
+2025-01-19 21:51:43: Total folders: 1
+2025-01-19 21:51:43: Total notes: 1
+2025-01-19 21:51:43: Total resources: 0
+2025-01-19 21:53:17: Sync: starting: Starting synchronization to memory (1)... [1737298397116]
+2025-01-19 21:53:17: mkdir /root/.sync
+2025-01-19 21:53:17: mkdir /root/.resource
+2025-01-19 21:53:17: stat /root/3b3ff4ca29c341eba9cf53d65bc66b6f.md
+2025-01-19 21:53:17: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 3b3ff4ca29c341eba9cf53d65bc66b6f, "folder1")
+2025-01-19 21:53:17: put /root/3b3ff4ca29c341eba9cf53d65bc66b6f.md
+2025-01-19 21:53:17: setTimestamp /root/3b3ff4ca29c341eba9cf53d65bc66b6f.md
+2025-01-19 21:53:17: list /root
+2025-01-19 21:53:17: Sync: finished: Synchronization finished [1737298397116]
+2025-01-19 21:53:17: Operations completed: 
+2025-01-19 21:53:17: starting: 1
+2025-01-19 21:53:17: state: idle
+2025-01-19 21:53:17: createRemote: 1
+2025-01-19 21:53:17: finished: 1
+2025-01-19 21:53:17: Total folders: 1
+2025-01-19 21:53:17: Total notes: 0
+2025-01-19 21:53:17: Total resources: 0
+2025-01-19 21:53:17: Sync: starting: Starting synchronization to memory (1)... [1737298397325]
+2025-01-19 21:53:17: mkdir /root/.sync
+2025-01-19 21:53:17: mkdir /root/.resource
+2025-01-19 21:53:17: list /root
+2025-01-19 21:53:17: get /root/3b3ff4ca29c341eba9cf53d65bc66b6f.md
+2025-01-19 21:53:17: Sync: createLocal: Remote exists but local does not: Folder: (Remote 3b3ff4ca29c341eba9cf53d65bc66b6f, "folder1")
+2025-01-19 21:53:17: Sync: finished: Synchronization finished [1737298397325]
+2025-01-19 21:53:17: Operations completed: 
+2025-01-19 21:53:17: starting: 1
+2025-01-19 21:53:17: state: idle
+2025-01-19 21:53:17: createLocal: 1
+2025-01-19 21:53:17: finished: 1
+2025-01-19 21:53:17: Total folders: 1
+2025-01-19 21:53:17: Total notes: 0
+2025-01-19 21:53:17: Total resources: 0
+2025-01-19 21:53:17: Sync: starting: Starting synchronization to memory (1)... [1737298397334]
+2025-01-19 21:53:17: mkdir /root/.sync
+2025-01-19 21:53:17: mkdir /root/.resource
+2025-01-19 21:53:17: Sync: deleteRemote: local has been deleted: (Remote 3b3ff4ca29c341eba9cf53d65bc66b6f)
+2025-01-19 21:53:17: delete /root/3b3ff4ca29c341eba9cf53d65bc66b6f.md
+2025-01-19 21:53:17: list /root
+2025-01-19 21:53:17: Sync: finished: Synchronization finished [1737298397334]
+2025-01-19 21:53:17: Operations completed: 
+2025-01-19 21:53:17: starting: 1
+2025-01-19 21:53:17: state: idle
+2025-01-19 21:53:17: deleteRemote: 1
+2025-01-19 21:53:17: finished: 1
+2025-01-19 21:53:17: Total folders: 0
+2025-01-19 21:53:17: Total notes: 0
+2025-01-19 21:53:17: Total resources: 0
+2025-01-19 21:53:17: Sync: starting: Starting synchronization to memory (1)... [1737298397541]
+2025-01-19 21:53:17: mkdir /root/.sync
+2025-01-19 21:53:17: mkdir /root/.resource
+2025-01-19 21:53:17: stat /root/6e5a1cb7113d4bffbb5dd6193fa49e9d.md
+2025-01-19 21:53:17: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 6e5a1cb7113d4bffbb5dd6193fa49e9d, "note1")
+2025-01-19 21:53:17: put /root/6e5a1cb7113d4bffbb5dd6193fa49e9d.md
+2025-01-19 21:53:17: setTimestamp /root/6e5a1cb7113d4bffbb5dd6193fa49e9d.md
+2025-01-19 21:53:17: list /root
+2025-01-19 21:53:17: Sync: finished: Synchronization finished [1737298397541]
+2025-01-19 21:53:17: Operations completed: 
+2025-01-19 21:53:17: starting: 1
+2025-01-19 21:53:17: state: idle
+2025-01-19 21:53:17: createRemote: 1
+2025-01-19 21:53:17: finished: 1
+2025-01-19 21:53:17: Total folders: 0
+2025-01-19 21:53:17: Total notes: 1
+2025-01-19 21:53:17: Total resources: 0
+2025-01-19 21:55:07: Sync: starting: Starting synchronization to memory (1)... [1737298507798]
+2025-01-19 21:55:07: mkdir /root/.sync
+2025-01-19 21:55:07: mkdir /root/.resource
+2025-01-19 21:55:07: stat /root/05cf92704c3540d8b1a8cb336ba01758.md
+2025-01-19 21:55:07: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 05cf92704c3540d8b1a8cb336ba01758, "folder1")
+2025-01-19 21:55:07: put /root/05cf92704c3540d8b1a8cb336ba01758.md
+2025-01-19 21:55:07: setTimestamp /root/05cf92704c3540d8b1a8cb336ba01758.md
+2025-01-19 21:55:07: list /root
+2025-01-19 21:55:24: Sync: finished: Synchronization finished [1737298507798]
+2025-01-19 21:55:24: Operations completed: 
+2025-01-19 21:55:24: starting: 1
+2025-01-19 21:55:24: state: idle
+2025-01-19 21:55:24: createRemote: 1
+2025-01-19 21:55:24: finished: 1
+2025-01-19 21:55:24: Total folders: 1
+2025-01-19 21:55:24: Total notes: 0
+2025-01-19 21:55:24: Total resources: 0
+2025-01-19 21:55:24: Sync: starting: Starting synchronization to memory (1)... [1737298524342]
+2025-01-19 21:55:24: mkdir /root/.sync
+2025-01-19 21:55:24: mkdir /root/.resource
+2025-01-19 21:55:24: list /root
+2025-01-19 21:55:24: get /root/05cf92704c3540d8b1a8cb336ba01758.md
+2025-01-19 21:55:24: Sync: createLocal: Remote exists but local does not: Folder: (Remote 05cf92704c3540d8b1a8cb336ba01758, "folder1")
+2025-01-19 21:55:24: Sync: finished: Synchronization finished [1737298524342]
+2025-01-19 21:55:24: Operations completed: 
+2025-01-19 21:55:24: starting: 1
+2025-01-19 21:55:24: state: idle
+2025-01-19 21:55:24: createLocal: 1
+2025-01-19 21:55:24: finished: 1
+2025-01-19 21:55:24: Total folders: 1
+2025-01-19 21:55:24: Total notes: 0
+2025-01-19 21:55:24: Total resources: 0
+2025-01-19 21:55:33: Sync: starting: Starting synchronization to memory (1)... [1737298533078]
+2025-01-19 21:55:33: mkdir /root/.sync
+2025-01-19 21:55:33: mkdir /root/.resource
+2025-01-19 21:55:33: Sync: deleteRemote: local has been deleted: (Remote 05cf92704c3540d8b1a8cb336ba01758)
+2025-01-19 21:55:33: delete /root/05cf92704c3540d8b1a8cb336ba01758.md
+2025-01-19 21:55:33: list /root
+2025-01-19 21:55:33: Sync: finished: Synchronization finished [1737298533078]
+2025-01-19 21:55:33: Operations completed: 
+2025-01-19 21:55:33: starting: 1
+2025-01-19 21:55:33: state: idle
+2025-01-19 21:55:33: deleteRemote: 1
+2025-01-19 21:55:33: finished: 1
+2025-01-19 21:55:33: Total folders: 0
+2025-01-19 21:55:33: Total notes: 0
+2025-01-19 21:55:33: Total resources: 0
+2025-01-19 21:55:33: Sync: starting: Starting synchronization to memory (1)... [1737298533301]
+2025-01-19 21:55:33: mkdir /root/.sync
+2025-01-19 21:55:33: mkdir /root/.resource
+2025-01-19 21:55:33: stat /root/4f91a49f5afe448d960cdd4f15445cf0.md
+2025-01-19 21:55:33: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 4f91a49f5afe448d960cdd4f15445cf0, "note1")
+2025-01-19 21:55:33: put /root/4f91a49f5afe448d960cdd4f15445cf0.md
+2025-01-19 21:55:33: setTimestamp /root/4f91a49f5afe448d960cdd4f15445cf0.md
+2025-01-19 21:55:33: list /root
+2025-01-19 21:55:33: Sync: finished: Synchronization finished [1737298533301]
+2025-01-19 21:55:33: Operations completed: 
+2025-01-19 21:55:33: starting: 1
+2025-01-19 21:55:33: state: idle
+2025-01-19 21:55:33: createRemote: 1
+2025-01-19 21:55:33: finished: 1
+2025-01-19 21:55:33: Total folders: 0
+2025-01-19 21:55:33: Total notes: 1
+2025-01-19 21:55:33: Total resources: 0
+2025-01-19 21:57:24: Sync: starting: Starting synchronization to memory (1)... [1737298644472]
+2025-01-19 21:57:24: mkdir /root/.sync
+2025-01-19 21:57:24: mkdir /root/.resource
+2025-01-19 21:57:24: stat /root/b8330f4eb18446b5a3f02e083791f142.md
+2025-01-19 21:57:24: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local b8330f4eb18446b5a3f02e083791f142, "folder1")
+2025-01-19 21:57:24: put /root/b8330f4eb18446b5a3f02e083791f142.md
+2025-01-19 21:57:24: setTimestamp /root/b8330f4eb18446b5a3f02e083791f142.md
+2025-01-19 21:57:37: list /root
+2025-01-19 21:57:37: Sync: finished: Synchronization finished [1737298644472]
+2025-01-19 21:57:37: Operations completed: 
+2025-01-19 21:57:37: starting: 1
+2025-01-19 21:57:37: state: idle
+2025-01-19 21:57:37: createRemote: 1
+2025-01-19 21:57:37: finished: 1
+2025-01-19 21:57:37: Total folders: 1
+2025-01-19 21:57:37: Total notes: 0
+2025-01-19 21:57:37: Total resources: 0
+2025-01-19 21:57:37: Sync: starting: Starting synchronization to memory (1)... [1737298657344]
+2025-01-19 21:57:37: mkdir /root/.sync
+2025-01-19 21:57:37: mkdir /root/.resource
+2025-01-19 21:57:37: list /root
+2025-01-19 21:57:37: get /root/b8330f4eb18446b5a3f02e083791f142.md
+2025-01-19 21:57:37: Sync: createLocal: Remote exists but local does not: Folder: (Remote b8330f4eb18446b5a3f02e083791f142, "folder1")
+2025-01-19 21:57:37: Sync: finished: Synchronization finished [1737298657344]
+2025-01-19 21:57:37: Operations completed: 
+2025-01-19 21:57:37: starting: 1
+2025-01-19 21:57:37: state: idle
+2025-01-19 21:57:37: createLocal: 1
+2025-01-19 21:57:37: finished: 1
+2025-01-19 21:57:37: Total folders: 1
+2025-01-19 21:57:37: Total notes: 0
+2025-01-19 21:57:37: Total resources: 0
+2025-01-19 21:57:37: Sync: starting: Starting synchronization to memory (1)... [1737298657362]
+2025-01-19 21:57:37: mkdir /root/.sync
+2025-01-19 21:57:37: mkdir /root/.resource
+2025-01-19 21:57:37: Sync: deleteRemote: local has been deleted: (Remote b8330f4eb18446b5a3f02e083791f142)
+2025-01-19 21:57:37: delete /root/b8330f4eb18446b5a3f02e083791f142.md
+2025-01-19 21:57:37: list /root
+2025-01-19 21:57:37: Sync: finished: Synchronization finished [1737298657362]
+2025-01-19 21:57:37: Operations completed: 
+2025-01-19 21:57:37: starting: 1
+2025-01-19 21:57:37: state: idle
+2025-01-19 21:57:37: deleteRemote: 1
+2025-01-19 21:57:37: finished: 1
+2025-01-19 21:57:37: Total folders: 0
+2025-01-19 21:57:37: Total notes: 0
+2025-01-19 21:57:37: Total resources: 0
+2025-01-19 21:57:43: Sync: starting: Starting synchronization to memory (1)... [1737298663452]
+2025-01-19 21:57:43: mkdir /root/.sync
+2025-01-19 21:57:43: mkdir /root/.resource
+2025-01-19 21:57:43: stat /root/fd20c375fc91448ea1b8b378e543f58f.md
+2025-01-19 21:57:43: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local fd20c375fc91448ea1b8b378e543f58f, "note1")
+2025-01-19 21:57:43: put /root/fd20c375fc91448ea1b8b378e543f58f.md
+2025-01-19 21:57:43: setTimestamp /root/fd20c375fc91448ea1b8b378e543f58f.md
+2025-01-19 21:58:30: list /root
+2025-01-19 21:58:30: Sync: finished: Synchronization finished [1737298663452]
+2025-01-19 21:58:30: Operations completed: 
+2025-01-19 21:58:30: starting: 1
+2025-01-19 21:58:30: state: idle
+2025-01-19 21:58:30: createRemote: 1
+2025-01-19 21:58:30: finished: 1
+2025-01-19 21:58:30: Total folders: 0
+2025-01-19 21:58:30: Total notes: 1
+2025-01-19 21:58:30: Total resources: 0
+2025-01-19 21:58:41: Sync: starting: Starting synchronization to memory (1)... [1737298721232]
+2025-01-19 21:58:41: mkdir /root/.sync
+2025-01-19 21:58:41: mkdir /root/.resource
+2025-01-19 21:58:41: stat /root/8934e4936e9342fcac7a73a83cff8bd5.md
+2025-01-19 21:58:41: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 8934e4936e9342fcac7a73a83cff8bd5, "folder1")
+2025-01-19 21:58:41: put /root/8934e4936e9342fcac7a73a83cff8bd5.md
+2025-01-19 21:58:41: setTimestamp /root/8934e4936e9342fcac7a73a83cff8bd5.md
+2025-01-19 21:58:41: list /root
+2025-01-19 21:58:41: Sync: finished: Synchronization finished [1737298721232]
+2025-01-19 21:58:41: Operations completed: 
+2025-01-19 21:58:41: starting: 1
+2025-01-19 21:58:41: state: idle
+2025-01-19 21:58:41: createRemote: 1
+2025-01-19 21:58:41: finished: 1
+2025-01-19 21:58:41: Total folders: 1
+2025-01-19 21:58:41: Total notes: 0
+2025-01-19 21:58:41: Total resources: 0
+2025-01-19 21:58:41: Sync: starting: Starting synchronization to memory (1)... [1737298721443]
+2025-01-19 21:58:41: mkdir /root/.sync
+2025-01-19 21:58:41: mkdir /root/.resource
+2025-01-19 21:58:41: list /root
+2025-01-19 21:58:41: get /root/8934e4936e9342fcac7a73a83cff8bd5.md
+2025-01-19 21:58:41: Sync: createLocal: Remote exists but local does not: Folder: (Remote 8934e4936e9342fcac7a73a83cff8bd5, "folder1")
+2025-01-19 21:58:41: Sync: finished: Synchronization finished [1737298721443]
+2025-01-19 21:58:41: Operations completed: 
+2025-01-19 21:58:41: starting: 1
+2025-01-19 21:58:41: state: idle
+2025-01-19 21:58:41: createLocal: 1
+2025-01-19 21:58:41: finished: 1
+2025-01-19 21:58:41: Total folders: 1
+2025-01-19 21:58:41: Total notes: 0
+2025-01-19 21:58:41: Total resources: 0
+2025-01-19 21:58:41: Sync: starting: Starting synchronization to memory (1)... [1737298721453]
+2025-01-19 21:58:41: mkdir /root/.sync
+2025-01-19 21:58:41: mkdir /root/.resource
+2025-01-19 21:58:41: Sync: deleteRemote: local has been deleted: (Remote 8934e4936e9342fcac7a73a83cff8bd5)
+2025-01-19 21:58:41: delete /root/8934e4936e9342fcac7a73a83cff8bd5.md
+2025-01-19 21:58:41: list /root
+2025-01-19 21:58:41: Sync: finished: Synchronization finished [1737298721453]
+2025-01-19 21:58:41: Operations completed: 
+2025-01-19 21:58:41: starting: 1
+2025-01-19 21:58:41: state: idle
+2025-01-19 21:58:41: deleteRemote: 1
+2025-01-19 21:58:41: finished: 1
+2025-01-19 21:58:41: Total folders: 0
+2025-01-19 21:58:41: Total notes: 0
+2025-01-19 21:58:41: Total resources: 0
+2025-01-19 21:58:49: Sync: starting: Starting synchronization to memory (1)... [1737298729105]
+2025-01-19 21:58:49: mkdir /root/.sync
+2025-01-19 21:58:49: mkdir /root/.resource
+2025-01-19 21:58:49: stat /root/6000639572c14cb39328d129c60c10c0.md
+2025-01-19 21:59:31: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 6000639572c14cb39328d129c60c10c0, "note1")
+2025-01-19 21:59:31: put /root/6000639572c14cb39328d129c60c10c0.md
+2025-01-19 21:59:31: setTimestamp /root/6000639572c14cb39328d129c60c10c0.md
+2025-01-19 21:59:31: list /root
+2025-01-19 21:59:31: Sync: finished: Synchronization finished [1737298729105]
+2025-01-19 21:59:31: Operations completed: 
+2025-01-19 21:59:31: starting: 1
+2025-01-19 21:59:31: state: idle
+2025-01-19 21:59:31: createRemote: 1
+2025-01-19 21:59:31: finished: 1
+2025-01-19 21:59:31: Total folders: 0
+2025-01-19 21:59:31: Total notes: 1
+2025-01-19 21:59:31: Total resources: 0
+2025-01-19 22:01:25: Sync: starting: Starting synchronization to memory (1)... [1737298885412]
+2025-01-19 22:01:25: mkdir /root/.sync
+2025-01-19 22:01:25: mkdir /root/.resource
+2025-01-19 22:01:25: stat /root/2a61d4ce35574585b5025ccb40c5916a.md
+2025-01-19 22:01:29: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 2a61d4ce35574585b5025ccb40c5916a, "folder1")
+2025-01-19 22:01:29: put /root/2a61d4ce35574585b5025ccb40c5916a.md
+2025-01-19 22:01:29: setTimestamp /root/2a61d4ce35574585b5025ccb40c5916a.md
+2025-01-19 22:01:29: list /root
+2025-01-19 22:01:33: Sync: finished: Synchronization finished [1737298885412]
+2025-01-19 22:01:33: Operations completed: 
+2025-01-19 22:01:33: starting: 1
+2025-01-19 22:01:33: state: idle
+2025-01-19 22:01:33: createRemote: 1
+2025-01-19 22:01:33: finished: 1
+2025-01-19 22:01:33: Total folders: 1
+2025-01-19 22:01:33: Total notes: 0
+2025-01-19 22:01:33: Total resources: 0
+2025-01-19 22:01:33: Sync: starting: Starting synchronization to memory (1)... [1737298893990]
+2025-01-19 22:01:33: mkdir /root/.sync
+2025-01-19 22:01:33: mkdir /root/.resource
+2025-01-19 22:01:33: list /root
+2025-01-19 22:01:33: get /root/2a61d4ce35574585b5025ccb40c5916a.md
+2025-01-19 22:01:33: Sync: createLocal: Remote exists but local does not: Folder: (Remote 2a61d4ce35574585b5025ccb40c5916a, "folder1")
+2025-01-19 22:01:35: Sync: finished: Synchronization finished [1737298893990]
+2025-01-19 22:01:35: Operations completed: 
+2025-01-19 22:01:35: starting: 1
+2025-01-19 22:01:35: state: idle
+2025-01-19 22:01:35: createLocal: 1
+2025-01-19 22:01:35: finished: 1
+2025-01-19 22:01:35: Total folders: 1
+2025-01-19 22:01:35: Total notes: 0
+2025-01-19 22:01:35: Total resources: 0
+2025-01-19 22:01:35: Sync: starting: Starting synchronization to memory (1)... [1737298895381]
+2025-01-19 22:01:35: mkdir /root/.sync
+2025-01-19 22:01:35: mkdir /root/.resource
+2025-01-19 22:01:35: Sync: deleteRemote: local has been deleted: (Remote 2a61d4ce35574585b5025ccb40c5916a)
+2025-01-19 22:01:35: delete /root/2a61d4ce35574585b5025ccb40c5916a.md
+2025-01-19 22:01:35: list /root
+2025-01-19 22:02:05: Sync: finished: Synchronization finished [1737298895381]
+2025-01-19 22:02:05: Operations completed: 
+2025-01-19 22:02:05: starting: 1
+2025-01-19 22:02:05: state: idle
+2025-01-19 22:02:05: deleteRemote: 1
+2025-01-19 22:02:05: finished: 1
+2025-01-19 22:02:05: Total folders: 0
+2025-01-19 22:02:05: Total notes: 0
+2025-01-19 22:02:05: Total resources: 0
+2025-01-19 22:02:18: Sync: starting: Starting synchronization to memory (1)... [1737298938118]
+2025-01-19 22:02:18: mkdir /root/.sync
+2025-01-19 22:02:18: mkdir /root/.resource
+2025-01-19 22:02:18: stat /root/8cb587112c4c48fcbaf89c1a6fee6433.md
+2025-01-19 22:02:18: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 8cb587112c4c48fcbaf89c1a6fee6433, "note1")
+2025-01-19 22:02:18: put /root/8cb587112c4c48fcbaf89c1a6fee6433.md
+2025-01-19 22:02:18: setTimestamp /root/8cb587112c4c48fcbaf89c1a6fee6433.md
+2025-01-19 22:02:18: list /root
+2025-01-19 22:02:47: Sync: finished: Synchronization finished [1737298938118]
+2025-01-19 22:02:47: Operations completed: 
+2025-01-19 22:02:47: starting: 1
+2025-01-19 22:02:47: state: idle
+2025-01-19 22:02:47: createRemote: 1
+2025-01-19 22:02:47: finished: 1
+2025-01-19 22:02:47: Total folders: 0
+2025-01-19 22:02:47: Total notes: 1
+2025-01-19 22:02:47: Total resources: 0
+2025-01-19 22:03:03: Sync: starting: Starting synchronization to memory (1)... [1737298983297]
+2025-01-19 22:03:03: mkdir /root/.sync
+2025-01-19 22:03:03: mkdir /root/.resource
+2025-01-19 22:03:03: stat /root/a65dbf5928f84283ab62d1a19f55f09c.md
+2025-01-19 22:03:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local a65dbf5928f84283ab62d1a19f55f09c, "folder1")
+2025-01-19 22:03:03: put /root/a65dbf5928f84283ab62d1a19f55f09c.md
+2025-01-19 22:03:03: setTimestamp /root/a65dbf5928f84283ab62d1a19f55f09c.md
+2025-01-19 22:03:03: list /root
+2025-01-19 22:03:03: Sync: finished: Synchronization finished [1737298983297]
+2025-01-19 22:03:03: Operations completed: 
+2025-01-19 22:03:03: starting: 1
+2025-01-19 22:03:03: state: idle
+2025-01-19 22:03:03: createRemote: 1
+2025-01-19 22:03:03: finished: 1
+2025-01-19 22:03:03: Total folders: 1
+2025-01-19 22:03:03: Total notes: 0
+2025-01-19 22:03:03: Total resources: 0
+2025-01-19 22:03:03: Sync: starting: Starting synchronization to memory (1)... [1737298983509]
+2025-01-19 22:03:03: mkdir /root/.sync
+2025-01-19 22:03:03: mkdir /root/.resource
+2025-01-19 22:03:03: list /root
+2025-01-19 22:03:03: get /root/a65dbf5928f84283ab62d1a19f55f09c.md
+2025-01-19 22:03:03: Sync: createLocal: Remote exists but local does not: Folder: (Remote a65dbf5928f84283ab62d1a19f55f09c, "folder1")
+2025-01-19 22:03:03: Sync: finished: Synchronization finished [1737298983509]
+2025-01-19 22:03:03: Operations completed: 
+2025-01-19 22:03:03: starting: 1
+2025-01-19 22:03:03: state: idle
+2025-01-19 22:03:03: createLocal: 1
+2025-01-19 22:03:03: finished: 1
+2025-01-19 22:03:03: Total folders: 1
+2025-01-19 22:03:03: Total notes: 0
+2025-01-19 22:03:03: Total resources: 0
+2025-01-19 22:03:03: Sync: starting: Starting synchronization to memory (1)... [1737298983518]
+2025-01-19 22:03:03: mkdir /root/.sync
+2025-01-19 22:03:03: mkdir /root/.resource
+2025-01-19 22:03:03: Sync: deleteRemote: local has been deleted: (Remote a65dbf5928f84283ab62d1a19f55f09c)
+2025-01-19 22:03:03: delete /root/a65dbf5928f84283ab62d1a19f55f09c.md
+2025-01-19 22:03:03: list /root
+2025-01-19 22:03:03: Sync: finished: Synchronization finished [1737298983518]
+2025-01-19 22:03:03: Operations completed: 
+2025-01-19 22:03:03: starting: 1
+2025-01-19 22:03:03: state: idle
+2025-01-19 22:03:03: deleteRemote: 1
+2025-01-19 22:03:03: finished: 1
+2025-01-19 22:03:03: Total folders: 0
+2025-01-19 22:03:03: Total notes: 0
+2025-01-19 22:03:03: Total resources: 0
+2025-01-19 22:03:09: Sync: starting: Starting synchronization to memory (1)... [1737298989520]
+2025-01-19 22:03:09: mkdir /root/.sync
+2025-01-19 22:03:09: mkdir /root/.resource
+2025-01-19 22:03:09: stat /root/b6eb55dad7b5449d873db7cc549f0ce9.md
+2025-01-19 22:03:09: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local b6eb55dad7b5449d873db7cc549f0ce9, "note1")
+2025-01-19 22:03:09: put /root/b6eb55dad7b5449d873db7cc549f0ce9.md
+2025-01-19 22:03:09: setTimestamp /root/b6eb55dad7b5449d873db7cc549f0ce9.md
+2025-01-19 22:03:09: list /root
+2025-01-19 22:03:09: Sync: finished: Synchronization finished [1737298989520]
+2025-01-19 22:03:09: Operations completed: 
+2025-01-19 22:03:09: starting: 1
+2025-01-19 22:03:09: state: idle
+2025-01-19 22:03:09: createRemote: 1
+2025-01-19 22:03:09: finished: 1
+2025-01-19 22:03:09: Total folders: 0
+2025-01-19 22:03:09: Total notes: 1
+2025-01-19 22:03:09: Total resources: 0
+2025-01-19 22:03:20: Sync: starting: Starting synchronization to memory (1)... [1737299000636]
+2025-01-19 22:03:20: mkdir /root/.sync
+2025-01-19 22:03:20: mkdir /root/.resource
+2025-01-19 22:03:20: stat /root/482dcddbc3b44b009b9f2d70c963cb10.md
+2025-01-19 22:03:20: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 482dcddbc3b44b009b9f2d70c963cb10, "folder1")
+2025-01-19 22:03:20: put /root/482dcddbc3b44b009b9f2d70c963cb10.md
+2025-01-19 22:03:20: setTimestamp /root/482dcddbc3b44b009b9f2d70c963cb10.md
+2025-01-19 22:03:20: list /root
+2025-01-19 22:03:20: Sync: finished: Synchronization finished [1737299000636]
+2025-01-19 22:03:20: Operations completed: 
+2025-01-19 22:03:20: starting: 1
+2025-01-19 22:03:20: state: idle
+2025-01-19 22:03:20: createRemote: 1
+2025-01-19 22:03:20: finished: 1
+2025-01-19 22:03:20: Total folders: 1
+2025-01-19 22:03:20: Total notes: 0
+2025-01-19 22:03:20: Total resources: 0
+2025-01-19 22:03:20: Sync: starting: Starting synchronization to memory (1)... [1737299000944]
+2025-01-19 22:03:20: mkdir /root/.sync
+2025-01-19 22:03:20: mkdir /root/.resource
+2025-01-19 22:03:20: list /root
+2025-01-19 22:03:20: get /root/482dcddbc3b44b009b9f2d70c963cb10.md
+2025-01-19 22:03:20: Sync: createLocal: Remote exists but local does not: Folder: (Remote 482dcddbc3b44b009b9f2d70c963cb10, "folder1")
+2025-01-19 22:03:20: Sync: finished: Synchronization finished [1737299000944]
+2025-01-19 22:03:20: Operations completed: 
+2025-01-19 22:03:20: starting: 1
+2025-01-19 22:03:20: state: idle
+2025-01-19 22:03:20: createLocal: 1
+2025-01-19 22:03:20: finished: 1
+2025-01-19 22:03:20: Total folders: 1
+2025-01-19 22:03:20: Total notes: 0
+2025-01-19 22:03:20: Total resources: 0
+2025-01-19 22:03:20: Sync: starting: Starting synchronization to memory (1)... [1737299000954]
+2025-01-19 22:03:20: mkdir /root/.sync
+2025-01-19 22:03:20: mkdir /root/.resource
+2025-01-19 22:03:20: Sync: deleteRemote: local has been deleted: (Remote 482dcddbc3b44b009b9f2d70c963cb10)
+2025-01-19 22:03:20: delete /root/482dcddbc3b44b009b9f2d70c963cb10.md
+2025-01-19 22:03:20: list /root
+2025-01-19 22:03:20: Sync: finished: Synchronization finished [1737299000954]
+2025-01-19 22:03:20: Operations completed: 
+2025-01-19 22:03:20: starting: 1
+2025-01-19 22:03:20: state: idle
+2025-01-19 22:03:20: deleteRemote: 1
+2025-01-19 22:03:20: finished: 1
+2025-01-19 22:03:20: Total folders: 0
+2025-01-19 22:03:20: Total notes: 0
+2025-01-19 22:03:20: Total resources: 0
+2025-01-19 22:03:28: Sync: starting: Starting synchronization to memory (1)... [1737299008033]
+2025-01-19 22:03:28: mkdir /root/.sync
+2025-01-19 22:03:28: mkdir /root/.resource
+2025-01-19 22:03:28: stat /root/c7e099a07530467aaa54c76cfd8438e4.md
+2025-01-19 22:03:28: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local c7e099a07530467aaa54c76cfd8438e4, "note1")
+2025-01-19 22:03:28: put /root/c7e099a07530467aaa54c76cfd8438e4.md
+2025-01-19 22:03:28: setTimestamp /root/c7e099a07530467aaa54c76cfd8438e4.md
+2025-01-19 22:03:28: list /root
+2025-01-19 22:04:28: Sync: finished: Synchronization finished [1737299008033]
+2025-01-19 22:04:28: Operations completed: 
+2025-01-19 22:04:28: starting: 1
+2025-01-19 22:04:28: state: idle
+2025-01-19 22:04:28: createRemote: 1
+2025-01-19 22:04:28: finished: 1
+2025-01-19 22:04:28: Total folders: 0
+2025-01-19 22:04:28: Total notes: 1
+2025-01-19 22:04:28: Total resources: 0
+2025-01-19 22:04:44: Sync: starting: Starting synchronization to memory (1)... [1737299084073]
+2025-01-19 22:04:44: mkdir /root/.sync
+2025-01-19 22:04:44: mkdir /root/.resource
+2025-01-19 22:04:44: stat /root/82df2a71968349dd859a39cdef775f8e.md
+2025-01-19 22:04:44: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 82df2a71968349dd859a39cdef775f8e, "folder1")
+2025-01-19 22:04:44: put /root/82df2a71968349dd859a39cdef775f8e.md
+2025-01-19 22:04:44: setTimestamp /root/82df2a71968349dd859a39cdef775f8e.md
+2025-01-19 22:04:44: list /root
+2025-01-19 22:04:44: Sync: finished: Synchronization finished [1737299084073]
+2025-01-19 22:04:44: Operations completed: 
+2025-01-19 22:04:44: starting: 1
+2025-01-19 22:04:44: state: idle
+2025-01-19 22:04:44: createRemote: 1
+2025-01-19 22:04:44: finished: 1
+2025-01-19 22:04:44: Total folders: 1
+2025-01-19 22:04:44: Total notes: 0
+2025-01-19 22:04:44: Total resources: 0
+2025-01-19 22:04:44: Sync: starting: Starting synchronization to memory (1)... [1737299084286]
+2025-01-19 22:04:44: mkdir /root/.sync
+2025-01-19 22:04:44: mkdir /root/.resource
+2025-01-19 22:04:44: list /root
+2025-01-19 22:04:44: get /root/82df2a71968349dd859a39cdef775f8e.md
+2025-01-19 22:04:44: Sync: createLocal: Remote exists but local does not: Folder: (Remote 82df2a71968349dd859a39cdef775f8e, "folder1")
+2025-01-19 22:04:44: Sync: finished: Synchronization finished [1737299084286]
+2025-01-19 22:04:44: Operations completed: 
+2025-01-19 22:04:44: starting: 1
+2025-01-19 22:04:44: state: idle
+2025-01-19 22:04:44: createLocal: 1
+2025-01-19 22:04:44: finished: 1
+2025-01-19 22:04:44: Total folders: 1
+2025-01-19 22:04:44: Total notes: 0
+2025-01-19 22:04:44: Total resources: 0
+2025-01-19 22:04:44: Sync: starting: Starting synchronization to memory (1)... [1737299084302]
+2025-01-19 22:04:44: mkdir /root/.sync
+2025-01-19 22:04:44: mkdir /root/.resource
+2025-01-19 22:04:44: Sync: deleteRemote: local has been deleted: (Remote 82df2a71968349dd859a39cdef775f8e)
+2025-01-19 22:04:44: delete /root/82df2a71968349dd859a39cdef775f8e.md
+2025-01-19 22:04:44: list /root
+2025-01-19 22:04:51: Sync: finished: Synchronization finished [1737299084302]
+2025-01-19 22:04:51: Operations completed: 
+2025-01-19 22:04:51: starting: 1
+2025-01-19 22:04:51: state: idle
+2025-01-19 22:04:51: deleteRemote: 1
+2025-01-19 22:04:51: finished: 1
+2025-01-19 22:04:51: Total folders: 0
+2025-01-19 22:04:51: Total notes: 0
+2025-01-19 22:04:51: Total resources: 0
+2025-01-19 22:05:18: Sync: starting: Starting synchronization to memory (1)... [1737299118970]
+2025-01-19 22:05:18: mkdir /root/.sync
+2025-01-19 22:05:18: mkdir /root/.resource
+2025-01-19 22:05:18: stat /root/60ba55bf858941d788c0ab7d4ae1eee0.md
+2025-01-19 22:05:18: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 60ba55bf858941d788c0ab7d4ae1eee0, "note1")
+2025-01-19 22:05:18: put /root/60ba55bf858941d788c0ab7d4ae1eee0.md
+2025-01-19 22:05:18: setTimestamp /root/60ba55bf858941d788c0ab7d4ae1eee0.md
+2025-01-19 22:05:18: list /root
+2025-01-19 22:06:24: Sync: finished: Synchronization finished [1737299118970]
+2025-01-19 22:06:24: Operations completed: 
+2025-01-19 22:06:24: starting: 1
+2025-01-19 22:06:24: state: idle
+2025-01-19 22:06:24: createRemote: 1
+2025-01-19 22:06:24: finished: 1
+2025-01-19 22:06:24: Total folders: 0
+2025-01-19 22:06:24: Total notes: 1
+2025-01-19 22:06:24: Total resources: 0
+2025-01-19 22:06:34: Sync: starting: Starting synchronization to memory (1)... [1737299194906]
+2025-01-19 22:06:34: mkdir /root/.sync
+2025-01-19 22:06:34: mkdir /root/.resource
+2025-01-19 22:06:34: stat /root/4bf2c9e6f6a74c2088924d0a32c8716f.md
+2025-01-19 22:06:34: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 4bf2c9e6f6a74c2088924d0a32c8716f, "folder1")
+2025-01-19 22:06:34: put /root/4bf2c9e6f6a74c2088924d0a32c8716f.md
+2025-01-19 22:06:34: setTimestamp /root/4bf2c9e6f6a74c2088924d0a32c8716f.md
+2025-01-19 22:06:34: list /root
+2025-01-19 22:06:34: Sync: finished: Synchronization finished [1737299194906]
+2025-01-19 22:06:34: Operations completed: 
+2025-01-19 22:06:34: starting: 1
+2025-01-19 22:06:34: state: idle
+2025-01-19 22:06:34: createRemote: 1
+2025-01-19 22:06:34: finished: 1
+2025-01-19 22:06:34: Total folders: 1
+2025-01-19 22:06:34: Total notes: 0
+2025-01-19 22:06:34: Total resources: 0
+2025-01-19 22:06:35: Sync: starting: Starting synchronization to memory (1)... [1737299195119]
+2025-01-19 22:06:35: mkdir /root/.sync
+2025-01-19 22:06:35: mkdir /root/.resource
+2025-01-19 22:06:35: list /root
+2025-01-19 22:06:35: get /root/4bf2c9e6f6a74c2088924d0a32c8716f.md
+2025-01-19 22:06:35: Sync: createLocal: Remote exists but local does not: Folder: (Remote 4bf2c9e6f6a74c2088924d0a32c8716f, "folder1")
+2025-01-19 22:06:35: Sync: finished: Synchronization finished [1737299195119]
+2025-01-19 22:06:35: Operations completed: 
+2025-01-19 22:06:35: starting: 1
+2025-01-19 22:06:35: state: idle
+2025-01-19 22:06:35: createLocal: 1
+2025-01-19 22:06:35: finished: 1
+2025-01-19 22:06:35: Total folders: 1
+2025-01-19 22:06:35: Total notes: 0
+2025-01-19 22:06:35: Total resources: 0
+2025-01-19 22:06:35: Sync: starting: Starting synchronization to memory (1)... [1737299195134]
+2025-01-19 22:06:35: mkdir /root/.sync
+2025-01-19 22:06:35: mkdir /root/.resource
+2025-01-19 22:06:35: Sync: deleteRemote: local has been deleted: (Remote 4bf2c9e6f6a74c2088924d0a32c8716f)
+2025-01-19 22:06:35: delete /root/4bf2c9e6f6a74c2088924d0a32c8716f.md
+2025-01-19 22:06:35: list /root
+2025-01-19 22:06:35: Sync: finished: Synchronization finished [1737299195134]
+2025-01-19 22:06:35: Operations completed: 
+2025-01-19 22:06:35: starting: 1
+2025-01-19 22:06:35: state: idle
+2025-01-19 22:06:35: deleteRemote: 1
+2025-01-19 22:06:35: finished: 1
+2025-01-19 22:06:35: Total folders: 0
+2025-01-19 22:06:35: Total notes: 0
+2025-01-19 22:06:35: Total resources: 0
+2025-01-19 22:06:38: Sync: starting: Starting synchronization to memory (1)... [1737299198385]
+2025-01-19 22:06:38: mkdir /root/.sync
+2025-01-19 22:06:38: mkdir /root/.resource
+2025-01-19 22:06:38: stat /root/abd8a446ca0c4748a12555add242bf3c.md
+2025-01-19 22:06:38: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local abd8a446ca0c4748a12555add242bf3c, "note1")
+2025-01-19 22:06:38: put /root/abd8a446ca0c4748a12555add242bf3c.md
+2025-01-19 22:06:38: setTimestamp /root/abd8a446ca0c4748a12555add242bf3c.md
+2025-01-19 22:06:38: list /root
+2025-01-19 22:06:38: Sync: finished: Synchronization finished [1737299198385]
+2025-01-19 22:06:38: Operations completed: 
+2025-01-19 22:06:38: starting: 1
+2025-01-19 22:06:38: state: idle
+2025-01-19 22:06:38: createRemote: 1
+2025-01-19 22:06:38: finished: 1
+2025-01-19 22:06:38: Total folders: 0
+2025-01-19 22:06:38: Total notes: 1
+2025-01-19 22:06:38: Total resources: 0
+2025-01-19 22:06:53: Sync: starting: Starting synchronization to memory (1)... [1737299213659]
+2025-01-19 22:06:53: mkdir /root/.sync
+2025-01-19 22:06:53: mkdir /root/.resource
+2025-01-19 22:06:53: stat /root/b55873c569514a459d3f12250da44495.md
+2025-01-19 22:06:53: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local b55873c569514a459d3f12250da44495, "un")
+2025-01-19 22:06:53: put /root/b55873c569514a459d3f12250da44495.md
+2025-01-19 22:06:53: setTimestamp /root/b55873c569514a459d3f12250da44495.md
+2025-01-19 22:06:53: stat /root/79d6509ba95b458b963b5874ea721e40.md
+2025-01-19 22:06:53: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 79d6509ba95b458b963b5874ea721e40, "folder1")
+2025-01-19 22:06:53: put /root/79d6509ba95b458b963b5874ea721e40.md
+2025-01-19 22:06:53: setTimestamp /root/79d6509ba95b458b963b5874ea721e40.md
+2025-01-19 22:06:53: list /root
+2025-01-19 22:06:53: Sync: finished: Synchronization finished [1737299213659]
+2025-01-19 22:06:53: Operations completed: 
+2025-01-19 22:06:53: starting: 1
+2025-01-19 22:06:53: state: idle
+2025-01-19 22:06:53: createRemote: 2
+2025-01-19 22:06:53: finished: 1
+2025-01-19 22:06:53: Total folders: 1
+2025-01-19 22:06:53: Total notes: 1
+2025-01-19 22:06:53: Total resources: 0
+2025-01-19 22:06:53: Sync: starting: Starting synchronization to memory (1)... [1737299213872]
+2025-01-19 22:06:53: mkdir /root/.sync
+2025-01-19 22:06:53: mkdir /root/.resource
+2025-01-19 22:06:53: list /root
+2025-01-19 22:06:53: get /root/b55873c569514a459d3f12250da44495.md
+2025-01-19 22:06:53: Sync: createLocal: Remote exists but local does not: Note: (Remote b55873c569514a459d3f12250da44495, "un")
+2025-01-19 22:06:53: get /root/79d6509ba95b458b963b5874ea721e40.md
+2025-01-19 22:06:53: Sync: createLocal: Remote exists but local does not: Folder: (Remote 79d6509ba95b458b963b5874ea721e40, "folder1")
+2025-01-19 22:06:53: Sync: finished: Synchronization finished [1737299213872]
+2025-01-19 22:06:53: Operations completed: 
+2025-01-19 22:06:53: starting: 1
+2025-01-19 22:06:53: state: idle
+2025-01-19 22:06:53: createLocal: 2
+2025-01-19 22:06:53: finished: 1
+2025-01-19 22:06:53: Total folders: 1
+2025-01-19 22:06:53: Total notes: 1
+2025-01-19 22:06:53: Total resources: 0
+2025-01-19 22:06:53: Sync: starting: Starting synchronization to memory (1)... [1737299213998]
+2025-01-19 22:06:53: mkdir /root/.sync
+2025-01-19 22:06:53: mkdir /root/.resource
+2025-01-19 22:06:54: Sync: deleteRemote: local has been deleted: (Remote b55873c569514a459d3f12250da44495)
+2025-01-19 22:06:54: delete /root/b55873c569514a459d3f12250da44495.md
+2025-01-19 22:06:54: list /root
+2025-01-19 22:06:54: Sync: deleteLocal: remote has been deleted: (Local b55873c569514a459d3f12250da44495)
+2025-01-19 22:06:54: Sync: finished: Synchronization finished [1737299213998]
+2025-01-19 22:06:54: Operations completed: 
+2025-01-19 22:06:54: starting: 1
+2025-01-19 22:06:54: state: idle
+2025-01-19 22:06:54: deleteRemote: 1
+2025-01-19 22:06:54: deleteLocal: 1
+2025-01-19 22:06:54: finished: 1
+2025-01-19 22:06:54: Total folders: 1
+2025-01-19 22:06:54: Total notes: 0
+2025-01-19 22:06:54: Total resources: 0
+2025-01-19 22:06:54: list /root
+2025-01-19 22:06:54: Sync: starting: Starting synchronization to memory (1)... [1737299214223]
+2025-01-19 22:06:54: mkdir /root/.sync
+2025-01-19 22:06:54: mkdir /root/.resource
+2025-01-19 22:06:54: stat /root/6c43207bd85f4a928a0e2d124b2cc050.md
+2025-01-19 22:06:54: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 6c43207bd85f4a928a0e2d124b2cc050, "un")
+2025-01-19 22:06:54: put /root/6c43207bd85f4a928a0e2d124b2cc050.md
+2025-01-19 22:06:54: setTimestamp /root/6c43207bd85f4a928a0e2d124b2cc050.md
+2025-01-19 22:06:54: stat /root/545232eff620402d9fadae3016df466a.md
+2025-01-19 22:06:54: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 545232eff620402d9fadae3016df466a, "folder1")
+2025-01-19 22:06:54: put /root/545232eff620402d9fadae3016df466a.md
+2025-01-19 22:06:54: setTimestamp /root/545232eff620402d9fadae3016df466a.md
+2025-01-19 22:06:54: list /root
+2025-01-19 22:06:54: Sync: deleteLocal: remote has been deleted: (Local b55873c569514a459d3f12250da44495)
+2025-01-19 22:06:54: Sync: finished: Synchronization finished [1737299214223]
+2025-01-19 22:06:54: Operations completed: 
+2025-01-19 22:06:54: starting: 1
+2025-01-19 22:06:54: state: idle
+2025-01-19 22:06:54: createRemote: 2
+2025-01-19 22:06:54: deleteLocal: 1
+2025-01-19 22:06:54: finished: 1
+2025-01-19 22:06:54: Total folders: 1
+2025-01-19 22:06:54: Total notes: 1
+2025-01-19 22:06:54: Total resources: 0
+2025-01-19 22:06:54: Sync: starting: Starting synchronization to memory (1)... [1737299214440]
+2025-01-19 22:06:54: mkdir /root/.sync
+2025-01-19 22:06:54: mkdir /root/.resource
+2025-01-19 22:06:54: list /root
+2025-01-19 22:06:54: get /root/6c43207bd85f4a928a0e2d124b2cc050.md
+2025-01-19 22:06:54: Sync: createLocal: Remote exists but local does not: Note: (Remote 6c43207bd85f4a928a0e2d124b2cc050, "un")
+2025-01-19 22:06:54: get /root/545232eff620402d9fadae3016df466a.md
+2025-01-19 22:06:54: Sync: createLocal: Remote exists but local does not: Folder: (Remote 545232eff620402d9fadae3016df466a, "folder1")
+2025-01-19 22:06:54: Sync: finished: Synchronization finished [1737299214440]
+2025-01-19 22:06:54: Operations completed: 
+2025-01-19 22:06:54: starting: 1
+2025-01-19 22:06:54: state: idle
+2025-01-19 22:06:54: createLocal: 2
+2025-01-19 22:06:54: finished: 1
+2025-01-19 22:06:54: Total folders: 1
+2025-01-19 22:06:54: Total notes: 1
+2025-01-19 22:06:54: Total resources: 0
+2025-01-19 22:06:54: Sync: starting: Starting synchronization to memory (1)... [1737299214573]
+2025-01-19 22:06:54: mkdir /root/.sync
+2025-01-19 22:06:54: mkdir /root/.resource
+2025-01-19 22:06:54: Sync: deleteRemote: local has been deleted: (Remote 6c43207bd85f4a928a0e2d124b2cc050)
+2025-01-19 22:06:54: delete /root/6c43207bd85f4a928a0e2d124b2cc050.md
+2025-01-19 22:06:54: list /root
+2025-01-19 22:06:54: Sync: deleteLocal: remote has been deleted: (Local 6c43207bd85f4a928a0e2d124b2cc050)
+2025-01-19 22:06:54: Sync: finished: Synchronization finished [1737299214573]
+2025-01-19 22:06:54: Operations completed: 
+2025-01-19 22:06:54: starting: 1
+2025-01-19 22:06:54: state: idle
+2025-01-19 22:06:54: deleteRemote: 1
+2025-01-19 22:06:54: deleteLocal: 1
+2025-01-19 22:06:54: finished: 1
+2025-01-19 22:06:54: Total folders: 1
+2025-01-19 22:06:54: Total notes: 0
+2025-01-19 22:06:54: Total resources: 0
+2025-01-19 22:06:54: Sync: starting: Starting synchronization to memory (1)... [1737299214791]
+2025-01-19 22:06:54: mkdir /root/.sync
+2025-01-19 22:06:54: mkdir /root/.resource
+2025-01-19 22:06:54: list /root
+2025-01-19 22:06:54: Sync: deleteLocal: remote has been deleted: (Local 6c43207bd85f4a928a0e2d124b2cc050)
+2025-01-19 22:06:54: Sync: finished: Synchronization finished [1737299214791]
+2025-01-19 22:06:54: Operations completed: 
+2025-01-19 22:06:54: starting: 1
+2025-01-19 22:06:54: state: idle
+2025-01-19 22:06:54: deleteLocal: 1
+2025-01-19 22:06:54: finished: 1
+2025-01-19 22:06:54: Total folders: 1
+2025-01-19 22:06:54: Total notes: 0
+2025-01-19 22:06:54: Total resources: 0
+2025-01-19 22:06:55: Sync: starting: Starting synchronization to memory (1)... [1737299215018]
+2025-01-19 22:06:55: mkdir /root/.sync
+2025-01-19 22:06:55: mkdir /root/.resource
+2025-01-19 22:06:55: stat /root/e4422b5bdded468d9e251285ed7e9915.md
+2025-01-19 22:06:55: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local e4422b5bdded468d9e251285ed7e9915, "folder1")
+2025-01-19 22:06:55: put /root/e4422b5bdded468d9e251285ed7e9915.md
+2025-01-19 22:06:55: setTimestamp /root/e4422b5bdded468d9e251285ed7e9915.md
+2025-01-19 22:06:55: list /root
+2025-01-19 22:06:55: Sync: finished: Synchronization finished [1737299215018]
+2025-01-19 22:06:55: Operations completed: 
+2025-01-19 22:06:55: starting: 1
+2025-01-19 22:06:55: state: idle
+2025-01-19 22:06:55: createRemote: 1
+2025-01-19 22:06:55: finished: 1
+2025-01-19 22:06:55: Total folders: 1
+2025-01-19 22:06:55: Total notes: 0
+2025-01-19 22:06:55: Total resources: 0
+2025-01-19 22:06:55: Sync: starting: Starting synchronization to memory (1)... [1737299215230]
+2025-01-19 22:06:55: mkdir /root/.sync
+2025-01-19 22:06:55: mkdir /root/.resource
+2025-01-19 22:06:55: list /root
+2025-01-19 22:06:55: get /root/e4422b5bdded468d9e251285ed7e9915.md
+2025-01-19 22:06:55: Sync: createLocal: Remote exists but local does not: Folder: (Remote e4422b5bdded468d9e251285ed7e9915, "folder1")
+2025-01-19 22:06:55: Sync: finished: Synchronization finished [1737299215230]
+2025-01-19 22:06:55: Operations completed: 
+2025-01-19 22:06:55: starting: 1
+2025-01-19 22:06:55: state: idle
+2025-01-19 22:06:55: createLocal: 1
+2025-01-19 22:06:55: finished: 1
+2025-01-19 22:06:55: Total folders: 1
+2025-01-19 22:06:55: Total notes: 0
+2025-01-19 22:06:55: Total resources: 0
+2025-01-19 22:06:55: Sync: starting: Starting synchronization to memory (1)... [1737299215249]
+2025-01-19 22:06:55: mkdir /root/.sync
+2025-01-19 22:06:55: mkdir /root/.resource
+2025-01-19 22:06:55: Sync: deleteRemote: local has been deleted: (Remote e4422b5bdded468d9e251285ed7e9915)
+2025-01-19 22:06:55: delete /root/e4422b5bdded468d9e251285ed7e9915.md
+2025-01-19 22:06:55: list /root
+2025-01-19 22:06:55: Sync: finished: Synchronization finished [1737299215249]
+2025-01-19 22:06:55: Operations completed: 
+2025-01-19 22:06:55: starting: 1
+2025-01-19 22:06:55: state: idle
+2025-01-19 22:06:55: deleteRemote: 1
+2025-01-19 22:06:55: finished: 1
+2025-01-19 22:06:55: Total folders: 0
+2025-01-19 22:06:55: Total notes: 0
+2025-01-19 22:06:55: Total resources: 0
+2025-01-19 22:06:55: Sync: starting: Starting synchronization to memory (1)... [1737299215460]
+2025-01-19 22:06:55: mkdir /root/.sync
+2025-01-19 22:06:55: mkdir /root/.resource
+2025-01-19 22:06:55: stat /root/93496f457ec3429f8db6e37764cca0f7.md
+2025-01-19 22:06:55: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 93496f457ec3429f8db6e37764cca0f7, "note1")
+2025-01-19 22:06:55: put /root/93496f457ec3429f8db6e37764cca0f7.md
+2025-01-19 22:06:55: setTimestamp /root/93496f457ec3429f8db6e37764cca0f7.md
+2025-01-19 22:06:55: list /root
+2025-01-19 22:06:55: Sync: finished: Synchronization finished [1737299215460]
+2025-01-19 22:06:55: Operations completed: 
+2025-01-19 22:06:55: starting: 1
+2025-01-19 22:06:55: state: idle
+2025-01-19 22:06:55: createRemote: 1
+2025-01-19 22:06:55: finished: 1
+2025-01-19 22:06:55: Total folders: 0
+2025-01-19 22:06:55: Total notes: 1
+2025-01-19 22:06:55: Total resources: 0
+2025-01-19 22:06:55: Sync: starting: Starting synchronization to memory (1)... [1737299215680]
+2025-01-19 22:06:55: mkdir /root/.sync
+2025-01-19 22:06:55: mkdir /root/.resource
+2025-01-19 22:06:55: stat /root/a841ca99e29343709d4cd9c02100587c.md
+2025-01-19 22:06:55: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local a841ca99e29343709d4cd9c02100587c, "folder1")
+2025-01-19 22:06:55: put /root/a841ca99e29343709d4cd9c02100587c.md
+2025-01-19 22:06:55: setTimestamp /root/a841ca99e29343709d4cd9c02100587c.md
+2025-01-19 22:06:55: stat /root/f2b35951b6334548bbe83f9e71cc52ef.md
+2025-01-19 22:06:55: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local f2b35951b6334548bbe83f9e71cc52ef, "folder2")
+2025-01-19 22:06:55: put /root/f2b35951b6334548bbe83f9e71cc52ef.md
+2025-01-19 22:06:55: setTimestamp /root/f2b35951b6334548bbe83f9e71cc52ef.md
+2025-01-19 22:06:55: Sync: deleteRemote: local has been deleted: (Remote e4422b5bdded468d9e251285ed7e9915)
+2025-01-19 22:06:55: delete /root/e4422b5bdded468d9e251285ed7e9915.md
+2025-01-19 22:06:55: list /root
+2025-01-19 22:06:55: Sync: deleteLocal: remote has been deleted: (Local 93496f457ec3429f8db6e37764cca0f7)
+2025-01-19 22:06:55: Sync: finished: Synchronization finished [1737299215680]
+2025-01-19 22:06:55: Operations completed: 
+2025-01-19 22:06:55: starting: 1
+2025-01-19 22:06:55: state: idle
+2025-01-19 22:06:55: createRemote: 2
+2025-01-19 22:06:55: deleteRemote: 1
+2025-01-19 22:06:55: deleteLocal: 1
+2025-01-19 22:06:55: finished: 1
+2025-01-19 22:06:55: Total folders: 2
+2025-01-19 22:06:55: Total notes: 0
+2025-01-19 22:06:55: Total resources: 0
+2025-01-19 22:06:55: Sync: starting: Starting synchronization to memory (1)... [1737299215897]
+2025-01-19 22:06:55: mkdir /root/.sync
+2025-01-19 22:06:55: mkdir /root/.resource
+2025-01-19 22:06:55: list /root
+2025-01-19 22:06:55: get /root/a841ca99e29343709d4cd9c02100587c.md
+2025-01-19 22:06:55: Sync: createLocal: Remote exists but local does not: Folder: (Remote a841ca99e29343709d4cd9c02100587c, "folder1")
+2025-01-19 22:06:55: get /root/f2b35951b6334548bbe83f9e71cc52ef.md
+2025-01-19 22:06:55: Sync: createLocal: Remote exists but local does not: Folder: (Remote f2b35951b6334548bbe83f9e71cc52ef, "folder2")
+2025-01-19 22:06:55: Sync: finished: Synchronization finished [1737299215897]
+2025-01-19 22:06:55: Operations completed: 
+2025-01-19 22:06:55: starting: 1
+2025-01-19 22:06:55: state: idle
+2025-01-19 22:06:55: createLocal: 2
+2025-01-19 22:06:55: finished: 1
+2025-01-19 22:06:55: Total folders: 2
+2025-01-19 22:06:55: Total notes: 0
+2025-01-19 22:06:55: Total resources: 0
+2025-01-19 22:06:56: Sync: starting: Starting synchronization to memory (1)... [1737299216016]
+2025-01-19 22:06:56: mkdir /root/.sync
+2025-01-19 22:06:56: mkdir /root/.resource
+2025-01-19 22:06:56: Sync: deleteRemote: local has been deleted: (Remote f2b35951b6334548bbe83f9e71cc52ef)
+2025-01-19 22:06:56: delete /root/f2b35951b6334548bbe83f9e71cc52ef.md
+2025-01-19 22:06:56: list /root
+2025-01-19 22:06:56: Sync: finished: Synchronization finished [1737299216016]
+2025-01-19 22:06:56: Operations completed: 
+2025-01-19 22:06:56: starting: 1
+2025-01-19 22:06:56: state: idle
+2025-01-19 22:06:56: deleteRemote: 1
+2025-01-19 22:06:56: finished: 1
+2025-01-19 22:06:56: Total folders: 1
+2025-01-19 22:06:56: Total notes: 0
+2025-01-19 22:06:56: Total resources: 0
+2025-01-19 22:06:56: list /root
+2025-01-19 22:06:56: stat /root/a841ca99e29343709d4cd9c02100587c.md
+2025-01-19 22:06:56: get /root/a841ca99e29343709d4cd9c02100587c.md
+2025-01-19 22:06:56: Sync: starting: Starting synchronization to memory (1)... [1737299216233]
+2025-01-19 22:06:56: mkdir /root/.sync
+2025-01-19 22:06:56: mkdir /root/.resource
+2025-01-19 22:06:56: stat /root/f2001c62142b4de4bd03884c81c38869.md
+2025-01-19 22:06:56: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local f2001c62142b4de4bd03884c81c38869, "folder1")
+2025-01-19 22:06:56: put /root/f2001c62142b4de4bd03884c81c38869.md
+2025-01-19 22:06:56: setTimestamp /root/f2001c62142b4de4bd03884c81c38869.md
+2025-01-19 22:06:56: stat /root/d9255c77933d41e7b445b1e83f01f11b.md
+2025-01-19 22:06:56: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local d9255c77933d41e7b445b1e83f01f11b, "folder2")
+2025-01-19 22:06:56: put /root/d9255c77933d41e7b445b1e83f01f11b.md
+2025-01-19 22:06:56: setTimestamp /root/d9255c77933d41e7b445b1e83f01f11b.md
+2025-01-19 22:06:56: list /root
+2025-01-19 22:06:56: Sync: finished: Synchronization finished [1737299216233]
+2025-01-19 22:06:56: Operations completed: 
+2025-01-19 22:06:56: starting: 1
+2025-01-19 22:06:56: state: idle
+2025-01-19 22:06:56: createRemote: 2
+2025-01-19 22:06:56: finished: 1
+2025-01-19 22:06:56: Total folders: 2
+2025-01-19 22:06:56: Total notes: 0
+2025-01-19 22:06:56: Total resources: 0
+2025-01-19 22:06:56: Sync: starting: Starting synchronization to memory (1)... [1737299216551]
+2025-01-19 22:06:56: mkdir /root/.sync
+2025-01-19 22:06:56: mkdir /root/.resource
+2025-01-19 22:06:56: list /root
+2025-01-19 22:06:56: get /root/f2001c62142b4de4bd03884c81c38869.md
+2025-01-19 22:06:56: Sync: createLocal: Remote exists but local does not: Folder: (Remote f2001c62142b4de4bd03884c81c38869, "folder1")
+2025-01-19 22:06:56: get /root/d9255c77933d41e7b445b1e83f01f11b.md
+2025-01-19 22:06:56: Sync: createLocal: Remote exists but local does not: Folder: (Remote d9255c77933d41e7b445b1e83f01f11b, "folder2")
+2025-01-19 22:06:56: Sync: finished: Synchronization finished [1737299216551]
+2025-01-19 22:06:56: Operations completed: 
+2025-01-19 22:06:56: starting: 1
+2025-01-19 22:06:56: state: idle
+2025-01-19 22:06:56: createLocal: 2
+2025-01-19 22:06:56: finished: 1
+2025-01-19 22:06:56: Total folders: 2
+2025-01-19 22:06:56: Total notes: 0
+2025-01-19 22:06:56: Total resources: 0
+2025-01-19 22:06:56: Sync: starting: Starting synchronization to memory (1)... [1737299216827]
+2025-01-19 22:06:56: mkdir /root/.sync
+2025-01-19 22:06:56: mkdir /root/.resource
+2025-01-19 22:06:56: Sync: deleteRemote: local has been deleted: (Remote d9255c77933d41e7b445b1e83f01f11b)
+2025-01-19 22:06:56: delete /root/d9255c77933d41e7b445b1e83f01f11b.md
+2025-01-19 22:06:56: list /root
+2025-01-19 22:06:56: Sync: finished: Synchronization finished [1737299216827]
+2025-01-19 22:06:56: Operations completed: 
+2025-01-19 22:06:56: starting: 1
+2025-01-19 22:06:56: state: idle
+2025-01-19 22:06:56: deleteRemote: 1
+2025-01-19 22:06:56: finished: 1
+2025-01-19 22:06:56: Total folders: 1
+2025-01-19 22:06:56: Total notes: 0
+2025-01-19 22:06:56: Total resources: 0
+2025-01-19 22:06:57: Sync: starting: Starting synchronization to memory (1)... [1737299217034]
+2025-01-19 22:06:57: mkdir /root/.sync
+2025-01-19 22:06:57: mkdir /root/.resource
+2025-01-19 22:06:57: list /root
+2025-01-19 22:06:57: Sync: finished: Synchronization finished [1737299217034]
+2025-01-19 22:06:57: Operations completed: 
+2025-01-19 22:06:57: starting: 1
+2025-01-19 22:06:57: state: idle
+2025-01-19 22:06:57: finished: 1
+2025-01-19 22:06:57: Total folders: 1
+2025-01-19 22:06:57: Total notes: 0
+2025-01-19 22:06:57: Total resources: 0
+2025-01-19 22:06:57: list /root
+2025-01-19 22:06:57: stat /root/f2001c62142b4de4bd03884c81c38869.md
+2025-01-19 22:06:57: get /root/f2001c62142b4de4bd03884c81c38869.md
+2025-01-19 22:06:57: Sync: starting: Starting synchronization to memory (1)... [1737299217255]
+2025-01-19 22:06:57: mkdir /root/.sync
+2025-01-19 22:06:57: mkdir /root/.resource
+2025-01-19 22:06:57: stat /root/19605fece429458e9cb7b17047fe4af7.md
+2025-01-19 22:06:57: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 19605fece429458e9cb7b17047fe4af7, "un")
+2025-01-19 22:06:57: put /root/19605fece429458e9cb7b17047fe4af7.md
+2025-01-19 22:06:57: setTimestamp /root/19605fece429458e9cb7b17047fe4af7.md
+2025-01-19 22:06:57: stat /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 9089a8fb229d4f24add808fd3af53916, "folder1")
+2025-01-19 22:06:57: put /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: setTimestamp /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: stat /root/585b2cea126241f68f6eeb5b661e2207.md
+2025-01-19 22:06:57: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 585b2cea126241f68f6eeb5b661e2207, "folder2")
+2025-01-19 22:06:57: put /root/585b2cea126241f68f6eeb5b661e2207.md
+2025-01-19 22:06:57: setTimestamp /root/585b2cea126241f68f6eeb5b661e2207.md
+2025-01-19 22:06:57: Sync: deleteRemote: local has been deleted: (Remote d9255c77933d41e7b445b1e83f01f11b)
+2025-01-19 22:06:57: delete /root/d9255c77933d41e7b445b1e83f01f11b.md
+2025-01-19 22:06:57: list /root
+2025-01-19 22:06:57: Sync: finished: Synchronization finished [1737299217255]
+2025-01-19 22:06:57: Operations completed: 
+2025-01-19 22:06:57: starting: 1
+2025-01-19 22:06:57: state: idle
+2025-01-19 22:06:57: createRemote: 3
+2025-01-19 22:06:57: deleteRemote: 1
+2025-01-19 22:06:57: finished: 1
+2025-01-19 22:06:57: Total folders: 2
+2025-01-19 22:06:57: Total notes: 1
+2025-01-19 22:06:57: Total resources: 0
+2025-01-19 22:06:57: Sync: starting: Starting synchronization to memory (1)... [1737299217471]
+2025-01-19 22:06:57: mkdir /root/.sync
+2025-01-19 22:06:57: mkdir /root/.resource
+2025-01-19 22:06:57: list /root
+2025-01-19 22:06:57: get /root/19605fece429458e9cb7b17047fe4af7.md
+2025-01-19 22:06:57: Sync: createLocal: Remote exists but local does not: Note: (Remote 19605fece429458e9cb7b17047fe4af7, "un")
+2025-01-19 22:06:57: get /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: Sync: createLocal: Remote exists but local does not: Folder: (Remote 9089a8fb229d4f24add808fd3af53916, "folder1")
+2025-01-19 22:06:57: get /root/585b2cea126241f68f6eeb5b661e2207.md
+2025-01-19 22:06:57: Sync: createLocal: Remote exists but local does not: Folder: (Remote 585b2cea126241f68f6eeb5b661e2207, "folder2")
+2025-01-19 22:06:57: Sync: finished: Synchronization finished [1737299217471]
+2025-01-19 22:06:57: Operations completed: 
+2025-01-19 22:06:57: starting: 1
+2025-01-19 22:06:57: state: idle
+2025-01-19 22:06:57: createLocal: 3
+2025-01-19 22:06:57: finished: 1
+2025-01-19 22:06:57: Total folders: 2
+2025-01-19 22:06:57: Total notes: 1
+2025-01-19 22:06:57: Total resources: 0
+2025-01-19 22:06:57: Sync: starting: Starting synchronization to memory (1)... [1737299217607]
+2025-01-19 22:06:57: mkdir /root/.sync
+2025-01-19 22:06:57: mkdir /root/.resource
+2025-01-19 22:06:57: Sync: deleteRemote: local has been deleted: (Remote 19605fece429458e9cb7b17047fe4af7)
+2025-01-19 22:06:57: delete /root/19605fece429458e9cb7b17047fe4af7.md
+2025-01-19 22:06:57: Sync: deleteRemote: local has been deleted: (Remote 9089a8fb229d4f24add808fd3af53916)
+2025-01-19 22:06:57: delete /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: list /root
+2025-01-19 22:06:57: Sync: deleteLocal: remote has been deleted: (Local 19605fece429458e9cb7b17047fe4af7)
+2025-01-19 22:06:57: Sync: finished: Synchronization finished [1737299217607]
+2025-01-19 22:06:57: Operations completed: 
+2025-01-19 22:06:57: starting: 1
+2025-01-19 22:06:57: state: idle
+2025-01-19 22:06:57: deleteRemote: 2
+2025-01-19 22:06:57: deleteLocal: 1
+2025-01-19 22:06:57: finished: 1
+2025-01-19 22:06:57: Total folders: 1
+2025-01-19 22:06:57: Total notes: 0
+2025-01-19 22:06:57: Total resources: 0
+2025-01-19 22:06:57: Sync: starting: Starting synchronization to memory (1)... [1737299217931]
+2025-01-19 22:06:57: mkdir /root/.sync
+2025-01-19 22:06:57: mkdir /root/.resource
+2025-01-19 22:06:57: stat /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: Sync: itemConflict: remote has been deleted, but local has changes: Folder: (Local 9089a8fb229d4f24add808fd3af53916, "Modified after having been deleted")
+2025-01-19 22:06:57: Sync: deleteRemote: local has been deleted: (Remote 19605fece429458e9cb7b17047fe4af7)
+2025-01-19 22:06:57: delete /root/19605fece429458e9cb7b17047fe4af7.md
+2025-01-19 22:06:57: Sync: deleteRemote: local has been deleted: (Remote 9089a8fb229d4f24add808fd3af53916)
+2025-01-19 22:06:57: delete /root/9089a8fb229d4f24add808fd3af53916.md
+2025-01-19 22:06:57: list /root
+2025-01-19 22:06:57: Sync: deleteLocal: remote has been deleted: (Local 19605fece429458e9cb7b17047fe4af7)
+2025-01-19 22:06:57: Sync: finished: Synchronization finished [1737299217931]
+2025-01-19 22:06:57: Operations completed: 
+2025-01-19 22:06:57: starting: 1
+2025-01-19 22:06:57: state: idle
+2025-01-19 22:06:57: itemConflict: 1
+2025-01-19 22:06:57: deleteRemote: 2
+2025-01-19 22:06:57: deleteLocal: 1
+2025-01-19 22:06:57: finished: 1
+2025-01-19 22:06:57: Total folders: 1
+2025-01-19 22:06:57: Total notes: 0
+2025-01-19 22:06:57: Total resources: 0
+2025-01-19 22:06:58: Sync: starting: Starting synchronization to memory (1)... [1737299218165]
+2025-01-19 22:06:58: mkdir /root/.sync
+2025-01-19 22:06:58: mkdir /root/.resource
+2025-01-19 22:06:58: stat /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local ac3f7a0bae7144cd95fafd49a8c76815, "un")
+2025-01-19 22:06:58: put /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: setTimestamp /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: stat /root/e9d44e3b69c14fd5ab51e69bfbf3c66e.md
+2025-01-19 22:06:58: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local e9d44e3b69c14fd5ab51e69bfbf3c66e, "folder1")
+2025-01-19 22:06:58: put /root/e9d44e3b69c14fd5ab51e69bfbf3c66e.md
+2025-01-19 22:06:58: setTimestamp /root/e9d44e3b69c14fd5ab51e69bfbf3c66e.md
+2025-01-19 22:06:58: list /root
+2025-01-19 22:06:58: Sync: finished: Synchronization finished [1737299218165]
+2025-01-19 22:06:58: Operations completed: 
+2025-01-19 22:06:58: starting: 1
+2025-01-19 22:06:58: state: idle
+2025-01-19 22:06:58: createRemote: 2
+2025-01-19 22:06:58: finished: 1
+2025-01-19 22:06:58: Total folders: 1
+2025-01-19 22:06:58: Total notes: 1
+2025-01-19 22:06:58: Total resources: 0
+2025-01-19 22:06:58: Sync: starting: Starting synchronization to memory (1)... [1737299218381]
+2025-01-19 22:06:58: mkdir /root/.sync
+2025-01-19 22:06:58: mkdir /root/.resource
+2025-01-19 22:06:58: list /root
+2025-01-19 22:06:58: get /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: Sync: createLocal: Remote exists but local does not: Note: (Remote ac3f7a0bae7144cd95fafd49a8c76815, "un")
+2025-01-19 22:06:58: get /root/e9d44e3b69c14fd5ab51e69bfbf3c66e.md
+2025-01-19 22:06:58: Sync: createLocal: Remote exists but local does not: Folder: (Remote e9d44e3b69c14fd5ab51e69bfbf3c66e, "folder1")
+2025-01-19 22:06:58: Sync: finished: Synchronization finished [1737299218381]
+2025-01-19 22:06:58: Operations completed: 
+2025-01-19 22:06:58: starting: 1
+2025-01-19 22:06:58: state: idle
+2025-01-19 22:06:58: createLocal: 2
+2025-01-19 22:06:58: finished: 1
+2025-01-19 22:06:58: Total folders: 1
+2025-01-19 22:06:58: Total notes: 1
+2025-01-19 22:06:58: Total resources: 0
+2025-01-19 22:06:58: Sync: starting: Starting synchronization to memory (1)... [1737299218508]
+2025-01-19 22:06:58: mkdir /root/.sync
+2025-01-19 22:06:58: mkdir /root/.resource
+2025-01-19 22:06:58: Sync: deleteRemote: local has been deleted: (Remote ac3f7a0bae7144cd95fafd49a8c76815)
+2025-01-19 22:06:58: delete /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: list /root
+2025-01-19 22:06:58: Sync: deleteLocal: remote has been deleted: (Local ac3f7a0bae7144cd95fafd49a8c76815)
+2025-01-19 22:06:58: Sync: finished: Synchronization finished [1737299218508]
+2025-01-19 22:06:58: Operations completed: 
+2025-01-19 22:06:58: starting: 1
+2025-01-19 22:06:58: state: idle
+2025-01-19 22:06:58: deleteRemote: 1
+2025-01-19 22:06:58: deleteLocal: 1
+2025-01-19 22:06:58: finished: 1
+2025-01-19 22:06:58: Total folders: 1
+2025-01-19 22:06:58: Total notes: 0
+2025-01-19 22:06:58: Total resources: 0
+2025-01-19 22:06:58: Sync: starting: Starting synchronization to memory (1)... [1737299218727]
+2025-01-19 22:06:58: mkdir /root/.sync
+2025-01-19 22:06:58: mkdir /root/.resource
+2025-01-19 22:06:58: stat /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: Sync: noteConflict: remote has been deleted, but local has changes: Note: (Local ac3f7a0bae7144cd95fafd49a8c76815, "Modified after having been deleted")
+2025-01-19 22:06:58: stat /root/474079a4eed34b47a9dbaf125f556a2c.md
+2025-01-19 22:06:58: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 474079a4eed34b47a9dbaf125f556a2c, "Modified after having been deleted")
+2025-01-19 22:06:58: put /root/474079a4eed34b47a9dbaf125f556a2c.md
+2025-01-19 22:06:58: setTimestamp /root/474079a4eed34b47a9dbaf125f556a2c.md
+2025-01-19 22:06:58: Sync: deleteRemote: local has been deleted: (Remote ac3f7a0bae7144cd95fafd49a8c76815)
+2025-01-19 22:06:58: delete /root/ac3f7a0bae7144cd95fafd49a8c76815.md
+2025-01-19 22:06:58: list /root
+2025-01-19 22:06:58: Sync: deleteLocal: remote has been deleted: (Local ac3f7a0bae7144cd95fafd49a8c76815)
+2025-01-19 22:06:58: Sync: finished: Synchronization finished [1737299218727]
+2025-01-19 22:06:58: Operations completed: 
+2025-01-19 22:06:58: starting: 1
+2025-01-19 22:06:58: state: idle
+2025-01-19 22:06:58: noteConflict: 1
+2025-01-19 22:06:58: createRemote: 1
+2025-01-19 22:06:58: deleteRemote: 1
+2025-01-19 22:06:58: deleteLocal: 1
+2025-01-19 22:06:58: finished: 1
+2025-01-19 22:06:58: Total folders: 1
+2025-01-19 22:06:58: Total notes: 1
+2025-01-19 22:06:58: Total resources: 0
+2025-01-19 22:06:58: Sync: starting: Starting synchronization to memory (1)... [1737299218957]
+2025-01-19 22:06:58: mkdir /root/.sync
+2025-01-19 22:06:58: mkdir /root/.resource
+2025-01-19 22:06:58: stat /root/7a5e5cf9e30a464592b83c742a4e9bb3.md
+2025-01-19 22:06:58: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 7a5e5cf9e30a464592b83c742a4e9bb3, "un")
+2025-01-19 22:06:58: put /root/7a5e5cf9e30a464592b83c742a4e9bb3.md
+2025-01-19 22:06:58: setTimestamp /root/7a5e5cf9e30a464592b83c742a4e9bb3.md
+2025-01-19 22:06:58: stat /root/8ea1f46f658d4187bab4720ec74f6c64.md
+2025-01-19 22:06:58: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 8ea1f46f658d4187bab4720ec74f6c64, "folder1")
+2025-01-19 22:06:58: put /root/8ea1f46f658d4187bab4720ec74f6c64.md
+2025-01-19 22:06:58: setTimestamp /root/8ea1f46f658d4187bab4720ec74f6c64.md
+2025-01-19 22:06:58: list /root
+2025-01-19 22:06:58: Sync: deleteLocal: remote has been deleted: (Local 474079a4eed34b47a9dbaf125f556a2c)
+2025-01-19 22:06:58: Sync: finished: Synchronization finished [1737299218957]
+2025-01-19 22:06:58: Operations completed: 
+2025-01-19 22:06:58: starting: 1
+2025-01-19 22:06:58: state: idle
+2025-01-19 22:06:58: createRemote: 2
+2025-01-19 22:06:58: deleteLocal: 1
+2025-01-19 22:06:58: finished: 1
+2025-01-19 22:06:58: Total folders: 1
+2025-01-19 22:06:58: Total notes: 1
+2025-01-19 22:06:58: Total resources: 0
+2025-01-19 22:06:58: list /root
+2025-01-19 22:06:58: stat /root/8ea1f46f658d4187bab4720ec74f6c64.md
+2025-01-19 22:06:58: get /root/8ea1f46f658d4187bab4720ec74f6c64.md
+2025-01-19 22:06:58: stat /root/7a5e5cf9e30a464592b83c742a4e9bb3.md
+2025-01-19 22:06:58: get /root/7a5e5cf9e30a464592b83c742a4e9bb3.md
+2025-01-19 22:06:59: Sync: starting: Starting synchronization to memory (1)... [1737299219185]
+2025-01-19 22:06:59: mkdir /root/.sync
+2025-01-19 22:06:59: mkdir /root/.resource
+2025-01-19 22:06:59: stat /root/29c0684352654388801349ad7bbdc099.md
+2025-01-19 22:06:59: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 29c0684352654388801349ad7bbdc099, "folder1")
+2025-01-19 22:06:59: put /root/29c0684352654388801349ad7bbdc099.md
+2025-01-19 22:06:59: setTimestamp /root/29c0684352654388801349ad7bbdc099.md
+2025-01-19 22:06:59: stat /root/4115e3078a364df09afa6f1636e28991.md
+2025-01-19 22:06:59: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 4115e3078a364df09afa6f1636e28991, "folder2")
+2025-01-19 22:06:59: put /root/4115e3078a364df09afa6f1636e28991.md
+2025-01-19 22:06:59: setTimestamp /root/4115e3078a364df09afa6f1636e28991.md
+2025-01-19 22:06:59: list /root
+2025-01-19 22:06:59: Sync: deleteLocal: remote has been deleted: (Local 7a5e5cf9e30a464592b83c742a4e9bb3)
+2025-01-19 22:06:59: Sync: finished: Synchronization finished [1737299219185]
+2025-01-19 22:06:59: Operations completed: 
+2025-01-19 22:06:59: starting: 1
+2025-01-19 22:06:59: state: idle
+2025-01-19 22:06:59: createRemote: 2
+2025-01-19 22:06:59: deleteLocal: 1
+2025-01-19 22:06:59: finished: 1
+2025-01-19 22:06:59: Total folders: 2
+2025-01-19 22:06:59: Total notes: 0
+2025-01-19 22:06:59: Total resources: 0
+2025-01-19 22:06:59: Sync: starting: Starting synchronization to memory (1)... [1737299219406]
+2025-01-19 22:06:59: mkdir /root/.sync
+2025-01-19 22:06:59: mkdir /root/.resource
+2025-01-19 22:06:59: list /root
+2025-01-19 22:06:59: get /root/29c0684352654388801349ad7bbdc099.md
+2025-01-19 22:06:59: Sync: createLocal: Remote exists but local does not: Folder: (Remote 29c0684352654388801349ad7bbdc099, "folder1")
+2025-01-19 22:06:59: get /root/4115e3078a364df09afa6f1636e28991.md
+2025-01-19 22:06:59: Sync: createLocal: Remote exists but local does not: Folder: (Remote 4115e3078a364df09afa6f1636e28991, "folder2")
+2025-01-19 22:06:59: Sync: finished: Synchronization finished [1737299219406]
+2025-01-19 22:06:59: Operations completed: 
+2025-01-19 22:06:59: starting: 1
+2025-01-19 22:06:59: state: idle
+2025-01-19 22:06:59: createLocal: 2
+2025-01-19 22:06:59: finished: 1
+2025-01-19 22:06:59: Total folders: 2
+2025-01-19 22:06:59: Total notes: 0
+2025-01-19 22:06:59: Total resources: 0
+2025-01-19 22:06:59: Sync: starting: Starting synchronization to memory (1)... [1737299219734]
+2025-01-19 22:06:59: mkdir /root/.sync
+2025-01-19 22:06:59: mkdir /root/.resource
+2025-01-19 22:06:59: Sync: deleteRemote: local has been deleted: (Remote 4115e3078a364df09afa6f1636e28991)
+2025-01-19 22:06:59: delete /root/4115e3078a364df09afa6f1636e28991.md
+2025-01-19 22:06:59: list /root
+2025-01-19 22:06:59: Sync: finished: Synchronization finished [1737299219734]
+2025-01-19 22:06:59: Operations completed: 
+2025-01-19 22:06:59: starting: 1
+2025-01-19 22:06:59: state: idle
+2025-01-19 22:06:59: deleteRemote: 1
+2025-01-19 22:06:59: finished: 1
+2025-01-19 22:06:59: Total folders: 1
+2025-01-19 22:06:59: Total notes: 0
+2025-01-19 22:06:59: Total resources: 0
+2025-01-19 22:06:59: Sync: starting: Starting synchronization to memory (1)... [1737299219943]
+2025-01-19 22:06:59: mkdir /root/.sync
+2025-01-19 22:06:59: mkdir /root/.resource
+2025-01-19 22:06:59: Sync: deleteRemote: local has been deleted: (Remote 29c0684352654388801349ad7bbdc099)
+2025-01-19 22:06:59: delete /root/29c0684352654388801349ad7bbdc099.md
+2025-01-19 22:06:59: list /root
+2025-01-19 22:06:59: Sync: finished: Synchronization finished [1737299219943]
+2025-01-19 22:06:59: Operations completed: 
+2025-01-19 22:06:59: starting: 1
+2025-01-19 22:06:59: state: idle
+2025-01-19 22:06:59: deleteRemote: 1
+2025-01-19 22:06:59: finished: 1
+2025-01-19 22:06:59: Total folders: 0
+2025-01-19 22:06:59: Total notes: 0
+2025-01-19 22:06:59: Total resources: 0
+2025-01-19 22:07:00: Sync: starting: Starting synchronization to memory (1)... [1737299220160]
+2025-01-19 22:07:00: mkdir /root/.sync
+2025-01-19 22:07:00: mkdir /root/.resource
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: Sync: finished: Synchronization finished [1737299220160]
+2025-01-19 22:07:00: Operations completed: 
+2025-01-19 22:07:00: starting: 1
+2025-01-19 22:07:00: state: idle
+2025-01-19 22:07:00: finished: 1
+2025-01-19 22:07:00: Total folders: 0
+2025-01-19 22:07:00: Total notes: 0
+2025-01-19 22:07:00: Total resources: 0
+2025-01-19 22:07:00: Sync: starting: Starting synchronization to memory (1)... [1737299220380]
+2025-01-19 22:07:00: mkdir /root/.sync
+2025-01-19 22:07:00: mkdir /root/.resource
+2025-01-19 22:07:00: stat /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 45a7ed8ff6cd42b8aedbbde818b2620a, "un")
+2025-01-19 22:07:00: put /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: setTimestamp /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: stat /root/4ac570e4e3f0493ba38c5e0ce4f35ada.md
+2025-01-19 22:07:00: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 4ac570e4e3f0493ba38c5e0ce4f35ada, "folder1")
+2025-01-19 22:07:00: put /root/4ac570e4e3f0493ba38c5e0ce4f35ada.md
+2025-01-19 22:07:00: setTimestamp /root/4ac570e4e3f0493ba38c5e0ce4f35ada.md
+2025-01-19 22:07:00: Sync: deleteRemote: local has been deleted: (Remote 29c0684352654388801349ad7bbdc099)
+2025-01-19 22:07:00: delete /root/29c0684352654388801349ad7bbdc099.md
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: Sync: finished: Synchronization finished [1737299220380]
+2025-01-19 22:07:00: Operations completed: 
+2025-01-19 22:07:00: starting: 1
+2025-01-19 22:07:00: state: idle
+2025-01-19 22:07:00: createRemote: 2
+2025-01-19 22:07:00: deleteRemote: 1
+2025-01-19 22:07:00: finished: 1
+2025-01-19 22:07:00: Total folders: 1
+2025-01-19 22:07:00: Total notes: 1
+2025-01-19 22:07:00: Total resources: 0
+2025-01-19 22:07:00: Sync: starting: Starting synchronization to memory (1)... [1737299220498]
+2025-01-19 22:07:00: mkdir /root/.sync
+2025-01-19 22:07:00: mkdir /root/.resource
+2025-01-19 22:07:00: stat /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: Sync: updateRemote: local has changes: Note: (Local 45a7ed8ff6cd42b8aedbbde818b2620a, "un UPDATE"): (Remote 45a7ed8ff6cd42b8aedbbde818b2620a.md)
+2025-01-19 22:07:00: put /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: setTimestamp /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: Sync: finished: Synchronization finished [1737299220498]
+2025-01-19 22:07:00: Operations completed: 
+2025-01-19 22:07:00: starting: 1
+2025-01-19 22:07:00: state: idle
+2025-01-19 22:07:00: updateRemote: 1
+2025-01-19 22:07:00: finished: 1
+2025-01-19 22:07:00: Total folders: 1
+2025-01-19 22:07:00: Total notes: 1
+2025-01-19 22:07:00: Total resources: 0
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: stat /root/4ac570e4e3f0493ba38c5e0ce4f35ada.md
+2025-01-19 22:07:00: get /root/4ac570e4e3f0493ba38c5e0ce4f35ada.md
+2025-01-19 22:07:00: stat /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: get /root/45a7ed8ff6cd42b8aedbbde818b2620a.md
+2025-01-19 22:07:00: Sync: starting: Starting synchronization to memory (1)... [1737299220728]
+2025-01-19 22:07:00: mkdir /root/.sync
+2025-01-19 22:07:00: mkdir /root/.resource
+2025-01-19 22:07:00: stat /root/ff5bffe75a0549f8a52c7400762050cd.md
+2025-01-19 22:07:00: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local ff5bffe75a0549f8a52c7400762050cd, "note")
+2025-01-19 22:07:00: put /root/ff5bffe75a0549f8a52c7400762050cd.md
+2025-01-19 22:07:00: setTimestamp /root/ff5bffe75a0549f8a52c7400762050cd.md
+2025-01-19 22:07:00: stat /root/b6a996bdc5994f02a3265565e8ef8154.md
+2025-01-19 22:07:00: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local b6a996bdc5994f02a3265565e8ef8154, "folder")
+2025-01-19 22:07:00: put /root/b6a996bdc5994f02a3265565e8ef8154.md
+2025-01-19 22:07:00: setTimestamp /root/b6a996bdc5994f02a3265565e8ef8154.md
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: Sync: deleteLocal: remote has been deleted: (Local 45a7ed8ff6cd42b8aedbbde818b2620a)
+2025-01-19 22:07:00: Sync: finished: Synchronization finished [1737299220728]
+2025-01-19 22:07:00: Operations completed: 
+2025-01-19 22:07:00: starting: 1
+2025-01-19 22:07:00: state: idle
+2025-01-19 22:07:00: createRemote: 2
+2025-01-19 22:07:00: deleteLocal: 1
+2025-01-19 22:07:00: finished: 1
+2025-01-19 22:07:00: Total folders: 1
+2025-01-19 22:07:00: Total notes: 1
+2025-01-19 22:07:00: Total resources: 0
+2025-01-19 22:07:00: Sync: starting: Starting synchronization to memory (1)... [1737299220943]
+2025-01-19 22:07:00: mkdir /root/.sync
+2025-01-19 22:07:00: mkdir /root/.resource
+2025-01-19 22:07:00: Sync: deleteRemote: local has been deleted: (Remote 4115e3078a364df09afa6f1636e28991)
+2025-01-19 22:07:00: delete /root/4115e3078a364df09afa6f1636e28991.md
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: get /root/ff5bffe75a0549f8a52c7400762050cd.md
+2025-01-19 22:07:00: Sync: createLocal: Remote exists but local does not: Note: (Remote ff5bffe75a0549f8a52c7400762050cd, "note")
+2025-01-19 22:07:00: get /root/b6a996bdc5994f02a3265565e8ef8154.md
+2025-01-19 22:07:00: Sync: createLocal: Remote exists but local does not: Folder: (Remote b6a996bdc5994f02a3265565e8ef8154, "folder")
+2025-01-19 22:07:00: Sync: finished: Synchronization finished [1737299220943]
+2025-01-19 22:07:00: Operations completed: 
+2025-01-19 22:07:00: starting: 1
+2025-01-19 22:07:00: state: idle
+2025-01-19 22:07:00: deleteRemote: 1
+2025-01-19 22:07:00: createLocal: 2
+2025-01-19 22:07:00: finished: 1
+2025-01-19 22:07:00: Total folders: 1
+2025-01-19 22:07:00: Total notes: 1
+2025-01-19 22:07:00: Total resources: 0
+2025-01-19 22:07:00: Sync: starting: Starting synchronization to memory (1)... [1737299220969]
+2025-01-19 22:07:00: mkdir /root/.sync
+2025-01-19 22:07:00: mkdir /root/.resource
+2025-01-19 22:07:00: Sync: deleteRemote: local has been deleted: (Remote ff5bffe75a0549f8a52c7400762050cd)
+2025-01-19 22:07:00: delete /root/ff5bffe75a0549f8a52c7400762050cd.md
+2025-01-19 22:07:00: list /root
+2025-01-19 22:07:00: Sync: deleteLocal: remote has been deleted: (Local ff5bffe75a0549f8a52c7400762050cd)
+2025-01-19 22:07:00: Sync: finished: Synchronization finished [1737299220969]
+2025-01-19 22:07:00: Operations completed: 
+2025-01-19 22:07:00: starting: 1
+2025-01-19 22:07:00: state: idle
+2025-01-19 22:07:00: deleteRemote: 1
+2025-01-19 22:07:00: deleteLocal: 1
+2025-01-19 22:07:00: finished: 1
+2025-01-19 22:07:00: Total folders: 1
+2025-01-19 22:07:00: Total notes: 0
+2025-01-19 22:07:00: Total resources: 0
+2025-01-19 22:07:01: Sync: starting: Starting synchronization to memory (1)... [1737299221184]
+2025-01-19 22:07:01: mkdir /root/.sync
+2025-01-19 22:07:01: mkdir /root/.resource
+2025-01-19 22:07:01: Sync: deleteRemote: local has been deleted: (Remote ff5bffe75a0549f8a52c7400762050cd)
+2025-01-19 22:07:01: delete /root/ff5bffe75a0549f8a52c7400762050cd.md
+2025-01-19 22:07:01: list /root
+2025-01-19 22:07:01: Sync: deleteLocal: remote has been deleted: (Local ff5bffe75a0549f8a52c7400762050cd)
+2025-01-19 22:07:01: Sync: finished: Synchronization finished [1737299221184]
+2025-01-19 22:07:01: Operations completed: 
+2025-01-19 22:07:01: starting: 1
+2025-01-19 22:07:01: state: idle
+2025-01-19 22:07:01: deleteRemote: 1
+2025-01-19 22:07:01: deleteLocal: 1
+2025-01-19 22:07:01: finished: 1
+2025-01-19 22:07:01: Total folders: 1
+2025-01-19 22:07:01: Total notes: 0
+2025-01-19 22:07:01: Total resources: 0
+2025-01-19 22:07:01: list /root
+2025-01-19 22:07:01: stat /root/b6a996bdc5994f02a3265565e8ef8154.md
+2025-01-19 22:07:01: get /root/b6a996bdc5994f02a3265565e8ef8154.md
+2025-01-19 22:07:01: Sync: starting: Starting synchronization to memory (1)... [1737299221422]
+2025-01-19 22:07:01: mkdir /root/.sync
+2025-01-19 22:07:01: mkdir /root/.resource
+2025-01-19 22:07:01: stat /root/562005111a5942d5a6fc8688394872cd.md
+2025-01-19 22:07:01: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 562005111a5942d5a6fc8688394872cd, "un")
+2025-01-19 22:07:01: put /root/562005111a5942d5a6fc8688394872cd.md
+2025-01-19 22:07:01: setTimestamp /root/562005111a5942d5a6fc8688394872cd.md
+2025-01-19 22:07:01: stat /root/361b3ade25b1456ab016adc9be5cb483.md
+2025-01-19 22:07:01: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 361b3ade25b1456ab016adc9be5cb483, "folder1")
+2025-01-19 22:07:01: put /root/361b3ade25b1456ab016adc9be5cb483.md
+2025-01-19 22:07:01: setTimestamp /root/361b3ade25b1456ab016adc9be5cb483.md
+2025-01-19 22:07:01: list /root
+2025-01-19 22:07:01: Sync: finished: Synchronization finished [1737299221422]
+2025-01-19 22:07:01: Operations completed: 
+2025-01-19 22:07:01: starting: 1
+2025-01-19 22:07:01: state: idle
+2025-01-19 22:07:01: createRemote: 2
+2025-01-19 22:07:01: finished: 1
+2025-01-19 22:07:01: Total folders: 1
+2025-01-19 22:07:01: Total notes: 1
+2025-01-19 22:07:01: Total resources: 0
+2025-01-19 22:07:01: Sync: starting: Starting synchronization to memory (1)... [1737299221632]
+2025-01-19 22:07:01: mkdir /root/.sync
+2025-01-19 22:07:01: mkdir /root/.resource
+2025-01-19 22:07:01: list /root
+2025-01-19 22:07:01: get /root/562005111a5942d5a6fc8688394872cd.md
+2025-01-19 22:07:01: Sync: createLocal: Remote exists but local does not: Note: (Remote 562005111a5942d5a6fc8688394872cd, "un")
+2025-01-19 22:07:01: get /root/361b3ade25b1456ab016adc9be5cb483.md
+2025-01-19 22:07:01: Sync: createLocal: Remote exists but local does not: Folder: (Remote 361b3ade25b1456ab016adc9be5cb483, "folder1")
+2025-01-19 22:07:01: Sync: finished: Synchronization finished [1737299221632]
+2025-01-19 22:07:01: Operations completed: 
+2025-01-19 22:07:01: starting: 1
+2025-01-19 22:07:01: state: idle
+2025-01-19 22:07:01: createLocal: 2
+2025-01-19 22:07:01: finished: 1
+2025-01-19 22:07:01: Total folders: 1
+2025-01-19 22:07:01: Total notes: 1
+2025-01-19 22:07:01: Total resources: 0
+2025-01-19 22:07:01: list /root
+2025-01-19 22:07:01: stat /root/361b3ade25b1456ab016adc9be5cb483.md
+2025-01-19 22:07:01: get /root/361b3ade25b1456ab016adc9be5cb483.md
+2025-01-19 22:07:01: stat /root/562005111a5942d5a6fc8688394872cd.md
+2025-01-19 22:07:01: get /root/562005111a5942d5a6fc8688394872cd.md
+2025-01-19 22:07:01: Sync: starting: Starting synchronization to memory (1)... [1737299221885]
+2025-01-19 22:07:01: mkdir /root/.sync
+2025-01-19 22:07:01: mkdir /root/.resource
+2025-01-19 22:07:01: stat /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:01: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local faad87a2d10c484986e3af5101f045dd, "un")
+2025-01-19 22:07:01: put /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:01: setTimestamp /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:01: stat /root/82350d97986d45d69fca6f12f120b202.md
+2025-01-19 22:07:01: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 82350d97986d45d69fca6f12f120b202, "folder1")
+2025-01-19 22:07:01: put /root/82350d97986d45d69fca6f12f120b202.md
+2025-01-19 22:07:01: setTimestamp /root/82350d97986d45d69fca6f12f120b202.md
+2025-01-19 22:07:01: list /root
+2025-01-19 22:07:01: Sync: deleteLocal: remote has been deleted: (Local 562005111a5942d5a6fc8688394872cd)
+2025-01-19 22:07:01: Sync: finished: Synchronization finished [1737299221885]
+2025-01-19 22:07:01: Operations completed: 
+2025-01-19 22:07:01: starting: 1
+2025-01-19 22:07:01: state: idle
+2025-01-19 22:07:01: createRemote: 2
+2025-01-19 22:07:01: deleteLocal: 1
+2025-01-19 22:07:01: finished: 1
+2025-01-19 22:07:01: Total folders: 1
+2025-01-19 22:07:01: Total notes: 1
+2025-01-19 22:07:01: Total resources: 0
+2025-01-19 22:07:02: Sync: starting: Starting synchronization to memory (1)... [1737299222103]
+2025-01-19 22:07:02: mkdir /root/.sync
+2025-01-19 22:07:02: mkdir /root/.resource
+2025-01-19 22:07:02: list /root
+2025-01-19 22:07:02: get /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: Sync: createLocal: Remote exists but local does not: Note: (Remote faad87a2d10c484986e3af5101f045dd, "un")
+2025-01-19 22:07:02: get /root/82350d97986d45d69fca6f12f120b202.md
+2025-01-19 22:07:02: Sync: createLocal: Remote exists but local does not: Folder: (Remote 82350d97986d45d69fca6f12f120b202, "folder1")
+2025-01-19 22:07:02: Sync: deleteLocal: remote has been deleted: (Local 562005111a5942d5a6fc8688394872cd)
+2025-01-19 22:07:02: Sync: finished: Synchronization finished [1737299222103]
+2025-01-19 22:07:02: Operations completed: 
+2025-01-19 22:07:02: starting: 1
+2025-01-19 22:07:02: state: idle
+2025-01-19 22:07:02: createLocal: 2
+2025-01-19 22:07:02: deleteLocal: 1
+2025-01-19 22:07:02: finished: 1
+2025-01-19 22:07:02: Total folders: 1
+2025-01-19 22:07:02: Total notes: 1
+2025-01-19 22:07:02: Total resources: 0
+2025-01-19 22:07:02: Sync: starting: Starting synchronization to memory (1)... [1737299222230]
+2025-01-19 22:07:02: mkdir /root/.sync
+2025-01-19 22:07:02: mkdir /root/.resource
+2025-01-19 22:07:02: stat /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: Sync: updateRemote: local has changes: Note: (Local faad87a2d10c484986e3af5101f045dd, "Updated on client 2"): (Remote faad87a2d10c484986e3af5101f045dd.md)
+2025-01-19 22:07:02: put /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: setTimestamp /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: list /root
+2025-01-19 22:07:02: Sync: finished: Synchronization finished [1737299222230]
+2025-01-19 22:07:02: Operations completed: 
+2025-01-19 22:07:02: starting: 1
+2025-01-19 22:07:02: state: idle
+2025-01-19 22:07:02: updateRemote: 1
+2025-01-19 22:07:02: finished: 1
+2025-01-19 22:07:02: Total folders: 1
+2025-01-19 22:07:02: Total notes: 1
+2025-01-19 22:07:02: Total resources: 0
+2025-01-19 22:07:02: Sync: starting: Starting synchronization to memory (1)... [1737299222449]
+2025-01-19 22:07:02: mkdir /root/.sync
+2025-01-19 22:07:02: mkdir /root/.resource
+2025-01-19 22:07:02: list /root
+2025-01-19 22:07:02: get /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: Sync: updateLocal: Remote is more recent than local: Note: (Local faad87a2d10c484986e3af5101f045dd, "un"): (Remote faad87a2d10c484986e3af5101f045dd, "Updated on client 2")
+2025-01-19 22:07:02: Sync: finished: Synchronization finished [1737299222449]
+2025-01-19 22:07:02: Operations completed: 
+2025-01-19 22:07:02: starting: 1
+2025-01-19 22:07:02: state: idle
+2025-01-19 22:07:02: updateLocal: 1
+2025-01-19 22:07:02: finished: 1
+2025-01-19 22:07:02: Total folders: 1
+2025-01-19 22:07:02: Total notes: 1
+2025-01-19 22:07:02: Total resources: 0
+2025-01-19 22:07:02: list /root
+2025-01-19 22:07:02: stat /root/82350d97986d45d69fca6f12f120b202.md
+2025-01-19 22:07:02: get /root/82350d97986d45d69fca6f12f120b202.md
+2025-01-19 22:07:02: stat /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: get /root/faad87a2d10c484986e3af5101f045dd.md
+2025-01-19 22:07:02: Sync: starting: Starting synchronization to memory (1)... [1737299222690]
+2025-01-19 22:07:02: mkdir /root/.sync
+2025-01-19 22:07:02: mkdir /root/.resource
+2025-01-19 22:07:02: stat /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:02: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd, "un")
+2025-01-19 22:07:02: put /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:02: setTimestamp /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:02: stat /root/96f0e76fe8c6423ab0464bd397c10e6d.md
+2025-01-19 22:07:02: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 96f0e76fe8c6423ab0464bd397c10e6d, "folder1")
+2025-01-19 22:07:02: put /root/96f0e76fe8c6423ab0464bd397c10e6d.md
+2025-01-19 22:07:02: setTimestamp /root/96f0e76fe8c6423ab0464bd397c10e6d.md
+2025-01-19 22:07:02: list /root
+2025-01-19 22:07:02: Sync: deleteLocal: remote has been deleted: (Local faad87a2d10c484986e3af5101f045dd)
+2025-01-19 22:07:02: Sync: finished: Synchronization finished [1737299222690]
+2025-01-19 22:07:02: Operations completed: 
+2025-01-19 22:07:02: starting: 1
+2025-01-19 22:07:02: state: idle
+2025-01-19 22:07:02: createRemote: 2
+2025-01-19 22:07:02: deleteLocal: 1
+2025-01-19 22:07:02: finished: 1
+2025-01-19 22:07:02: Total folders: 1
+2025-01-19 22:07:02: Total notes: 1
+2025-01-19 22:07:02: Total resources: 0
+2025-01-19 22:07:02: Sync: starting: Starting synchronization to memory (1)... [1737299222912]
+2025-01-19 22:07:02: mkdir /root/.sync
+2025-01-19 22:07:02: mkdir /root/.resource
+2025-01-19 22:07:02: list /root
+2025-01-19 22:07:02: get /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:02: Sync: createLocal: Remote exists but local does not: Note: (Remote 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd, "un")
+2025-01-19 22:07:02: get /root/96f0e76fe8c6423ab0464bd397c10e6d.md
+2025-01-19 22:07:02: Sync: createLocal: Remote exists but local does not: Folder: (Remote 96f0e76fe8c6423ab0464bd397c10e6d, "folder1")
+2025-01-19 22:07:02: Sync: deleteLocal: remote has been deleted: (Local faad87a2d10c484986e3af5101f045dd)
+2025-01-19 22:07:02: Sync: finished: Synchronization finished [1737299222912]
+2025-01-19 22:07:02: Operations completed: 
+2025-01-19 22:07:02: starting: 1
+2025-01-19 22:07:02: state: idle
+2025-01-19 22:07:02: createLocal: 2
+2025-01-19 22:07:02: deleteLocal: 1
+2025-01-19 22:07:02: finished: 1
+2025-01-19 22:07:02: Total folders: 1
+2025-01-19 22:07:02: Total notes: 1
+2025-01-19 22:07:02: Total resources: 0
+2025-01-19 22:07:03: Sync: starting: Starting synchronization to memory (1)... [1737299223040]
+2025-01-19 22:07:03: mkdir /root/.sync
+2025-01-19 22:07:03: mkdir /root/.resource
+2025-01-19 22:07:03: stat /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:03: Sync: updateRemote: local has changes: Note: (Local 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd, "Updated on client 2"): (Remote 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md)
+2025-01-19 22:07:03: put /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:03: setTimestamp /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:03: list /root
+2025-01-19 22:07:03: Sync: finished: Synchronization finished [1737299223040]
+2025-01-19 22:07:03: Operations completed: 
+2025-01-19 22:07:03: starting: 1
+2025-01-19 22:07:03: state: idle
+2025-01-19 22:07:03: updateRemote: 1
+2025-01-19 22:07:03: finished: 1
+2025-01-19 22:07:03: Total folders: 1
+2025-01-19 22:07:03: Total notes: 1
+2025-01-19 22:07:03: Total resources: 0
+2025-01-19 22:07:03: Sync: starting: Starting synchronization to memory (1)... [1737299223357]
+2025-01-19 22:07:03: mkdir /root/.sync
+2025-01-19 22:07:03: mkdir /root/.resource
+2025-01-19 22:07:03: stat /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:03: Sync: noteConflict: both remote and local have changes: Note: (Local 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd, "Updated on client 1"): (Remote 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md)
+2025-01-19 22:07:03: get /root/5b6ea5a1b7cd43f8a9d42fb49cb9a5cd.md
+2025-01-19 22:07:03: stat /root/c5d25b8dcef54a48b525bc5f4a46f6b1.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local c5d25b8dcef54a48b525bc5f4a46f6b1, "Updated on client 1")
+2025-01-19 22:07:03: put /root/c5d25b8dcef54a48b525bc5f4a46f6b1.md
+2025-01-19 22:07:03: setTimestamp /root/c5d25b8dcef54a48b525bc5f4a46f6b1.md
+2025-01-19 22:07:03: list /root
+2025-01-19 22:07:03: Sync: finished: Synchronization finished [1737299223357]
+2025-01-19 22:07:03: Operations completed: 
+2025-01-19 22:07:03: starting: 1
+2025-01-19 22:07:03: state: idle
+2025-01-19 22:07:03: noteConflict: 1
+2025-01-19 22:07:03: createRemote: 1
+2025-01-19 22:07:03: finished: 1
+2025-01-19 22:07:03: Total folders: 1
+2025-01-19 22:07:03: Total notes: 2
+2025-01-19 22:07:03: Total resources: 0
+2025-01-19 22:07:03: Sync: starting: Starting synchronization to memory (1)... [1737299223582]
+2025-01-19 22:07:03: mkdir /root/.sync
+2025-01-19 22:07:03: mkdir /root/.resource
+2025-01-19 22:07:03: stat /root/c68b909f01364a8f949ef277e524a25d.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local c68b909f01364a8f949ef277e524a25d, "mynote")
+2025-01-19 22:07:03: put /root/c68b909f01364a8f949ef277e524a25d.md
+2025-01-19 22:07:03: setTimestamp /root/c68b909f01364a8f949ef277e524a25d.md
+2025-01-19 22:07:03: stat /root/efe82f8a0b8f4d9983fd60427344b565.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local efe82f8a0b8f4d9983fd60427344b565, "mynote2")
+2025-01-19 22:07:03: put /root/efe82f8a0b8f4d9983fd60427344b565.md
+2025-01-19 22:07:03: setTimestamp /root/efe82f8a0b8f4d9983fd60427344b565.md
+2025-01-19 22:07:03: stat /root/84b4875703524a379d5f0aadde43c040.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 84b4875703524a379d5f0aadde43c040, "folder")
+2025-01-19 22:07:03: put /root/84b4875703524a379d5f0aadde43c040.md
+2025-01-19 22:07:03: setTimestamp /root/84b4875703524a379d5f0aadde43c040.md
+2025-01-19 22:07:03: stat /root/b04203d4dd904566996b29c8dfa72121.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: Tag: (Local b04203d4dd904566996b29c8dfa72121, "mytag")
+2025-01-19 22:07:03: put /root/b04203d4dd904566996b29c8dfa72121.md
+2025-01-19 22:07:03: setTimestamp /root/b04203d4dd904566996b29c8dfa72121.md
+2025-01-19 22:07:03: list /root
+2025-01-19 22:07:03: Sync: deleteLocal: remote has been deleted: (Local 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd)
+2025-01-19 22:07:03: Sync: deleteLocal: remote has been deleted: (Local c5d25b8dcef54a48b525bc5f4a46f6b1)
+2025-01-19 22:07:03: Sync: finished: Synchronization finished [1737299223582]
+2025-01-19 22:07:03: Operations completed: 
+2025-01-19 22:07:03: starting: 1
+2025-01-19 22:07:03: state: idle
+2025-01-19 22:07:03: createRemote: 4
+2025-01-19 22:07:03: deleteLocal: 2
+2025-01-19 22:07:03: finished: 1
+2025-01-19 22:07:03: Total folders: 1
+2025-01-19 22:07:03: Total notes: 2
+2025-01-19 22:07:03: Total resources: 0
+2025-01-19 22:07:03: Sync: starting: Starting synchronization to memory (1)... [1737299223805]
+2025-01-19 22:07:03: mkdir /root/.sync
+2025-01-19 22:07:03: mkdir /root/.resource
+2025-01-19 22:07:03: list /root
+2025-01-19 22:07:03: get /root/c68b909f01364a8f949ef277e524a25d.md
+2025-01-19 22:07:03: Sync: createLocal: Remote exists but local does not: Note: (Remote c68b909f01364a8f949ef277e524a25d, "mynote")
+2025-01-19 22:07:03: get /root/efe82f8a0b8f4d9983fd60427344b565.md
+2025-01-19 22:07:03: Sync: createLocal: Remote exists but local does not: Note: (Remote efe82f8a0b8f4d9983fd60427344b565, "mynote2")
+2025-01-19 22:07:03: get /root/84b4875703524a379d5f0aadde43c040.md
+2025-01-19 22:07:03: Sync: createLocal: Remote exists but local does not: Folder: (Remote 84b4875703524a379d5f0aadde43c040, "folder")
+2025-01-19 22:07:03: get /root/b04203d4dd904566996b29c8dfa72121.md
+2025-01-19 22:07:03: Sync: createLocal: Remote exists but local does not: Tag: (Remote b04203d4dd904566996b29c8dfa72121, "mytag")
+2025-01-19 22:07:03: Sync: deleteLocal: remote has been deleted: (Local 5b6ea5a1b7cd43f8a9d42fb49cb9a5cd)
+2025-01-19 22:07:03: Sync: finished: Synchronization finished [1737299223805]
+2025-01-19 22:07:03: Operations completed: 
+2025-01-19 22:07:03: starting: 1
+2025-01-19 22:07:03: state: idle
+2025-01-19 22:07:03: createLocal: 4
+2025-01-19 22:07:03: deleteLocal: 1
+2025-01-19 22:07:03: finished: 1
+2025-01-19 22:07:03: Total folders: 1
+2025-01-19 22:07:03: Total notes: 2
+2025-01-19 22:07:03: Total resources: 0
+2025-01-19 22:07:03: Sync: starting: Starting synchronization to memory (1)... [1737299223845]
+2025-01-19 22:07:03: mkdir /root/.sync
+2025-01-19 22:07:03: mkdir /root/.resource
+2025-01-19 22:07:03: stat /root/3f6a1c53577d4fe8bdba2c58cc4dc258.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: NoteTag: (Local 3f6a1c53577d4fe8bdba2c58cc4dc258)
+2025-01-19 22:07:03: put /root/3f6a1c53577d4fe8bdba2c58cc4dc258.md
+2025-01-19 22:07:03: setTimestamp /root/3f6a1c53577d4fe8bdba2c58cc4dc258.md
+2025-01-19 22:07:03: stat /root/5320ceb1892c4c9189368466af2f54a9.md
+2025-01-19 22:07:03: Sync: createRemote: remote does not exist, and local is new and has never been synced: NoteTag: (Local 5320ceb1892c4c9189368466af2f54a9)
+2025-01-19 22:07:03: put /root/5320ceb1892c4c9189368466af2f54a9.md
+2025-01-19 22:07:03: setTimestamp /root/5320ceb1892c4c9189368466af2f54a9.md
+2025-01-19 22:07:03: list /root
+2025-01-19 22:07:03: Sync: finished: Synchronization finished [1737299223845]
+2025-01-19 22:07:03: Operations completed: 
+2025-01-19 22:07:03: starting: 1
+2025-01-19 22:07:03: state: idle
+2025-01-19 22:07:03: createRemote: 2
+2025-01-19 22:07:03: finished: 1
+2025-01-19 22:07:03: Total folders: 1
+2025-01-19 22:07:03: Total notes: 2
+2025-01-19 22:07:03: Total resources: 0
+2025-01-19 22:07:04: Sync: starting: Starting synchronization to memory (1)... [1737299224059]
+2025-01-19 22:07:04: mkdir /root/.sync
+2025-01-19 22:07:04: mkdir /root/.resource
+2025-01-19 22:07:04: list /root
+2025-01-19 22:07:04: get /root/3f6a1c53577d4fe8bdba2c58cc4dc258.md
+2025-01-19 22:07:04: Sync: createLocal: Remote exists but local does not: NoteTag: (Remote 3f6a1c53577d4fe8bdba2c58cc4dc258)
+2025-01-19 22:07:04: get /root/5320ceb1892c4c9189368466af2f54a9.md
+2025-01-19 22:07:04: Sync: createLocal: Remote exists but local does not: NoteTag: (Remote 5320ceb1892c4c9189368466af2f54a9)
+2025-01-19 22:07:04: Sync: finished: Synchronization finished [1737299224059]
+2025-01-19 22:07:04: Operations completed: 
+2025-01-19 22:07:04: starting: 1
+2025-01-19 22:07:04: state: idle
+2025-01-19 22:07:04: createLocal: 2
+2025-01-19 22:07:04: finished: 1
+2025-01-19 22:07:04: Total folders: 1
+2025-01-19 22:07:04: Total notes: 2
+2025-01-19 22:07:04: Total resources: 0
+2025-01-19 22:07:04: Sync: starting: Starting synchronization to memory (1)... [1737299224087]
+2025-01-19 22:07:04: mkdir /root/.sync
+2025-01-19 22:07:04: mkdir /root/.resource
+2025-01-19 22:07:04: Sync: deleteRemote: local has been deleted: (Remote 3f6a1c53577d4fe8bdba2c58cc4dc258)
+2025-01-19 22:07:04: delete /root/3f6a1c53577d4fe8bdba2c58cc4dc258.md
+2025-01-19 22:07:04: list /root
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local 3f6a1c53577d4fe8bdba2c58cc4dc258)
+2025-01-19 22:07:04: Sync: finished: Synchronization finished [1737299224087]
+2025-01-19 22:07:04: Operations completed: 
+2025-01-19 22:07:04: starting: 1
+2025-01-19 22:07:04: state: idle
+2025-01-19 22:07:04: deleteRemote: 1
+2025-01-19 22:07:04: deleteLocal: 1
+2025-01-19 22:07:04: finished: 1
+2025-01-19 22:07:04: Total folders: 1
+2025-01-19 22:07:04: Total notes: 2
+2025-01-19 22:07:04: Total resources: 0
+2025-01-19 22:07:04: Sync: starting: Starting synchronization to memory (1)... [1737299224300]
+2025-01-19 22:07:04: mkdir /root/.sync
+2025-01-19 22:07:04: mkdir /root/.resource
+2025-01-19 22:07:04: list /root
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local 3f6a1c53577d4fe8bdba2c58cc4dc258)
+2025-01-19 22:07:04: Sync: finished: Synchronization finished [1737299224300]
+2025-01-19 22:07:04: Operations completed: 
+2025-01-19 22:07:04: starting: 1
+2025-01-19 22:07:04: state: idle
+2025-01-19 22:07:04: deleteLocal: 1
+2025-01-19 22:07:04: finished: 1
+2025-01-19 22:07:04: Total folders: 1
+2025-01-19 22:07:04: Total notes: 2
+2025-01-19 22:07:04: Total resources: 0
+2025-01-19 22:07:04: Sync: starting: Starting synchronization to memory (1)... [1737299224528]
+2025-01-19 22:07:04: mkdir /root/.sync
+2025-01-19 22:07:04: mkdir /root/.resource
+2025-01-19 22:07:04: stat /root/4504f1f1ddcf49e0ae2cb5293b250752.md
+2025-01-19 22:07:04: Sync: createRemote: remote does not exist, and local is new and has never been synced: Note: (Local 4504f1f1ddcf49e0ae2cb5293b250752, "un")
+2025-01-19 22:07:04: put /root/4504f1f1ddcf49e0ae2cb5293b250752.md
+2025-01-19 22:07:04: setTimestamp /root/4504f1f1ddcf49e0ae2cb5293b250752.md
+2025-01-19 22:07:04: stat /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 33cb1b7d36d944d7829b9be4ce590746, "folder1")
+2025-01-19 22:07:04: put /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: setTimestamp /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: list /root
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local c68b909f01364a8f949ef277e524a25d)
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local efe82f8a0b8f4d9983fd60427344b565)
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local b04203d4dd904566996b29c8dfa72121)
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local 5320ceb1892c4c9189368466af2f54a9)
+2025-01-19 22:07:04: Sync: finished: Synchronization finished [1737299224528]
+2025-01-19 22:07:04: Operations completed: 
+2025-01-19 22:07:04: starting: 1
+2025-01-19 22:07:04: state: idle
+2025-01-19 22:07:04: createRemote: 2
+2025-01-19 22:07:04: deleteLocal: 4
+2025-01-19 22:07:04: finished: 1
+2025-01-19 22:07:04: Total folders: 1
+2025-01-19 22:07:04: Total notes: 1
+2025-01-19 22:07:04: Total resources: 0
+2025-01-19 22:07:04: Sync: starting: Starting synchronization to memory (1)... [1737299224746]
+2025-01-19 22:07:04: mkdir /root/.sync
+2025-01-19 22:07:04: mkdir /root/.resource
+2025-01-19 22:07:04: list /root
+2025-01-19 22:07:04: get /root/4504f1f1ddcf49e0ae2cb5293b250752.md
+2025-01-19 22:07:04: Sync: createLocal: Remote exists but local does not: Note: (Remote 4504f1f1ddcf49e0ae2cb5293b250752, "un")
+2025-01-19 22:07:04: get /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: Sync: createLocal: Remote exists but local does not: Folder: (Remote 33cb1b7d36d944d7829b9be4ce590746, "folder1")
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local c68b909f01364a8f949ef277e524a25d)
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local efe82f8a0b8f4d9983fd60427344b565)
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local b04203d4dd904566996b29c8dfa72121)
+2025-01-19 22:07:04: Sync: deleteLocal: remote has been deleted: (Local 5320ceb1892c4c9189368466af2f54a9)
+2025-01-19 22:07:04: Sync: finished: Synchronization finished [1737299224746]
+2025-01-19 22:07:04: Operations completed: 
+2025-01-19 22:07:04: starting: 1
+2025-01-19 22:07:04: state: idle
+2025-01-19 22:07:04: createLocal: 2
+2025-01-19 22:07:04: deleteLocal: 4
+2025-01-19 22:07:04: finished: 1
+2025-01-19 22:07:04: Total folders: 1
+2025-01-19 22:07:04: Total notes: 1
+2025-01-19 22:07:04: Total resources: 0
+2025-01-19 22:07:04: Sync: starting: Starting synchronization to memory (1)... [1737299224878]
+2025-01-19 22:07:04: mkdir /root/.sync
+2025-01-19 22:07:04: mkdir /root/.resource
+2025-01-19 22:07:04: stat /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: Sync: updateRemote: local has changes: Folder: (Local 33cb1b7d36d944d7829b9be4ce590746, "folder1 UPDATE CLIENT 2"): (Remote 33cb1b7d36d944d7829b9be4ce590746.md)
+2025-01-19 22:07:04: put /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: setTimestamp /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:04: list /root
+2025-01-19 22:07:04: Sync: finished: Synchronization finished [1737299224878]
+2025-01-19 22:07:04: Operations completed: 
+2025-01-19 22:07:04: starting: 1
+2025-01-19 22:07:04: state: idle
+2025-01-19 22:07:04: updateRemote: 1
+2025-01-19 22:07:04: finished: 1
+2025-01-19 22:07:04: Total folders: 1
+2025-01-19 22:07:04: Total notes: 1
+2025-01-19 22:07:04: Total resources: 0
+2025-01-19 22:07:05: Sync: starting: Starting synchronization to memory (1)... [1737299225204]
+2025-01-19 22:07:05: mkdir /root/.sync
+2025-01-19 22:07:05: mkdir /root/.resource
+2025-01-19 22:07:05: stat /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:05: Sync: itemConflict: both remote and local have changes: Folder: (Local 33cb1b7d36d944d7829b9be4ce590746, "folder1 UPDATE CLIENT 1"): (Remote 33cb1b7d36d944d7829b9be4ce590746.md)
+2025-01-19 22:07:05: get /root/33cb1b7d36d944d7829b9be4ce590746.md
+2025-01-19 22:07:05: list /root
+2025-01-19 22:07:05: Sync: finished: Synchronization finished [1737299225204]
+2025-01-19 22:07:05: Operations completed: 
+2025-01-19 22:07:05: starting: 1
+2025-01-19 22:07:05: state: idle
+2025-01-19 22:07:05: itemConflict: 1
+2025-01-19 22:07:05: finished: 1
+2025-01-19 22:07:05: Total folders: 1
+2025-01-19 22:07:05: Total notes: 1
+2025-01-19 22:07:05: Total resources: 0
+2025-01-19 22:07:05: Sync: starting: Starting synchronization to memory (1)... [1737299225638]
+2025-01-19 22:07:05: mkdir /root/.sync
+2025-01-19 22:07:05: mkdir /root/.resource
+2025-01-19 22:07:05: stat /root/3307cfc8189743d2aa4ec11929ae7d15.md
+2025-01-19 22:07:05: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local 3307cfc8189743d2aa4ec11929ae7d15, "folder")
+2025-01-19 22:07:05: put /root/3307cfc8189743d2aa4ec11929ae7d15.md
+2025-01-19 22:07:05: setTimestamp /root/3307cfc8189743d2aa4ec11929ae7d15.md
+2025-01-19 22:07:05: list /root
+2025-01-19 22:07:05: Sync: deleteLocal: remote has been deleted: (Local 4504f1f1ddcf49e0ae2cb5293b250752)
+2025-01-19 22:07:05: Sync: finished: Synchronization finished [1737299225638]
+2025-01-19 22:07:05: Operations completed: 
+2025-01-19 22:07:05: starting: 1
+2025-01-19 22:07:05: state: idle
+2025-01-19 22:07:05: createRemote: 1
+2025-01-19 22:07:05: deleteLocal: 1
+2025-01-19 22:07:05: finished: 1
+2025-01-19 22:07:05: Total folders: 1
+2025-01-19 22:07:05: Total notes: 0
+2025-01-19 22:07:05: Total resources: 0
+2025-01-19 22:07:05: Sync: starting: Starting synchronization to memory (1)... [1737299225958]
+2025-01-19 22:07:05: mkdir /root/.sync
+2025-01-19 22:07:05: mkdir /root/.resource
+2025-01-19 22:07:05: stat /root/ffe9c93e26d6483698dcb94e02298571.md
+2025-01-19 22:07:05: Sync: createRemote: remote does not exist, and local is new and has never been synced: Folder: (Local ffe9c93e26d6483698dcb94e02298571, "folder")
+2025-01-19 22:07:05: put /root/ffe9c93e26d6483698dcb94e02298571.md
+2025-01-19 22:07:05: setTimestamp /root/ffe9c93e26d6483698dcb94e02298571.md
+2025-01-19 22:07:05: list /root
+2025-01-19 22:07:05: get /root/3307cfc8189743d2aa4ec11929ae7d15.md
+2025-01-19 22:07:05: Sync: createLocal: Remote exists but local does not: Folder: (Remote 3307cfc8189743d2aa4ec11929ae7d15, "folder")
+2025-01-19 22:07:05: Sync: deleteLocal: remote has been deleted: (Local 4504f1f1ddcf49e0ae2cb5293b250752)
+2025-01-19 22:07:05: Sync: finished: Synchronization finished [1737299225958]
+2025-01-19 22:07:05: Operations completed: 
+2025-01-19 22:07:05: starting: 1
+2025-01-19 22:07:05: state: idle
+2025-01-19 22:07:05: createRemote: 1
+2025-01-19 22:07:05: createLocal: 1
+2025-01-19 22:07:05: deleteLocal: 1
+2025-01-19 22:07:05: finished: 1
+2025-01-19 22:07:05: Total folders: 2
+2025-01-19 22:07:05: Total notes: 0
+2025-01-19 22:07:05: Total resources: 0
+2025-01-19 22:07:05: Sync: starting: Starting synchronization to memory (1)... [1737299225978]
+2025-01-19 22:07:05: mkdir /root/.sync
+2025-01-19 22:07:05: mkdir /root/.resource
+2025-01-19 22:07:05: list /root
+2025-01-19 22:07:05: Sync: finished: Synchronization finished [1737299225978]
+2025-01-19 22:07:05: Operations completed: 
+2025-01-19 22:07:05: starting: 1
+2025-01-19 22:07:05: state: idle
+2025-01-19 22:07:05: finished: 1
+2025-01-19 22:07:05: Total folders: 2
+2025-01-19 22:07:05: Total notes: 0
+2025-01-19 22:07:05: Total resources: 0
+2025-01-19 22:07:06: Sync: starting: Starting synchronization to memory (1)... [1737299226285]
+2025-01-19 22:07:06: mkdir /root/.sync
+2025-01-19 22:07:06: mkdir /root/.resource
+2025-01-19 22:07:06: list /root
+2025-01-19 22:07:06: get /root/ffe9c93e26d6483698dcb94e02298571.md
+2025-01-19 22:07:06: Sync: createLocal: Remote exists but local does not: Folder: (Remote ffe9c93e26d6483698dcb94e02298571, "folder")
+2025-01-19 22:07:06: Sync: finished: Synchronization finished [1737299226285]
+2025-01-19 22:07:06: Operations completed: 
+2025-01-19 22:07:06: starting: 1
+2025-01-19 22:07:06: state: idle
+2025-01-19 22:07:06: createLocal: 1
+2025-01-19 22:07:06: finished: 1
+2025-01-19 22:07:06: Total folders: 2
+2025-01-19 22:07:06: Total notes: 0
+2025-01-19 22:07:06: Total resources: 0

@@ -96,7 +96,7 @@ function setupDatabase(id = null) {
         })
         .then(() => {
             databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
-            databases_[id].setLogger(logger);
+            // databases_[id].setLogger(logger);
             return databases_[id].open({ name: filePath }).then(() => {
                 BaseModel.db_ = databases_[id];
                 return setupDatabase(id);

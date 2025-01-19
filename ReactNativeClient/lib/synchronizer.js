@@ -58,6 +58,13 @@ class Synchronizer {
             lines.push(_('Deleted remote items: %d.', report.deleteRemote));
         if (report.state)
             lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
+        if (report.errors && report.errors.length)
+            lines.push(
+                _(
+                    'Last error: %s (stacktrace in log).',
+                    report.errors[report.errors.length - 1].message
+                )
+            );
         return lines;
     }
 
@@ -144,6 +151,8 @@ class Synchronizer {
             : function (o) {};
         this.progressReport_ = { errors: [] };
 
+        const syncTargetId = this.api().driver().syncTargetId();
+
         if (this.state() != 'idle') {
             this.logger().warn(
                 'Synchronization is already in progress. State: ' + this.state()
@@ -167,7 +176,13 @@ class Synchronizer {
             'starting',
             null,
             null,
-            'Starting synchronization... [' + synchronizationId + ']'
+            'Starting synchronization to ' +
+                this.api().driver().syncTargetName() +
+                ' (' +
+                syncTargetId +
+                ')... [' +
+                synchronizationId +
+                ']'
         );
 
         try {
@@ -178,7 +193,7 @@ class Synchronizer {
             while (true) {
                 if (this.cancelling()) break;
 
-                let result = await BaseItem.itemsThatNeedSync();
+                let result = await BaseItem.itemsThatNeedSync(syncTargetId);
                 let locals = result.items;
 
                 for (let i = 0; i < locals.length; i++) {
@@ -271,22 +286,25 @@ class Synchronizer {
 
                         if (this.randomFailure(options, 1)) return;
 
-                        await ItemClass.save(
-                            {
-                                id: local.id,
-                                sync_time: time.unixMs(),
-                                type_: local.type_
-                            },
-                            { autoTimestamp: false }
+                        await ItemClass.saveSyncTime(
+                            syncTargetId,
+                            local,
+                            time.unixMs()
                         );
                     } else if (action == 'itemConflict') {
                         if (remote) {
                             let remoteContent = await this.api().get(path);
                             local = await BaseItem.unserialize(remoteContent);
 
-                            local.sync_time = time.unixMs();
+                            const syncTimeQueries =
+                                BaseItem.updateSyncTimeQueries(
+                                    syncTargetId,
+                                    local,
+                                    time.unixMs()
+                                );
                             await ItemClass.save(local, {
-                                autoTimestamp: false
+                                autoTimestamp: false,
+                                nextQueries: syncTimeQueries
                             });
                         } else {
                             await ItemClass.delete(local.id);
@@ -307,9 +325,15 @@ class Synchronizer {
                             let remoteContent = await this.api().get(path);
                             local = await BaseItem.unserialize(remoteContent);
 
-                            local.sync_time = time.unixMs();
+                            const syncTimeQueries =
+                                BaseItem.updateSyncTimeQueries(
+                                    syncTargetId,
+                                    local,
+                                    time.unixMs()
+                                );
                             await ItemClass.save(local, {
-                                autoTimestamp: false
+                                autoTimestamp: false,
+                                nextQueries: syncTimeQueries
                             });
                         } else {
                             await ItemClass.delete(local.id);
@@ -398,10 +422,14 @@ class Synchronizer {
                         let ItemClass = BaseItem.itemClass(content);
 
                         let newContent = Object.assign({}, content);
-                        newContent.sync_time = time.unixMs();
                         let options = {
                             autoTimestamp: false,
-                            applyMetadataChanges: true
+                            applyMetadataChanges: true,
+                            nextQueries: BaseItem.updateSyncTimeQueries(
+                                syncTargetId,
+                                newContent,
+                                time.unixMs()
+                            )
                         };
                         if (action == 'createLocal') options.isNew = true;
 
@@ -441,42 +469,44 @@ class Synchronizer {
             let localFoldersToDelete = [];
 
             if (!this.cancelling()) {
-                let items = await BaseItem.syncedItems();
-                for (let i = 0; i < items.length; i++) {
-                    let item = items[i];
-                    if (remoteIds.indexOf(item.id) < 0) {
-                        if (item.type_ == Folder.modelType()) {
-                            localFoldersToDelete.push(item);
+                let syncItems = await BaseItem.syncedItems(syncTargetId);
+                for (let i = 0; i < syncItems.length; i++) {
+                    let syncItem = syncItems[i];
+                    if (remoteIds.indexOf(syncItem.item_id) < 0) {
+                        if (syncItem.item_type == Folder.modelType()) {
+                            localFoldersToDelete.push(syncItem);
                             continue;
                         }
 
                         this.logSyncOperation(
                             'deleteLocal',
-                            { id: item.id },
+                            { id: syncItem.item_id },
                             null,
                             'remote has been deleted'
                         );
-                        let ItemClass = BaseItem.itemClass(item);
-                        await ItemClass.delete(item.id, {
+                        let ItemClass = BaseItem.itemClass(syncItem.item_type);
+                        await ItemClass.delete(syncItem.item_id, {
                             trackDeleted: false
                         });
                     }
                 }
             }
+
             if (!this.cancelling()) {
                 for (let i = 0; i < localFoldersToDelete.length; i++) {
-                    const folder = localFoldersToDelete[i];
-                    const noteIds = await Folder.noteIds(folder.id);
+                    const syncItem = localFoldersToDelete[i];
+                    const noteIds = await Folder.noteIds(syncItem.item_id);
                     if (noteIds.length) {
-                        // CONFLICT
-                        await Folder.markNotesAsConflict(folder.id);
-                        await Folder.delete(folder.id, {
-                            deleteChildren: false
-                        });
-                    } else {
-                        await Folder.delete(folder.id);
+                        await Folder.markNotesAsConflict(syncItem.item_id);
                     }
+                    await Folder.delete(syncItem.item_id, {
+                        deleteChildren: false
+                    });
                 }
+            }
+
+            if (!this.cancelling()) {
+                await BaseItem.deleteOrphanSyncItems();
             }
         } catch (error) {
             this.logger().error(error);

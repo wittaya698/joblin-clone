@@ -18,8 +18,6 @@ class Note extends BaseItem {
     static async serialize(note, type = null, shownKeys = null) {
         let fieldNames = this.fieldNames();
         fieldNames.push('type_');
-        // lodash.pull(fieldNames, 'is_conflict', 'sync_time');
-        lodash.pull(fieldNames, 'sync_time');
         return super.serialize(note, 'note', fieldNames);
     }
 
@@ -75,8 +73,7 @@ class Note extends BaseItem {
             'is_todo',
             'todo_completed',
             'parent_id',
-            'updated_time',
-            'sync_time'
+            'updated_time'
         ];
     }
 
@@ -257,7 +254,6 @@ class Note extends BaseItem {
 
         let newNote = Object.assign({}, originalNote);
         delete newNote.id;
-        newNote.sync_time = 0;
 
         for (let n in changes) {
             if (!changes.hasOwnProperty(n)) continue;

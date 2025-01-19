@@ -4,6 +4,14 @@ import moment from 'moment';
 import { time } from '@/lib/time-utils.js';
 
 class FileApiDriverLocal {
+    syncTargetId() {
+        return 2;
+    }
+
+    syncTargetName() {
+        return 'file';
+    }
+
     fsErrorToJsError_(error) {
         let msg = error.toString();
         let output = new Error(msg);

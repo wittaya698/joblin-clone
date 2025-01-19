@@ -1,6 +1,14 @@
 import { time } from '@/lib/time-utils';
 
 class FileApiDriverMemory {
+    syncTargetId() {
+        return 1;
+    }
+
+    syncTargetName() {
+        return 'memory';
+    }
+
     constructor() {
         this.items_ = [];
     }

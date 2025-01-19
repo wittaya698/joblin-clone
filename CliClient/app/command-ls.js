@@ -32,7 +32,7 @@ class Command extends BaseCommand {
             ['-f, --format <format>', 'Either "text" or "json"'],
             [
                 '-l, --long',
-                'Use long list format. Format is NOTE_COUNT (for notebook), DATE, NEED_SYNC, TODO_CHECKED (for todos), TITLE'
+                'Use long list format. Format is NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for todos), TITLE'
             ]
         ];
     }
@@ -102,7 +102,6 @@ class Command extends BaseCommand {
                     }
 
                     row.push(time.unixMsToLocalDateTime(item.updated_time));
-                    row.push(item.updated_time > item.sync_time ? '*' : ' ');
                 }
 
                 let title = item.title + suffix;
