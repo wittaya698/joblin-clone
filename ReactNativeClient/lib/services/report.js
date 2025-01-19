@@ -1,6 +1,7 @@
 import { time } from '@/lib/time-utils';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { Folder } from '@/lib/models/folder.js';
+import { Note } from '@/lib/models/note.js';
 import { _ } from '@/lib/locale.js';
 
 class ReportService {
@@ -33,6 +34,12 @@ class ReportService {
             total: await BaseItem.deletedItemCount()
         };
 
+        output.conflicted = {
+            total: await Note.conflictedCount()
+        };
+
+        output.items['Note'].total -= output.conflicted.total;
+
         return output;
     }
 
@@ -51,9 +58,10 @@ class ReportService {
             );
         }
 
-        if (r.total)
-            section.body.push(_('Total: %d/%d', r.total.synced, r.total.total));
-        if (r.toDelete) section.body.push(_('To delete: %d', r.toDelete.total));
+        section.body.push(_('Total: %d/%d', r.total.synced, r.total.total));
+        section.body.push('');
+        section.body.push(_('Conflicted: %d', r.conflicted.total));
+        section.body.push(_('To delete: %d', r.toDelete.total));
 
         sections.push(section);
 

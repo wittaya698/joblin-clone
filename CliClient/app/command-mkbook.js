@@ -19,8 +19,12 @@ class Command extends BaseCommand {
     async action(args, end) {
         let folder = await Folder.save(
             { title: args['notebook'] },
-            { duplicateCheck: true }
+            {
+                duplicateCheck: true,
+                reservedTitleCheck: true
+            }
         );
+
         app().switchCurrentFolder(folder);
     }
 }
