@@ -118,6 +118,7 @@ class FolderScreenComponent extends BaseScreenComponent {
             <View style={this.styles().screen}>
                 <ScreenHeader navState={this.props.navigation.state} />
                 <TextInput
+                    autoFocus={true}
                     value={this.state.folder.title}
                     onChangeText={text => this.title_changeText(text)}
                 />

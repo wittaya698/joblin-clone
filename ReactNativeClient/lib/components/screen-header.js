@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { _ } from '@/lib/locale.js';
 import { Setting } from '@/lib/models/setting.js';
 import { FileApi } from '@/lib/file-api.js';
@@ -15,14 +15,45 @@ import {
     MenuTrigger
 } from 'react-native-popup-menu';
 
-const styles = StyleSheet.create({
+let styleObject = {
     divider: {
         marginVertical: 5,
         marginHorizontal: 2,
         borderBottomWidth: 1,
         borderColor: '#ccc'
+    },
+    sideMenuButton: {
+        flex: 1,
+        backgroundColor: '#0482E3',
+        paddingLeft: 15,
+        paddingRight: 15,
+        marginRight: 10
+    },
+    sideMenuButtonText: {
+        textAlignVertical: 'center',
+        color: '#ffffff',
+        fontWeight: 'bold',
+        flex: 1
+    },
+    backButton: {
+        flex: 1,
+        backgroundColor: '#0482E3',
+        paddingLeft: 15,
+        paddingRight: 15,
+        marginRight: 10
+    },
+    backButtonText: {
+        textAlignVertical: 'center',
+        color: '#ffffff',
+        fontWeight: 'bold',
+        flex: 1
     }
+};
+
+styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, {
+    backgroundColor: '#c6c6c6'
 });
+const styles = StyleSheet.create(styleObject);
 
 class ScreenHeaderComponent extends Component {
     sideMenuButton_press() {
@@ -48,6 +79,32 @@ class ScreenHeaderComponent extends Component {
     }
 
     render() {
+        function sideMenuButton(styles, onPress) {
+            return (
+                <TouchableOpacity onPress={onPress}>
+                    <View style={styles.sideMenuButton}>
+                        <Text style={styles.sideMenuButtonText}>☰</Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
+        function backButton(styles, onPress, disabled) {
+            return (
+                <TouchableOpacity onPress={onPress} disabled={disabled}>
+                    <View
+                        style={
+                            disabled
+                                ? styles.backButtonDisabled
+                                : styles.backButton
+                        }
+                    >
+                        <Text style={styles.backButtonText}>&lt;</Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
         let key = 0;
         let menuOptionComponents = [];
         for (let i = 0; i < this.props.menuOptions.length; i++) {
@@ -99,12 +156,12 @@ class ScreenHeaderComponent extends Component {
                     alignItems: 'center'
                 }}
             >
-                <Button title="☰" onPress={() => this.sideMenuButton_press()} />
-                <Button
-                    disabled={!this.props.historyCanGoBack}
-                    title="<"
-                    onPress={() => this.backButton_press()}
-                ></Button>
+                {sideMenuButton(styles, () => this.sideMenuButton_press())}
+                {backButton(
+                    styles,
+                    () => this.backButton_press(),
+                    !this.props.historyCanGoBack
+                )}
                 <Text style={{ flex: 1, marginLeft: 10 }}>{title}</Text>
                 <Menu onSelect={value => this.menu_select(value)}>
                     <MenuTrigger>

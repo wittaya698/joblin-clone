@@ -56,7 +56,8 @@ class Synchronizer {
             lines.push(_('Deleted local items: %d.', report.deleteLocal));
         if (report.deleteRemote)
             lines.push(_('Deleted remote items: %d.', report.deleteRemote));
-        if (report.state) lines.push(_('State: %s.', report.state));
+        if (report.state)
+            lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
         return lines;
     }
 
@@ -160,7 +161,7 @@ class Synchronizer {
 
         let synchronizationId = time.unixMs().toString();
 
-        this.state_ = 'started';
+        this.state_ = 'in_progess';
 
         this.logSyncOperation(
             'starting',
