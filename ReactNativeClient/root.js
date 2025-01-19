@@ -9,6 +9,7 @@ import { AppNav } from '@/lib/components/app-nav.js';
 import { Logger } from '@/lib/logger.js';
 import { Note } from '@/lib/models/note.js';
 import { Folder } from '@/lib/models/folder.js';
+import { FoldersScreenUtils } from '@/lib/components/screens/folders-utils.js';
 import { Resource } from '@/lib/models/resource.js';
 import { Tag } from '@/lib/models/tag.js';
 import { NoteTag } from '@/lib/models/note-tag.js';
@@ -240,6 +241,7 @@ async function initialize(dispatch, backButtonHandler) {
 
     BaseModel.dispatch = dispatch;
     NotesScreenUtils.dispatch = dispatch;
+    FoldersScreenUtils.dispatch = dispatch;
     BaseModel.db_ = db;
 
     BaseItem.loadClass('Note', Note);
@@ -260,6 +262,8 @@ async function initialize(dispatch, backButtonHandler) {
             // await db.exec('DELETE FROM note_tags');
             // await db.exec('DELETE FROM resources');
             // await db.exec('DELETE FROM deleted_items');
+
+            // await db.exec('UPDATE notes SET is_conflict = 1 where id like "546f%"');
         }
 
         reg.logger().info('Database is ready.');
@@ -268,9 +272,7 @@ async function initialize(dispatch, backButtonHandler) {
 
         reg.logger().info('Loading folders...');
 
-        let initialFolders = await Folder.all();
-
-        dispatch(actions.folders_update_all({ folders: initialFolders }));
+        await FoldersScreenUtils.refreshFolders();
         dispatch(actions.application_loading_done());
 
         let folderId = Setting.value('activeFolderId');

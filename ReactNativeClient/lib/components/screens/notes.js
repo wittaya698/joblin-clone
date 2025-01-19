@@ -38,15 +38,17 @@ class NotesScreenComponent extends BaseScreenComponent {
     }
 
     menuOptions() {
+        if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
+
         return [
             {
-                title: _('Delete folder'),
+                title: _('Delete notebook'),
                 onPress: () => {
                     this.deleteFolder_onPress(this.props.selectedFolderId);
                 }
             },
             {
-                title: _('Edit folder'),
+                title: _('Edit notebook'),
                 onPress: () => {
                     this.editFolder_onPress(this.props.selectedFolderId);
                 }
@@ -60,6 +62,8 @@ class NotesScreenComponent extends BaseScreenComponent {
             this.props.selectedFolderId
         );
         let title = folder ? folder.title : null;
+        const addFolderNoteButtons = folder.id != Folder.conflictFolderId();
+
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader
@@ -74,7 +78,7 @@ class NotesScreenComponent extends BaseScreenComponent {
                     style={{ flex: 1 }}
                 />
                 <ActionButton
-                    addFolderNoteButtons={true}
+                    addFolderNoteButtons={addFolderNoteButtons}
                     parentFolderId={this.props.selectedFolderId}
                 ></ActionButton>
 
