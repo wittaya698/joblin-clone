@@ -215,8 +215,7 @@ async function initialize(dispatch, backButtonHandler) {
     await logDatabase.exec(Logger.databaseCreateTableSql());
 
     const mainLogger = new Logger();
-    mainLogger.addTarget('database', { database: logDatabase, source: 'm' });
-    mainLogger.addTarget('console');
+    if (Setting.value('env') == 'env') mainLogger.addTarget('console');
     mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
     reg.setLogger(mainLogger);
@@ -232,7 +231,7 @@ async function initialize(dispatch, backButtonHandler) {
 
     const dbLogger = new Logger();
     dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
-    dbLogger.addTarget('console');
+    if (Setting.value('env') == 'env') dbLogger.addTarget('console');
     dbLogger.setLevel(Logger.LEVEL_INFO);
 
     let db = new JoplinDatabase(new DatabaseDriverReactNative());

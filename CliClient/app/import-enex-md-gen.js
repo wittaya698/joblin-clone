@@ -434,9 +434,11 @@ function enexXmlToMdArray(stream, resources) {
                         : ' ';
                 section.lines.push('- [' + x + '] ');
             } else if (n == 'hr') {
-                section.lines.push(
-                    '------------------------------------------------------------------------------'
-                );
+                // Needs to be surrounded by new lines so that it's properly rendered as a line when converting to HTML
+                section.lines.push(NEWLINE);
+                section.lines.push('----------------------------------------');
+                section.lines.push(NEWLINE);
+                section.lines.push(NEWLINE);
             } else if (n == 'h1') {
                 section.lines.push(BLOCK_OPEN);
                 section.lines.push('# ');

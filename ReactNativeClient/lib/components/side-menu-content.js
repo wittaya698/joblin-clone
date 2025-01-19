@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Log } from '@/lib/log.js';
 import { Button, Text } from 'react-native';
+import { Log } from '@/lib/log.js';
+import { Note } from '@/lib/models/note.js';
+import { FoldersScreenUtils } from '@/lib/components/screens/folders-utils.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
@@ -54,12 +56,7 @@ class SideMenuContentComponent extends Component {
 
             try {
                 sync.start(options).then(async () => {
-                    let initialFolders = await Folder.all({
-                        includeConflictFolder: true
-                    });
-                    dispatch(
-                        actions.folders_update_all({ folders: initialFolders })
-                    );
+                    await FoldersScreenUtils.refreshFolders();
                 });
             } catch (error) {
                 Log.error(error);
