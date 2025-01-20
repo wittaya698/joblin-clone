@@ -48,6 +48,7 @@ class Command extends BaseCommand {
                   );
             if (!ok) return;
             await Folder.delete(folder.id);
+            await app().refreshCurrentFolder();
         } else {
             const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
             if (!notes.length)

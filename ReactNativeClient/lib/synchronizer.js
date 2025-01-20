@@ -7,6 +7,7 @@ import { sprintf } from 'sprintf-js';
 import { time } from '@/lib/time-utils.js';
 import { Logger } from '@/lib/logger.js';
 import { _ } from '@/lib/locale.js';
+import { EventDispatcher } from '@/lib/event-dispatcher.js';
 import moment from 'moment';
 
 class Synchronizer {

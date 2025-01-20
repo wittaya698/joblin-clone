@@ -12,10 +12,6 @@ class Command extends BaseCommand {
         return 'Creates a new note.';
     }
 
-    aliases() {
-        return ['touch'];
-    }
-
     async action(args) {
         if (!app().currentFolder())
             throw new Error(_('Notes can only be created within a notebook.'));
