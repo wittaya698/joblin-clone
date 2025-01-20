@@ -108,9 +108,17 @@ class Note extends BaseItem {
             options.conditions.push('is_conflict = 1');
         } else {
             options.conditions.push('is_conflict = 0');
+            if (parentId) {
+                options.conditions.push('parent_id = ?');
+                options.conditionsParams.push(parentId);
+            }
+        }
 
-            options.conditions.push('parent_id = ?');
-            options.conditionsParams.push(parentId);
+        if (options.anywherePattern) {
+            let pattern = options.anywherePattern.replace(/\*/g, '%');
+            options.conditions.push('(title LIKE ? OR body LIKE ?)');
+            options.conditionsParams.push(pattern);
+            options.conditionsParams.push(pattern);
         }
 
         if (options.itemTypes && options.itemTypes.length) {
