@@ -309,6 +309,7 @@ class NoteScreenComponent extends BaseScreenComponent {
         } else {
             bodyComponent = (
                 <TextInput
+                    autoCapitalize="sentences"
                     autoFocus={true}
                     style={{
                         flex: 1,
@@ -403,6 +404,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                         />
                     )}
                     <TextInput
+                        autoCapitalize="sentences"
                         style={{ flex: 1 }}
                         value={note.title}
                         onChangeText={text => this.title_changeText(text)}
