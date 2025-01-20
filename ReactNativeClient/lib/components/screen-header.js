@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { _ } from '@/lib/locale.js';
 import { Setting } from '@/lib/models/setting.js';
 import { FileApi } from '@/lib/file-api.js';
@@ -173,10 +174,46 @@ class ScreenHeaderComponent extends Component {
             </MenuOption>
         );
 
-        let title =
-            'title' in this.props && this.props.title !== null
-                ? this.props.title
-                : _(this.props.navState.routeName);
+        const createTitleComponent = () => {
+            const p = this.props.titlePicker;
+            if (p) {
+                let items = [];
+                for (let i = 0; i < p.items.length; i++) {
+                    let item = p.items[i];
+                    items.push(
+                        <Picker.Item
+                            label={item.label}
+                            value={item.value}
+                            key={item.value}
+                        />
+                    );
+                }
+                return (
+                    <Picker
+                        style={{
+                            flex: 1
+                        }}
+                        itemStyle={{ color: 'black' }}
+                        selectedValue={p.selectedValue}
+                        onValueChange={(itemValue, itemIndex) => {
+                            if (p.onValueChange)
+                                p.onValueChange(itemValue, itemIndex);
+                        }}
+                    >
+                        {items}
+                    </Picker>
+                );
+            } else {
+                let title =
+                    'title' in this.props && this.props.title !== null
+                        ? this.props.title
+                        : _(this.props.navState.routeName);
+                return <Text style={{ flex: 1, marginLeft: 10 }}>{title}</Text>;
+            }
+        };
+
+        const titleComp = createTitleComponent();
+
         return (
             <View
                 style={{
@@ -204,7 +241,7 @@ class ScreenHeaderComponent extends Component {
                     this.props.saveButtonDisabled === true,
                     this.props.showSaveButton === true
                 )}
-                <Text style={{ flex: 1, marginLeft: 10 }}>{title}</Text>
+                {titleComp}
                 <Menu onSelect={value => this.menu_select(value)}>
                     <MenuTrigger>
                         <Text style={{ fontSize: 25 }}> &#8942; </Text>

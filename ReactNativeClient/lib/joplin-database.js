@@ -209,6 +209,16 @@ class JoplinDatabase extends Database {
         this.logger().info('Checking for database schema update...');
 
         for (let initLoopCount = 1; initLoopCount <= 2; initLoopCount++) {
+            // await this.exec('DROP TABLE folders');
+            // await this.exec('DROP TABLE notes');
+            // await this.exec('DROP TABLE deleted_items');
+            // await this.exec('DROP TABLE tags');
+            // await this.exec('DROP TABLE note_tags');
+            // await this.exec('DROP TABLE resources');
+            // await this.exec('DROP TABLE settings');
+            // await this.exec('DROP TABLE table_fields');
+            // await this.exec('DROP TABLE version');
+            // await this.exec('DROP TABLE sync_items');
             try {
                 let row = await this.selectOne('SELECT * FROM version LIMIT 1');
                 this.logger().info('Current database version', row);

@@ -43,11 +43,11 @@ async function createClients() {
         let client = createClient(clientId);
         promises.push(fs.remove(client.profileDir));
         promises.push(
-            execCommand(client, 'config sync.target local')
+            execCommand(client, 'config sync.target filesystem')
                 .then(() => {
                     return execCommand(
                         client,
-                        'config sync.local.path ' + syncDir
+                        'config sync.filesystem.path ' + syncDir
                     );
                 })
                 // Critical -> To be removed

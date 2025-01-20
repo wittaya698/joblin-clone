@@ -66,6 +66,19 @@ function historyCanGoBackTo(route) {
     return true;
 }
 
+function reducerActionsAreSame(a1, a2) {
+    if (
+        Object.getOwnPropertyNames(a1).length !==
+        Object.getOwnPropertyNames(a2).length
+    )
+        return false;
+    for (let n in a1) {
+        if (!a1.hasOwnProperty(n)) continue;
+        if (a1[n] !== a2[n]) return false;
+    }
+    return true;
+}
+
 const navReducer = createSlice({
     name: 'nav',
     initialState: defaultState,
@@ -74,7 +87,6 @@ const navReducer = createSlice({
             const currentRoute = state.route;
             const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-            newRoute = {};
             if (action.payload.routeName === 'Back') {
                 if (!state.historyCanGoBack) return;
                 action = navHistory.pop(); // Current page
@@ -89,17 +101,28 @@ const navReducer = createSlice({
                 }
 
                 if (!action) action = Object.assign({}, initialRoute);
+                navHistory.push(action);
             } else {
-                if (state.route == action) {
+                // If the route *name* is the same (even if the other parameters are different), we
+                // overwrite the last route in the history with the current one. If the route name
+                // is different, we push a new history entry.
+
+                if (currentRouteName == action.payload.routeName) {
+                    if (navHistory.length)
+                        navHistory[navHistory.length - 1] = action;
                     // If the current screen is already the requested screen, don't do anything
                 } else {
                     if (action.payload.routeName == 'Welcome') navHistory = [];
-                    action = {
-                        routeName: action.payload.routeName,
-                        payload: action.payload
-                    };
+                    navHistory.push(action);
                 }
             }
+
+            action = {
+                routeName: action.payload.routeName,
+                payload: action.payload
+            };
+            state.route = action;
+            state.historyCanGoBack = navHistory.length > 2;
 
             reg.logger().info(
                 'Route: ' + currentRouteName + ' => ' + action.payload.routeName
@@ -116,10 +139,6 @@ const navReducer = createSlice({
             if ('itemType' in action.payload) {
                 state.selectedItemType = action.payload.itemType;
             }
-
-            state.route = action;
-            navHistory.push(action);
-            state.historyCanGoBack = navHistory.length > 2;
 
             if (state.route.routeName == 'Notes') {
                 Setting.setValue('activeFolderId', state.selectedFolderId);
@@ -140,23 +159,34 @@ const navReducer = createSlice({
         // Insert the note into the note list if it's new, or
         // update it if it already exists.
         notes_update_one: (state, action) => {
-            if (action.payload.note.parent_id != state.selectedFolderId) return;
+            const modNote = action.payload.note;
 
             let newNotes = state.notes.splice(0);
             var found = false;
             for (let i = 0; i < newNotes.length; i++) {
                 let n = newNotes[i];
-                if (n.id == action.payload.note.id) {
-                    newNotes[i] = Object.assign(
-                        newNotes[i],
-                        action.payload.note
-                    );
+                if (n.id == modNote.id) {
+                    if (
+                        !('parent_id' in modNote) ||
+                        modNote.parent_id == n.parent_id
+                    ) {
+                        // Merge the properties that have changed (in modNote) into
+                        // the object we already have.
+                        newNotes[i] = Object.assign(newNotes[i], action.note);
+                    } else {
+                        newNotes.splice(i, 1);
+                    }
                     found = true;
                     break;
                 }
             }
 
-            if (!found) newNotes.push(action.payload.note);
+            if (
+                !found &&
+                'parent_id' in modNote &&
+                modNote.parent_id == state.selectedFolderId
+            )
+                newNotes.push(modeNote);
 
             newNotes = Note.sortNotes(newNotes, state.notesOrder);
             state.notes = newNotes;
@@ -293,7 +323,7 @@ async function initialize(dispatch, backButtonHandler) {
         if (Setting.value('env') == 'prod') {
             await db.open({ name: 'joplin.sqlite' });
         } else {
-            await db.open({ name: 'joplin-27.sqlite' });
+            await db.open({ name: 'joplin-28.sqlite' });
 
             // await db.exec('DELETE FROM notes');
             // await db.exec('DELETE FROM folders');

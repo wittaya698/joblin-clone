@@ -115,8 +115,12 @@ class NoteScreenComponent extends BaseScreenComponent {
         return Folder.load(folderId);
     }
 
-    async refreshFolder() {
-        this.setState({ folder: await this.currentFolder() });
+    async refreshFolder(folderId = null) {
+        if (!folderId) {
+            this.setState({ folder: await this.currentFolder() });
+        } else {
+            this.setState({ folder: await Folder.load(folderId) });
+        }
     }
 
     async refreshNoteMetadata(force = null) {
@@ -208,23 +212,29 @@ class NoteScreenComponent extends BaseScreenComponent {
         ];
     }
 
-    async todoCheckbox_change(checked) {
+    async saveOneProperty(name, value) {
         let note = Object.assign({}, this.state.note);
-        const todoCompleted = checked ? time.unixMs() : 0;
 
         if (note.id) {
-            note = await Note.save({
-                id: note.id,
-                todo_completed: todoCompleted
-            });
+            let toSave = { id: note.id };
+            toSave[name] = value;
+            toSave = await Note.save(toSave);
+            note[name] = toSave[name];
             this.setState({
                 lastSavedNote: Object.assign({}, note),
                 note: note
             });
         } else {
-            note.todo_completed = todoCompleted;
+            note[name] = value;
             this.setState({ note: note });
         }
+    }
+
+    async todoCheckbox_change(checked) {
+        return this.saveOneProperty(
+            'todo_completed',
+            checked ? time.unixMs() : 0
+        );
     }
 
     render() {
@@ -319,8 +329,6 @@ class NoteScreenComponent extends BaseScreenComponent {
         } else {
             title = noteHeaderTitle;
         }
-        let headerTitle = '';
-        if (folder) headerTitle = folder.title;
 
         const renderActionButton = () => {
             let buttons = [];
@@ -345,6 +353,15 @@ class NoteScreenComponent extends BaseScreenComponent {
             );
         };
 
+        const titlePickerItems = () => {
+            let output = [];
+            for (let i = 0; i < this.props.folders.length; i++) {
+                let f = this.props.folders[i];
+                output.push({ label: f.title, value: f.id });
+            }
+            return output;
+        };
+
         const actionButtonComp = renderActionButton();
 
         let showSaveButton = this.state.mode == 'edit';
@@ -353,7 +370,23 @@ class NoteScreenComponent extends BaseScreenComponent {
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader
-                    title={headerTitle}
+                    titlePicker={{
+                        items: titlePickerItems(),
+                        selectedValue: folder ? folder.id : null,
+                        onValueChange: async (itemValue, itemIndex) => {
+                            let note = Object.assign({}, this.state.note);
+                            if (note.id)
+                                await Note.moveToFolder(note.id, itemValue);
+                            note.parent_id = itemValue;
+
+                            const folder = await Folder.load(note.parent_id);
+                            this.setState({
+                                lastSavedNote: Object.assign({}, note),
+                                note: note,
+                                folder: folder
+                            });
+                        }
+                    }}
                     navState={this.props.navigation.state}
                     menuOptions={this.menuOptions()}
                     showSaveButton={showSaveButton}
@@ -394,7 +427,8 @@ const NoteScreen = connect(state => {
     return {
         noteId: state.nav.selectedNoteId,
         folderId: state.nav.selectedFolderId,
-        itemType: state.nav.selectedItemType
+        itemType: state.nav.selectedItemType,
+        folders: state.nav.folders
     };
 })(NoteScreenComponent);
 
