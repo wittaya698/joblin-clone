@@ -55,7 +55,10 @@ class LogScreenComponent extends BaseScreenComponent {
                     }}
                 >
                     <Text style={style}>
-                        {time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm') +
+                        {time.formatMsToLocal(
+                            item.timestamp,
+                            'MM-DDTHH:mm:ss'
+                        ) +
                             ': ' +
                             item.message}
                     </Text>
