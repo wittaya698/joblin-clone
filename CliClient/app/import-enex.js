@@ -8,7 +8,7 @@ import { Note } from '@/lib/models/note.js';
 import { Tag } from '@/lib/models/tag.js';
 import { Resource } from '@/lib/models/resource.js';
 import { Folder } from '@/lib/models/folder.js';
-import { enexXmlToMd } from '@/import-enex-md-gen.js';
+import { enexXmlToMd } from './import-enex-md-gen.js';
 import { time } from '@/lib/time-utils.js';
 import Levenshtein from 'levenshtein';
 import jsSHA from 'jssha';
@@ -16,11 +16,6 @@ import jsSHA from 'jssha';
 import Promise from 'promise';
 import fs from 'fs-extra';
 import stringToStream from 'string-to-stream';
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = dirname(__filename);
-
-// appModulePath.addPath(__dirname);
 
 function dateToTimestamp(s, zeroIfInvalid = false) {
     let m = moment(s, 'YYYYMMDDTHHmmssZ');
@@ -117,6 +112,7 @@ async function saveNoteResources(note) {
         // same resource.
         let existingResource = await Resource.load(toSave.id);
         if (existingResource) continue;
+
         await Resource.save(toSave, { isNew: true });
         await filePutContents(Resource.fullPath(toSave), resource.data);
         resourcesCreated++;
@@ -188,7 +184,6 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
     if (!importOptions) importOptions = {};
     if (!('fuzzyMatching' in importOptions))
         importOptions.fuzzyMatching = false;
-
     if (!('onProgress' in importOptions))
         importOptions.onProgress = function (state) {};
     if (!('onError' in importOptions))
@@ -235,6 +230,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
 
         async function processNotes() {
             if (processingNotes) return false;
+
             processingNotes = true;
             stream.pause();
 
@@ -246,6 +242,10 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
                     return enexXmlToMd(contentStream, note.resources)
                         .then(body => {
                             delete note.bodyXml;
+
+                            // console.info('-----------------------------------------------------------');
+                            // console.info(body);
+                            // console.info('-----------------------------------------------------------');
 
                             note.id = uuid.create();
                             note.parent_id = parentFolderId;
@@ -285,7 +285,7 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
             });
         }
 
-        saxStream.on('error', function (error) {
+        saxStream.on('error', error => {
             importOptions.onError(error);
         });
 
@@ -395,17 +395,11 @@ function importEnex(parentFolderId, filePath, importOptions = null) {
                     : 'evernote';
 
                 // if (noteAttributes['reminder-time']) {
-                //     console.info(
-                //         '======================================================'
-                //     );
-                //     console.info(noteAttributes);
-                //     console.info(
-                //         '------------------------------------------------------'
-                //     );
-                //     console.info(note);
-                //     console.info(
-                //         '======================================================'
-                //     );
+                // 	console.info('======================================================');
+                // 	console.info(noteAttributes);
+                // 	console.info('------------------------------------------------------');
+                // 	console.info(note);
+                // 	console.info('======================================================');
                 // }
 
                 noteAttributes = null;
