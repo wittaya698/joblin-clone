@@ -21,6 +21,16 @@ class Synchronizer {
         this.cancelling_ = false;
         this.onProgress_ = function (s) {};
         this.progressReport_ = {};
+
+        this.dispatcher_ = new EventDispatcher();
+    }
+
+    on(eventName, callback) {
+        return this.dispatcher_.on(eventName, callback);
+    }
+
+    off(eventName, callback) {
+        return this.dispatcher_.off(eventName, callback);
     }
 
     state() {
@@ -65,6 +75,13 @@ class Synchronizer {
                     report.errors[report.errors.length - 1].message
                 )
             );
+        if (report.completedTime)
+            lines.push(
+                _(
+                    'Completed: %s',
+                    time.unixMsToLocalDateTime(report.completedTime)
+                )
+            );
         return lines;
     }
 
@@ -98,6 +115,8 @@ class Synchronizer {
         this.progressReport_[action]++;
         this.progressReport_.state = this.state();
         this.onProgress_(this.progressReport_);
+
+        this.dispatcher_.dispatch('progress', this.progressReport_);
     }
 
     async logSyncSummary(report) {
@@ -154,7 +173,7 @@ class Synchronizer {
         const syncTargetId = this.api().driver().syncTargetId();
 
         if (this.state() != 'idle') {
-            this.logger().warn(
+            this.logger().info(
                 'Synchronization is already in progress. State: ' + this.state()
             );
             return;
@@ -525,11 +544,14 @@ class Synchronizer {
             null,
             'Synchronization finished [' + synchronizationId + ']'
         );
+
+        this.progressReport_.completedTime = time.unixMs();
         await this.logSyncSummary(this.progressReport_);
 
         this.onProgress_ = function (s) {};
-
         this.progressReport_ = {};
+
+        this.dispatcher_.dispatch('complete');
     }
 }
 

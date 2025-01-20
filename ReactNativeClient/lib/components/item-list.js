@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { FlatList, Text, TouchableHighlight, View } from 'react-native';
 import { Checkbox } from '@/lib/components/checkbox.js';
+import { reg } from '@/lib/registry.js';
 import { Note } from '@/lib/models/note.js';
 import { time } from '@/lib/time-utils.js';
 
@@ -32,6 +33,7 @@ class ItemListComponent extends Component {
             id: note.id,
             todo_completed: checked ? time.unixMs() : 0
         });
+        reg.scheduleSync();
     }
 
     listView_itemLongPress(itemId) {}

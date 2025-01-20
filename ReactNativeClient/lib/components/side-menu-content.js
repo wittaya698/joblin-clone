@@ -56,24 +56,43 @@ class SideMenuContentComponent extends Component {
         NotesScreenUtils.openNoteList(folder.id);
     }
 
+    async synchronizer_progress(report) {
+        const sync = await reg.synchronizer();
+        let lines = sync.reportToLines(report);
+        this.setState({ syncReportText: lines.join('\n') });
+    }
+
+    synchronizer_complete() {
+        FoldersScreenUtils.refreshFolders();
+    }
+
+    async UNSAFE_componentWillMount() {
+        reg.dispatcher().on(
+            'synchronizer_progress',
+            this.synchronizer_progress.bind(this)
+        );
+        reg.dispatcher().on(
+            'synchronizer_complete',
+            this.synchronizer_complete.bind(this)
+        );
+    }
+
+    componentWillUnmount() {
+        reg.dispatcher().off(
+            'synchronizer_progress',
+            this.synchronizer_progress.bind(this)
+        );
+        reg.dispatcher().off(
+            'synchronizer_complete',
+            this.synchronizer_complete.bind(this)
+        );
+    }
+
     async synchronize_press() {
         if (reg.oneDriveApi().auth()) {
             const sync = await reg.synchronizer();
 
-            let options = {
-                onProgress: report => {
-                    let lines = sync.reportToLines(report);
-                    this.setState({ syncReportText: lines.join('\n') });
-                }
-            };
-
-            try {
-                sync.start(options).then(async () => {
-                    await FoldersScreenUtils.refreshFolders();
-                });
-            } catch (error) {
-                Log.error(error);
-            }
+            sync.start();
         } else {
             this.props.dispatch(
                 actions.navigate({ routeName: 'OneDriveLogin' })
@@ -95,7 +114,9 @@ class SideMenuContentComponent extends Component {
                     }}
                 >
                     <View style={styles.folderButton}>
-                        <Text style={styles.folderButtonText}>{title}</Text>
+                        <Text numberOfLines={1} style={styles.folderButtonText}>
+                            {title}
+                        </Text>
                     </View>
                 </TouchableOpacity>
             );

@@ -6,6 +6,7 @@ import { ActionButton } from '@/lib/components/action-button.js';
 import { Folder } from '@/lib/models/folder.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
+import { reg } from '@/lib/registry.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
@@ -72,6 +73,8 @@ class FolderScreenComponent extends BaseScreenComponent {
                 duplicateCheck: true,
                 reservedTitleCheck: true
             });
+
+            reg.scheduleSync();
         } catch (error) {
             dialogs.error(
                 this,
