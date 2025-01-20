@@ -75,3 +75,5 @@ class Command extends BaseCommand {
         }
     }
 }
+
+module.exports = Command;
