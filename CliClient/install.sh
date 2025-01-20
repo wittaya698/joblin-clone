@@ -8,4 +8,5 @@ cp "$CLIENT_DIR/package.json" build/
 cp "$CLIENT_DIR/../ReactNativeClient/lib/package.json" build/lib
 cd "$CLIENT_DIR/build"
 sudo npm install -g
+#sudo yarn global add
 cd -

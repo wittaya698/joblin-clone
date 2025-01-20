@@ -172,7 +172,10 @@ const navReducer = createSlice({
                     ) {
                         // Merge the properties that have changed (in modNote) into
                         // the object we already have.
-                        newNotes[i] = Object.assign(newNotes[i], action.note);
+                        newNotes[i] = Object.assign(
+                            newNotes[i],
+                            action.payload.note
+                        );
                     } else {
                         newNotes.splice(i, 1);
                     }
@@ -296,9 +299,9 @@ async function initialize(dispatch, backButtonHandler) {
 
     const dbLogger = new Logger();
     dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
-    if (Setting.value('env') == 'dev') dbLogger.addTarget('console');
     if (Setting.value('env') == 'dev') {
-        dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
+        dbLogger.addTarget('console');
+        dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
     } else {
         dbLogger.setLevel(Logger.LEVEL_INFO);
     }
@@ -370,6 +373,7 @@ class HomeStackComponent extends React.Component {
             this.props.dispatch,
             this.backButtonHandler.bind(this)
         );
+        reg.scheduleSync();
     }
 
     backButtonHandler() {

@@ -1,4 +1,5 @@
 import * as Location from 'expo-location';
+import { Setting } from '@/lib/models/setting.js';
 
 class GeolocationReact {
     static currentPosition_testResponse() {
@@ -17,6 +18,9 @@ class GeolocationReact {
     }
 
     static currentPosition(options = null) {
+        if (Setting.value('env') == 'dev')
+            return this.currentPosition_testResponse();
+
         if (!options) options = {};
         if (!('enableHighAccuracy' in options))
             options.enableHighAccuracy = true;

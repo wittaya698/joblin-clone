@@ -150,6 +150,8 @@ class NoteScreenComponent extends BaseScreenComponent {
     async saveNoteButton_press() {
         let note = Object.assign({}, this.state.note);
 
+        reg.logger().info('Saving note: ', note);
+
         if (!note.parent_id) {
             let folder = await Folder.defaultFolder();
             if (!folder) {
@@ -189,12 +191,21 @@ class NoteScreenComponent extends BaseScreenComponent {
 
     attachFile_onPress() {}
 
+    async toggleIsTodo_onPress() {
+        let note = await Note.toggleIsTodo(this.state.note.id);
+        let newState = { note: note };
+        if (!note.id) newState.lastSavedNote = Object.assign({}, note);
+        this.setState(newState);
+    }
+
     showMetadata_onPress() {
         this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
         this.refreshNoteMetadata(true);
     }
 
     menuOptions() {
+        const note = this.state.note;
+
         return [
             {
                 title: _('Attach file'),
@@ -209,6 +220,15 @@ class NoteScreenComponent extends BaseScreenComponent {
                 }
             },
             {
+                title:
+                    note && !!note.is_todo
+                        ? _('Convert to regular note')
+                        : _('Convert to todo'),
+                onPress: () => {
+                    this.toggleIsTodo_onPress();
+                }
+            },
+            {
                 title: _('Toggle metadata'),
                 onPress: () => {
                     this.showMetadata_onPress();
@@ -219,6 +239,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
     async saveOneProperty(name, value) {
         let note = Object.assign({}, this.state.note);
+
+        reg.logger().info('Saving note property: ', note.id, name, value);
 
         if (note.id) {
             let toSave = { id: note.id };
@@ -389,8 +411,23 @@ class NoteScreenComponent extends BaseScreenComponent {
                         selectedValue: folder ? folder.id : null,
                         onValueChange: async (itemValue, itemIndex) => {
                             let note = Object.assign({}, this.state.note);
+
+                            // RN bug: https://github.com/facebook/react-native/issues/9220
+                            // The Picker fires the onValueChange when the component is initialized
+                            // so we need to check that it has actually changed.
+
+                            if (note.parent_id == itemValue) return;
+
+                            reg.logger().info(
+                                'Moving note: ' +
+                                    note.parent_id +
+                                    ' => ' +
+                                    itemValue
+                            );
+
                             if (note.id)
                                 await Note.moveToFolder(note.id, itemValue);
+
                             note.parent_id = itemValue;
 
                             const folder = await Folder.load(note.parent_id);
