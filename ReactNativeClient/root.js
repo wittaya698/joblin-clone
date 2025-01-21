@@ -47,7 +47,9 @@ let defaultState = {
     notesOrder: {
         orderBy: 'updated_time',
         orderByDir: 'DESC'
-    }
+    },
+    syncStarted: false,
+    syncReport: {}
 };
 
 const initialRoute = {
@@ -252,6 +254,18 @@ const navReducer = createSlice({
 
         side_menu_close: (state, action) => {
             state.showSideMenu = false;
+        },
+
+        sync_started: (state, action) => {
+            state.syncStarted = true;
+        },
+
+        sync_completed: (state, action) => {
+            state.syncStarted = false;
+        },
+
+        sync_report_update: (state, action) => {
+            state.syncReport = action.payload.report;
         }
     }
 });
@@ -301,7 +315,7 @@ async function initialize(dispatch, backButtonHandler) {
     dbLogger.addTarget('database', { database: logDatabase, source: 'm' });
     if (Setting.value('env') == 'dev') {
         dbLogger.addTarget('console');
-        dbLogger.setLevel(Logger.LEVEL_DEBUG); // Set to LEVEL_DEBUG for full SQL queries
+        dbLogger.setLevel(Logger.LEVEL_INFO); // Set to LEVEL_DEBUG for full SQL queries
     } else {
         dbLogger.setLevel(Logger.LEVEL_INFO);
     }
@@ -310,6 +324,7 @@ async function initialize(dispatch, backButtonHandler) {
     db.setLogger(dbLogger);
     reg.setDb(db);
 
+    reg.dispatch = dispatch;
     BaseModel.dispatch = dispatch;
     NotesScreenUtils.dispatch = dispatch;
     NotesScreenUtils.store = store;
@@ -368,12 +383,24 @@ async function initialize(dispatch, backButtonHandler) {
 }
 
 class HomeStackComponent extends React.Component {
+    constructor() {
+        super();
+        this.lastSyncStarted_ = defaultState.syncStarted;
+    }
+
     async componentDidMount() {
         await initialize(
             this.props.dispatch,
             this.backButtonHandler.bind(this)
         );
         reg.scheduleSync();
+    }
+
+    componentWillReceiveProps(newProps) {
+        if (newProps.syncStarted != this.lastSyncStarted_) {
+            if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
+            this.lastSyncStarted_ = newProps.syncStarted;
+        }
     }
 
     backButtonHandler() {
@@ -408,7 +435,8 @@ class HomeStackComponent extends React.Component {
 export const HomeStack = connect(state => {
     return {
         historyCanGoBack: state.nav.historyCanGoBack,
-        showSideMenu: state.nav.showSideMenu
+        showSideMenu: state.nav.showSideMenu,
+        syncStarted: state.syncStarted
     };
 })(HomeStackComponent);
 

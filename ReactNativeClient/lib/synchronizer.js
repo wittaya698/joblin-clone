@@ -9,6 +9,7 @@ import { Logger } from '@/lib/logger.js';
 import { _ } from '@/lib/locale.js';
 import { EventDispatcher } from '@/lib/event-dispatcher.js';
 import moment from 'moment';
+// import { actions } from '@/root.js';
 
 class Synchronizer {
     constructor(db, api, appType) {
@@ -23,15 +24,7 @@ class Synchronizer {
         this.onProgress_ = function (s) {};
         this.progressReport_ = {};
 
-        this.dispatcher_ = new EventDispatcher();
-    }
-
-    on(eventName, callback) {
-        return this.dispatcher_.on(eventName, callback);
-    }
-
-    off(eventName, callback) {
-        return this.dispatcher_.off(eventName, callback);
+        this.dispatch = function (action) {};
     }
 
     state() {
@@ -53,7 +46,7 @@ class Synchronizer {
         return this.logger_;
     }
 
-    reportToLines(report) {
+    static reportToLines(report) {
         let lines = [];
         if (report.createLocal)
             lines.push(_('Created local items: %d.', report.createLocal));
@@ -76,6 +69,8 @@ class Synchronizer {
                     report.errors[report.errors.length - 1].message
                 )
             );
+        if (report.cancelling && !report.completedTime)
+            lines.push(_('Cancelling...'));
         if (report.completedTime)
             lines.push(
                 _(
@@ -117,7 +112,11 @@ class Synchronizer {
         this.progressReport_.state = this.state();
         this.onProgress_(this.progressReport_);
 
-        this.dispatcher_.dispatch('progress', this.progressReport_);
+        // this.dispatch(
+        // actions.sync_report_update({
+        // report: Object.assign({}, this.progressReport_)
+        //     })
+        // );
     }
 
     async logSyncSummary(report) {
@@ -156,7 +155,7 @@ class Synchronizer {
     cancel() {
         if (this.cancelling_) return;
 
-        this.logger().info('Cancelling synchronization...');
+        this.logSyncOperation('cancelling', null, null, '');
         this.cancelling_ = true;
     }
 
@@ -191,6 +190,8 @@ class Synchronizer {
         let synchronizationId = time.unixMs().toString();
 
         this.state_ = 'in_progess';
+
+        // this.dispatch(actions.sync_started());
 
         this.logSyncOperation(
             'starting',
@@ -539,20 +540,20 @@ class Synchronizer {
         }
         this.state_ = 'idle';
 
+        this.progressReport_.completedTime = time.unixMs();
+
         this.logSyncOperation(
             'finished',
             null,
             null,
             'Synchronization finished [' + synchronizationId + ']'
         );
-
-        this.progressReport_.completedTime = time.unixMs();
         await this.logSyncSummary(this.progressReport_);
 
         this.onProgress_ = function (s) {};
         this.progressReport_ = {};
 
-        this.dispatcher_.dispatch('complete');
+        // this.dispatch(actions.sync_completed());
     }
 }
 
