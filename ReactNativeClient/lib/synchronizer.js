@@ -1,13 +1,12 @@
+import { BaseItem } from '@/lib/models/base-item.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
 import { Resource } from '@/lib/models/resource.js';
-import { BaseItem } from '@/lib/models/base-item.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { sprintf } from 'sprintf-js';
 import { time } from '@/lib/time-utils.js';
 import { Logger } from '@/lib/logger.js';
 import { _ } from '@/lib/locale.js';
-import { EventDispatcher } from '@/lib/event-dispatcher.js';
 import moment from 'moment';
 // import { actions } from '@/root.js';
 
@@ -21,6 +20,7 @@ class Synchronizer {
         this.logger_ = new Logger();
         this.appType_ = appType;
         this.cancelling_ = false;
+
         this.onProgress_ = function (s) {};
         this.progressReport_ = {};
 
@@ -42,6 +42,7 @@ class Synchronizer {
     setLogger(l) {
         this.logger_ = l;
     }
+
     logger() {
         return this.logger_;
     }
@@ -78,6 +79,7 @@ class Synchronizer {
                     time.unixMsToLocalDateTime(report.completedTime)
                 )
             );
+
         return lines;
     }
 
@@ -149,6 +151,7 @@ class Synchronizer {
             options.onMessage('Random failure: ' + name);
             return true;
         }
+
         return false;
     }
 
@@ -170,7 +173,7 @@ class Synchronizer {
             : function (o) {};
         this.progressReport_ = { errors: [] };
 
-        let lastContext = options.context;
+        const lastContext = options.context ? options.context : {};
 
         const syncTargetId = this.api().driver().syncTargetId();
 
@@ -193,7 +196,7 @@ class Synchronizer {
 
         let outputContext = {};
 
-        this.state_ = 'in_progess';
+        this.state_ = 'in_progress';
 
         // this.dispatch(actions.sync_started());
 
@@ -272,6 +275,7 @@ class Synchronizer {
                             reason = 'local has changes';
                         }
                     }
+
                     this.logSyncOperation(action, local, remote, reason);
 
                     if (
@@ -297,10 +301,7 @@ class Synchronizer {
                         // to do an atomic move with OneDrive (see file-api-driver-onedrive.js)
 
                         // await this.api().put(tempPath, content);
-                        // await this.api().setTimestamp(
-                        //     tempPath,
-                        //     local.updated_time
-                        // );
+                        // await this.api().setTimestamp(tempPath, local.updated_time);
                         // await this.api().move(tempPath, path);
 
                         await this.api().put(path, content);
@@ -364,6 +365,7 @@ class Synchronizer {
                             await ItemClass.delete(local.id);
                         }
                     }
+
                     donePaths.push(path);
                 }
 
@@ -392,102 +394,120 @@ class Synchronizer {
             }
 
             // ------------------------------------------------------------------------
-            // Then, loop through all the remote items, find those that
+            // Loop through all the remote items, find those that
             // have been updated, and apply the changes to local.
             // ------------------------------------------------------------------------
 
             // At this point all the local items that have changed have been pushed to remote
             // or handled as conflicts, so no conflict is possible after this.
 
-            let deltaOptions = {};
-            if (lastContext.delta) deltaOptions.context = lastContext.delta;
-            let listResult = await this.api().delta('', deltaOptions);
-            outputContext.delta = listResult.context;
+            let context = null;
+            let newDeltaContext = null;
+            let localFoldersToDelete = [];
+            if (lastContext.delta) context = lastContext.delta;
 
-            // let remoteIds = [];
-            // let context = null;
+            while (true) {
+                if (this.cancelling()) break;
 
-            // while (true) {
-            //     if (this.cancelling()) break;
+                let listResult = await this.api().delta('', {
+                    context: context
+                });
+                let remotes = listResult.items;
+                for (let i = 0; i < remotes.length; i++) {
+                    if (this.cancelling()) break;
 
-            //     let listResult = await this.api().list('', {
-            //         context: context
-            //     });
-            //     let remotes = listResult.items;
-            //     for (let i = 0; i < remotes.length; i++) {
-            //         if (this.cancelling()) break;
+                    let remote = remotes[i];
+                    if (!BaseItem.isSystemPath(remote.path)) continue; // The delta API might return things like the .sync, .resource or the root folder
 
-            //         let remote = remotes[i];
-            //         let path = remote.path;
+                    //console.info(remote);
 
-            //         remoteIds.push(BaseItem.pathToId(path));
-            //         if (donePaths.indexOf(path) > 0) continue;
+                    let path = remote.path;
+                    let action = null;
+                    let reason = '';
+                    let local = await BaseItem.loadItemByPath(path);
+                    if (!local) {
+                        if (!remote.isDeleted) {
+                            action = 'createLocal';
+                            reason = 'remote exists but local does not';
+                        }
+                    } else {
+                        if (remote.isDeleted) {
+                            action = 'deleteLocal';
+                            reason = 'remote has been deleted';
+                        } else {
+                            if (remote.updated_time > local.updated_time) {
+                                action = 'updateLocal';
+                                reason = 'remote is more recent than local';
+                            }
+                        }
+                    }
 
-            //         let action = null;
-            //         let reason = '';
-            //         let local = await BaseItem.loadItemByPath(path);
-            //         if (!local) {
-            //             action = 'createLocal';
-            //             reason = 'Remote exists but local does not';
-            //         } else {
-            //             if (remote.updated_time > local.updated_time) {
-            //                 action = 'updateLocal';
-            //                 reason = sprintf(
-            //                     'Remote is more recent than local'
-            //                 );
-            //             }
-            //         }
-            //         if (!action) continue;
+                    if (!action) continue;
 
-            //         if (action == 'createLocal' || action == 'updateLocal') {
-            //             let content = await this.api().get(path);
-            //             if (content === null) {
-            //                 this.logger().warn(
-            //                     'Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' +
-            //                         path
-            //                 );
-            //                 continue;
-            //             }
-            //             content = await BaseItem.unserialize(content);
-            //             let ItemClass = BaseItem.itemClass(content);
+                    this.logSyncOperation(action, local, remote, reason);
 
-            //             let newContent = Object.assign({}, content);
-            //             let options = {
-            //                 autoTimestamp: false,
-            //                 applyMetadataChanges: true,
-            //                 nextQueries: BaseItem.updateSyncTimeQueries(
-            //                     syncTargetId,
-            //                     newContent,
-            //                     time.unixMs()
-            //                 )
-            //             };
-            //             if (action == 'createLocal') options.isNew = true;
+                    if (action == 'createLocal' || action == 'updateLocal') {
+                        let content = await this.api().get(path);
+                        if (content === null) {
+                            this.logger().warn(
+                                'Remote has been deleted between now and the list() call? In that case it will be handled during the next sync: ' +
+                                    path
+                            );
+                            continue;
+                        }
+                        content = await BaseItem.unserialize(content);
+                        let ItemClass = BaseItem.itemClass(content);
 
-            //             if (
-            //                 newContent.type_ == BaseModel.TYPE_RESOURCE &&
-            //                 action == 'createLocal'
-            //             ) {
-            //                 let localResourceContentPath =
-            //                     Resource.fullPath(newContent);
-            //                 let remoteResourceContentPath =
-            //                     this.resourceDirName_ + '/' + newContent.id;
+                        let newContent = Object.assign({}, content);
+                        let options = {
+                            autoTimestamp: false,
+                            applyMetadataChanges: true,
+                            nextQueries: BaseItem.updateSyncTimeQueries(
+                                syncTargetId,
+                                newContent,
+                                time.unixMs()
+                            )
+                        };
+                        if (action == 'createLocal') options.isNew = true;
 
-            //                 await this.api().get(remoteResourceContentPath, {
-            //                     path: localResourceContentPath,
-            //                     target: 'file'
-            //                 });
-            //             }
-            //             await ItemClass.save(newContent, options);
+                        if (
+                            newContent.type_ == BaseModel.TYPE_RESOURCE &&
+                            action == 'createLocal'
+                        ) {
+                            let localResourceContentPath =
+                                Resource.fullPath(newContent);
+                            let remoteResourceContentPath =
+                                this.resourceDirName_ + '/' + newContent.id;
+                            await this.api().get(remoteResourceContentPath, {
+                                path: localResourceContentPath,
+                                target: 'file'
+                            });
+                        }
 
-            //             this.logSyncOperation(action, local, content, reason);
-            //         } else {
-            //             this.logSyncOperation(action, local, remote, reason);
-            //         }
-            //     }
+                        await ItemClass.save(newContent, options);
+                    } else if (action == 'deleteLocal') {
+                        if (local.type_ == BaseModel.TYPE_FOLDER) {
+                            localFoldersToDelete.push(local);
+                            continue;
+                        }
 
-            //     if (!listResult.hasMore) break;
-            //     context = listResult.context;
-            // }
+                        let ItemClass = BaseItem.itemClass(local.type_);
+                        await ItemClass.delete(local.id, {
+                            trackDeleted: false
+                        });
+                    }
+                }
+
+                if (!listResult.hasMore) {
+                    newDeltaContext = listResult.context;
+                    break;
+                }
+                context = listResult.context;
+            }
+
+            outputContext.delta = newDeltaContext
+                ? newDeltaContext
+                : lastContext.delta;
 
             // // ------------------------------------------------------------------------
             // // Search, among the local IDs, those that don't exist remotely, which
@@ -499,45 +519,40 @@ class Synchronizer {
             // let localFoldersToDelete = [];
 
             // if (!this.cancelling()) {
-            //     let syncItems = await BaseItem.syncedItems(syncTargetId);
-            //     for (let i = 0; i < syncItems.length; i++) {
-            //         let syncItem = syncItems[i];
-            //         if (remoteIds.indexOf(syncItem.item_id) < 0) {
-            //             if (syncItem.item_type == Folder.modelType()) {
-            //                 localFoldersToDelete.push(syncItem);
-            //                 continue;
-            //             }
+            // 	let syncItems = await BaseItem.syncedItems(syncTargetId);
+            // 	for (let i = 0; i < syncItems.length; i++) {
+            // 		if (this.cancelling()) break;
 
-            //             this.logSyncOperation(
-            //                 'deleteLocal',
-            //                 { id: syncItem.item_id },
-            //                 null,
-            //                 'remote has been deleted'
-            //             );
-            //             let ItemClass = BaseItem.itemClass(syncItem.item_type);
-            //             await ItemClass.delete(syncItem.item_id, {
-            //                 trackDeleted: false
-            //             });
-            //         }
-            //     }
+            // 		let syncItem = syncItems[i];
+            // 		if (remoteIds.indexOf(syncItem.item_id) < 0) {
+            // 			if (syncItem.item_type == Folder.modelType()) {
+            // 				localFoldersToDelete.push(syncItem);
+            // 				continue;
+            // 			}
+
+            // 			this.logSyncOperation('deleteLocal', { id: syncItem.item_id }, null, 'remote has been deleted');
+
+            // 			let ItemClass = BaseItem.itemClass(syncItem.item_type);
+            // 			await ItemClass.delete(syncItem.item_id, { trackDeleted: false });
+            // 		}
+            // 	}
             // }
 
-            // if (!this.cancelling()) {
-            //     for (let i = 0; i < localFoldersToDelete.length; i++) {
-            //         const syncItem = localFoldersToDelete[i];
-            //         const noteIds = await Folder.noteIds(syncItem.item_id);
-            //         if (noteIds.length) {
-            //             await Folder.markNotesAsConflict(syncItem.item_id);
-            //         }
-            //         await Folder.delete(syncItem.item_id, {
-            //             deleteChildren: false
-            //         });
-            //     }
-            // }
+            if (!this.cancelling()) {
+                for (let i = 0; i < localFoldersToDelete.length; i++) {
+                    const item = localFoldersToDelete[i];
+                    const noteIds = await Folder.noteIds(item.id);
+                    if (noteIds.length) {
+                        // CONFLICT
+                        await Folder.markNotesAsConflict(item.id);
+                    }
+                    await Folder.delete(item.id, { deleteChildren: false });
+                }
+            }
 
-            // if (!this.cancelling()) {
-            //     await BaseItem.deleteOrphanSyncItems();
-            // }
+            if (!this.cancelling()) {
+                await BaseItem.deleteOrphanSyncItems();
+            }
         } catch (error) {
             this.logger().error(error);
             this.progressReport_.errors.push(error);
@@ -547,6 +562,7 @@ class Synchronizer {
             this.logger().info('Synchronization was cancelled.');
             this.cancelling_ = false;
         }
+
         this.state_ = 'idle';
 
         this.progressReport_.completedTime = time.unixMs();
@@ -557,6 +573,7 @@ class Synchronizer {
             null,
             'Synchronization finished [' + synchronizationId + ']'
         );
+
         await this.logSyncSummary(this.progressReport_);
 
         this.onProgress_ = function (s) {};

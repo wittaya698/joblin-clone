@@ -1,21 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Wittaya698
+# Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-22 16:33+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2025-01-22 21:02+0700\n"
+"PO-Revision-Date: 2017-07-18 13:27+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:97
 msgid "No notebook selected."
@@ -345,7 +345,7 @@ msgid "Done."
 msgstr "Terminé."
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:115
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:73
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:74
 msgid "Cancelling..."
 msgstr "Annulation..."
 
@@ -402,52 +402,53 @@ msgid "The application has been successfully authorised."
 msgstr "Le logiciel a été autorisé."
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:100
-msgid "Please open this URL in your browser to authentify the application:"
+#, fuzzy
+msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
 "Veuillez ouvrir cette URL dans votre navigateur internet pour autentifier le "
 "logiciel :"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:52
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:53
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Objets créés localement : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:54
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:55
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Objets mis à jour localement : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:56
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:57
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Objets distants créés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:58
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:59
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Objets distants mis à jour : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:60
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:61
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Objets supprimés localement : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:62
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:63
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:64
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:65
 #, javascript-format
 msgid "State: %s."
 msgstr "Etat : %s."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:68
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:69
 #, javascript-format
 msgid "Last error: %s (stacktrace in log)."
 msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:77
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:78
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Terminé : %s"

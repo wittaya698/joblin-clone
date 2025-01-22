@@ -97,7 +97,7 @@ class OneDriveApiNodeUtils {
 
             targetConsole.log(
                 _(
-                    'Please open this URL in your browser to authentify the application:'
+                    'Please open this URL in your browser to authenticate the application:'
                 )
             );
             targetConsole.log('');
