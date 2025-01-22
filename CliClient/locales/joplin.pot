@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-22 15:59+0700\n"
+"POT-Creation-Date: 2025-01-22 16:33+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -312,7 +312,11 @@ msgstr ""
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:109
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:98
+msgid "Done."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:115
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:73
 msgid "Cancelling..."
 msgstr ""

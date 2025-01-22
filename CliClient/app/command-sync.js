@@ -86,10 +86,16 @@ class Command extends BaseCommand {
 
             this.log(_('Starting synchronization...'));
 
-            await sync.start(options);
+            let context = Setting.value('sync.context');
+            context = context ? JSON.parse(context) : {};
+            options.context = context;
+            let newContext = await sync.start(options);
+            Setting.setValue('sync.context', JSON.stringify(newContext));
             vorpalUtils.redrawDone();
 
             await app().refreshCurrentFolder();
+
+            this.log(_('Done.'));
         } catch {
             this.releaseLockFn_();
             this.releaseLockFn_ = null;
