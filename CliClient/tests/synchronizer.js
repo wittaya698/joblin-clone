@@ -538,4 +538,19 @@ describe('Synchronizer', function () {
         expect(notes.length).toBe(0);
         expect(folders.length).toBe(1);
     });
+
+    it('should not try to delete on remote conflicted notes that have been deleted', async () => {
+        let f1 = await Folder.save({ title: 'folder' });
+        let n1 = await Note.save({ title: 'mynote', parent_id: f1.id });
+        await synchronizer().start();
+
+        await switchClient(2);
+
+        await synchronizer().start();
+        await Note.save({ id: n1.id, is_conflict: 1 });
+        await Note.delete(n1.id);
+        const deletedItems = await BaseItem.deletedItems();
+
+        expect(deletedItems.length).toBe(0);
+    });
 });

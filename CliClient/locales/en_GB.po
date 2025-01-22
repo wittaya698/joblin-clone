@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-22 15:21+0700\n"
+"POT-Creation-Date: 2025-01-22 15:59+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,13 +57,23 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:329
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:326
+msgid "Invalid command. Showing help:"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:368
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:435
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:474
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-alias.js:13
+msgid ""
+"Creates a new command alias which can then be used as a regular command (eg. "
+"`alias ll \"ls -l\"`)."
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:15
@@ -77,6 +87,7 @@ msgstr ""
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:32
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:35
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:42
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-geoloc.js:28
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:30
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:41
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:43
@@ -125,6 +136,10 @@ msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-geoloc.js:15
+msgid "Displays a geolocation URL for the note."
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:15
@@ -409,12 +424,16 @@ msgstr ""
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:228
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:49
+msgid "This note does not have geolocation information."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:243
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:245
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:260
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""

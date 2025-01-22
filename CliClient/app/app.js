@@ -288,6 +288,45 @@ class Application {
 
             if (cmd.hidden()) vorpalCmd.hidden();
         });
+
+        this.vorpal()
+            .catch('[args...]', 'Catches undefined commands')
+            .action(function (args, end) {
+                args = args.args;
+
+                function delayExec(command) {
+                    setTimeout(() => {
+                        app().vorpal().exec(command);
+                    }, 100);
+                }
+
+                if (!args.length) {
+                    end();
+                    delayExec('help');
+                    return;
+                }
+
+                let commandName = args.splice(0, 1);
+
+                let aliases = Setting.value('aliases').trim();
+                aliases = aliases.length ? JSON.parse(aliases) : [];
+
+                for (let i = 0; i < aliases.length; i++) {
+                    const alias = aliases[i];
+                    if (alias.name == commandName) {
+                        let command =
+                            alias.command + ' ' + app().shellArgsToString(args);
+                        end();
+
+                        delayExec(command);
+                        return;
+                    }
+                }
+
+                this.log(_('Invalid command. Showing help:'));
+                end();
+                delayExec('help');
+            });
     }
 
     async synchronizer(syncTarget) {
