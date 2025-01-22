@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import { promiseChain } from '@/lib/promise-utils.js';
 import moment from 'moment';
+import { BaseItem } from '@/lib/models/base-item.js';
 import { time } from '@/lib/time-utils.js';
 
 class FileApiDriverLocal {
@@ -19,6 +20,10 @@ class FileApiDriverLocal {
         return output;
     }
 
+    supportsDelta() {
+        return false;
+    }
+
     stat(path) {
         return new Promise((resolve, reject) => {
             fs.stat(path, (error, s) => {
@@ -35,7 +40,7 @@ class FileApiDriverLocal {
         });
     }
 
-    statTimeToTimestamp_(time) {
+    statTimeToTimestampMs_(time) {
         let m = moment(time, 'YYYY-MM-DDTHH:mm:ss.SSSZ');
         if (!m.isValid()) {
             throw new Error('Invalid date: ' + time);
@@ -46,8 +51,8 @@ class FileApiDriverLocal {
     metadataFromStats_(path, stats) {
         return {
             path: path,
-            created_time: this.statTimeToTimestamp_(stats.birthtime),
-            updated_time: this.statTimeToTimestamp_(stats.mtime),
+            created_time: this.statTimeToTimestampMs_(stats.birthtime),
+            updated_time: this.statTimeToTimestampMs_(stats.mtime),
             created_time_orig: stats.birthtime,
             updated_time_orig: stats.mtime,
             isDir: stats.isDirectory()
@@ -57,7 +62,6 @@ class FileApiDriverLocal {
     setTimestamp(path, timestampMs) {
         return new Promise((resolve, reject) => {
             let t = Math.floor(timestampMs / 1000);
-
             fs.utimes(path, t, t, error => {
                 if (error) {
                     reject(this.fsErrorToJsError_(error));
@@ -66,6 +70,52 @@ class FileApiDriverLocal {
                 resolve();
             });
         });
+    }
+
+    async delta(path, options) {
+        try {
+            let items = await fs.readdir(path);
+            let output = [];
+            for (let i = 0; i < items.length; i++) {
+                let stat = await this.stat(path + '/' + items[i]);
+                if (!stat) continue; // Has been deleted between the readdir() call and now
+                stat.path = items[i];
+                output.push(stat);
+            }
+
+            if (!Array.isArray(options.itemIds))
+                throw new Error(
+                    'Delta API not supported - local IDs must be provided'
+                );
+
+            let deletedItems = [];
+            for (let i = 0; i < options.itemIds.length; i++) {
+                const itemId = options.itemIds[i];
+                let found = false;
+                for (let j = 0; j < output.length; j++) {
+                    const item = output[j];
+                    if (BaseItem.pathToId(item.path) == itemId) {
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) {
+                    deletedItems.push({
+                        path: BaseItem.systemPath(itemId),
+                        isDeleted: true
+                    });
+                }
+            }
+
+            return {
+                hasMore: false,
+                context: null,
+                items: output
+            };
+        } catch (error) {
+            throw this.fsErrorToJsError_(error);
+        }
     }
 
     async list(path, options) {
@@ -121,7 +171,7 @@ class FileApiDriverLocal {
                         resolve();
                     })
                     .catch(error => {
-                        this.fsErrorToJsError_(error);
+                        reject(this.fsErrorToJsError_(error));
                     });
             });
         });
@@ -131,7 +181,7 @@ class FileApiDriverLocal {
         return new Promise((resolve, reject) => {
             fs.writeFile(path, content, function (error) {
                 if (error) {
-                    this.fsErrorToJsError_(error);
+                    reject(this.fsErrorToJsError_(error));
                 } else {
                     resolve();
                 }
@@ -147,7 +197,7 @@ class FileApiDriverLocal {
                         // File doesn't exist - it's fine
                         resolve();
                     } else {
-                        this.fsErrorToJsError_(error);
+                        reject(this.fsErrorToJsError_(error));
                     }
                 } else {
                     resolve();

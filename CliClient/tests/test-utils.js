@@ -52,7 +52,7 @@ function sleep(n) {
 }
 
 async function switchClient(id) {
-    await time.msleep(200); // Always leave a little time so that updated_time properties don't overlap
+    await time.msleep(400); // Always leave a little time so that updated_time properties don't overlap
     await Setting.saveAll();
 
     currentClient_ = id;
@@ -96,7 +96,6 @@ function setupDatabase(id = null) {
         })
         .then(() => {
             databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
-            // databases_[id].setLogger(logger);
             return databases_[id].open({ name: filePath }).then(() => {
                 BaseModel.db_ = databases_[id];
                 return setupDatabase(id);

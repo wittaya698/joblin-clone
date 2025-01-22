@@ -23,7 +23,7 @@ process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
 
-jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000;
+jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000; // The first test is slow because the database needs to be built
 
 async function allItems() {
     let folders = await Folder.all();
@@ -62,6 +62,7 @@ async function localItemsSameAsRemote(locals, expect) {
 
 describe('Synchronizer', function () {
     beforeEach(async () => {
+        await sleep(1);
         await setupDatabaseAndSynchronizer(1);
         await setupDatabaseAndSynchronizer(2);
         await switchClient(1);
@@ -247,7 +248,6 @@ describe('Synchronizer', function () {
         await switchClient(2);
 
         await synchronizer().start();
-
         await Note.delete(note1.id);
         await synchronizer().start();
 
@@ -524,7 +524,9 @@ describe('Synchronizer', function () {
             is_conflict: 1
         });
         await synchronizer().start();
+
         await switchClient(2);
+
         await synchronizer().start();
         let notes = await Note.all();
         let folders = await Folder.all();

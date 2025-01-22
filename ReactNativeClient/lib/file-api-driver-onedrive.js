@@ -17,5 +17,9 @@ class FileApiDriverOneDrive {
     api() {
         return this.api_;
     }
+
+    supportsDelta() {
+        return true;
+    }
 }
 export { FileApiDriverOneDrive };

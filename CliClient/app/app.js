@@ -240,6 +240,8 @@ class Application {
 
             let CommandClass = require('./' + path);
             let cmd = new CommandClass();
+            if (!cmd.enabled()) return;
+
             let vorpalCmd = this.vorpal().command(
                 cmd.usage(),
                 cmd.description()
@@ -289,47 +291,48 @@ class Application {
             if (cmd.hidden()) vorpalCmd.hidden();
         });
 
-        this.vorpal()
-            .catch('[args...]', 'Catches undefined commands')
-            .action(function (args, end) {
-                args = args.args;
+        //     this.vorpal()
+        //         .catch('[args...]', 'Catches undefined commands')
+        //         .action(function (args, end) {
+        //             args = args.args;
 
-                function delayExec(command) {
-                    setTimeout(() => {
-                        app().vorpal().exec(command);
-                    }, 100);
-                }
+        //             function delayExec(command) {
+        //                 setTimeout(() => {
+        //                     app().vorpal().exec(command);
+        //                 }, 100);
+        //             }
 
-                if (!args.length) {
-                    end();
-                    delayExec('help');
-                    return;
-                }
+        //             if (!args.length) {
+        //                 end();
+        //                 delayExec('help');
+        //                 return;
+        //             }
 
-                let commandName = args.splice(0, 1);
+        //             let commandName = args.splice(0, 1);
 
-                let aliases = Setting.value('aliases').trim();
-                aliases = aliases.length ? JSON.parse(aliases) : [];
+        //             let aliases = Setting.value('aliases').trim();
+        //             aliases = aliases.length ? JSON.parse(aliases) : [];
 
-                for (let i = 0; i < aliases.length; i++) {
-                    const alias = aliases[i];
-                    if (alias.name == commandName) {
-                        let command =
-                            alias.command + ' ' + app().shellArgsToString(args);
-                        end();
+        //             for (let i = 0; i < aliases.length; i++) {
+        //                 const alias = aliases[i];
+        //                 if (alias.name == commandName) {
+        //                     let command =
+        //                         alias.command + ' ' + app().shellArgsToString(args);
+        //                     end();
 
-                        delayExec(command);
-                        return;
-                    }
-                }
+        //                     delayExec(command);
+        //                     return;
+        //                 }
+        //             }
 
-                this.log(_('Invalid command. Showing help:'));
-                end();
-                delayExec('help');
-            });
+        //             this.log(_('Invalid command. Showing help:'));
+        //             end();
+        //             delayExec('help');
+        //         });
     }
 
-    async synchronizer(syncTarget) {
+    async synchronizer(syncTarget, options = null) {
+        if (!options) options = {};
         if (this.synchronizers_[syncTarget])
             return this.synchronizers_[syncTarget];
 
@@ -363,7 +366,9 @@ class Application {
             fileApi = new FileApi('joplin', new FileApiDriverMemory());
             fileApi.setLogger(this.logger_);
         } else if (syncTarget == 'filesystem') {
-            let syncDir = Setting.value('sync.filesystem.path');
+            let syncDir = options['sync.filesystem.path']
+                ? options['sync.filesystem.path']
+                : Setting.value('sync.filesystem.path');
             if (!syncDir) syncDir = Setting.value('profileDir') + '/sync';
             this.vorpal().log(_('Synchronizing with directory "%s"', syncDir));
             await fs.mkdirp(syncDir, 0o755);

@@ -27,6 +27,10 @@ class BaseCommand {
         return false;
     }
 
+    enabled() {
+        return true;
+    }
+
     async cancel() {}
 }
 

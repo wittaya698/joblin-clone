@@ -84,7 +84,8 @@ class BaseItem extends BaseModel {
     }
 
     static pathToId(path) {
-        let s = path.split('.');
+        let p = path.split('/');
+        let s = p[p.length - 1].split('.');
         return s[0];
     }
 
