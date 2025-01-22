@@ -38,16 +38,18 @@ class Command extends BaseCommand {
     }
 
     description() {
-        return 'Synchronizes with remote storage.';
+        return _('Synchronizes with remote storage.');
     }
 
     options() {
         return [
             [
                 '--target <target>',
-                'Sync to provided target (defaults to sync.target config value)'
+                _(
+                    'Sync to provided target (defaults to sync.target config value)'
+                )
             ],
-            ['--random-failures', 'For debugging purposes. Do not use.']
+            ['--random-failures', _('For debugging purposes. Do not use.')]
         ];
     }
 

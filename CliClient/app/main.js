@@ -52,6 +52,6 @@ shimInit();
 app()
     .start()
     .catch(error => {
-        console.log('Fatal error:');
+        console.log(_('Fatal error:'));
         console.log(error);
     });

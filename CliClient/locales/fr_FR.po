@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-22 01:14+0700\n"
+"POT-Creation-Date: 2025-01-22 14:18+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,20 +27,20 @@ msgstr "Aucun carnet n'est spécifié."
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:139
 msgid "Usage: --profile <dir-path>"
-msgstr ""
+msgstr "Utilisation: --profile <chemin>"
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:146
 msgid "Usage: --env <dev|prod>"
-msgstr ""
+msgstr "Utilisation : --env <dev|prod>"
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:173
 msgid "Usage: --log-level <none|error|warn|info|debug>"
-msgstr ""
+msgstr "Utilisation: --log-level <none|error|warn|info|debug>"
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:181
 #, javascript-format
 msgid "Unknown flag: %s"
-msgstr ""
+msgstr "Paramètre inconnu : %s"
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:200
 #, javascript-format
@@ -49,30 +49,73 @@ msgid ""
 "aborting."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:312
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:314
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:418
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:420
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:11
+msgid "cat <title>"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:15
+msgid "Displays the given item data."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:19
+msgid "Shows complete information about note."
+msgstr ""
+
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:32
-#, javascript-format
-msgid "No item \"%s\" found."
-msgstr ""
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:33
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:39
-#, javascript-format
-msgid "No notebook \"%s\""
-msgstr ""
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:41
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:35
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:42
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:30
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:41
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:43
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:41
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:53
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-search.js:28
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-set.js:32
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:26
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:30
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:36
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:38
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-use.js:32
 #, javascript-format
-msgid "No note matches this pattern: \"%s\""
+msgid "Cannot find \"%s\"."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-config.js:7
+msgid "config [name] [value]"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-config.js:12
+msgid ""
+"Gets or sets a config value. If [value] is not provided, it will show the "
+"value of [name]. If neither [name] nor [value] is provided, it will list the "
+"current configuration."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:11
+msgid "cp <pattern> [notebook]"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:16
+msgid ""
+"Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
+"specified the note is duplicated in the current notebook."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:13
+msgid "edit <title>"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:17
+msgid "Edit note."
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:32
@@ -92,8 +135,21 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:11
+msgid "import-enex <file> [notebook]"
+msgstr ""
+
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:15
 msgid "Imports an Evernote notebook file (.enex file)."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:20
+msgid "Do not ask for confirmation."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:21
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:52
+msgid "For debugging purposes. Do not use."
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:39
@@ -145,96 +201,206 @@ msgstr ""
 msgid "Importing notes..."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:78
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:14
+msgid "ls [pattern]"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:19
+msgid ""
+"Displays the notes in [notebook]. Use `ls /` to display the list of "
+"notebooks."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:27
+msgid "Displays only the first top <num> notes."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:32
+msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:35
+msgid "Reverses the sorting order."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:39
+msgid ""
+"Displays only the items of the specific type(s). Can be `n` for notes, `t` "
+"for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
+"todos, while `-ttd` would display notes and todos."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:46
+msgid ""
+"Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
+"TODO_CHECKED (for todos), TITLE"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:89
 msgid "Please select a notebook first."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mkbook.js:8
+msgid "mkbook <notebook>"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mkbook.js:12
+msgid "Creates a new notebook."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mknote.js:8
+msgid "mknote <note>"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mknote.js:12
+msgid "Creates a new note."
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mknote.js:17
 msgid "Notes can only be created within a notebook."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:28
-#, javascript-format
-msgid "No item matches pattern \"%s\""
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:11
+msgid "mv <pattern> <destination>"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:42
-#, javascript-format
-msgid "No notebook matchin pattern \"%s\""
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:16
+msgid ""
+"Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
+"it will be moved to the notebook <destination>. If <pattern> is a notebook, "
+"it will be renamed to <destination>."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:47
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:13
+msgid "rm <pattern>"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:17
+msgid "Deletes the items matching <pattern>."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:28
+msgid "Deletes the items without asking for confirmation."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:30
+msgid "Deletes a notebook."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:46
 #, javascript-format
 msgid "Delete notebook \"%s\"?"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:55
-#, javascript-format
-msgid "No note matchin pattern \"%s\""
-msgstr ""
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:61
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:59
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-search.js:29
-#, javascript-format
-msgid "Notebook not found: \"%s\""
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-search.js:14
+msgid "search <pattern> [notebook]"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-set.js:30
-#, javascript-format
-msgid "No note \"%s\" found."
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-search.js:18
+msgid "Searches for the given <pattern> in all the notes."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:61
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-set.js:12
+msgid "set <note> <name> [value]"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-set.js:17
+msgid "Sets the property <name> of the given <note> to the given [value]."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-status.js:13
+msgid "Displays summary about the notes and notebooks."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:41
+msgid "Synchronizes with remote storage."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:49
+msgid "Sync to provided target (defaults to sync.target config value)"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:63
 msgid "Synchronisation is already in progress."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:81
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:83
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:83
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:85
 msgid "Cannot initialize synchronizer."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:85
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:87
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:107
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:109
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:73
 msgid "Cancelling..."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:24
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:34
-#, javascript-format
-msgid "Tag does not exist: \"%s\""
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:9
+msgid "tag <command> [tag] [note]"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:28
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:36
-#, javascript-format
-msgid "Note does not exist: \"%s\""
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:14
+msgid ""
+"<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
+"from [note], or to list the notes associated with [tag]. The command `tag "
+"list` can be used to list all the tags."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:53
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:55
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-use.js:30
-#, javascript-format
-msgid "No folder \"%s\""
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-use.js:10
+msgid "use <notebook>"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-use.js:15
+msgid ""
+"Switches to [notebook] - all further operations will happen within this "
+"notebook."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-version.js:11
+msgid "Displays version information"
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/main.js:55
+msgid "Fatal error:"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:36
+msgid "All potential ports are in use"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:67
+msgid ""
+"The application has been authorised - you may now close this browser tab."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:73
+msgid "The application has been successfully authorised."
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:100
+msgid "Please open this URL in your browser to authentify the application:"
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/logger.js:158

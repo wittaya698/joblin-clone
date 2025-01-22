@@ -10,11 +10,11 @@ import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'edit <title>';
+        return _('edit <title>');
     }
 
     description() {
-        return 'Edit note.';
+        return _('Edit note.');
     }
 
     autocomplete() {

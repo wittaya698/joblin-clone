@@ -14,6 +14,10 @@ class Command extends BaseCommand {
         return 'Dumps the complete database as JSON.';
     }
 
+    hidden() {
+        return true;
+    }
+
     async action(args) {
         let items = [];
         let folders = await Folder.all();

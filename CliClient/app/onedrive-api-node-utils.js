@@ -1,3 +1,5 @@
+import { _ } from '@/lib/locale.js';
+
 import tcpPortUsed from 'tcp-port-used';
 import http from 'http';
 import urlParser from 'url';
@@ -31,7 +33,7 @@ class OneDriveApiNodeUtils {
             }
         }
 
-        if (!port) throw new Error('All potential ports are in use');
+        if (!port) throw new Error(_('All potential ports are in use'));
         let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);
 
         return new Promise((resolve, reject) => {
@@ -61,11 +63,15 @@ class OneDriveApiNodeUtils {
                     .then(() => {
                         writeResponse(
                             200,
-                            'The application has been authorised - you may now close this browser tab.'
+                            _(
+                                'The application has been authorised - you may now close this browser tab.'
+                            )
                         );
                         targetConsole.log('');
                         targetConsole.log(
-                            'The application has been successfully authorised.'
+                            _(
+                                'The application has been successfully authorised.'
+                            )
                         );
                         server.destroy();
                     })
@@ -90,7 +96,9 @@ class OneDriveApiNodeUtils {
             enableServerDestroy(server);
 
             targetConsole.log(
-                'Please open this URL in your browser to authentify the application:'
+                _(
+                    'Please open this URL in your browser to authentify the application:'
+                )
             );
             targetConsole.log('');
             targetConsole.log(authCodeUrl);

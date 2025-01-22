@@ -23,6 +23,10 @@ class BaseCommand {
         return [];
     }
 
+    hidden() {
+        return false;
+    }
+
     async cancel() {}
 }
 
