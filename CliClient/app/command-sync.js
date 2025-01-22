@@ -49,7 +49,7 @@ class Command extends BaseCommand {
                     'Sync to provided target (defaults to sync.target config value)'
                 )
             ],
-            ['--random-failures', _('For debugging purposes. Do not use.')]
+            ['--random-failures', 'For debugging purposes. Do not use.']
         ];
     }
 

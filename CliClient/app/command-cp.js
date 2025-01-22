@@ -8,7 +8,7 @@ import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
-        return _('cp <pattern> [notebook]');
+        return 'cp <pattern> [notebook]';
     }
 
     description() {

@@ -1,8 +1,8 @@
 import { sprintf } from 'sprintf-js';
 
 // Critical -> to be removed
-const enGBLocale = require('../locales/fr_FR.json');
-const frFRLocale = require('../locales/en_GB.json');
+const enGBLocale = require('../locales/en_GB.json');
+const frFRLocale = require('../locales/fr_FR.json');
 
 let codeToLanguageE_ = {};
 codeToLanguageE_['aa'] = 'Afar';
@@ -279,7 +279,7 @@ function _(s, ...args) {
 }
 
 // Critical -> to be removed
-localeList = {
+const localeList = {
     en_GB: enGBLocale,
     fr_FR: frFRLocale
 };

@@ -5,7 +5,7 @@ import { Note } from '@/lib/models/note.js';
 
 class Command extends BaseCommand {
     usage() {
-        return _('mknote <note>');
+        return 'mknote <note>';
     }
 
     description() {
