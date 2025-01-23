@@ -121,7 +121,7 @@ class ActionButtonComponent extends React.Component {
         let mainIcon = mainButton.icon ? (
             <Icon name={mainButton.icon} style={styles.actionButtonIcon} />
         ) : (
-            <Text style={{ fontSize: 20, color: '#ffffff' }}>+</Text>
+            <Icon name="add" style={styles.actionButtonIcon} />
         );
 
         let buttonElement = null;

@@ -24,11 +24,22 @@ import { reg } from '@/lib/registry.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
+import { globalStyle } from '@/lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
 
 const styles = StyleSheet.create({
-    webView: {
-        fontSize: 10
+    titleTextInput: {
+        flex: 1,
+        color: globalStyle.color,
+        backgroundColor: globalStyle.backgroundColor
+    },
+    bodyTextInput: {
+        flex: 1,
+        marginLeft: globalStyle.marginLeft,
+        marginRight: globalStyle.marginRight,
+        textAlignVertical: 'top',
+        color: globalStyle.color,
+        backgroundColor: globalStyle.backgroundColor
     }
 });
 
@@ -297,7 +308,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                 return body;
             }
 
-            function markdownToHtml(body) {
+            function markdownToHtml(body, style) {
                 // https://necolas.github.io/normalize.css/
                 const normalizeCss = `
 					html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -305,10 +316,18 @@ class NoteScreenComponent extends BaseScreenComponent {
 					pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent;-webkit-text-decoration-skip:objects}
 					b,strong{font-weight:bolder}small{font-size:80%}img{border-style:none}
 				`;
-                const css = `
+                const css =
+                    `
 					body {
-						font-size: 16px;
-						margin: 1em;
+						font-size: ` +
+                    style.htmlFontSize +
+                    `;
+						margin: ` +
+                    style.htmlMarginLeft +
+                    `;
+						color: ` +
+                    style.htmlColor +
+                    `;
 					}
 					h1 {
 						font-size: 1.2em;
@@ -329,7 +348,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						position: relative;
 						top: 0.1em;
 						text-decoration: none;
-						color: black;
+						color: ` +
+                    style.htmlColor +
+                    `;
 					}
                     table {
 						border-collapse: collapse;
@@ -389,9 +410,10 @@ class NoteScreenComponent extends BaseScreenComponent {
             bodyComponent = (
                 <View style={{ flex: 1 }}>
                     <WebView
-                        source={{ html: markdownToHtml(note.body) }}
+                        source={{
+                            html: markdownToHtml(note.body, globalStyle)
+                        }}
                         onMessage={event => {
-                            // 'checkboxclick_NOTICK_0'
                             let msg = event.nativeEvent.data;
                             if (msg.indexOf('checkboxclick_') === 0) {
                                 msg = msg.split('_');
@@ -409,11 +431,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                 <TextInput
                     autoCapitalize="sentences"
                     autoFocus={true}
-                    style={{
-                        flex: 1,
-                        textAlignVertical: 'top',
-                        fontFamily: 'monospace'
-                    }}
+                    style={styles.bodyTextInput}
                     multiline={true}
                     value={note.body}
                     onChangeText={text => this.body_changeText(text)}
@@ -471,6 +489,15 @@ class NoteScreenComponent extends BaseScreenComponent {
 
         if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
+        let titleContainerStyle = {
+            flexDirection: 'row',
+            paddingLeft: globalStyle.marginLeft,
+            height: 40,
+            borderBottomColor: globalStyle.dividerColor,
+            borderBottomWidth: 1
+        };
+        if (!isTodo) titleContainerStyle.paddingLeft -= 3; // Because the TextInput already includes a padding
+
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader
@@ -513,7 +540,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                     saveButtonDisabled={saveButtonDisabled}
                     onSaveButtonPress={() => this.saveNoteButton_press()}
                 />
-                <View style={{ flexDirection: 'row' }}>
+                <View style={titleContainerStyle}>
                     {isTodo && (
                         <Checkbox
                             checked={!!Number(note.todo_completed)}
@@ -523,8 +550,9 @@ class NoteScreenComponent extends BaseScreenComponent {
                         />
                     )}
                     <TextInput
+                        underlineColorAndroid="#ffffff00"
                         autoCapitalize="sentences"
-                        style={{ flex: 1 }}
+                        style={styles.titleTextInput}
                         value={note.title}
                         onChangeText={text => this.title_changeText(text)}
                     />

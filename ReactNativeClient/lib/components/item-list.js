@@ -1,9 +1,28 @@
 import { Component } from 'react';
-import { FlatList, Text, TouchableHighlight, View } from 'react-native';
+import {
+    FlatList,
+    Text,
+    TouchableHighlight,
+    View,
+    StyleSheet
+} from 'react-native';
 import { Checkbox } from '@/lib/components/checkbox.js';
 import { reg } from '@/lib/registry.js';
 import { Note } from '@/lib/models/note.js';
 import { time } from '@/lib/time-utils.js';
+import { globalStyle } from '@/lib/components/global-style.js';
+
+const styles = StyleSheet.create({
+    listItem: {
+        flexDirection: 'row',
+        height: 40,
+        borderBottomWidth: 1,
+        borderBottomColor: globalStyle.dividerColor,
+        alignItems: 'center',
+        paddingLeft: globalStyle.marginLeft,
+        backgroundColor: globalStyle.backgroundColor
+    }
+});
 
 class ItemListComponent extends Component {
     constructor() {
@@ -48,21 +67,19 @@ class ItemListComponent extends Component {
                 this.listView_itemLongPress(item.id);
             };
 
-            const checkboxStyle = {};
+            const listItemStyle = { color: globalStyle.color };
+            const checkboxStyle = Object.assign({}, listItemStyle);
             if (!Number(item.is_todo)) checkboxStyle.display = 'none';
 
             const checkboxChecked = !!Number(item.todo_completed);
 
             return (
-                <TouchableHighlight onPress={onPress} onLongPress={onLongPress}>
-                    <View
-                        style={{
-                            flexDirection: 'row',
-                            paddingLeft: 10,
-                            paddingTop: 5,
-                            paddingBottom: 5
-                        }}
-                    >
+                <TouchableHighlight
+                    onPress={onPress}
+                    onLongPress={onLongPress}
+                    underlayColor="#0066FF"
+                >
+                    <View style={styles.listItem}>
                         <Checkbox
                             style={checkboxStyle}
                             checked={checkboxChecked}
@@ -70,7 +87,7 @@ class ItemListComponent extends Component {
                                 this.todoCheckbox_change(item.id, checked);
                             }}
                         />
-                        <Text>{item.title}</Text>
+                        <Text style={listItemStyle}>{item.title}</Text>
                     </View>
                 </TouchableHighlight>
             );
