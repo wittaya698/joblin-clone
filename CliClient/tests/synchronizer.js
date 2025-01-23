@@ -15,6 +15,7 @@ import {
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
 import { Tag } from 'lib/models/tag.js';
+import { Database } from 'lib/database.js';
 import { Setting } from 'lib/models/setting.js';
 import { BaseItem } from 'lib/models/base-item.js';
 import { BaseModel } from 'lib/base-model.js';
@@ -24,6 +25,8 @@ process.on('unhandledRejection', (reason, p) => {
 });
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000; // The first test is slow because the database needs to be built
+
+const syncTargetId = Database.enumId('syncTarget', 'memory');
 
 async function allItems() {
     let folders = await Folder.all();
@@ -236,7 +239,7 @@ describe('Synchronizer', function () {
         expect(files.length).toBe(1);
         expect(files[0].path).toBe(Folder.systemPath(folder1));
 
-        let deletedItems = await BaseItem.deletedItems();
+        let deletedItems = await BaseItem.deletedItems(syncTargetId);
         expect(deletedItems.length).toBe(0);
     });
 
@@ -256,7 +259,7 @@ describe('Synchronizer', function () {
         await synchronizer().start();
         let items = await allItems();
         expect(items.length).toBe(1);
-        let deletedItems = await BaseItem.deletedItems();
+        let deletedItems = await BaseItem.deletedItems(syncTargetId);
         expect(deletedItems.length).toBe(0);
     });
 
@@ -544,7 +547,7 @@ describe('Synchronizer', function () {
         await synchronizer().start();
         await Note.save({ id: n1.id, is_conflict: 1 });
         await Note.delete(n1.id);
-        const deletedItems = await BaseItem.deletedItems();
+        const deletedItems = await BaseItem.deletedItems(syncTargetId);
 
         expect(deletedItems.length).toBe(0);
     });

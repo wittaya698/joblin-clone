@@ -7,6 +7,7 @@ import { vorpalUtils } from './vorpal-utils.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
+const osTmpdir = require('os-tmpdir');
 
 class Command extends BaseCommand {
     constructor() {
@@ -21,7 +22,9 @@ class Command extends BaseCommand {
 
     static async lockFile(filePath) {
         try {
-            const release = await locker.lock(filePath);
+            const release = await locker.lock(filePath, {
+                stale: 1000 * 60 * 5
+            });
             return release;
         } catch (error) {
             throw error;
@@ -59,7 +62,7 @@ class Command extends BaseCommand {
 
     async action(args) {
         this.releaseLockFn_ = null;
-        const lockFilePath = Setting.value('tempDir') + '/synclock';
+        const lockFilePath = osTmpdir() + '/synclock';
         if (!(await fs.pathExists(lockFilePath)))
             await fs.writeFile(lockFilePath, 'synclock');
 

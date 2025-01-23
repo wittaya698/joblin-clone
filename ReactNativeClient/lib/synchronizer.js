@@ -288,7 +288,18 @@ class Synchronizer {
                     ) {
                         let remoteContentPath =
                             this.resourceDirName_ + '/' + local.id;
-                        let resourceContent = await Resource.content(local);
+                        let resourceContent = '';
+                        try {
+                            resourceContent = await Resource.content(local);
+                        } catch (error) {
+                            error.message =
+                                'Cannot read resource content: ' +
+                                local.id +
+                                ': ' +
+                                error.message;
+                            this.logger().error(error);
+                            this.progressReport_.errors.push(error);
+                        }
                         await this.api().put(
                             remoteContentPath,
                             resourceContent
@@ -379,7 +390,7 @@ class Synchronizer {
             // Delete the remote items that have been deleted locally.
             // ------------------------------------------------------------------------
 
-            let deletedItems = await BaseItem.deletedItems();
+            let deletedItems = await BaseItem.deletedItems(syncTargetId);
             for (let i = 0; i < deletedItems.length; i++) {
                 if (this.cancelling()) break;
 
@@ -393,7 +404,7 @@ class Synchronizer {
                 );
                 await this.api().delete(path);
                 if (this.randomFailure(options, 3)) return;
-                await BaseItem.remoteDeletedItem(item.item_id);
+                await BaseItem.remoteDeletedItem(syncTargetId, item.item_id);
             }
 
             // ------------------------------------------------------------------------

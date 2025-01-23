@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Joplin-CLI 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-01-23 00:18+0700\n"
+"POT-Creation-Date: 2025-01-23 12:14+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -283,40 +283,40 @@ msgstr ""
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:41
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:44
 msgid "Synchronizes with remote storage."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:49
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:52
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:54
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:57
 msgid "For \"filesystem\" target only: Path to sync to."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:67
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:70
 msgid "Synchronisation is already in progress."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:95
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:98
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:97
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:100
 msgid "Cannot initialize synchronizer."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:99
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:102
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:110
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:113
 msgid "Done."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:127
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:130
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:74
 msgid "Cancelling..."
 msgstr ""

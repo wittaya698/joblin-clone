@@ -86,7 +86,9 @@ reg.synchronizer = async () => {
     reg.synchronizer_.dispatch = reg.dispatch;
 };
 
-reg.scheduleSync = async () => {
+reg.scheduleSync = async (delay = null) => {
+    if (delay === null) delay = 1000 * 10;
+
     if (reg.scheduleSyncId_) {
         clearTimeout(reg.scheduleSyncId_);
         reg.scheduleSyncId_ = null;
@@ -106,8 +108,12 @@ reg.scheduleSync = async () => {
         }
 
         const sync = await reg.synchronizer();
-        sync.start();
-    }, 1000 * 10);
+
+        let context = Setting.value('sync.context');
+        context = context ? JSON.parse(context) : {};
+        let newContext = await sync.start({ context: context });
+        Setting.setValue('sync.context', JSON.stringify(newContext));
+    }, delay);
 };
 
 reg.setDb = v => {

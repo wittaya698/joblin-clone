@@ -33,7 +33,7 @@ class ReportService {
         };
 
         output.toDelete = {
-            total: await BaseItem.deletedItemCount()
+            total: await BaseItem.deletedItemCount(syncTarget)
         };
 
         output.conflicted = {
