@@ -197,7 +197,7 @@ class Synchronizer {
 
         let synchronizationId = time.unixMs().toString();
 
-        let outputContext = {};
+        let outputContext = Object.assign({}, lastContext);
 
         this.state_ = 'in_progress';
 
