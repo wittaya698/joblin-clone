@@ -91,8 +91,8 @@ android {
         applicationId 'net.witthaya.joplin_clone'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 26
-        versionName "0.9.13"
+        versionCode 27
+        versionName "0.9.14"
     }
     signingConfigs {
         debug {
