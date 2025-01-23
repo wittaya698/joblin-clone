@@ -105,6 +105,19 @@ async function mergePotToPo(potFilePath, poFilePath) {
     await removePoHeaderDate(poFilePath);
 }
 
+function buildIndex(locales) {
+    let output = [];
+    output.push('var locales = {};');
+    for (let i = 0; i < locales.length; i++) {
+        const locale = locales[i];
+        output.push(
+            "locales['" + locale + "'] = require('./" + locale + ".json');"
+        );
+    }
+    output.push('module.exports = { locales: locales };');
+    return output.join('\n');
+}
+
 async function main() {
     let potFilePath = cliLocalesDir + '/joplin.pot';
     let jsonLocalesDir = cliDir + '/build/locales';
@@ -114,7 +127,9 @@ async function main() {
         cliDir + '/app/*.js',
         rnDir + '/lib/*.js',
         rnDir + '/lib/models/*.js',
-        rnDir + '/lib/services/*.js'
+        rnDir + '/lib/services/*.js',
+        rnDir + '/lib/components/*.js',
+        rnDir + '/lib/components/screens/*.js'
     ]);
 
     await execCommand(
@@ -140,7 +155,11 @@ async function main() {
         buildLocale(poFilePäth, jsonFilePath);
     }
 
-    saveToFile(jsonLocalesDir + '/index.json', JSON.stringify(locales));
+    saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales));
+    const rnJsonLocaleDir = rnDir + '/locales';
+    await execCommand(
+        'rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"'
+    );
 }
 
 main().catch(error => {
