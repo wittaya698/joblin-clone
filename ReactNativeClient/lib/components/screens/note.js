@@ -180,8 +180,17 @@ class NoteScreenComponent extends BaseScreenComponent {
         this.noteComponent_change('body', text);
     }
 
+    async noteExists(noteId) {
+        const existingNote = await Note.load(noteId);
+        return !!existingNote;
+    }
+
     async saveNoteButton_press() {
         let note = Object.assign({}, this.state.note);
+
+        // Note has been deleted while user was modifying it. In that, we
+        // just save a new note by clearing the note ID.
+        if (note.id && !(await this.noteExists(note.id))) delete note.id;
 
         reg.logger().info('Saving note: ', note);
 
@@ -205,6 +214,33 @@ class NoteScreenComponent extends BaseScreenComponent {
         this.refreshNoteMetadata();
 
         reg.scheduleSync();
+    }
+
+    async saveOneProperty(name, value) {
+        let note = Object.assign({}, this.state.note);
+
+        // Note has been deleted while user was modifying it. In that, we
+        // just save a new note by clearing the note ID.
+        if (note.id && !(await this.noteExists(note.id))) delete note.id;
+
+        reg.logger().info('Saving note property: ', note.id, name, value);
+
+        if (note.id) {
+            let toSave = { id: note.id };
+            toSave[name] = value;
+            toSave = await Note.save(toSave);
+            note[name] = toSave[name];
+
+            this.setState({
+                lastSavedNote: Object.assign({}, note),
+                note: note
+            });
+
+            reg.scheduleSync();
+        } else {
+            note[name] = value;
+            this.setState({ note: note });
+        }
     }
 
     async deleteNote_onPress() {
@@ -234,6 +270,18 @@ class NoteScreenComponent extends BaseScreenComponent {
     showMetadata_onPress() {
         this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
         this.refreshNoteMetadata(true);
+    }
+
+    async showOnMap_onPress() {
+        if (!this.state.note.id) return;
+
+        let note = await Note.load(this.state.note.id);
+        try {
+            const url = Note.geolocationUrl(note);
+            Linking.openURL(url);
+        } catch (error) {
+            await dialogs.error(this, error.message);
+        }
     }
 
     menuOptions() {
@@ -268,30 +316,14 @@ class NoteScreenComponent extends BaseScreenComponent {
                 onPress: () => {
                     this.showMetadata_onPress();
                 }
+            },
+            {
+                title: _('View location on map'),
+                onPress: () => {
+                    this.showOnMap_onPress();
+                }
             }
         ];
-    }
-
-    async saveOneProperty(name, value) {
-        let note = Object.assign({}, this.state.note);
-
-        reg.logger().info('Saving note property: ', note.id, name, value);
-
-        if (note.id) {
-            let toSave = { id: note.id };
-            toSave[name] = value;
-            toSave = await Note.save(toSave);
-            note[name] = toSave[name];
-            this.setState({
-                lastSavedNote: Object.assign({}, note),
-                note: note
-            });
-
-            reg.scheduleSync();
-        } else {
-            note[name] = value;
-            this.setState({ note: note });
-        }
     }
 
     async todoCheckbox_change(checked) {

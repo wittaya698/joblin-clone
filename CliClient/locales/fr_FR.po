@@ -15,32 +15,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:97
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:99
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:104
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:106
 msgid "No notebook has been specified."
 msgstr "Aucun carnet n'est spécifié."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:139
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:141
 msgid "Usage: --profile <dir-path>"
 msgstr "Utilisation: --profile <chemin>"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:146
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:148
 msgid "Usage: --env <dev|prod>"
 msgstr "Utilisation : --env <dev|prod>"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:173
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:175
 msgid "Usage: --log-level <none|error|warn|info|debug>"
 msgstr "Utilisation: --log-level <none|error|warn|info|debug>"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:181
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:183
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:200
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:202
 #, javascript-format
 msgid ""
 "Command line argument \"%s\" contains both quotes and double-quotes - "
@@ -49,20 +49,20 @@ msgstr ""
 "Paramètre de ligne de command \"%s\" contient à la fois des guillemets "
 "simples et doubles - impossible de continuer."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:224
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:226
 msgid "Provides help for a given command."
 msgstr "Affiche l'aide pour la commande donnée."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:226
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:228
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:373
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:375
 #, javascript-format
 msgid "Synchronizing with directory \"%s\""
 msgstr "Synchronisation avec dossier \"%s\""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:479
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:481
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
@@ -544,45 +544,49 @@ msgid ""
 "There is currently no notebook. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:198
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:207
 msgid "Untitled"
-msgstr ""
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:214
-#, fuzzy
-msgid "Delete note?"
-msgstr "Supprimer le carnet \"%s\" ?"
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:244
-msgid "Attach file"
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:250
 #, fuzzy
+msgid "Delete note?"
+msgstr "Supprimer le carnet \"%s\" ?"
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:292
+msgid "Attach file"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:298
+#, fuzzy
 msgid "Delete note"
 msgstr "Supprime le carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:258
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:306
 msgid "Convert to regular note"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:259
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:307
 msgid "Convert to todo"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:266
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:314
 msgid "Hide metadata"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:267
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:315
 msgid "Show metadata"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:487
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:321
+msgid "View location on map"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:519
 msgid "New note"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:498
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:530
 msgid "Edit"
 msgstr ""
 

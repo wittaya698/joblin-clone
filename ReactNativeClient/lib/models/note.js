@@ -43,7 +43,7 @@ class Note extends BaseItem {
 
     static geolocationUrl(note) {
         if (!('latitude' in note) || !('longitude' in note))
-            throw new Error('Latitude or longitude missing');
+            throw new Error('Latitude or longitude is missing');
         if (!note.latitude && !note.longitude)
             throw new Error(
                 _('This note does not have geolocation information.')
