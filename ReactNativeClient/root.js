@@ -26,6 +26,7 @@ import { FoldersScreen } from '@/lib/components/screens/folders.js';
 import { LogScreen } from '@/lib/components/screens/log.js';
 import { StatusScreen } from '@/lib/components/screens/status.js';
 import { WelcomeScreen } from '@/lib/components/screens/welcome.js';
+import { SearchScreen } from '@/lib/components/screens/search.js';
 import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
 import { Setting } from '@/lib/models/setting.js';
 import { MenuProvider } from 'react-native-popup-menu';
@@ -51,7 +52,8 @@ let defaultState = {
         orderByDir: 'DESC'
     },
     syncStarted: false,
-    syncReport: {}
+    syncReport: {},
+    searchQuery: ''
 };
 
 const initialRoute = {
@@ -293,6 +295,10 @@ const navReducer = createSlice({
 
         sync_report_update: (state, action) => {
             state.syncReport = action.payload.report;
+        },
+
+        search_query: (state, action) => {
+            state.searchQuery = action.payload.query.trim();
         }
     }
 });
@@ -411,7 +417,12 @@ async function initialize(dispatch, backButtonHandler) {
     PoorManIntervals.setInterval(() => {
         reg.logger().info('Running background sync on timer...');
         reg.scheduleSync(1);
-    }, 1000);
+    }, 1000 * 60 * 5);
+
+    if (Setting.value('env') == 'dev') {
+    } else {
+        reg.scheduleSync();
+    }
 
     initializationState_ = 'done';
     reg.logger().info('Application initialized');
@@ -428,10 +439,6 @@ class HomeStackComponent extends React.Component {
             this.props.dispatch,
             this.backButtonHandler.bind(this)
         );
-        if (Setting.value('env') == 'dev') {
-        } else {
-            reg.scheduleSync();
-        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -463,7 +470,8 @@ class HomeStackComponent extends React.Component {
             Folder: { screen: FolderScreen },
             OneDriveLogin: { screen: OneDriveLoginScreen },
             Log: { screen: LogScreen },
-            Status: { screen: StatusScreen }
+            Status: { screen: StatusScreen },
+            Search: { screen: SearchScreen }
         };
 
         return <AppNav screens={appNavInit} />;

@@ -48,12 +48,11 @@ let styleObject = {
         paddingRight: 5,
         marginRight: 2
     },
-    backButton: {
+    iconButton: {
         flex: 1,
         backgroundColor: globalStyle.backgroundColor,
         paddingLeft: 15,
-        paddingRight: 15,
-        marginRight: 1
+        paddingRight: 15
     },
     saveButton: {
         flex: 1,
@@ -107,6 +106,10 @@ let styleObject = {
 styleObject.topIcon = Object.assign({}, globalStyle.icon);
 styleObject.topIcon.flex = 1;
 styleObject.topIcon.textAlignVertical = 'center';
+
+styleObject.backButton = Object.assign({}, styleObject.iconButton);
+styleObject.backButton.marginRight = 1;
+
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, {
     opacity: globalStyle.disabledOpacity
 });
@@ -123,6 +126,10 @@ class ScreenHeaderComponent extends Component {
 
     backButton_press() {
         this.props.dispatch(actions.navigate({ routeName: 'Back' }));
+    }
+
+    searchButton_press() {
+        this.props.dispatch(actions.navigate({ routeName: 'Search' }));
     }
 
     menu_select(value) {
@@ -184,6 +191,16 @@ class ScreenHeaderComponent extends Component {
                             />
                         )}
                         <Text style={styles.saveButtonText}>Save</Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
+        function searchButton(styles, onPress) {
+            return (
+                <TouchableOpacity onPress={onPress}>
+                    <View style={styles.iconButton}>
+                        <Icon name="search" style={styles.topIcon} />
                     </View>
                 </TouchableOpacity>
             );
@@ -286,6 +303,7 @@ class ScreenHeaderComponent extends Component {
                     this.props.showSaveButton === true
                 )}
                 {titleComp}
+                {searchButton(styles, () => this.searchButton_press())}
                 <Menu
                     onSelect={value => this.menu_select(value)}
                     style={styles.contextMenu}
