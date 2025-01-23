@@ -61,11 +61,11 @@ const initialRoute = {
 defaultState.route = initialRoute;
 
 let navHistory = [];
-navHistory.push(initialRoute);
 
 function historyCanGoBackTo(route) {
-    if (route.routeName == 'Note' && !route.payload.noteId) return false;
-    if (route.routeName == 'Folder' && !route.payload.folderId) return false;
+    if (route.routeName == 'Note') return false;
+    if (route.routeName == 'Folder') return false;
+
     return true;
 }
 
@@ -90,42 +90,55 @@ const navReducer = createSlice({
             const currentRoute = state.route;
             const currentRouteName = currentRoute ? currentRoute.routeName : '';
 
-            if (action.payload.routeName === 'Back') {
-                if (!state.historyCanGoBack) return;
-                action = navHistory.pop(); // Current page
-                action = navHistory.pop(); // Previous page
-
-                while (!historyCanGoBackTo(action)) {
-                    if (!navHistory.length) {
-                        action = null;
-                        break;
-                    }
-                    action = navHistory.pop();
-                }
-
-                if (!action) action = Object.assign({}, initialRoute);
-                navHistory.push(action);
-            } else {
-                // If the route *name* is the same (even if the other parameters are different), we
-                // overwrite the last route in the history with the current one. If the route name
-                // is different, we push a new history entry.
-
-                if (currentRouteName == action.payload.routeName) {
-                    if (navHistory.length)
-                        navHistory[navHistory.length - 1] = action;
-                    // If the current screen is already the requested screen, don't do anything
-                } else {
-                    if (action.payload.routeName == 'Welcome') navHistory = [];
-                    navHistory.push(action);
-                }
-            }
-
             action = {
                 routeName: action.payload.routeName,
                 payload: action.payload
             };
-            state.route = action;
-            state.historyCanGoBack = navHistory.length > 2;
+
+            let historyGoingBack = false;
+
+            if (action.payload.routeName === 'Back') {
+                if (!navHistory.length) return;
+
+                let newAction = null;
+                while (navHistory.length) {
+                    newAction = navHistory.pop();
+                    if (newAction.routeName != state.route.routeName) break;
+                }
+
+                action = newAction ? newAction : navHistory.pop();
+                historyGoingBack = true;
+            }
+
+            if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
+                // If the route *name* is the same (even if the other parameters are different), we
+                // overwrite the last route in the history with the current one. If the route name
+                // is different, we push a new history entry.
+                if (currentRoute.routeName == action.payload.routeName) {
+                    // nothing
+                } else {
+                    if (action.payload.routeName == 'Welcome') navHistory = [];
+                    navHistory.push({
+                        routeName: currentRoute.routeName,
+                        payload: Object.assign({}, currentRoute.payload)
+                    });
+                }
+            }
+
+            // HACK: whenever a new screen is loaded, all the previous screens of that type
+            // are overwritten with the new screen parameters. This is because the way notes
+            // are currently loaded is not optimal (doesn't retain history properly) so
+            // this is a simple fix without doing a big refactoring to change the way notes
+            // are loaded. Might be good enough since going back to different folders
+            // is probably not a common workflow.
+            for (let i = 0; i < navHistory.length; i++) {
+                let n = navHistory[i];
+                if (n.routeName == action.routeName) {
+                    navHistory[i] = Object.assign({}, action);
+                }
+            }
+
+            if (action.payload.routeName == 'Welcome') navHistory = [];
 
             reg.logger().info(
                 'Route: ' + currentRouteName + ' => ' + action.payload.routeName
@@ -142,6 +155,10 @@ const navReducer = createSlice({
             if ('itemType' in action.payload) {
                 state.selectedItemType = action.payload.itemType;
             }
+
+            state.route = action;
+
+            state.historyCanGoBack = !!navHistory.length;
 
             if (state.route.routeName == 'Notes') {
                 Setting.setValue('activeFolderId', state.selectedFolderId);
@@ -397,7 +414,10 @@ class HomeStackComponent extends React.Component {
             this.props.dispatch,
             this.backButtonHandler.bind(this)
         );
-        reg.scheduleSync();
+        if (Setting.value('env') == 'dev') {
+        } else {
+            reg.scheduleSync();
+        }
     }
 
     componentWillReceiveProps(newProps) {
