@@ -331,6 +331,13 @@ class NoteScreenComponent extends BaseScreenComponent {
 						text-decoration: none;
 						color: black;
 					}
+                    table {
+						border-collapse: collapse;
+					}
+					td, th {
+						border: 1px solid silver;
+						padding: .5em 1em .5em 1em;
+					}
 				`;
 
                 let counter = -1;
