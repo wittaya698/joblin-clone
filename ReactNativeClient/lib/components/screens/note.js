@@ -5,7 +5,8 @@ import {
     Button,
     TextInput,
     Text,
-    StyleSheet
+    StyleSheet,
+    Linking
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
@@ -345,9 +346,6 @@ class NoteScreenComponent extends BaseScreenComponent {
 						font-size: ` +
                     style.htmlFontSize +
                     `;
-                    /* margin: ` +
-                    style.htmlMarginLeft +
-                    `; */
 						color: ` +
                     style.htmlColor +
                     `;
@@ -382,6 +380,11 @@ class NoteScreenComponent extends BaseScreenComponent {
 						border: 1px solid silver;
 						padding: .5em 1em .5em 1em;
 					}
+                    hr {
+						border: 1px solid ` +
+                    style.htmlDividerColor +
+                    `;
+					}
 				`;
 
                 let counter = -1;
@@ -396,13 +399,28 @@ class NoteScreenComponent extends BaseScreenComponent {
                     });
                 }
 
+                const renderer = new marked.Renderer();
+                renderer.link = function (href, title, text) {
+                    const js =
+                        'window.ReactNativeWebView.postMessage(' +
+                        JSON.stringify(href) +
+                        '); return false;';
+                    let output =
+                        "<a href='#' onclick='" + js + "'>" + text + '</a>';
+                    return output;
+                };
+
                 let html = note
                     ? '<style>' +
                       normalizeCss +
                       '\n' +
                       css +
                       '</style>' +
-                      marked(body, { gfm: true, breaks: true })
+                      marked(body, {
+                          gfm: true,
+                          breaks: true,
+                          renderer: renderer
+                      })
                     : '';
 
                 let elementId = 1;
@@ -438,12 +456,15 @@ class NoteScreenComponent extends BaseScreenComponent {
                         }}
                         onMessage={event => {
                             let msg = event.nativeEvent.data;
+                            reg.logger().info('postMessage received: ' + msg);
                             if (msg.indexOf('checkboxclick_') === 0) {
                                 msg = msg.split('_');
                                 let index = Number(msg[msg.length - 1]);
                                 let currentState = msg[msg.length - 2]; // Not really needed but keep it anyway
                                 const newBody = toggleTickAt(note.body, index);
                                 this.saveOneProperty('body', newBody);
+                            } else {
+                                Linking.openURL(msg);
                             }
                         }}
                     />
