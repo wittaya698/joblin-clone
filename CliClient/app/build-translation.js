@@ -72,6 +72,13 @@ function buildLocale(inputFile, outputFile) {
     saveToFile(outputFile, translation);
 }
 
+async function removePoHeaderDate(filePath) {
+    await execCommand(
+        "sed -i '' -e'/POT-Creation-Date:/d' \"" + filePath + '"'
+    );
+    await execCommand("sed -i '' -e'/PO-Revision-Date:/d' \"" + filePath + '"');
+}
+
 async function createPotFile(potFilePath, sources) {
     let baseArgs = [];
     baseArgs.push('--from-code=utf-8');
@@ -87,6 +94,7 @@ async function createPotFile(potFilePath, sources) {
         args.push(sources[i]);
         const result = await execCommand('xgettext ' + args.join(' '));
         if (result) console.error(result);
+        await removePoHeaderDate(potFilePath);
     }
 }
 
@@ -94,6 +102,7 @@ async function mergePotToPo(potFilePath, poFilePath) {
     const command = 'msgmerge -U "' + poFilePath + '" "' + potFilePath + '"';
     const result = await execCommand(command);
     if (result) console.error(result);
+    await removePoHeaderDate(poFilePath);
 }
 
 async function main() {
