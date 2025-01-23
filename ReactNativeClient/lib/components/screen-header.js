@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Log } from '@/lib/log.js';
 import { Picker } from '@react-native-picker/picker';
 import { _ } from '@/lib/locale.js';
 import { Setting } from '@/lib/models/setting.js';
@@ -20,10 +22,8 @@ import {
 let styleObject = {
     container: {
         flexDirection: 'row',
-        paddingLeft: globalStyle.marginLeft,
         paddingTop: 10,
         paddingBottom: 10,
-        paddingRight: 0,
         backgroundColor: globalStyle.backgroundColor,
         alignItems: 'center',
         shadowColor: '#000000',
@@ -42,29 +42,29 @@ let styleObject = {
     },
     sideMenuButton: {
         flex: 1,
-        backgroundColor: '#0482E3',
-        paddingLeft: 15,
-        paddingRight: 15,
-        marginRight: 10
+        backgroundColor: globalStyle.backgroundColor,
+        paddingLeft: globalStyle.marginLeft,
+        paddingRight: 5,
+        marginRight: 2
     },
     sideMenuButtonText: {
         textAlignVertical: 'center',
-        color: '#ffffff',
+        color: globalStyle.color,
         fontWeight: 'bold',
         flex: 1
     },
     backButton: {
         flex: 1,
-        backgroundColor: '#0482E3',
+        backgroundColor: globalStyle.backgroundColor,
         paddingLeft: 15,
         paddingRight: 15,
-        marginRight: 10
+        marginRight: 1
     },
-    backButtonText: {
-        textAlignVertical: 'center',
-        color: '#ffffff',
-        fontWeight: 'bold',
-        flex: 1
+    backButtonIcon: {
+        flex: 1,
+        fontSize: 20,
+        color: globalStyle.color,
+        textAlignVertical: 'center'
     },
     saveButton: {
         flex: 1,
@@ -101,16 +101,16 @@ let styleObject = {
     },
     titleText: {
         flex: 1,
-        marginLeft: 10,
+        marginLeft: 0,
         color: globalStyle.color
     }
 };
 
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, {
-    backgroundColor: '#c6c6c6'
+    opacity: 0.2
 });
 styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, {
-    backgroundColor: '#c6c6c6'
+    opacity: 0.2
 });
 const styles = StyleSheet.create(styleObject);
 
@@ -149,6 +149,7 @@ class ScreenHeaderComponent extends Component {
         }
 
         function backButton(styles, onPress, disabled) {
+            // <Text style={styles.backButtonText}>&lt;</Text>
             return (
                 <TouchableOpacity onPress={onPress} disabled={disabled}>
                     <View
@@ -158,7 +159,7 @@ class ScreenHeaderComponent extends Component {
                                 : styles.backButton
                         }
                     >
-                        <Text style={styles.backButtonText}>&lt;</Text>
+                        <Icon name="arrow-back" style={styles.backButtonIcon} />
                     </View>
                 </TouchableOpacity>
             );

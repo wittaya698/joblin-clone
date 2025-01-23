@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import { _ } from '@/lib/locale.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
+import { globalStyle } from '@/lib/components/global-style.js';
 import { actions } from '@/root.js';
+
+const styles = StyleSheet.create({
+    message: {
+        margin: globalStyle.margin
+    }
+});
 
 class WelcomeScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -31,7 +38,7 @@ class WelcomeScreenComponent extends BaseScreenComponent {
             return (
                 <View style={this.styles().screen}>
                     <ScreenHeader navState={this.props.navigation.state} />
-                    <Text>{message}</Text>
+                    <Text style={styles.message}>{message}</Text>
                     <ActionButton addFolderNoteButtons={true}></ActionButton>
                 </View>
             );

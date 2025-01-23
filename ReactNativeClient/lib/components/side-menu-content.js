@@ -102,8 +102,8 @@ class SideMenuContentComponent extends Component {
         ); // DIVIDER
 
         const syncTitle = this.props.syncStarted
-            ? 'Cancel sync'
-            : 'Synchronize';
+            ? _('Cancel sync')
+            : _('Synchronize');
 
         let lines = Synchronizer.reportToLines(this.props.syncReport);
         const syncReportText = lines.join('\n');

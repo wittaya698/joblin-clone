@@ -12,10 +12,7 @@ class AppNavComponent extends Component {
 
         return (
             <View style={{ flex: 1 }}>
-                <Screen
-                    style={{ backgroundColor: '#f00' }}
-                    navigation={{ state: route }}
-                />
+                <Screen navigation={{ state: route }} />
             </View>
         );
     }

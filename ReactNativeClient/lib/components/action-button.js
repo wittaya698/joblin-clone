@@ -86,7 +86,7 @@ class ActionButtonComponent extends React.Component {
             }
 
             buttons.push({
-                title: 'New folder',
+                title: 'New notebook',
                 icon: 'folder',
                 onPress: () => {
                     this.newFolder_press();
