@@ -34,6 +34,7 @@ import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js
 import { reg } from '@/lib/registry.js';
 import { _, setLocale } from '@/lib/locale.js';
 import RNFS, { stat } from 'react-native-fs';
+import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
 
 let defaultState = {
     notes: [],
@@ -170,12 +171,15 @@ const navReducer = createSlice({
         // Replace all the notes with the provided array
         application_loading_done: (state, action) => {
             state.loading = false;
+            PoorManIntervals.update();
         },
 
         // Replace all the notes with the provided array
         notes_update_all: (state, action) => {
             state.notes = action.payload.notes;
+            PoorManIntervals.update();
         },
+
         // Insert the note into the note list if it's new, or
         // update it if it already exists.
         notes_update_one: (state, action) => {
@@ -213,6 +217,7 @@ const navReducer = createSlice({
 
             newNotes = Note.sortNotes(newNotes, state.notesOrder);
             state.notes = newNotes;
+            PoorManIntervals.update();
         },
 
         notes_delete: (state, action) => {
@@ -225,10 +230,12 @@ const navReducer = createSlice({
 
             newState = Object.assign({}, state);
             state.notes = newNotes;
+            PoorManIntervals.update();
         },
 
         folders_update_all: (state, action) => {
             state.folders = action.payload.folders;
+            PoorManIntervals.update();
         },
 
         folders_update_one: (state, action) => {
@@ -249,6 +256,7 @@ const navReducer = createSlice({
             if (!found) newFolders.push(action.payload.folder);
 
             state.folders = newFolders;
+            PoorManIntervals.update();
         },
 
         folder_delete: (state, action) => {
@@ -260,6 +268,7 @@ const navReducer = createSlice({
             }
 
             state.folders = newFolders;
+            PoorManIntervals.update();
         },
 
         side_menu_toggle: (state, action) => {
@@ -398,6 +407,11 @@ async function initialize(dispatch, backButtonHandler) {
     BackHandler.addEventListener('hardwareBackPress', () => {
         return backButtonHandler();
     });
+
+    PoorManIntervals.setInterval(() => {
+        reg.logger().info('Running background sync on timer...');
+        reg.scheduleSync(1);
+    }, 1000);
 
     initializationState_ = 'done';
     reg.logger().info('Application initialized');
