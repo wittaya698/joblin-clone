@@ -42,16 +42,11 @@ let styleObject = {
     },
     sideMenuButton: {
         flex: 1,
+        alignItems: 'center',
         backgroundColor: globalStyle.backgroundColor,
         paddingLeft: globalStyle.marginLeft,
         paddingRight: 5,
         marginRight: 2
-    },
-    sideMenuButtonText: {
-        textAlignVertical: 'center',
-        color: globalStyle.color,
-        fontWeight: 'bold',
-        flex: 1
     },
     backButton: {
         flex: 1,
@@ -60,29 +55,32 @@ let styleObject = {
         paddingRight: 15,
         marginRight: 1
     },
-    backButtonIcon: {
-        flex: 1,
-        fontSize: 20,
-        color: globalStyle.color,
-        textAlignVertical: 'center'
-    },
     saveButton: {
         flex: 1,
-        backgroundColor: '#0482E3',
+        flexDirection: 'row',
+        alignItems: 'center',
         paddingLeft: 15,
         paddingRight: 15,
-        marginRight: 10
+        marginRight: 10,
+        borderWidth: 1,
+        borderColor: globalStyle.color,
+        borderRadius: 10
     },
     saveButtonText: {
         textAlignVertical: 'center',
-        color: '#ffffff',
-        fontWeight: 'bold',
-        flex: 1
+        color: globalStyle.color,
+        fontWeight: 'bold'
+    },
+    saveButtonIcon: {
+        fontSize: 20,
+        color: globalStyle.color,
+        marginRight: 5
     },
     contextMenuTrigger: {
         fontSize: 25,
         paddingRight: globalStyle.marginRight,
-        color: globalStyle.color
+        color: globalStyle.color,
+        fontWeight: 'bold'
     },
     contextMenu: {
         backgroundColor: globalStyle.backgroundColor
@@ -106,12 +104,16 @@ let styleObject = {
     }
 };
 
+styleObject.topIcon = Object.assign({}, globalStyle.icon);
+styleObject.topIcon.flex = 1;
+styleObject.topIcon.textAlignVertical = 'center';
 styleObject.backButtonDisabled = Object.assign({}, styleObject.backButton, {
-    opacity: 0.2
+    opacity: globalStyle.disabledOpacity
 });
 styleObject.saveButtonDisabled = Object.assign({}, styleObject.saveButton, {
-    opacity: 0.2
+    opacity: globalStyle.disabledOpacity
 });
+
 const styles = StyleSheet.create(styleObject);
 
 class ScreenHeaderComponent extends Component {
@@ -142,14 +144,13 @@ class ScreenHeaderComponent extends Component {
             return (
                 <TouchableOpacity onPress={onPress}>
                     <View style={styles.sideMenuButton}>
-                        <Text style={styles.sideMenuButtonText}>☰</Text>
+                        <Icon name="menu" style={styleObject.topIcon} />
                     </View>
                 </TouchableOpacity>
             );
         }
 
         function backButton(styles, onPress, disabled) {
-            // <Text style={styles.backButtonText}>&lt;</Text>
             return (
                 <TouchableOpacity onPress={onPress} disabled={disabled}>
                     <View
@@ -159,7 +160,7 @@ class ScreenHeaderComponent extends Component {
                                 : styles.backButton
                         }
                     >
-                        <Icon name="arrow-back" style={styles.backButtonIcon} />
+                        <Icon name="arrow-back" style={styles.topIcon} />
                     </View>
                 </TouchableOpacity>
             );
@@ -176,6 +177,12 @@ class ScreenHeaderComponent extends Component {
                                 : styles.saveButton
                         }
                     >
+                        {disabled && (
+                            <Icon
+                                name="checkmark"
+                                style={styles.saveButtonIcon}
+                            />
+                        )}
                         <Text style={styles.saveButtonText}>Save</Text>
                     </View>
                 </TouchableOpacity>

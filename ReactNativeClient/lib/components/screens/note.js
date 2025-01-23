@@ -27,21 +27,42 @@ import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { globalStyle } from '@/lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
 
-const styles = StyleSheet.create({
+const styleObject = {
     titleTextInput: {
         flex: 1,
+        paddingLeft: 0,
         color: globalStyle.color,
         backgroundColor: globalStyle.backgroundColor
     },
     bodyTextInput: {
         flex: 1,
-        marginLeft: globalStyle.marginLeft,
-        marginRight: globalStyle.marginRight,
+        paddingLeft: globalStyle.marginLeft,
+        paddingRight: globalStyle.marginRight,
         textAlignVertical: 'top',
         color: globalStyle.color,
         backgroundColor: globalStyle.backgroundColor
+    },
+    bodyViewContainer: {
+        flex: 1,
+        paddingLeft: globalStyle.marginLeft,
+        paddingRight: globalStyle.marginRight,
+        paddingTop: globalStyle.marginTop,
+        paddingBottom: globalStyle.marginBottom
     }
-});
+};
+
+styleObject.titleContainer = {
+    flexDirection: 'row',
+    paddingLeft: globalStyle.marginLeft,
+    paddingRight: globalStyle.marginRight,
+    height: 40,
+    borderBottomColor: globalStyle.dividerColor,
+    borderBottomWidth: 1
+};
+
+styleObject.titleContainerTodo = Object.assign({}, styleObject.titleContainer);
+
+const styles = StyleSheet.create(styleObject);
 
 class NoteScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -240,7 +261,9 @@ class NoteScreenComponent extends BaseScreenComponent {
                 }
             },
             {
-                title: _('Toggle metadata'),
+                title: this.state.showNoteMetadata
+                    ? _('Hide metadata')
+                    : _('Show metadata'),
                 onPress: () => {
                     this.showMetadata_onPress();
                 }
@@ -322,9 +345,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 						font-size: ` +
                     style.htmlFontSize +
                     `;
-						margin: ` +
+                    /* margin: ` +
                     style.htmlMarginLeft +
-                    `;
+                    `; */
 						color: ` +
                     style.htmlColor +
                     `;
@@ -408,7 +431,7 @@ class NoteScreenComponent extends BaseScreenComponent {
             }
 
             bodyComponent = (
-                <View style={{ flex: 1 }}>
+                <View style={styles.bodyViewContainer}>
                     <WebView
                         source={{
                             html: markdownToHtml(note.body, globalStyle)
@@ -489,15 +512,9 @@ class NoteScreenComponent extends BaseScreenComponent {
 
         if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
-        let titleContainerStyle = {
-            flexDirection: 'row',
-            paddingLeft: globalStyle.marginLeft,
-            height: 40,
-            borderBottomColor: globalStyle.dividerColor,
-            borderBottomWidth: 1
-        };
-        if (!isTodo) titleContainerStyle.paddingLeft -= 3; // Because the TextInput already includes a padding
-
+        const titleContainerStyle = isTodo
+            ? styles.titleContainerTodo
+            : styles.titleContainer;
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader
@@ -560,7 +577,14 @@ class NoteScreenComponent extends BaseScreenComponent {
                 {bodyComponent}
                 {actionButtonComp}
                 {this.state.showNoteMetadata && (
-                    <Text>{this.state.noteMetadata}</Text>
+                    <Text
+                        style={{
+                            paddingLeft: globalStyle.marginLeft,
+                            paddingRight: globalStyle.marginRight
+                        }}
+                    >
+                        {this.state.noteMetadata}
+                    </Text>
                 )}
                 <DialogBox
                     ref={dialogbox => {

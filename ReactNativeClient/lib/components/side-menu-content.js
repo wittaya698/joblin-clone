@@ -25,10 +25,6 @@ const styleObject = {
         flex: 1,
         backgroundColor: globalStyle.backgroundColor
     },
-    icon: {
-        fontSize: 20,
-        color: globalStyle.color
-    },
     name: {
         position: 'absolute',
         left: 70,
@@ -60,6 +56,8 @@ const styleObject = {
 
 styleObject.folderButton = Object.assign({}, styleObject.button);
 styleObject.folderButtonText = Object.assign({}, styleObject.buttonText);
+styleObject.folderIcon = Object.assign({}, globalStyle.icon);
+styleObject.folderIcon.color = '#026CB6';
 styleObject.syncButton = Object.assign({}, styleObject.button);
 styleObject.syncButtonText = Object.assign({}, styleObject.buttonText);
 styleObject.folderButtonSelected = Object.assign({}, styleObject.folderButton);
@@ -96,9 +94,9 @@ class SideMenuContentComponent extends Component {
 
     folderItem(folder, selected) {
         const iconComp = selected ? (
-            <Icon name="folder-open-outline" style={styles.icon} />
+            <Icon name="folder-open-outline" style={globalStyle.icon} />
         ) : (
-            <Icon name="folder-outline" style={styles.icon} />
+            <Icon name="folder-outline" style={globalStyle.icon} />
         );
         const folderButtonStyle = selected
             ? styles.folderButtonSelected
@@ -126,9 +124,9 @@ class SideMenuContentComponent extends Component {
             state == 'sync' ? _('Synchronize') : _('Cancel synchronization');
         const iconComp =
             state == 'sync' ? (
-                <Icon name="sync-outline" style={styles.icon} />
+                <Icon name="sync-outline" style={globalStyle.icon} />
             ) : (
-                <Icon name="close-outline" style={styles.icon} />
+                <Icon name="close-outline" style={globalStyle.icon} />
             );
 
         return (
