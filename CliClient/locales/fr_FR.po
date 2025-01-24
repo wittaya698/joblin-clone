@@ -15,32 +15,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:96
 msgid "No notebook selected."
 msgstr "Aucun carnet n'est sélectionné."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:103
 msgid "No notebook has been specified."
 msgstr "Aucun carnet n'est spécifié."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:138
 msgid "Usage: --profile <dir-path>"
 msgstr "Utilisation: --profile <chemin>"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:145
 msgid "Usage: --env <dev|prod>"
 msgstr "Utilisation : --env <dev|prod>"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:172
 msgid "Usage: --log-level <none|error|warn|info|debug>"
 msgstr "Utilisation: --log-level <none|error|warn|info|debug>"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:180
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr "Paramètre inconnu : %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:199
 #, javascript-format
 msgid ""
 "Command line argument \"%s\" contains both quotes and double-quotes - "
@@ -49,55 +42,32 @@ msgstr ""
 "Paramètre de ligne de command \"%s\" contient à la fois des guillemets "
 "simples et doubles - impossible de continuer."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:223
 msgid "Provides help for a given command."
 msgstr "Affiche l'aide pour la commande donnée."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:225
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:380
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-alias.js:13
 msgid ""
 "Creates a new command alias which can then be used as a regular command (eg. "
 "`alias ll \"ls -l\"`)."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:15
 #, fuzzy
 msgid "Displays the given item data."
 msgstr "Affiche la note."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:19
 #, fuzzy
 msgid "Shows complete information about note."
 msgstr "Affiche tous les détails de la note."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cat.js:32
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:35
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:42
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-geoloc.js:28
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:30
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:41
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:43
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:41
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:53
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-search.js:28
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-set.js:32
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:26
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:30
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:36
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:38
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-use.js:32
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-config.js:13
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
@@ -107,7 +77,6 @@ msgstr ""
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournies, la configuration complète est affichée."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-cp.js:16
 msgid ""
 "Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
@@ -115,94 +84,75 @@ msgstr ""
 "Copie les notes correspondant à [nom] vers [carnet]. Si aucun carnet n'est "
 "spécifié, la note est dupliqué sur place."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:17
 msgid "Edit note."
 msgstr "Editer la note."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:32
 msgid "Done editing."
 msgstr "Edition terminée."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:40
 msgid ""
 "No text editor is defined. Please set it using `config editor <editor-path>`"
 msgstr ""
 "Aucun éditeur de texte n'est défini. Veuillez le définir en utilisant la "
 "commande `config editor <chemin-editeur>`"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:49
 msgid "No active notebook."
 msgstr "Aucun carnet actif."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-edit.js:75
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-geoloc.js:15
 #, fuzzy
 msgid "Displays a geolocation URL for the note."
 msgstr "Affiche tous les détails de la note."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:15
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr "Importer un carnet Evernote (fichier .enex)."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:20
 msgid "Do not ask for confirmation."
 msgstr "Ne pas demander de confirmation."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:39
 #, javascript-format
 msgid "Folder does not exists: \"%s\". Create it?"
 msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:49
 #, javascript-format
 msgid "Imported - %s"
 msgstr "Importé - %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:67
 #, javascript-format
 msgid "File \"%s\" will be imported into notebook \"%s\". Continue?"
 msgstr "Le fichier \"%s\" va être importé dans le carnet \"%s\". Continuer ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:78
 #, javascript-format
 msgid "Found: %d."
 msgstr "Trouvés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:79
 #, javascript-format
 msgid "Created: %d."
 msgstr "Créés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:81
 #, javascript-format
 msgid "Updated: %d."
 msgstr "Mise à jour : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:83
 #, javascript-format
 msgid "Skipped: %d."
 msgstr "Ignorés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:86
 #, javascript-format
 msgid "Resources: %d."
 msgstr "Ressources : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:89
 #, javascript-format
 msgid "Tagged: %d."
 msgstr "Etiquettes : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-import-enex.js:100
 msgid "Importing notes..."
 msgstr "Importation des notes..."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:19
 msgid ""
 "Displays the notes in [notebook]. Use `ls /` to display the list of "
 "notebooks."
@@ -210,20 +160,16 @@ msgstr ""
 "Affiche les notes dans le carnet. Utilisez `ls /` pour afficher la liste des "
 "carnets."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:27
 msgid "Displays only the first top <num> notes."
 msgstr "Affiche uniquement les <num> premières notes."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:32
 msgid "Sorts the item by <field> (eg. title, updated_time, created_time)."
 msgstr ""
 "Trier les notes par <field> (par exemple, title, updated_time, created_time)."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:35
 msgid "Reverses the sorting order."
 msgstr "Inverser l'ordre."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:39
 msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
@@ -233,7 +179,6 @@ msgstr ""
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
 "uniquement les tâches, tandis que `-ttd` affiche les notes et les tâches)."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:46
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for todos), TITLE"
@@ -241,23 +186,18 @@ msgstr ""
 "Utilise le format de liste longue. Le format est ID, NOMBRE_DE_NOTES (pour "
 "les carnets), DATE, TACHE_TERMINE (pour les tâches), TITRE"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-ls.js:89
 msgid "Please select a notebook first."
 msgstr "Veuillez sélectionner un carnet d'abord."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mkbook.js:12
 msgid "Creates a new notebook."
 msgstr "Créer un carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mknote.js:12
 msgid "Creates a new note."
 msgstr "Créer une note."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mknote.js:17
 msgid "Notes can only be created within a notebook."
 msgstr "Les notes ne peuvent être créées que dans un carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-mv.js:16
 msgid ""
 "Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
 "it will be moved to the notebook <destination>. If <pattern> is a notebook, "
@@ -267,77 +207,59 @@ msgstr ""
 "est une note, elle sera déplacée vers le carnet <destination>. Si <motif> "
 "est un carnet, il sera renommé <destination>."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:17
 msgid "Deletes the items matching <pattern>."
 msgstr "Supprime les objets correspondants à <motif>."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:28
 msgid "Deletes the items without asking for confirmation."
 msgstr "Supprime les objets sans demander la confirmation."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:30
 msgid "Deletes a notebook."
 msgstr "Supprime le carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:46
 #, javascript-format
 msgid "Delete notebook \"%s\"?"
 msgstr "Supprimer le carnet \"%s\" ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-rm.js:59
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
 msgstr "%d notes correspondent à ce motif. Les supprimer ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-search.js:18
 msgid "Searches for the given <pattern> in all the notes."
 msgstr "Chercher le motif <pattern> dans toutes les notes."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-set.js:17
 msgid "Sets the property <name> of the given <note> to the given [value]."
 msgstr "Assigner la valeur [value] à la propriété <name> de la <note> donnée."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-status.js:13
 msgid "Displays summary about the notes and notebooks."
 msgstr "Afficher un résumé des notes et carnets."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:46
 msgid "Synchronizes with remote storage."
 msgstr "Synchroniser les notes et carnets."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:54
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 "Synchroniser avec la cible donnée (par défaut, la valeur de configuration "
 "`sync.target`)."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:71
 msgid "Synchronisation is already in progress."
 msgstr "Synchronisation est déjà en cours."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:92
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr "Cible de la synchronisation : %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:94
 msgid "Cannot initialize synchronizer."
 msgstr "Impossible d'initialiser le synchroniseur."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:96
 msgid "Starting synchronization..."
 msgstr "Commencement de la synchronisation..."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:107
 msgid "Done."
 msgstr "Terminé."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:124
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:74
 msgid "Cancelling..."
 msgstr "Annulation..."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:14
 msgid ""
 "<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
 "from [note], or to list the notes associated with [tag]. The command `tag "
@@ -348,303 +270,239 @@ msgstr ""
 "l'étiquette [tag]. La commande `tag list` peut être utilisée pour lister les "
 "étiquettes."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-tag.js:55
 #, javascript-format
 msgid "Invalid command: \"%s\""
 msgstr "Commande invalie : \"%s\""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-use.js:15
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
 "notebook."
 msgstr ""
 "Changer de carnet - toutes les opérations à venir se feront dans ce carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-version.js:11
 msgid "Displays version information"
 msgstr "Affiche les informations de version."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-version.js:16
 #, javascript-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/main.js:50
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:36
 #, fuzzy
 msgid "All potential ports are in use"
 msgstr ""
 "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
 "sur %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:67
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:73
 msgid "The application has been successfully authorised."
 msgstr "Le logiciel a été autorisé."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:100
 #, fuzzy
 msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
 "Veuillez ouvrir cette URL dans votre navigateur internet pour autentifier le "
 "logiciel :"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/registry.js:85
 msgid ""
 "Please set the \"sync.filesystem.path\" config value to the desired "
 "synchronisation destination."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:53
 #, javascript-format
 msgid "Created local items: %d."
 msgstr "Objets créés localement : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:55
 #, javascript-format
 msgid "Updated local items: %d."
 msgstr "Objets mis à jour localement : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:57
 #, javascript-format
 msgid "Created remote items: %d."
 msgstr "Objets distants créés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:59
 #, javascript-format
 msgid "Updated remote items: %d."
 msgstr "Objets distants mis à jour : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:61
 #, javascript-format
 msgid "Deleted local items: %d."
 msgstr "Objets supprimés localement : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:63
 #, javascript-format
 msgid "Deleted remote items: %d."
 msgstr "Objets distants supprimés : %d."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:65
 #, javascript-format
 msgid "State: %s."
 msgstr "Etat : %s."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:69
 #, javascript-format
 msgid "Last error: %s (stacktrace in log)."
 msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:78
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Terminé : %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/folder.js:93
 msgid "Conflicts"
 msgstr "Conflits"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/folder.js:158
 #, javascript-format
 msgid "A notebook with this title already exists: \"%s\""
 msgstr "Un carnet avec ce titre existe déjà : \"%s\""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/folder.js:168
 #, javascript-format
 msgid "Notebooks cannot be named \"%s\", which is a reserved title."
 msgstr "Les carnets ne peuvent être nommés \"%s\" car c'est un nom réservé."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:49
 msgid "This note does not have geolocation information."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:243
 #, javascript-format
 msgid "Cannot copy note to \"%s\" notebook"
 msgstr "Impossible de copier la note dans le carnet \"%s\""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/note.js:260
 #, javascript-format
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:183
 #, fuzzy
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation : %s"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:186
 msgid "File system"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:187
 msgid "OneDrive"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:199
 msgid "Todo filter"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:201
 msgid "Show all"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:202
 msgid "Non-completed and recently completed ones"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:203
 msgid "Non-completed ones only"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:53
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:59
 #, javascript-format
 msgid "%s: %d/%d"
 msgstr "%s: %d/%d"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:63
 #, javascript-format
 msgid "Total: %d/%d"
 msgstr "Total : %d/%d"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:65
 #, javascript-format
 msgid "Conflicted: %d"
 msgstr "Conflits : %d"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:66
 #, javascript-format
 msgid "To delete: %d"
 msgstr "A supprimer : %d"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:71
 msgid "Folders"
 msgstr "Carnets"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:82
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:240
 msgid "Log"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:250
 #, fuzzy
 msgid "Status"
 msgstr "Etat : %s."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:267
 msgid "Configuration"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:124
 msgid "Synchronize"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:124
 #, fuzzy
 msgid "Cancel synchronization"
 msgstr "Commencement de la synchronisation..."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/config.js:109
 msgid "Save"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/folder.js:78
 #, javascript-format
 msgid "The folder could not be saved: %s"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/folders.js:22
 msgid ""
 "There is currently no notebook. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:185
 msgid "Untitled"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:228
 #, fuzzy
 msgid "Delete note?"
 msgstr "Supprimer le carnet \"%s\" ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:270
 msgid "Attach file"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:276
 #, fuzzy
 msgid "Delete note"
 msgstr "Supprime le carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:284
 msgid "Convert to regular note"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:285
 msgid "Convert to todo"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:292
 msgid "Hide metadata"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:293
 msgid "Show metadata"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:299
 msgid "View location on map"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:497
 msgid "New note"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:508
 msgid "Edit"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/notes.js:21
 #, fuzzy
 msgid "Delete notebook?"
 msgstr "Supprimer le carnet \"%s\" ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/notes.js:45
 #, fuzzy
 msgid "Delete notebook"
 msgstr "Supprime le carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/notes.js:51
 #, fuzzy
 msgid "Edit notebook"
 msgstr "Editer la note."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/notes.js:82
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/welcome.js:33
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
 "menu to access your existing notebooks."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/welcome.js:36
 msgid "You currently have no notebook. Create one by clicking on (+) button."
 msgstr ""
 
