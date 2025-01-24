@@ -511,17 +511,16 @@ msgstr "Carnets"
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:219
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:236
 msgid "Log"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:229
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:246
 #, fuzzy
 msgid "Status"
 msgstr "Etat : %s."
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:124
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:175
 msgid "Synchronize"
 msgstr ""
 
@@ -529,10 +528,6 @@ msgstr ""
 #, fuzzy
 msgid "Cancel synchronization"
 msgstr "Commencement de la synchronisation..."
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:174
-msgid "Cancel sync"
-msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/folder.js:78
 #, javascript-format
@@ -544,49 +539,49 @@ msgid ""
 "There is currently no notebook. Create one by clicking on the (+) button."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:207
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:185
 msgid "Untitled"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:250
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:228
 #, fuzzy
 msgid "Delete note?"
 msgstr "Supprimer le carnet \"%s\" ?"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:292
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:270
 msgid "Attach file"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:298
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:276
 #, fuzzy
 msgid "Delete note"
 msgstr "Supprime le carnet."
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:306
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:284
 msgid "Convert to regular note"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:307
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:285
 msgid "Convert to todo"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:314
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:292
 msgid "Hide metadata"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:315
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:293
 msgid "Show metadata"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:321
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:299
 msgid "View location on map"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:519
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:497
 msgid "New note"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:530
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/note.js:508
 msgid "Edit"
 msgstr ""
 

@@ -108,55 +108,33 @@ class NoteScreenComponent extends BaseScreenComponent {
         return !!Object.getOwnPropertyNames(diff).length;
     }
 
-    UNSAFE_componentWillMount() {
+    async UNSAFE_componentWillMount() {
         BackHandler.addEventListener('hardwareBackPress', this.backHandler);
 
+        let note = null;
+        let mode = 'view';
         if (!this.props.noteId) {
-            let note =
+            note =
                 this.props.itemType == 'todo'
                     ? Note.newTodo(this.props.folderId)
                     : Note.new(this.props.folderId);
-            this.setState({
-                lastSavedNote: Object.assign({}, note),
-                note: note,
-                mode: 'edit'
-            });
-            this.refreshNoteMetadata();
+            mode = 'edit';
         } else {
-            Note.load(this.props.noteId).then(note => {
-                this.setState({
-                    lastSavedNote: Object.assign({}, note),
-                    note: note
-                });
-            });
-            this.refreshNoteMetadata();
+            note = await Note.load(this.props.noteId);
         }
 
-        this.refreshFolder();
+        this.setState({
+            lastSavedNote: Object.assign({}, note),
+            note: note,
+            mode: mode,
+            folder: await Folder.load(note.parent_id)
+        });
+
+        this.refreshNoteMetadata();
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
-    }
-
-    async currentFolder() {
-        let folderId = this.props.folderId;
-        if (!folderId) {
-            if (this.state.note && this.state.note.parent_id)
-                folderId = this.state.note.parent_id;
-        }
-
-        if (!folderId) return Folder.defaultFolder();
-
-        return Folder.load(folderId);
-    }
-
-    async refreshFolder(folderId = null) {
-        if (!folderId) {
-            this.setState({ folder: await this.currentFolder() });
-        } else {
-            this.setState({ folder: await Folder.load(folderId) });
-        }
     }
 
     async refreshNoteMetadata(force = null) {
@@ -550,7 +528,7 @@ class NoteScreenComponent extends BaseScreenComponent {
             let output = [];
             for (let i = 0; i < this.props.folders.length; i++) {
                 let f = this.props.folders[i];
-                output.push({ label: f.title, value: f.id });
+                output.push({ label: f.title + ' ' + f.id, value: f.id });
             }
             return output;
         };

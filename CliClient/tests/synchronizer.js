@@ -10,7 +10,8 @@ import {
     fileApi,
     sleep,
     clearDatabase,
-    switchClient
+    switchClient,
+    syncTargetId
 } from 'test-utils.js';
 import { Folder } from 'lib/models/folder.js';
 import { Note } from 'lib/models/note.js';
@@ -26,7 +27,8 @@ process.on('unhandledRejection', (reason, p) => {
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000000; // The first test is slow because the database needs to be built
 
-const syncTargetId = Database.enumId('syncTarget', 'memory');
+// Critical
+// const syncTargetId = Database.enumId('syncTarget', 'memory');
 
 async function allItems() {
     let folders = await Folder.all();
@@ -49,7 +51,13 @@ async function localItemsSameAsRemote(locals, expect) {
             expect(!!remote).toBe(true);
             if (!remote) continue;
 
-            expect(remote.updated_time).toBe(dbItem.updated_time);
+            if (syncTargetId() == Database.enumId('syncTarget', 'filesystem')) {
+                expect(remote.updated_time).toBe(
+                    Math.floor(dbItem.updated_time / 1000) * 1000
+                );
+            } else {
+                expect(remote.updated_time).toBe(dbItem.updated_time);
+            }
 
             let remoteContent = await fileApi().get(path);
             remoteContent =
@@ -239,7 +247,7 @@ describe('Synchronizer', function () {
         expect(files.length).toBe(1);
         expect(files[0].path).toBe(Folder.systemPath(folder1));
 
-        let deletedItems = await BaseItem.deletedItems(syncTargetId);
+        let deletedItems = await BaseItem.deletedItems(syncTargetId());
         expect(deletedItems.length).toBe(0);
     });
 
@@ -259,7 +267,7 @@ describe('Synchronizer', function () {
         await synchronizer().start();
         let items = await allItems();
         expect(items.length).toBe(1);
-        let deletedItems = await BaseItem.deletedItems(syncTargetId);
+        let deletedItems = await BaseItem.deletedItems(syncTargetId());
         expect(deletedItems.length).toBe(0);
     });
 
@@ -547,7 +555,7 @@ describe('Synchronizer', function () {
         await synchronizer().start();
         await Note.save({ id: n1.id, is_conflict: 1 });
         await Note.delete(n1.id);
-        const deletedItems = await BaseItem.deletedItems(syncTargetId);
+        const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
         expect(deletedItems.length).toBe(0);
     });

@@ -43,17 +43,12 @@ async function createClients() {
         let client = createClient(clientId);
         promises.push(fs.remove(client.profileDir));
         promises.push(
-            execCommand(client, 'config sync.target filesystem')
-                .then(() => {
-                    return execCommand(
-                        client,
-                        'config sync.filesystem.path ' + syncDir
-                    );
-                })
-                // Critical -> To be removed
-                .then(() => {
-                    return execCommand(client, 'mkbook support');
-                })
+            execCommand(client, 'config sync.target filesystem').then(() => {
+                return execCommand(
+                    client,
+                    'config sync.filesystem.path ' + syncDir
+                );
+            })
         );
         output.push(client);
     }
@@ -2078,7 +2073,7 @@ function execCommand(client, command, options = {}) {
     let exePath = 'node ' + joplinAppPath;
     let cmd =
         exePath +
-        ' --update-geolocation-disabled --env dev --profile ' +
+        ' --update-geolocation-disabled --env dev --log-level debug --profile ' +
         client.profileDir +
         ' ' +
         command;

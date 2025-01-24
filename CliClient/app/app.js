@@ -423,7 +423,7 @@ class Application {
         this.dbLogger_.addTarget('file', {
             path: profileDir + '/log-database.txt'
         });
-        this.dbLogger_.setLevel(Logger.LEVEL_INFO);
+        this.dbLogger_.setLevel(initArgs.logLevel);
 
         this.syncLogger_.addTarget('file', {
             path: profileDir + '/log-sync.txt'
