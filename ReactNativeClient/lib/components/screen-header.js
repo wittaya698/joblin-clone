@@ -146,6 +146,10 @@ class ScreenHeaderComponent extends Component {
         this.props.dispatch(actions.navigate({ routeName: 'Status' }));
     }
 
+    config_press() {
+        this.props.dispatch(actions.navigate({ routeName: 'Config' }));
+    }
+
     render() {
         function sideMenuButton(styles, onPress) {
             return (
@@ -223,7 +227,7 @@ class ScreenHeaderComponent extends Component {
 
         if (menuOptionComponents.length) {
             menuOptionComponents.push(
-                <View key={'menuDivider_' + key++} style={styles.divider} />
+                <View key={'menuOption_' + key++} style={styles.divider} />
             );
         }
 
@@ -244,6 +248,24 @@ class ScreenHeaderComponent extends Component {
                 style={styles.contextMenuItem}
             >
                 <Text style={styles.contextMenuItemText}>{_('Status')}</Text>
+            </MenuOption>
+        );
+
+        if (menuOptionComponents.length) {
+            menuOptionComponents.push(
+                <View key={'menuOption_' + key++} style={styles.divider} />
+            );
+        }
+
+        menuOptionComponents.push(
+            <MenuOption
+                value={() => this.config_press()}
+                key={'menuOption_' + key++}
+                style={styles.contextMenuItem}
+            >
+                <Text style={styles.contextMenuItemText}>
+                    {_('Configuration')}
+                </Text>
             </MenuOption>
         );
 

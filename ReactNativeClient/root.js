@@ -22,6 +22,7 @@ import { NotesScreen } from '@/lib/components/screens/notes.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { NoteScreen } from '@/lib/components/screens/note.js';
 import { FolderScreen } from '@/lib/components/screens/folder.js';
+import { ConfigScreen } from '@/lib/components/screens/config.js';
 import { FoldersScreen } from '@/lib/components/screens/folders.js';
 import { LogScreen } from '@/lib/components/screens/log.js';
 import { StatusScreen } from '@/lib/components/screens/status.js';
@@ -401,6 +402,11 @@ async function initialize(dispatch, backButtonHandler) {
         let folderId = Setting.value('activeFolderId');
         let folder = await Folder.load(folderId);
 
+        // dispatch({
+        // 	type: 'Navigation/NAVIGATE',
+        // 	routeName: 'Config',
+        // });
+
         if (folder) {
             await NotesScreenUtils.openNoteList(folderId);
         } else {
@@ -471,7 +477,8 @@ class HomeStackComponent extends React.Component {
             OneDriveLogin: { screen: OneDriveLoginScreen },
             Log: { screen: LogScreen },
             Status: { screen: StatusScreen },
-            Search: { screen: SearchScreen }
+            Search: { screen: SearchScreen },
+            Config: { screen: ConfigScreen }
         };
 
         return <AppNav screens={appNavInit} />;
