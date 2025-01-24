@@ -31,7 +31,8 @@ Resource.fsDriver_ = fsDriver;
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
-const syncTarget = 'filesystem';
+//const syncTarget = 'filesystem';
+const syncTarget = 'memory';
 const syncDir = __dirname + '/../tests/sync';
 
 const logger = new Logger();
@@ -48,8 +49,8 @@ Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
 Setting.setConstant('appType', 'cli');
 
 function syncTargetId() {
-    return JoplinDatabase.enumId('syncTarget', 'filesystem');
-    //return JoplinDatabase.enumId('syncTarget', 'memory');
+    // return JoplinDatabase.enumId('syncTarget', 'filesystem');
+    return JoplinDatabase.enumId('syncTarget', 'memory');
 }
 
 function sleep(n) {

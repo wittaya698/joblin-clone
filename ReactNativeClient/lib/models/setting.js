@@ -178,9 +178,14 @@ Setting.defaults_ = {
     },
     'sync.target': {
         value: 'onedrive',
-        type: 'string',
+        type: 'enum',
         public: true,
-        label: () => _('Synchronisation target')
+        label: () => _('Synchronisation target'),
+        options: () => ({
+            1: 'Memory',
+            2: _('File system'),
+            3: _('OneDrive')
+        })
     },
     'sync.context': { value: '', type: 'string', public: false },
     editor: { value: '', type: 'string', public: true, appTypes: ['cli'] },

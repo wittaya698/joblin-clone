@@ -76,7 +76,7 @@ class SideMenuContentComponent extends Component {
     }
 
     async synchronize_press() {
-        const sync = await reg.synchronizer();
+        const sync = await reg.synchronizer(Setting.value('sync.target'));
 
         if (this.props.syncStarted) {
             sync.cancel();

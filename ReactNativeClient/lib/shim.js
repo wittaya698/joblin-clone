@@ -12,14 +12,7 @@ shim.isReactNative = () => {
 shim.fetch = typeof fetch !== 'undefined' ? fetch : null;
 shim.FormData = typeof FormData !== 'undefined' ? FormData : null;
 
-if (!shim.fetch) {
-    let moduleName = 'cross-fetch';
-    shim.fetch = require(moduleName);
-}
-
-if (!shim.FormData) {
-    let moduleName = 'form-data';
-    shim.FormData = require(moduleName);
-}
+shim.fs = null;
+shim.FileApiDriverLocal = null;
 
 export { shim };

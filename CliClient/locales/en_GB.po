@@ -15,52 +15,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:99
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:96
 msgid "No notebook selected."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:106
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:103
 msgid "No notebook has been specified."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:141
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:138
 msgid "Usage: --profile <dir-path>"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:148
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:145
 msgid "Usage: --env <dev|prod>"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:175
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:172
 msgid "Usage: --log-level <none|error|warn|info|debug>"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:183
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:180
 #, javascript-format
 msgid "Unknown flag: %s"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:202
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:199
 #, javascript-format
 msgid ""
 "Command line argument \"%s\" contains both quotes and double-quotes - "
 "aborting."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:226
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:223
 msgid "Provides help for a given command."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:228
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:225
 msgid "Exits the application."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:375
-#, javascript-format
-msgid "Synchronizing with directory \"%s\""
-msgstr ""
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:481
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/app.js:380
 msgid "No notebook is defined. Create one with `mkbook <notebook>`."
 msgstr ""
 
@@ -281,40 +276,36 @@ msgstr ""
 msgid "Displays summary about the notes and notebooks."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:44
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:46
 msgid "Synchronizes with remote storage."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:52
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:54
 msgid "Sync to provided target (defaults to sync.target config value)"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:57
-msgid "For \"filesystem\" target only: Path to sync to."
-msgstr ""
-
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:70
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:71
 msgid "Synchronisation is already in progress."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:98
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:92
 #, javascript-format
 msgid "Synchronization target: %s"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:100
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:94
 msgid "Cannot initialize synchronizer."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:102
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:96
 msgid "Starting synchronization..."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:113
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:107
 msgid "Done."
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:130
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/command-sync.js:124
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:74
 msgid "Cancelling..."
 msgstr ""
@@ -346,7 +337,7 @@ msgstr ""
 msgid "%s %s (%s)"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/main.js:55
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/main.js:50
 msgid "Fatal error:"
 msgstr ""
 
@@ -365,6 +356,12 @@ msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/CliClient/app/onedrive-api-node-utils.js:100
 msgid "Please open this URL in your browser to authenticate the application:"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/registry.js:85
+msgid ""
+"Please set the \"sync.filesystem.path\" config value to the desired "
+"synchronisation destination."
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/synchronizer.js:53
@@ -440,6 +437,34 @@ msgstr ""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr ""
 
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:183
+msgid "Synchronisation target"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:186
+msgid "File system"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:187
+msgid "OneDrive"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:199
+msgid "Todo filter"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:201
+msgid "Show all"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:202
+msgid "Non-completed and recently completed ones"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/models/setting.js:203
+msgid "Non-completed ones only"
+msgstr ""
+
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/services/report.js:53
 msgid "Sync status (synced items / total items)"
 msgstr ""
@@ -473,12 +498,16 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:236
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:240
 msgid "Log"
 msgstr ""
 
-#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:246
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:250
 msgid "Status"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screen-header.js:267
+msgid "Configuration"
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:124
@@ -487,6 +516,10 @@ msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/side-menu-content.js:124
 msgid "Cancel synchronization"
+msgstr ""
+
+#: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/config.js:109
+msgid "Save"
 msgstr ""
 
 #: /Users/macbookair/Workspace/witthaya_projects/joplin-clone/ReactNativeClient/lib/components/screens/folder.js:78

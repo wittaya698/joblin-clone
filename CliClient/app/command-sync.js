@@ -5,6 +5,8 @@ import { Setting } from '@/lib/models/setting.js';
 import { BaseItem } from '@/lib/models/base-item.js';
 import { vorpalUtils } from './vorpal-utils.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
+import { reg } from '@/lib/registry.js';
+import md5 from 'md5';
 const locker = require('proper-lockfile');
 const fs = require('fs-extra');
 const osTmpdir = require('os-tmpdir');
@@ -52,17 +54,16 @@ class Command extends BaseCommand {
                     'Sync to provided target (defaults to sync.target config value)'
                 )
             ],
-            [
-                '--filesystem-path <path>',
-                _('For "filesystem" target only: Path to sync to.')
-            ],
             ['--random-failures', 'For debugging purposes. Do not use.']
         ];
     }
 
     async action(args) {
         this.releaseLockFn_ = null;
-        const lockFilePath = osTmpdir() + '/synclock';
+
+        // Lock is unique per profile/database
+        const lockFilePath =
+            osTmpdir() + '/synclock_' + md5(Setting.value('profileDir'));
         if (!(await fs.pathExists(lockFilePath)))
             await fs.writeFile(lockFilePath, 'synclock');
 
@@ -73,15 +74,8 @@ class Command extends BaseCommand {
         try {
             this.syncTarget_ = Setting.value('sync.target');
             if (args.options.target) this.syncTarget_ = args.options.target;
-            let syncInitOptions = {};
-            if (args.options['filesystem-path'])
-                syncInitOptions['sync.filesystem.path'] =
-                    args.options['filesystem-path'];
 
-            let sync = await app().synchronizer(
-                this.syncTarget_,
-                syncInitOptions
-            );
+            let sync = await reg.synchronizer(this.syncTarget_);
 
             let options = {
                 onProgress: report => {
@@ -128,8 +122,8 @@ class Command extends BaseCommand {
 
         vorpalUtils.redrawDone();
         this.log(_('Cancelling...'));
-        let sync = await app().synchronizer(target);
-        sync.cancel();
+        let sync = await reg.synchronizer(target);
+        if (sync) sync.cancel();
 
         this.syncTarget_ = null;
     }

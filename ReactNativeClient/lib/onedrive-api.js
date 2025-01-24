@@ -135,6 +135,7 @@ class OneDriveApi {
     }
 
     async exec(method, path, query = null, data = null, options = null) {
+        if (!path) throw new Error('Path is required');
         method = method.toUpperCase();
 
         if (!options) options = {};
