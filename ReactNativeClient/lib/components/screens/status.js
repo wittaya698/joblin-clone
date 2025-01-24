@@ -40,9 +40,7 @@ class StatusScreenComponent extends BaseScreenComponent {
 
     async refreshScreen() {
         let service = new ReportService();
-        let report = await service.status(
-            Database.enumId('syncTarget', Setting.value('sync.target'))
-        );
+        let report = await service.status(Setting.value('sync.target'));
         this.setState({ report: report });
     }
 

@@ -31,9 +31,11 @@ Resource.fsDriver_ = fsDriver;
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
-//const syncTarget = 'filesystem';
-const syncTarget = 'memory';
+//const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
+const syncTargetId_ = Setting.SYNC_TARGET_FILESYSTEM;
 const syncDir = __dirname + '/../tests/sync';
+
+const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 200;
 
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -49,8 +51,7 @@ Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
 Setting.setConstant('appType', 'cli');
 
 function syncTargetId() {
-    // return JoplinDatabase.enumId('syncTarget', 'filesystem');
-    return JoplinDatabase.enumId('syncTarget', 'memory');
+    return syncTargetId_;
 }
 
 function sleep(n) {
@@ -62,7 +63,7 @@ function sleep(n) {
 }
 
 async function switchClient(id) {
-    await time.msleep(400); // Always leave a little time so that updated_time properties don't overlap
+    await time.msleep(sleepTime); // Always leave a little time so that updated_time properties don't overlap
     await Setting.saveAll();
 
     currentClient_ = id;
@@ -129,7 +130,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
         synchronizers_[id].setLogger(logger);
     }
 
-    if (syncTarget == 'filesystem') {
+    if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
         fs.removeSync(syncDir);
         fs.mkdirpSync(syncDir, 0o755);
     } else {
@@ -151,17 +152,18 @@ function synchronizer(id = null) {
 function fileApi() {
     if (fileApi_) return fileApi_;
 
-    if (syncTarget == 'filesystem') {
+    if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
         fs.removeSync(syncDir);
         fs.mkdirpSync(syncDir, 0o755);
         fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
-        fileApi_.setLogger(logger);
-        return fileApi_;
     } else {
         fileApi_ = new FileApi('/root', new FileApiDriverMemory());
         fileApi_.setLogger(logger);
-        return fileApi_;
     }
+
+    fileApi_.setLogger(logger);
+    fileApi_.setSyncTargetId(syncTargetId_);
+    return fileApi_;
 }
 
 export {

@@ -179,7 +179,7 @@ class Synchronizer {
 
         const lastContext = options.context ? options.context : {};
 
-        const syncTargetId = this.api().driver().syncTargetId();
+        const syncTargetId = this.api().syncTargetId();
 
         if (this.state() != 'idle') {
             this.logger().info(
@@ -208,11 +208,9 @@ class Synchronizer {
             'starting',
             null,
             null,
-            'Starting synchronization to ' +
-                this.api().driver().syncTargetName() +
-                ' (' +
+            'Starting synchronization to target ' +
                 syncTargetId +
-                ')... [' +
+                '... [' +
                 synchronizationId +
                 ']'
         );

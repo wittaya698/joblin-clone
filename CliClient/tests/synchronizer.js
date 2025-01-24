@@ -48,7 +48,7 @@ async function localItemsSameAsRemote(locals, expect) {
             expect(!!remote).toBe(true);
             if (!remote) continue;
 
-            if (syncTargetId() == Database.enumId('syncTarget', 'filesystem')) {
+            if (syncTargetId() == Setting.SYNC_TARGET_FILESYSTEM) {
                 expect(remote.updated_time).toBe(
                     Math.floor(dbItem.updated_time / 1000) * 1000
                 );
@@ -70,7 +70,6 @@ async function localItemsSameAsRemote(locals, expect) {
 
 describe('Synchronizer', function () {
     beforeEach(async () => {
-        await sleep(1);
         await setupDatabaseAndSynchronizer(1);
         await setupDatabaseAndSynchronizer(2);
         await switchClient(1);
@@ -148,29 +147,20 @@ describe('Synchronizer', function () {
         await switchClient(2);
 
         await synchronizer().start();
-
-        await sleep(0.1);
-
         let note2 = await Note.load(note1.id);
         note2.title = 'Updated on client 2';
         await Note.save(note2);
         note2 = await Note.load(note2.id);
-
         await synchronizer().start();
 
         await switchClient(1);
-
-        await sleep(0.1);
 
         let note2conf = await Note.load(note1.id);
         note2conf.title = 'Updated on client 1';
         await Note.save(note2conf);
         note2conf = await Note.load(note1.id);
-
         await synchronizer().start();
-
         let conflictedNotes = await Note.conflictedNotes();
-
         expect(conflictedNotes.length).toBe(1);
 
         // Other than the id (since the conflicted note is a duplicate), and the is_conflict property
