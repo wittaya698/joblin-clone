@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { BackHandler, Keyboard } from 'react-native';
+import { BackHandler, Keyboard, Platform } from 'react-native';
+import * as Localization from 'expo-localization';
 import { connect, Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -31,7 +32,12 @@ import { MenuProvider } from 'react-native-popup-menu';
 import { SideMenuContent } from '@/lib/components/side-menu-content.js';
 import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
 import { reg } from '@/lib/registry.js';
-import { _, setLocale } from '@/lib/locale.js';
+import {
+    _,
+    setLocale,
+    closestSupportedLocale,
+    defaultLocale
+} from '@/lib/locale.js';
 import RNFS, { stat } from 'react-native-fs';
 import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
 
@@ -414,6 +420,23 @@ async function initialize(dispatch, backButtonHandler) {
         reg.logger().info('Database is ready.');
         reg.logger().info('Loading settings...');
         await Setting.load();
+
+        if (Setting.value('firstStart')) {
+            const getLocale = () => {
+                const locales = Localization.getLocales();
+
+                if (!locales || locales.length === 0) {
+                    return defaultLocale();
+                }
+
+                return locales[0].languageTag;
+            };
+
+            // Set locale and other settings
+            const locale = getLocale();
+            Setting.setValue('locale', closestSupportedLocale(locale));
+            Setting.setValue('firstStart', 0);
+        }
 
         setLocale(Setting.value('locale'));
 

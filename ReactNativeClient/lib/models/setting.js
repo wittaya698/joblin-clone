@@ -94,6 +94,11 @@ class Setting extends BaseModel {
         this.scheduleUpdate();
     }
 
+    static formatValue(type, value) {
+        if (type == 'int') return Math.floor(Number(value));
+        return value;
+    }
+
     static value(key) {
         if (key in this.constants_) {
             let output = this.constants_[key];
@@ -105,14 +110,15 @@ class Setting extends BaseModel {
         if (!this.cache_)
             throw new Error('Settings have not been initialized!');
 
+        const md = this.settingMetadata(key);
+
         for (let i = 0; i < this.cache_.length; i++) {
             if (this.cache_[i].key == key) {
-                return this.cache_[i].value;
+                return this.formatValue(md.type, this.cache_[i].value);
             }
         }
 
-        let s = this.settingMetadata(key);
-        return s.value;
+        return this.formatValue(md.type, md.value);
     }
 
     static isEnum(key) {
@@ -196,6 +202,8 @@ class Setting extends BaseModel {
             delete s.appTypes;
             delete s.label;
             delete s.options;
+            s.value = this.formatValue(s.type, s.value);
+
             queries.push(Database.insertQuery(this.tableName(), s));
         }
 
@@ -242,6 +250,7 @@ Setting.SYNC_TARGET_ONEDRIVE = 3;
 
 Setting.metadata_ = {
     activeFolderId: { value: '', type: 'string', public: false },
+    firstStart: { value: 1, type: 'int', public: false },
     'sync.2.path': {
         value: '',
         type: 'string',

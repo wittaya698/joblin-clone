@@ -312,5 +312,6 @@ export {
     localeStrings,
     setLocale,
     supportedLocalesToLanguages,
-    defaultLocale
+    defaultLocale,
+    closestSupportedLocale
 };
