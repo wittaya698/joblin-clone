@@ -300,7 +300,7 @@ class ScreenHeaderComponent extends Component {
                 let title =
                     'title' in this.props && this.props.title !== null
                         ? this.props.title
-                        : _(this.props.navState.routeName);
+                        : '';
                 return <Text style={styles.titleText}>{title}</Text>;
             }
         };

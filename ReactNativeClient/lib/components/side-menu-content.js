@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
+import { Setting } from '@/lib/models/setting.js';
 import { FoldersScreenUtils } from '@/lib/components/screens/folders-utils.js';
 import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { Synchronizer } from '@/lib/synchronizer.js';
@@ -76,19 +77,23 @@ class SideMenuContentComponent extends Component {
     }
 
     async synchronize_press() {
+        if (
+            Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE &&
+            !reg.oneDriveApi().auth()
+        ) {
+            this.props.dispatch(actions.side_menu_close());
+            this.props.dispatch(
+                actions.navigate({ routeName: 'OneDriveLogin' })
+            );
+            return;
+        }
+
         const sync = await reg.synchronizer(Setting.value('sync.target'));
 
         if (this.props.syncStarted) {
             sync.cancel();
         } else {
-            if (reg.oneDriveApi().auth()) {
-                reg.scheduleSync(1);
-            } else {
-                this.props.dispatch(actions.side_menu_close());
-                this.props.dispatch(
-                    actions.navigate({ routeName: 'OneDriveLogin' })
-                );
-            }
+            reg.scheduleSync(0);
         }
     }
 

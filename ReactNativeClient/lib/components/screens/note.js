@@ -78,7 +78,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             noteMetadata: '',
             showNoteMetadata: false,
             folder: null,
-            lastSavedNote: null
+            lastSavedNote: null,
+            isLoading: true
         };
 
         this.saveButtonHasBeenShown_ = false;
@@ -127,7 +128,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             lastSavedNote: Object.assign({}, note),
             note: note,
             mode: mode,
-            folder: await Folder.load(note.parent_id)
+            folder: await Folder.load(note.parent_id),
+            isLoading: false
         });
 
         this.refreshNoteMetadata();
@@ -313,9 +315,18 @@ class NoteScreenComponent extends BaseScreenComponent {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={this.styles().screen}>
+                    <ScreenHeader navState={this.props.navigation.state} />
+                </View>
+            );
+        }
+
         const note = this.state.note;
         const isTodo = !!Number(note.is_todo);
         const folder = this.state.folder;
+        const isNew = !note.id;
 
         let bodyComponent = null;
         if (this.state.mode == 'view') {
@@ -481,10 +492,11 @@ class NoteScreenComponent extends BaseScreenComponent {
                 </View>
             );
         } else {
+            const focusBody = !isNew && !!note.title;
             bodyComponent = (
                 <TextInput
                     autoCapitalize="sentences"
-                    autoFocus={true}
+                    autoFocus={focusBody}
                     style={styles.bodyTextInput}
                     multiline={true}
                     value={note.body}
@@ -598,6 +610,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                         />
                     )}
                     <TextInput
+                        autoFocus={isNew}
                         underlineColorAndroid="#ffffff00"
                         autoCapitalize="sentences"
                         style={styles.titleTextInput}
