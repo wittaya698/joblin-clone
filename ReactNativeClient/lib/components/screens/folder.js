@@ -75,7 +75,7 @@ class FolderScreenComponent extends BaseScreenComponent {
         } catch (error) {
             dialogs.error(
                 this,
-                _('The folder could not be saved: %s', error.message)
+                _('The notebook could not be saved: %s', error.message)
             );
             return;
         }

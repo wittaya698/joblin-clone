@@ -182,7 +182,13 @@ let supportedLocales_ = null;
 
 let loadedLocales_ = {};
 
-let currentLocale_ = 'en_GB';
+const defaultLocale_ = 'en_GB';
+
+let currentLocale_ = defaultLocale_;
+
+function defaultLocale() {
+    return defaultLocale_;
+}
 
 function supportedLocales() {
     if (!supportedLocales_)
@@ -192,6 +198,16 @@ function supportedLocales() {
     for (let n in supportedLocales_) {
         if (!supportedLocales_.hasOwnProperty(n)) continue;
         output.push(n);
+    }
+    return output;
+}
+
+function supportedLocalesToLanguages() {
+    const locales = supportedLocales();
+    let output = {};
+    for (let i = 0; i < locales.length; i++) {
+        const locale = locales[i];
+        output[locale] = countryDisplayName(locale);
     }
     return output;
 }
@@ -290,4 +306,11 @@ const localeList = {
     fr_FR: frFRLocale
 };
 
-export { _, supportedLocales, localeStrings, setLocale };
+export {
+    _,
+    supportedLocales,
+    localeStrings,
+    setLocale,
+    supportedLocalesToLanguages,
+    defaultLocale
+};

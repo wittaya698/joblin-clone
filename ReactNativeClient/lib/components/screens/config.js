@@ -3,13 +3,27 @@ import { View, StyleSheet, Text, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { connect } from 'react-redux';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
-import { _ } from '@/lib/locale.js';
+import { _, setLocale } from '@/lib/locale.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { globalStyle } from '@/lib/components/global-style.js';
 import { Setting } from '@/lib/models/setting.js';
 
 let styles = {
-    body: {}
+    settingContainer: {
+        borderBottomWidth: 1,
+        borderBottomColor: globalStyle.dividerColor,
+        paddingTop: globalStyle.marginTop,
+        paddingBottom: globalStyle.marginBottom,
+        paddingLeft: globalStyle.marginLeft,
+        paddingRight: globalStyle.marginRight
+    },
+    settingText: {
+        fontWeight: 'bold',
+        color: globalStyle.color
+    },
+    settingControl: {
+        color: globalStyle.color
+    }
 };
 
 styles = StyleSheet.create(styles);
@@ -45,6 +59,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
             let values = this.state.values;
             values[key] = value;
             this.setState({ values: values });
+            this.saveSettings();
         };
 
         const value = this.state.values[key];
@@ -61,10 +76,13 @@ class ConfigScreenComponent extends BaseScreenComponent {
             }
 
             return (
-                <View key={key}>
-                    <Text key="label">{setting.label()}</Text>
+                <View key={key} style={styles.settingContainer}>
+                    <Text key="label" style={styles.settingText}>
+                        {setting.label()}
+                    </Text>
                     <Picker
                         key="control"
+                        style={styles.settingControl}
                         itemStyle={{ color: 'black' }}
                         selectedValue={value}
                         onValueChange={(itemValue, itemIndex) =>
@@ -82,19 +100,23 @@ class ConfigScreenComponent extends BaseScreenComponent {
         return output;
     }
 
-    saveButton_press() {
+    saveSettings() {
         const values = this.state.values;
         for (let key in values) {
             if (!values.hasOwnProperty(key)) continue;
             Setting.setValue(key, values[key]);
         }
         Setting.saveAll();
+
+        setLocale(Setting.value('locale'));
     }
 
     render() {
         const settings = Setting.publicSettings(Setting.value('appType'));
         let settingComps = [];
         for (let key in settings) {
+            if (key == 'sync.target') continue;
+
             if (!settings.hasOwnProperty(key)) continue;
             const comp = this.settingToComponent(key, settings[key]);
             if (!comp) continue;
@@ -105,10 +127,6 @@ class ConfigScreenComponent extends BaseScreenComponent {
             <View style={this.styles().screen}>
                 <ScreenHeader navState={this.props.navigation.state} />
                 <View style={styles.body}>{settingComps}</View>
-                <Button
-                    title={_('Save')}
-                    onPress={() => this.saveButton_press()}
-                />
             </View>
         );
     }

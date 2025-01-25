@@ -9,9 +9,7 @@ class Command extends BaseCommand {
     }
 
     description() {
-        return _(
-            'Creates a new command alias which can then be used as a regular command (eg. `alias ll "ls -l"`).'
-        );
+        return 'Creates a new command alias which can then be used as a regular command (eg. `alias ll "ls -l"`).';
     }
 
     async action(args) {
