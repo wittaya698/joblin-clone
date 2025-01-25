@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, Button } from 'react-native';
 import { connect } from 'react-redux';
+import { reg } from '@/lib/registry.js';
 import { NoteList } from '@/lib/components/note-list.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Folder } from '@/lib/models/folder.js';
+import { Note } from '@/lib/models/note.js';
 import { actions } from '@/root.js';
 import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import { dialogs } from '@/lib/dialogs.js';
-import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import DialogBox from 'react-native-dialogbox';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 
@@ -17,13 +18,55 @@ class NotesScreenComponent extends BaseScreenComponent {
         return { header: null };
     }
 
+    async componentDidMount() {
+        await this.refreshNotes();
+    }
+
+    async UNSAFE_componentWillReceiveProps(newProps) {
+        if (
+            newProps.notesOrder.orderBy != this.props.notesOrder.orderBy ||
+            newProps.notesOrder.orderByDir !=
+                this.props.notesOrder.orderByDir ||
+            newProps.selectedFolderId != this.props.selectedFolderId
+        ) {
+            await this.refreshNotes(newProps);
+        }
+    }
+
+    async refreshNotes(props = null) {
+        if (props === null) props = this.props;
+
+        let options = {
+            orderBy: props.notesOrder.orderBy,
+            orderByDir: props.notesOrder.orderByDir
+        };
+
+        const source = JSON.stringify({
+            options: options,
+            selectedFolderId: props.selectedFolderId
+        });
+
+        let folder = Folder.byId(props.folders, props.selectedFolderId);
+
+        if (source == props.notesSource) return;
+
+        const notes = await Note.previews(props.selectedFolderId, options);
+
+        this.props.dispatch(
+            actions.notes_update_all({ notes: notes, notesSource: source })
+        );
+    }
+
     deleteFolder_onPress(folderId) {
         dialogs.confirm(this, _('Delete notebook?')).then(ok => {
             if (!ok) return;
 
             Folder.delete(folderId)
                 .then(() => {
-                    return NotesScreenUtils.openDefaultNoteList();
+                    this.props.dispatch(
+                        actions.navigate({ routeName: 'Welcome' })
+                    );
+                    reg.scheduleSync();
                 })
                 .catch(error => {
                     alert(error.message);
@@ -63,8 +106,14 @@ class NotesScreenComponent extends BaseScreenComponent {
         );
 
         if (!folder) {
-            NotesScreenUtils.openDefaultNoteList();
-            return null;
+            return (
+                <View style={this.styles().screen}>
+                    <ScreenHeader
+                        title={title}
+                        menuOptions={this.menuOptions()}
+                    />
+                </View>
+            );
         }
 
         let title = folder ? folder.title : null;
@@ -92,7 +141,10 @@ class NotesScreenComponent extends BaseScreenComponent {
 const NotesScreen = connect(state => {
     return {
         folders: state.nav.folders,
-        selectedFolderId: state.nav.selectedFolderId
+        selectedFolderId: state.nav.selectedFolderId,
+        notes: state.nav.notes,
+        notesOrder: state.nav.notesOrder,
+        notesSource: state.nav.notesSource
     };
 })(NotesScreenComponent);
 

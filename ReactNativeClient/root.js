@@ -18,7 +18,6 @@ import { BaseModel } from '@/lib/base-model.js';
 import { JoplinDatabase } from '@/lib/joplin-database.js';
 import { Database } from '@/lib/database.js';
 import { NotesScreen } from '@/lib/components/screens/notes.js';
-import { NotesScreenUtils } from '@/lib/components/screens/notes-utils.js';
 import { NoteScreen } from '@/lib/components/screens/note.js';
 import { FolderScreen } from '@/lib/components/screens/folder.js';
 import { ConfigScreen } from '@/lib/components/screens/config.js';
@@ -38,6 +37,7 @@ import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
 
 let defaultState = {
     notes: [],
+    notesSource: '',
     folders: [],
     selectedNoteId: null,
     selectedItemType: 'note',
@@ -178,6 +178,7 @@ const navReducer = createSlice({
         // Replace all the notes with the provided array
         notes_update_all: (state, action) => {
             state.notes = action.payload.notes;
+            state.notesSource = action.payload.notesSource;
             PoorManIntervals.update();
         },
 
@@ -358,8 +359,6 @@ async function initialize(dispatch, backButtonHandler) {
 
     reg.dispatch = dispatch;
     BaseModel.dispatch = dispatch;
-    NotesScreenUtils.dispatch = dispatch;
-    NotesScreenUtils.store = store;
     FoldersScreenUtils.dispatch = dispatch;
     BaseModel.db_ = db;
 
@@ -399,12 +398,13 @@ async function initialize(dispatch, backButtonHandler) {
         let folderId = Setting.value('activeFolderId');
         let folder = await Folder.load(folderId);
 
-        // dispatch(actions.navigate({ routeName: 'Config' }));
-
-        if (folder) {
-            await NotesScreenUtils.openNoteList(folderId);
+        if (!folder) folder = await Folder.defaultFolder();
+        if (!folder) {
+            dispatch(actions.navigate({ routeName: 'Welcome' }));
         } else {
-            await NotesScreenUtils.openDefaultNoteList();
+            dispatch(
+                actions.navigate({ routeName: 'Notes', folderId: folder.id })
+            );
         }
     } catch (error) {
         reg.logger().error('Initialization error:', error);
