@@ -412,7 +412,7 @@ async function initialize(dispatch, backButtonHandler) {
         } else {
             await NotesScreenUtils.openDefaultNoteList();
         }
-    } catch {
+    } catch (error) {
         reg.logger().error('Initialization error:', error);
     }
 

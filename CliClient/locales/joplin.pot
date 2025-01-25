@@ -64,6 +64,9 @@ msgstr ""
 msgid "Cannot find \"%s\"."
 msgstr ""
 
+msgid "Also displays hidden config variables."
+msgstr ""
+
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
@@ -318,6 +321,10 @@ msgstr ""
 
 #, javascript-format
 msgid "Completed: %s"
+msgstr ""
+
+#, javascript-format
+msgid "Synchronization is already in progress. State: %s"
 msgstr ""
 
 msgid "Conflicts"

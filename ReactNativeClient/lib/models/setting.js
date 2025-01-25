@@ -69,12 +69,12 @@ class Setting extends BaseModel {
                             )
                         );
                     }
-
-                    if (c.value === value) return;
-                    c.value = value;
-                    this.scheduleUpdate();
-                    return;
                 }
+
+                if (c.value === value) return;
+                c.value = value;
+                this.scheduleUpdate();
+                return;
             }
         }
 

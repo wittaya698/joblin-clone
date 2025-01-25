@@ -27,7 +27,9 @@ reg.setLogger = l => {
 reg.oneDriveApi = () => {
     if (reg.oneDriveApi_) return reg.oneDriveApi_;
 
-    const isPublic = Setting.value('appType') != 'cli';
+    // Critical -> both appType is public for now
+    // const isPublic = Setting.value('appType') != 'cli';
+    const isPublic = true;
 
     reg.oneDriveApi_ = new OneDriveApi(
         parameters().oneDrive.id,
@@ -69,7 +71,7 @@ reg.synchronizer = async syncTargetId => {
     if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
         if (!reg.oneDriveApi().auth())
             throw new Error('User is not authentified');
-        error_msg = 'Error: Tenant does not have a SPO license.';
+        let error_msg = 'Error: Tenant does not have a SPO license.';
         reg.logger().error(error_msg);
         throw new Error(error_msg);
 
@@ -123,12 +125,20 @@ reg.scheduleSync = async (delay = null) => {
             return;
         }
 
-        const sync = await reg.synchronizer();
+        const sync = await reg.synchronizer(Setting.value('sync.target'));
 
         let context = Setting.value('sync.context');
         context = context ? JSON.parse(context) : {};
-        let newContext = await sync.start({ context: context });
-        Setting.setValue('sync.context', JSON.stringify(newContext));
+        try {
+            let newContext = await sync.start({ context: context });
+            Setting.setValue('sync.context', JSON.stringify(newContext));
+        } catch (error) {
+            if (error.code == 'alreadyStarted') {
+                reg.logger.info(error.message);
+            } else {
+                throw error;
+            }
+        }
     }, delay);
 };
 

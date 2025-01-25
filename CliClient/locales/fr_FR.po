@@ -68,6 +68,9 @@ msgstr "Affiche tous les détails de la note."
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
 
+msgid "Also displays hidden config variables."
+msgstr ""
+
 #, fuzzy
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
@@ -358,6 +361,10 @@ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 #, javascript-format
 msgid "Completed: %s"
 msgstr "Terminé : %s"
+
+#, fuzzy, javascript-format
+msgid "Synchronization is already in progress. State: %s"
+msgstr "Synchronisation est déjà en cours."
 
 msgid "Conflicts"
 msgstr "Conflits"
