@@ -4,7 +4,6 @@ import {
     ListView,
     Text,
     TouchableHighlight,
-    Switch,
     View,
     StyleSheet
 } from 'react-native';
@@ -45,10 +44,26 @@ class NoteItemComponent extends Component {
         });
     }
 
+    async todoCheckbox_change(checked) {
+        if (!this.props.note) return;
+        const newNote = {
+            id: this.props.note.id,
+            todo_completed: checked ? time.unixMs() : 0
+        };
+        await Note.save(newNote);
+    }
+    onPress() {
+        if (!this.props.note) return;
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Note',
+            noteId: this.props.note.id
+        });
+    }
+
     render() {
         const note = this.props.note ? this.props.note : {};
         const onPress = this.props.onPress;
-        const onLongPress = this.props.onLongPress;
         const onCheckboxChange = this.props.onCheckboxChange;
 
         const checkboxStyle = !Number(note.is_todo)
@@ -63,9 +78,7 @@ class NoteItemComponent extends Component {
 
         return (
             <TouchableHighlight
-                onPress={() =>
-                    onPress ? onPress(note) : this.noteItem_press(note.id)
-                }
+                onPress={() => this.onPress()}
                 onLongPress={() => onLongPress(note)}
                 underlayColor="#0066FF"
             >
@@ -73,9 +86,7 @@ class NoteItemComponent extends Component {
                     <Checkbox
                         style={checkboxStyle}
                         checked={checkboxChecked}
-                        onChange={checked => {
-                            onCheckboxChange(note, checked);
-                        }}
+                        onChange={checked => this.todoCheckbox_change(checked)}
                     />
                     <Text style={styles.listItemText}>{note.title}</Text>
                 </View>

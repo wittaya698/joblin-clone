@@ -350,6 +350,10 @@ class BaseModel {
             );
         return this.db_;
     }
+
+    static isReady() {
+        return !!this.db_;
+    }
 }
 
 BaseModel.TYPE_NOTE = 1;

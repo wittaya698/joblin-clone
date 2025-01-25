@@ -78,24 +78,6 @@ class NoteListComponent extends Component {
         });
     }
 
-    async todoCheckbox_change(itemId, checked) {
-        let note = await Note.load(itemId);
-        await Note.save({
-            id: note.id,
-            todo_completed: checked ? time.unixMs() : 0
-        });
-    }
-
-    listView_itemPress(noteId) {
-        this.props.dispatch({
-            type: 'NAV_GO',
-            routeName: 'Note',
-            noteId: noteId
-        });
-    }
-
-    listView_itemLongPress(itemId) {}
-
     render() {
         // `enableEmptySections` is to fix this warning: https://github.com/FaridSafi/react-native-gifted-listview/issues/39
 
@@ -105,17 +87,7 @@ class NoteListComponent extends Component {
                     data={this.state.dataSource}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) => {
-                        return (
-                            <NoteItem
-                                note={item}
-                                onPress={note =>
-                                    this.listView_itemPress(note.id)
-                                }
-                                onCheckboxChange={(note, checked) =>
-                                    this.todoCheckbox_change(note.id, checked)
-                                }
-                            />
-                        );
+                        return <NoteItem note={item} />;
                     }}
                 />
             );
