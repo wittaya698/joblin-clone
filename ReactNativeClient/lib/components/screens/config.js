@@ -125,7 +125,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
         return (
             <View style={this.styles().screen}>
-                <ScreenHeader navState={this.props.navigation.state} />
+                <ScreenHeader title={_('Configuration')} />
                 <View style={styles.body}>{settingComps}</View>
             </View>
         );
