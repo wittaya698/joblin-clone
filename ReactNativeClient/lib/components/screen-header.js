@@ -10,7 +10,6 @@ import { FileApi } from '@/lib/file-api.js';
 import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
 import { reg } from '@/lib/registry.js';
 import { globalStyle } from '@/lib/components/global-style.js';
-import { actions } from '@/root.js';
 
 import {
     Menu,
@@ -121,15 +120,18 @@ const styles = StyleSheet.create(styleObject);
 
 class ScreenHeaderComponent extends Component {
     sideMenuButton_press() {
-        this.props.dispatch(actions.side_menu_toggle());
+        this.props.dispatch({ type: 'SIDE_MENU_TOGGLE' });
     }
 
     backButton_press() {
-        this.props.dispatch(actions.navigate({ routeName: 'Back' }));
+        this.props.dispatch({ type: 'NAV_BACK' });
     }
 
     searchButton_press() {
-        this.props.dispatch(actions.navigate({ routeName: 'Search' }));
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Search'
+        });
     }
 
     menu_select(value) {
@@ -139,15 +141,24 @@ class ScreenHeaderComponent extends Component {
     }
 
     log_press() {
-        this.props.dispatch(actions.navigate({ routeName: 'Log' }));
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Log'
+        });
     }
 
     status_press() {
-        this.props.dispatch(actions.navigate({ routeName: 'Status' }));
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Status'
+        });
     }
 
     config_press() {
-        this.props.dispatch(actions.navigate({ routeName: 'Config' }));
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Config'
+        });
     }
 
     render() {
@@ -346,8 +357,7 @@ ScreenHeaderComponent.defaultProps = {
 
 const ScreenHeader = connect(state => {
     return {
-        navigator: state.nav.navigator,
-        historyCanGoBack: state.nav.historyCanGoBack
+        historyCanGoBack: state.historyCanGoBack
     };
 })(ScreenHeaderComponent);
 

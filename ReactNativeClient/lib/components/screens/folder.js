@@ -10,7 +10,6 @@ import { reg } from '@/lib/registry.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
 import { _ } from '@/lib/locale.js';
-import { actions } from '@/root.js';
 
 class FolderScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -69,8 +68,6 @@ class FolderScreenComponent extends BaseScreenComponent {
 
         try {
             folder = await Folder.save(folder, { userSideValidation: true });
-
-            reg.scheduleSync();
         } catch (error) {
             dialogs.error(
                 this,
@@ -83,9 +80,11 @@ class FolderScreenComponent extends BaseScreenComponent {
             folder: folder
         });
 
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Notes', folderId: folder.id })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Notes',
+            folderId: folder.id
+        });
     }
 
     render() {
@@ -114,7 +113,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 }
 
 const FolderScreen = connect(state => {
-    return { folderId: state.nav.selectedFolderId };
+    return { folderId: state.selectedFolderId };
 })(FolderScreenComponent);
 
 export { FolderScreen };

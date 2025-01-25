@@ -15,7 +15,6 @@ import { reg } from '@/lib/registry.js';
 import { Note } from '@/lib/models/note.js';
 import { time } from '@/lib/time-utils.js';
 import { globalStyle } from '@/lib/components/global-style.js';
-import { actions } from '@/root.js';
 
 let styles = {
     listItem: {
@@ -39,9 +38,11 @@ styles = StyleSheet.create(styles);
 
 class NoteItemComponent extends Component {
     noteItem_press(noteId) {
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Note', noteId: noteId })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Note',
+            noteId: noteId
+        });
     }
 
     render() {

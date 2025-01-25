@@ -7,7 +7,6 @@ import { ActionButton } from '@/lib/components/action-button.js';
 import { _ } from '@/lib/locale.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { globalStyle } from '@/lib/components/global-style.js';
-import { actions } from '@/root.js';
 
 const styles = StyleSheet.create({
     message: {
@@ -48,8 +47,8 @@ class WelcomeScreenComponent extends BaseScreenComponent {
 
 const WelcomeScreen = connect(state => {
     return {
-        loading: state.nav.loading,
-        folders: state.nav.folders
+        loading: state.loading,
+        folders: state.folders
     };
 })(WelcomeScreenComponent);
 

@@ -15,7 +15,6 @@ import { Note } from '@/lib/models/note.js';
 import { NoteItem } from '@/lib/components/note-item.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { globalStyle } from '@/lib/components/global-style.js';
-import { actions } from '@/root.js';
 
 let styles = {
     body: {
@@ -76,11 +75,18 @@ class SearchScreenComponent extends BaseScreenComponent {
     searchTextInput_submit() {
         const query = this.state.query.trim();
         if (!query) return;
-        this.props.dispatch(actions.search_query({ query: query }));
+
+        this.props.dispatch({
+            type: 'SEARCH_QUERY',
+            query: query
+        });
     }
 
     clearButton_press() {
-        this.props.dispatch(actions.search_query({ query: '' }));
+        this.props.dispatch({
+            type: 'SEARCH_QUERY',
+            query: ''
+        });
     }
 
     async refreshSearch(query = null) {
@@ -151,7 +157,7 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 const SearchScreen = connect(state => {
     return {
-        query: state.nav.searchQuery
+        query: state.searchQuery
     };
 })(SearchScreenComponent);
 export { SearchScreen };

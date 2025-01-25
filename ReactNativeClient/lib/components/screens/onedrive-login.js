@@ -8,7 +8,6 @@ import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
-import { actions } from '@/root.js';
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -55,7 +54,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
                 await reg
                     .oneDriveApi()
                     .execTokenRequest(this.authCode_, this.redirectUrl(), true);
-                this.props.dispatch(actions.navigate({ routeName: 'Back' }));
+                this.props.dispatch({ type: 'NAV_BACK' });
                 reg.scheduleSync(0);
             } catch (error) {
                 alert(error.message);

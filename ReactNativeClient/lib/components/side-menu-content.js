@@ -18,7 +18,6 @@ import { Synchronizer } from '@/lib/synchronizer.js';
 import { reg } from '@/lib/registry.js';
 import { _ } from '@/lib/locale.js';
 import { globalStyle } from '@/lib/components/global-style.js';
-import { actions } from '@/root.js';
 
 const styleObject = {
     menu: {
@@ -72,9 +71,13 @@ class SideMenuContentComponent extends Component {
     }
 
     folder_press(folder) {
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Notes', folderId: folder.id })
-        );
+        this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Notes',
+            folderId: folder.id
+        });
     }
 
     async synchronize_press() {
@@ -82,10 +85,12 @@ class SideMenuContentComponent extends Component {
             Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE &&
             !reg.oneDriveApi().auth()
         ) {
-            this.props.dispatch(actions.side_menu_close());
-            this.props.dispatch(
-                actions.navigate({ routeName: 'OneDriveLogin' })
-            );
+            this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
+
+            this.props.dispatch({
+                type: 'NAV_GO',
+                routeName: 'OneDriveLogin'
+            });
             return;
         }
 
@@ -213,10 +218,10 @@ class SideMenuContentComponent extends Component {
 
 const SideMenuContent = connect(state => {
     return {
-        folders: state.nav.folders,
-        syncStarted: state.nav.syncStarted,
-        syncReport: state.nav.syncReport,
-        selectedFolderId: state.nav.selectedFolderId
+        folders: state.folders,
+        syncStarted: state.syncStarted,
+        syncReport: state.syncReport,
+        selectedFolderId: state.selectedFolderId
     };
 })(SideMenuContentComponent);
 

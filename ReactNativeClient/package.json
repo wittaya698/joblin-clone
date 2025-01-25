@@ -22,7 +22,6 @@
     "@react-navigation/bottom-tabs": "^7.0.0",
     "@react-navigation/drawer": "^7.0.19",
     "@react-navigation/native": "^7.0.6",
-    "@reduxjs/toolkit": "^2.3.0",
     "cross-fetch": "^4.1.0",
     "crypto-browserify": "^3.12.1",
     "expo": "~52.0.11",

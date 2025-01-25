@@ -17,7 +17,6 @@ import { Note } from '@/lib/models/note.js';
 import { Setting } from '@/lib/models/setting.js';
 import { time } from '@/lib/time-utils.js';
 import { globalStyle } from '@/lib/components/global-style.js';
-import { actions } from '@/root.js';
 
 const styles = StyleSheet.create({
     noItemMessage: {
@@ -85,13 +84,14 @@ class NoteListComponent extends Component {
             id: note.id,
             todo_completed: checked ? time.unixMs() : 0
         });
-        reg.scheduleSync();
     }
 
     listView_itemPress(noteId) {
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Note', noteId: noteId })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Note',
+            noteId: noteId
+        });
     }
 
     listView_itemLongPress(itemId) {}
@@ -129,7 +129,7 @@ class NoteListComponent extends Component {
 }
 
 const NoteList = connect(state => {
-    return { items: state.nav.notes };
+    return { items: state.notes };
 })(NoteListComponent);
 
 export { NoteList };

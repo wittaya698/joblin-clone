@@ -20,7 +20,7 @@ class AppNavComponent extends Component {
 
 const AppNav = connect(state => {
     return {
-        route: state.nav.route
+        route: state.route
     };
 })(AppNavComponent);
 export { AppNav };

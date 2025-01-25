@@ -26,7 +26,6 @@ import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
 import { globalStyle } from '@/lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
-import { actions } from '@/root.js';
 
 const styleObject = {
     titleTextInput: {
@@ -194,8 +193,6 @@ class NoteScreenComponent extends BaseScreenComponent {
         });
         if (isNew) Note.updateGeolocation(note.id);
         this.refreshNoteMetadata();
-
-        reg.scheduleSync();
     }
 
     async saveOneProperty(name, value) {
@@ -217,8 +214,6 @@ class NoteScreenComponent extends BaseScreenComponent {
                 lastSavedNote: Object.assign({}, note),
                 note: note
             });
-
-            reg.scheduleSync();
         } else {
             note[name] = value;
             this.setState({ note: note });
@@ -235,11 +230,12 @@ class NoteScreenComponent extends BaseScreenComponent {
         let folderId = note.parent_id;
 
         await Note.delete(note.id);
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Notes', folderId: folderId })
-        );
 
-        reg.scheduleSync();
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Notes',
+            folderId: folderId
+        });
     }
 
     attachFile_onPress() {}
@@ -315,7 +311,6 @@ class NoteScreenComponent extends BaseScreenComponent {
             'todo_completed',
             checked ? time.unixMs() : 0
         );
-        reg.scheduleSync();
     }
 
     render() {
@@ -595,7 +590,6 @@ class NoteScreenComponent extends BaseScreenComponent {
                                 note: note,
                                 folder: folder
                             });
-                            reg.scheduleSync();
                         }
                     }}
                     menuOptions={this.menuOptions()}
@@ -645,10 +639,10 @@ class NoteScreenComponent extends BaseScreenComponent {
 
 const NoteScreen = connect(state => {
     return {
-        noteId: state.nav.selectedNoteId,
-        folderId: state.nav.selectedFolderId,
-        itemType: state.nav.selectedItemType,
-        folders: state.nav.folders
+        noteId: state.selectedNoteId,
+        folderId: state.selectedFolderId,
+        itemType: state.selectedItemType,
+        folders: state.folders
     };
 })(NoteScreenComponent);
 

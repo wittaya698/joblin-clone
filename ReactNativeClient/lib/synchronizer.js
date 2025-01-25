@@ -8,7 +8,6 @@ import { time } from '@/lib/time-utils.js';
 import { Logger } from '@/lib/logger.js';
 import { _ } from '@/lib/locale.js';
 import moment from 'moment';
-// import { actions } from '@/root.js';
 
 class Synchronizer {
     constructor(db, api, appType) {
@@ -114,11 +113,10 @@ class Synchronizer {
         this.progressReport_.state = this.state();
         this.onProgress_(this.progressReport_);
 
-        // this.dispatch(
-        // actions.sync_report_update({
-        // report: Object.assign({}, this.progressReport_)
-        //     })
-        // );
+        this.dispatch({
+            type: 'SYNC_REPORT_UPDATE',
+            report: Object.assign({}, this.progressReport_)
+        });
     }
 
     async logSyncSummary(report) {
@@ -209,7 +207,7 @@ class Synchronizer {
 
         this.state_ = 'in_progress';
 
-        // this.dispatch(actions.sync_started());
+        this.dispatch({ type: 'SYNC_STARTED' });
 
         this.logSyncOperation(
             'starting',
@@ -581,7 +579,7 @@ class Synchronizer {
         this.onProgress_ = function (s) {};
         this.progressReport_ = {};
 
-        // this.dispatch(actions.sync_completed());
+        this.dispatch({ type: 'SYNC_COMPLETED' });
 
         return outputContext;
     }

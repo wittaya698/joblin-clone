@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { ActionButton } from '@/lib/components/action-button.js';
-import { actions } from '@/root.js';
 
 class LoadingScreenComponent extends React.Component {
     static navigationOptions(options) {

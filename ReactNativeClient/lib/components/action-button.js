@@ -5,7 +5,6 @@ import { FAB, Provider } from 'react-native-paper';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { _ } from '@/lib/locale.js';
-import { actions } from '@/root.js';
 
 const styles = StyleSheet.create({
     actionButtonIcon: {
@@ -31,30 +30,31 @@ class ActionButtonComponent extends React.Component {
     }
 
     newTodo_press() {
-        this.props.dispatch(
-            actions.navigate({
-                routeName: 'Note',
-                noteId: null,
-                folderId: this.props.parentFolderId,
-                itemType: 'todo'
-            })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Note',
+            noteId: null,
+            folderId: this.props.parentFolderId,
+            itemType: 'todo'
+        });
     }
 
     newNote_press() {
-        this.props.dispatch(
-            actions.navigate({
-                routeName: 'Note',
-                noteId: null,
-                folderId: this.props.parentFolderId
-            })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Note',
+            noteId: null,
+            folderId: this.props.parentFolderId,
+            itemType: 'note'
+        });
     }
 
     newFolder_press() {
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Folder', folderId: null })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Folder',
+            folderId: null
+        });
     }
 
     handleStateChange = ({ open }) => {
@@ -176,7 +176,7 @@ class ActionButtonComponent extends React.Component {
 }
 
 const ActionButton = connect(state => {
-    return { folders: state.nav.folders };
+    return { folders: state.folders };
 })(ActionButtonComponent);
 
 export { ActionButton };

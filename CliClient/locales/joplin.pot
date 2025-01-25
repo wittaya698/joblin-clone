@@ -402,6 +402,9 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
+msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgstr ""
+
 msgid "Log"
 msgstr ""
 
@@ -419,6 +422,9 @@ msgstr ""
 
 #, javascript-format
 msgid "The notebook could not be saved: %s"
+msgstr ""
+
+msgid "Edit notebook"
 msgstr ""
 
 msgid "Untitled"
@@ -460,10 +466,10 @@ msgstr ""
 msgid "Delete notebook"
 msgstr ""
 
-msgid "Edit notebook"
+msgid "Login with OneDrive"
 msgstr ""
 
-msgid "There are currently no notes. Create one by clicking on the (+) button."
+msgid "Search"
 msgstr ""
 
 msgid ""
@@ -472,4 +478,7 @@ msgid ""
 msgstr ""
 
 msgid "You currently have no notebook. Create one by clicking on (+) button."
+msgstr ""
+
+msgid "Welcome"
 msgstr ""

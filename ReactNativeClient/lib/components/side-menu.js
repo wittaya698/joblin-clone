@@ -9,7 +9,7 @@ class SideMenuComponent extends Component {
 
 const SideMenu = connect(state => {
     return {
-        isOpen: state.nav.showSideMenu
+        isOpen: state.showSideMenu
     };
 })(SideMenuComponent);
 

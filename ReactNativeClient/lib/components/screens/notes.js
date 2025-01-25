@@ -6,7 +6,6 @@ import { NoteList } from '@/lib/components/note-list.js';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
-import { actions } from '@/root.js';
 import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import { dialogs } from '@/lib/dialogs.js';
@@ -52,9 +51,11 @@ class NotesScreenComponent extends BaseScreenComponent {
 
         const notes = await Note.previews(props.selectedFolderId, options);
 
-        this.props.dispatch(
-            actions.notes_update_all({ notes: notes, notesSource: source })
-        );
+        this.props.dispatch({
+            type: 'NOTES_UPDATE_ALL',
+            notes: notes,
+            notesSource: source
+        });
     }
 
     deleteFolder_onPress(folderId) {
@@ -63,10 +64,10 @@ class NotesScreenComponent extends BaseScreenComponent {
 
             Folder.delete(folderId)
                 .then(() => {
-                    this.props.dispatch(
-                        actions.navigate({ routeName: 'Welcome' })
-                    );
-                    reg.scheduleSync();
+                    this.props.dispatch({
+                        type: 'NAV_GO',
+                        routeName: 'Welcome'
+                    });
                 })
                 .catch(error => {
                     alert(error.message);
@@ -75,9 +76,11 @@ class NotesScreenComponent extends BaseScreenComponent {
     }
 
     editFolder_onPress(folderId) {
-        this.props.dispatch(
-            actions.navigate({ routeName: 'Folder', folderId: folderId })
-        );
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'Folder',
+            folderId: folderId
+        });
     }
 
     menuOptions() {
@@ -140,11 +143,11 @@ class NotesScreenComponent extends BaseScreenComponent {
 
 const NotesScreen = connect(state => {
     return {
-        folders: state.nav.folders,
-        selectedFolderId: state.nav.selectedFolderId,
-        notes: state.nav.notes,
-        notesOrder: state.nav.notesOrder,
-        notesSource: state.nav.notesSource
+        folders: state.folders,
+        selectedFolderId: state.selectedFolderId,
+        notes: state.notes,
+        notesOrder: state.notesOrder,
+        notesSource: state.notesSource
     };
 })(NotesScreenComponent);
 

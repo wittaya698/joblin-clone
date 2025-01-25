@@ -9,7 +9,6 @@ import { _ } from '@/lib/locale.js';
 import moment from 'moment';
 import { BaseItem } from '@/lib/models/base-item.js';
 import lodash from 'lodash';
-// import { actions } from '@/root.js';
 
 class Folder extends BaseItem {
     static tableName() {
@@ -86,7 +85,11 @@ class Folder extends BaseItem {
         }
 
         await super.delete(folderId, options);
-        // this.dispatch(actions.folder_delete({ folderId: folderId }));
+
+        this.dispatch({
+            type: 'FOLDER_DELETE',
+            folderId: folderId
+        });
     }
 
     static conflictFolderTitle() {
@@ -172,7 +175,10 @@ class Folder extends BaseItem {
         }
 
         return super.save(o, options).then(folder => {
-            // this.dispatch(actions.folders_update_one({ folder: folder }));
+            this.dispatch({
+                type: 'FOLDERS_UPDATE_ONE',
+                folder: folder
+            });
             return folder;
         });
     }

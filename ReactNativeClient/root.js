@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BackHandler, Keyboard } from 'react-native';
 import { connect, Provider } from 'react-redux';
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { applyMiddleware, createStore } from 'redux';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { shimInit } from '@/lib/shim-init-react.js';
 import { Log } from '@/lib/log.js';
@@ -56,8 +56,9 @@ let defaultState = {
 };
 
 const initialRoute = {
+    type: 'NAV_GO',
     routeName: 'Welcome',
-    payload: {}
+    params: {}
 };
 
 defaultState.route = initialRoute;
@@ -84,23 +85,14 @@ function reducerActionsAreSame(a1, a2) {
     return true;
 }
 
-const navReducer = createSlice({
-    name: 'nav',
-    initialState: defaultState,
-    reducers: {
-        navigate: (state, action) => {
-            const currentRoute = state.route;
-            const currentRouteName = currentRoute ? currentRoute.routeName : '';
+const reducer = (state = defaultState, action) => {
+    let newState = state;
+    let historyGoingBack = false;
 
-            action = {
-                routeName: action.payload.routeName,
-                payload: action.payload
-            };
-
-            let historyGoingBack = false;
-
-            if (action.payload.routeName === 'Back') {
-                if (!navHistory.length) return;
+    try {
+        switch (action.type) {
+            case 'NAV_BACK':
+                if (!navHistory.length) break;
 
                 let newAction = null;
                 while (navHistory.length) {
@@ -109,207 +101,242 @@ const navReducer = createSlice({
                 }
 
                 action = newAction ? newAction : navHistory.pop();
+
                 historyGoingBack = true;
-            }
 
-            if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
-                // If the route *name* is the same (even if the other parameters are different), we
-                // overwrite the last route in the history with the current one. If the route name
-                // is different, we push a new history entry.
-                if (currentRoute.routeName == action.payload.routeName) {
-                    // nothing
-                } else {
-                    if (action.payload.routeName == 'Welcome') navHistory = [];
-                    navHistory.push({
-                        routeName: currentRoute.routeName,
-                        payload: Object.assign({}, currentRoute.payload)
-                    });
-                }
-            }
+            // Fall throught
 
-            // HACK: whenever a new screen is loaded, all the previous screens of that type
-            // are overwritten with the new screen parameters. This is because the way notes
-            // are currently loaded is not optimal (doesn't retain history properly) so
-            // this is a simple fix without doing a big refactoring to change the way notes
-            // are loaded. Might be good enough since going back to different folders
-            // is probably not a common workflow.
-            for (let i = 0; i < navHistory.length; i++) {
-                let n = navHistory[i];
-                if (n.routeName == action.routeName) {
-                    navHistory[i] = Object.assign({}, action);
-                }
-            }
+            case 'NAV_GO':
+                const currentRoute = state.route;
+                const currentRouteName = currentRoute
+                    ? currentRoute.routeName
+                    : '';
 
-            if (action.payload.routeName == 'Welcome') navHistory = [];
-
-            reg.logger().info(
-                'Route: ' + currentRouteName + ' => ' + action.payload.routeName
-            );
-
-            if ('noteId' in action.payload) {
-                state.selectedNoteId = action.payload.noteId;
-            }
-
-            if ('folderId' in action.payload) {
-                state.selectedFolderId = action.payload.folderId;
-            }
-
-            if ('itemType' in action.payload) {
-                state.selectedItemType = action.payload.itemType;
-            }
-
-            state.route = action;
-
-            state.historyCanGoBack = !!navHistory.length;
-
-            if (state.route.routeName == 'Notes') {
-                Setting.setValue('activeFolderId', state.selectedFolderId);
-            }
-
-            Keyboard.dismiss(); // TODO: should probably be in some middleware
-        },
-
-        // Replace all the notes with the provided array
-        application_loading_done: (state, action) => {
-            state.loading = false;
-            PoorManIntervals.update();
-        },
-
-        // Replace all the notes with the provided array
-        notes_update_all: (state, action) => {
-            state.notes = action.payload.notes;
-            state.notesSource = action.payload.notesSource;
-            PoorManIntervals.update();
-        },
-
-        // Insert the note into the note list if it's new, or
-        // update it if it already exists.
-        notes_update_one: (state, action) => {
-            const modNote = action.payload.note;
-
-            let newNotes = state.notes.splice(0);
-            var found = false;
-            for (let i = 0; i < newNotes.length; i++) {
-                let n = newNotes[i];
-                if (n.id == modNote.id) {
-                    if (
-                        !('parent_id' in modNote) ||
-                        modNote.parent_id == n.parent_id
-                    ) {
-                        // Merge the properties that have changed (in modNote) into
-                        // the object we already have.
-                        newNotes[i] = Object.assign(
-                            newNotes[i],
-                            action.payload.note
-                        );
+                if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
+                    // If the route *name* is the same (even if the other parameters are different), we
+                    // overwrite the last route in the history with the current one. If the route name
+                    // is different, we push a new history entry.
+                    if (currentRoute.routeName == action.routeName) {
+                        // nothing
                     } else {
-                        newNotes.splice(i, 1);
+                        navHistory.push(currentRoute);
                     }
-                    found = true;
-                    break;
                 }
-            }
 
-            if (
-                !found &&
-                'parent_id' in modNote &&
-                modNote.parent_id == state.selectedFolderId
-            )
-                newNotes.push(modeNote);
+                // HACK: whenever a new screen is loaded, all the previous screens of that type
+                // are overwritten with the new screen parameters. This is because the way notes
+                // are currently loaded is not optimal (doesn't retain history properly) so
+                // this is a simple fix without doing a big refactoring to change the way notes
+                // are loaded. Might be good enough since going back to different folders
+                // is probably not a common workflow.
+                for (let i = 0; i < navHistory.length; i++) {
+                    let n = navHistory[i];
+                    if (n.routeName == action.routeName) {
+                        navHistory[i] = Object.assign({}, action);
+                    }
+                }
 
-            newNotes = Note.sortNotes(newNotes, state.notesOrder);
-            state.notes = newNotes;
-            PoorManIntervals.update();
-        },
+                if (action.routeName == 'Welcome') navHistory = [];
 
-        notes_delete: (state, action) => {
-            var newNotes = [];
-            for (let i = 0; i < state.notes.length; i++) {
-                let f = state.notes[i];
-                if (f.id == action.payload.noteId) continue;
-                newNotes.push(f);
-            }
+                reg.logger().info(
+                    'Route: ' + currentRouteName + ' => ' + action.routeName
+                );
 
-            newState = Object.assign({}, state);
-            state.notes = newNotes;
-            PoorManIntervals.update();
-        },
+                newState = Object.assign({}, state);
 
-        folders_update_all: (state, action) => {
-            state.folders = action.payload.folders;
-            PoorManIntervals.update();
-        },
+                if ('noteId' in action) {
+                    newState.selectedNoteId = action.noteId;
+                }
 
-        folders_update_one: (state, action) => {
-            var newFolders = state.folders.splice(0);
-            var found = false;
-            for (let i = 0; i < newFolders.length; i++) {
-                let n = newFolders[i];
-                if (n.id == action.payload.folder.id) {
-                    newFolders[i] = Object.assign(
-                        newFolders[i],
-                        action.payload.folder
+                if ('folderId' in action) {
+                    newState.selectedFolderId = action.folderId;
+                }
+
+                if ('itemType' in action) {
+                    newState.selectedItemType = action.itemType;
+                }
+
+                newState.route = action;
+
+                newState.historyCanGoBack = !!navHistory.length;
+
+                if (newState.route.routeName == 'Notes') {
+                    Setting.setValue(
+                        'activeFolderId',
+                        newState.selectedFolderId
                     );
-                    found = true;
-                    break;
                 }
-            }
 
-            if (!found) newFolders.push(action.payload.folder);
+                break;
 
-            state.folders = newFolders;
-            PoorManIntervals.update();
-        },
+            // Replace all the notes with the provided array
+            case 'APPLICATION_LOADING_DONE':
+                newState = Object.assign({}, state);
+                newState.loading = false;
+                break;
 
-        folder_delete: (state, action) => {
-            var newFolders = [];
-            for (let i = 0; i < state.folders.length; i++) {
-                let f = state.folders[i];
-                if (f.id == action.payload.folderId) continue;
-                newFolders.push(f);
-            }
+            // Replace all the notes with the provided array
+            case 'NOTES_UPDATE_ALL':
+                newState = Object.assign({}, state);
+                newState.notes = action.notes;
+                newState.notesSource = action.notesSource;
+                break;
 
-            state.folders = newFolders;
-            PoorManIntervals.update();
-        },
+            // Insert the note into the note list if it's new, or
+            // update it within the note array if it already exists.
+            case 'NOTES_UPDATE_ONE':
+                const modNote = action.note;
 
-        side_menu_toggle: (state, action) => {
-            state.showSideMenu = !state.showSideMenu;
-        },
+                let newNotes = state.notes.splice(0);
+                var found = false;
+                for (let i = 0; i < newNotes.length; i++) {
+                    let n = newNotes[i];
+                    if (n.id == modNote.id) {
+                        if (
+                            !('parent_id' in modNote) ||
+                            modNote.parent_id == n.parent_id
+                        ) {
+                            // Merge the properties that have changed (in modNote) into
+                            // the object we already have.
+                            newNotes[i] = Object.assign(
+                                newNotes[i],
+                                action.note
+                            );
+                        } else {
+                            newNotes.splice(i, 1);
+                        }
+                        found = true;
+                        break;
+                    }
+                }
 
-        side_menu_open: (state, action) => {
-            state.showSideMenu = true;
-        },
+                if (
+                    !found &&
+                    'parent_id' in modNote &&
+                    modNote.parent_id == state.selectedFolderId
+                )
+                    newNotes.push(modNote);
 
-        side_menu_close: (state, action) => {
-            state.showSideMenu = false;
-        },
+                newNotes = Note.sortNotes(newNotes, state.notesOrder);
+                newState = Object.assign({}, state);
+                newState.notes = newNotes;
+                break;
 
-        sync_started: (state, action) => {
-            state.syncStarted = true;
-        },
+            case 'NOTES_DELETE':
+                newNotes = [];
+                for (let i = 0; i < state.notes.length; i++) {
+                    let f = state.notes[i];
+                    if (f.id == action.noteId) continue;
+                    newNotes.push(f);
+                }
 
-        sync_completed: (state, action) => {
-            state.syncStarted = false;
-        },
+                newState = Object.assign({}, state);
+                newState.notes = newNotes;
+                break;
 
-        sync_report_update: (state, action) => {
-            state.syncReport = action.payload.report;
-        },
+            case 'FOLDERS_UPDATE_ALL':
+                newState = Object.assign({}, state);
+                newState.folders = action.folders;
+                break;
 
-        search_query: (state, action) => {
-            state.searchQuery = action.payload.query.trim();
+            case 'FOLDERS_UPDATE_ONE':
+                var newFolders = state.folders.splice(0);
+                var found = false;
+                for (let i = 0; i < newFolders.length; i++) {
+                    let n = newFolders[i];
+                    if (n.id == action.folder.id) {
+                        newFolders[i] = Object.assign(
+                            newFolders[i],
+                            action.folder
+                        );
+                        found = true;
+                        break;
+                    }
+                }
+
+                if (!found) newFolders.push(action.folder);
+
+                newState = Object.assign({}, state);
+                newState.folders = newFolders;
+                break;
+
+            case 'FOLDER_DELETE':
+                var newFolders = [];
+                for (let i = 0; i < state.folders.length; i++) {
+                    let f = state.folders[i];
+                    if (f.id == action.folderId) continue;
+                    newFolders.push(f);
+                }
+
+                newState = Object.assign({}, state);
+                newState.folders = newFolders;
+                break;
+
+            case 'SIDE_MENU_TOGGLE':
+                newState = Object.assign({}, state);
+                newState.showSideMenu = !newState.showSideMenu;
+                break;
+
+            case 'SIDE_MENU_OPEN':
+                newState = Object.assign({}, state);
+                newState.showSideMenu = true;
+                break;
+
+            case 'SIDE_MENU_CLOSE':
+                newState = Object.assign({}, state);
+                newState.showSideMenu = false;
+                break;
+
+            case 'SYNC_STARTED':
+                newState = Object.assign({}, state);
+                newState.syncStarted = true;
+                break;
+
+            case 'SYNC_COMPLETED':
+                newState = Object.assign({}, state);
+                newState.syncStarted = false;
+                break;
+
+            case 'SYNC_REPORT_UPDATE':
+                newState = Object.assign({}, state);
+                newState.syncReport = action.report;
+                break;
+
+            case 'SEARCH_QUERY':
+                newState = Object.assign({}, state);
+                newState.searchQuery = action.query.trim();
         }
+    } catch (error) {
+        error.message = 'In reducer: ' + error.message;
+        throw error;
     }
-});
 
-export const { reducer, actions } = navReducer;
+    return newState;
+};
 
-const store = configureStore({
-    reducer: {
-        nav: reducer
+const generalMiddleware = store => next => action => {
+    reg.logger().info('Reducer action', action.type);
+    PoorManIntervals.update(); // This function needs to be called regularly so put it here
+
+    const result = next(action);
+
+    if (action.type == 'NAV_GO') Keyboard.dismiss();
+
+    if (
+        [
+            'NOTES_UPDATE_ONE',
+            'NOTES_DELETE',
+            'FOLDERS_UPDATE_ONE',
+            'FOLDER_DELETE'
+        ].indexOf(action.type) >= 0
+    ) {
+        reg.scheduleSync();
     }
-});
+
+    return result;
+};
+
+let store = createStore(reducer, applyMiddleware(generalMiddleware));
 
 let initializationState_ = 'waiting';
 
@@ -393,18 +420,26 @@ async function initialize(dispatch, backButtonHandler) {
         reg.logger().info('Loading folders...');
 
         await FoldersScreenUtils.refreshFolders();
-        dispatch(actions.application_loading_done());
+        dispatch({
+            type: 'APPLICATION_LOADING_DONE'
+        });
 
         let folderId = Setting.value('activeFolderId');
         let folder = await Folder.load(folderId);
 
         if (!folder) folder = await Folder.defaultFolder();
+
         if (!folder) {
-            dispatch(actions.navigate({ routeName: 'Welcome' }));
+            dispatch({
+                type: 'NAV_GO',
+                routeName: 'Welcome'
+            });
         } else {
-            dispatch(
-                actions.navigate({ routeName: 'Notes', folderId: folder.id })
-            );
+            dispatch({
+                type: 'NAV_GO',
+                routeName: 'Notes',
+                folderId: folder.id
+            });
         }
     } catch (error) {
         reg.logger().error('Initialization error:', error);
@@ -441,21 +476,14 @@ class HomeStackComponent extends React.Component {
         );
     }
 
-    componentWillReceiveProps(newProps) {
-        if (newProps.syncStarted != this.lastSyncStarted_) {
-            if (!newProps.syncStarted) FoldersScreenUtils.refreshFolders();
-            this.lastSyncStarted_ = newProps.syncStarted;
-        }
-    }
-
     backButtonHandler() {
         if (this.props.showSideMenu) {
-            this.props.dispatch(actions.side_menu_close());
+            this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
             return true;
         }
 
         if (this.props.historyCanGoBack) {
-            this.props.dispatch(actions.navigate({ routeName: 'Back' }));
+            this.props.dispatch({ type: 'NAV_BACK' });
             return true;
         }
 
@@ -481,8 +509,8 @@ class HomeStackComponent extends React.Component {
 
 export const HomeStack = connect(state => {
     return {
-        historyCanGoBack: state.nav.historyCanGoBack,
-        showSideMenu: state.nav.showSideMenu,
+        historyCanGoBack: state.historyCanGoBack,
+        showSideMenu: state.showSideMenu,
         syncStarted: state.syncStarted
     };
 })(HomeStackComponent);

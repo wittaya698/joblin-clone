@@ -9,7 +9,6 @@ import { time } from '@/lib/time-utils.js';
 import { _ } from '@/lib/locale.js';
 import moment from 'moment';
 import lodash from 'lodash';
-// import { actions } from '@/root.js';
 
 class Note extends BaseItem {
     static tableName() {
@@ -303,7 +302,11 @@ class Note extends BaseItem {
             o.source_application = Setting.value('appId');
 
         return super.save(o, options).then(note => {
-            // this.dispatch(actions.notes_update_one({ note: note }));
+            this.dispatch({
+                type: 'NOTES_UPDATE_ONE',
+                note: note
+            });
+
             return note;
         });
     }
@@ -311,7 +314,10 @@ class Note extends BaseItem {
     static async delete(id, options = null) {
         let r = await super.delete(id, options);
 
-        // this.dispatch(actions.notes_delete({ noteId: id }));
+        this.dispatch({
+            type: 'NOTES_DELETE',
+            noteId: id
+        });
     }
 }
 
