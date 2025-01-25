@@ -73,12 +73,7 @@ class NotesScreenComponent extends BaseScreenComponent {
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader title={title} menuOptions={this.menuOptions()} />
-                <NoteList
-                    noItemMessage={_(
-                        'There are currently no notes. Create one by clicking on the (+) button.'
-                    )}
-                    style={{ flex: 1 }}
-                />
+                <NoteList style={{ flex: 1 }} />
                 <ActionButton
                     addFolderNoteButtons={addFolderNoteButtons}
                     parentFolderId={this.props.selectedFolderId}
