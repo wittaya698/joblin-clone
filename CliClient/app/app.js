@@ -286,6 +286,17 @@ class Application {
         });
     }
 
+    baseModelListener(action) {
+        switch (action.type) {
+            case 'NOTES_UPDATE_ONE':
+            case 'NOTES_DELETE':
+            case 'FOLDERS_UPDATE_ONE':
+            case 'FOLDER_DELETE':
+                reg.scheduleSync();
+                break;
+        }
+    }
+
     async start() {
         this.vorpal_ = require('vorpal')();
         vorpalUtils.initialize(this.vorpal());
@@ -339,6 +350,9 @@ class Application {
 
         reg.setDb(this.database_);
         BaseModel.db_ = this.database_;
+        BaseModel.dispatch = action => {
+            this.baseModelListener(action);
+        };
         await Setting.load();
 
         setLocale(Setting.value('locale'));
@@ -368,7 +382,7 @@ class Application {
         } else {
             setInterval(() => {
                 reg.scheduleSync(1);
-            }, 1000 * 5); //60 * 5);
+            }, 1000 * 60 * 5); //60 * 5);
 
             this.updatePrompt();
             this.vorpal().show();

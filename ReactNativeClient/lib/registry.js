@@ -114,7 +114,7 @@ reg.scheduleSync = async (delay = null) => {
 
     reg.logger().info('Scheduling sync operation...');
 
-    reg.scheduleSyncId_ = setTimeout(async () => {
+    const timeoutCallback = async () => {
         reg.scheduleSyncId_ = null;
         reg.logger().info('Doing scheduled sync');
 
@@ -139,7 +139,13 @@ reg.scheduleSync = async (delay = null) => {
                 throw error;
             }
         }
-    }, delay);
+    };
+
+    if (delay === 0) {
+        timeoutCallback();
+    } else {
+        reg.scheduleSyncId_ = setTimeout(timeoutCallback, delay);
+    }
 };
 
 reg.setDb = v => {
