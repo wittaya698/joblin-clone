@@ -291,10 +291,14 @@ class SideMenuContentComponent extends Component {
             />
         );
 
-        // onLayout={(event) => this.onLayout(event)}
-
         return (
-            <View style={{ flex: 1 }}>
+            <View
+                style={{
+                    flex: 1,
+                    borderRightWidth: 1,
+                    borderRightColor: globalStyle.dividerColor
+                }}
+            >
                 <View style={{ flexDirection: 'row' }}>
                     <Image
                         style={{ flex: 1, height: 150 }}

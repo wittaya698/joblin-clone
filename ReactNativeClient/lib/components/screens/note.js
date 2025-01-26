@@ -81,6 +81,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             isLoading: true
         };
 
+        this.bodyScrollTop_ = 0;
+
         this.saveButtonHasBeenShown_ = false;
 
         this.backHandler = () => {
@@ -352,7 +354,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                 return body;
             }
 
-            function markdownToHtml(body, style) {
+            const markdownToHtml = (body, style) => {
                 // https://necolas.github.io/normalize.css/
                 const normalizeCss = `
 					html{line-height:1.15;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}
@@ -449,11 +451,11 @@ class NoteScreenComponent extends BaseScreenComponent {
                         /°°JOP°CHECKBOX°([A-Z]+)°(\d+)°°/,
                         function (v, type, index) {
                             const js =
-                                "window.ReactNativeWebView.postMessage('checkboxclick_" +
+                                "window.ReactNativeWebView.postMessage('checkboxclick:" +
                                 type +
                                 '_' +
                                 index +
-                                "'); this.textContent = this.textContent == '☐' ? '☑' : '☐';";
+                                "'); this.textContent = this.textContent == '☐' ? '☑' : '☐'; return false";
                             return (
                                 '<a href="#" onclick="' +
                                 js +
@@ -465,8 +467,19 @@ class NoteScreenComponent extends BaseScreenComponent {
                     );
                 }
 
+                let scriptHtml =
+                    '<script>document.body.scrollTop = ' +
+                    this.bodyScrollTop_ +
+                    ';</script>';
+
+                html =
+                    '<body onscroll="window.ReactNativeWebView.postMessage(\'bodyscroll:\' + document.body.scrollTop);">' +
+                    html +
+                    scriptHtml +
+                    '</body>';
+
                 return html;
-            }
+            };
 
             bodyComponent = (
                 <View style={styles.bodyViewContainer}>
@@ -477,12 +490,15 @@ class NoteScreenComponent extends BaseScreenComponent {
                         onMessage={event => {
                             let msg = event.nativeEvent.data;
                             reg.logger().info('postMessage received: ' + msg);
-                            if (msg.indexOf('checkboxclick_') === 0) {
-                                msg = msg.split('_');
+                            if (msg.indexOf('checkboxclick:') === 0) {
+                                msg = msg.split(':');
                                 let index = Number(msg[msg.length - 1]);
                                 let currentState = msg[msg.length - 2]; // Not really needed but keep it anyway
                                 const newBody = toggleTickAt(note.body, index);
                                 this.saveOneProperty('body', newBody);
+                            } else if (msg.indexOf('bodyscroll:') === 0) {
+                                msg = msg.split(':');
+                                this.bodyScrollTop_ = Number(msg[1]);
                             } else {
                                 Linking.openURL(msg);
                             }
