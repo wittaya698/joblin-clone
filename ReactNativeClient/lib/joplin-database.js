@@ -127,7 +127,7 @@ class JoplinDatabase extends Database {
         //
         // 1. Add the new version number to the existingDatabaseVersions array
         // 2. Add the upgrade logic to the "switch (targetVersion)" statement below
-        const existingDatabaseVersions = [1, 2];
+        const existingDatabaseVersions = [1, 2, 3];
 
         let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
         if (currentVersionIndex == existingDatabaseVersions.length - 1)
@@ -157,6 +157,10 @@ class JoplinDatabase extends Database {
                 queries.push({
                     sql: 'CREATE INDEX deleted_items_sync_target ON deleted_items (sync_target)'
                 });
+            }
+
+            if (targetVersion == 3) {
+                queries = this.alterColumnQueries('settings', ['key', 'value']);
             }
 
             queries.push({

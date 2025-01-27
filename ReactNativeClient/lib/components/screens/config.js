@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Button } from 'react-native';
+import { View, Switch, StyleSheet, Text, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { connect } from 'react-redux';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
@@ -22,7 +22,7 @@ let styles = {
         color: globalStyle.color
     },
     settingControl: {
-        color: globalStyle.color
+        // color: globalStyle.color
     }
 };
 
@@ -64,7 +64,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 
         const value = this.state.values[key];
 
-        if (setting.type == 'enum') {
+        if (setting.isEnum) {
             let items = [];
             const settingOptions = setting.options();
 
@@ -91,6 +91,20 @@ class ConfigScreenComponent extends BaseScreenComponent {
                     >
                         {items}
                     </Picker>
+                </View>
+            );
+        } else if (setting.type == Setting.TYPE_BOOL) {
+            return (
+                <View key={key} style={styles.settingContainer}>
+                    <Text key="label" style={styles.settingText}>
+                        {setting.label()}
+                    </Text>
+                    <Switch
+                        key="control"
+                        style={styles.settingControl}
+                        value={value}
+                        onValueChange={value => updateSettingValue(key, value)}
+                    />
                 </View>
             );
         } else {

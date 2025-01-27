@@ -176,6 +176,7 @@ class Note extends BaseItem {
     }
 
     static async updateGeolocation(noteId) {
+        if (!Setting.value('trackLocation')) return;
         if (!Note.updateGeolocationEnabled_) return;
 
         let startWait = time.unixMs();
