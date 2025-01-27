@@ -11,6 +11,10 @@ function shimInit() {
         console.error(error_msg);
         throw new Error(error_msg);
     };
+
+    shim.readLocalFileBase64 = async function (path) {
+        return RNFS.readFile(path, 'base64');
+    };
 }
 
 export { shimInit };

@@ -45,5 +45,15 @@ class Resource extends BaseItem {
             content
         );
     }
+
+    static isResourceUrl(url) {
+        return url.length === 34 && url[0] === ':' && url[1] === '/';
+    }
+
+    static urlToId(url) {
+        if (!this.isResourceUrl(url))
+            throw new Error('Not a valid resource URL: ' + url);
+        return url.substr(2);
+    }
 }
 export { Resource };

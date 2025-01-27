@@ -24,9 +24,7 @@ class NotesScreenComponent extends BaseScreenComponent {
 
     async UNSAFE_componentWillReceiveProps(newProps) {
         if (
-            newProps.notesOrder.orderBy != this.props.notesOrder.orderBy ||
-            newProps.notesOrder.orderByDir !=
-                this.props.notesOrder.orderByDir ||
+            newProps.notesOrder !== this.props.notesOrder ||
             newProps.selectedFolderId != this.props.selectedFolderId ||
             newProps.selectedTagId != this.props.selectedTagId ||
             newProps.notesParentType != this.props.notesParentType
@@ -39,8 +37,8 @@ class NotesScreenComponent extends BaseScreenComponent {
         if (props === null) props = this.props;
 
         let options = {
-            orderBy: props.notesOrder.orderBy,
-            orderByDir: props.notesOrder.orderByDir
+            order: props.notesOrder,
+            uncompletedTodosOnTop: props.uncompletedTodosOnTop
         };
 
         const parent = this.parentItem(props);
@@ -177,7 +175,8 @@ const NotesScreen = connect(state => {
         notesParentType: state.notesParentType,
         notes: state.notes,
         notesOrder: state.notesOrder,
-        notesSource: state.notesSource
+        notesSource: state.notesSource,
+        uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop
     };
 })(NotesScreenComponent);
 

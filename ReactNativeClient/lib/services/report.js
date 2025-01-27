@@ -72,8 +72,7 @@ class ReportService {
         section.body = [];
 
         let folders = await Folder.all({
-            orderBy: 'title',
-            caseInsensitive: true
+            order: { by: 'title', dir: 'ASC' }
         });
         for (let i = 0; i < folders.length; i++) {
             let folder = folders[i];

@@ -12,6 +12,7 @@ import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
+import { Resource } from '@/lib/models/resource.js';
 import { Folder } from '@/lib/models/folder.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { ActionButton } from '@/lib/components/action-button.js';
@@ -22,6 +23,7 @@ import { Checkbox } from '@/lib/components/checkbox.js';
 import { _ } from '@/lib/locale.js';
 import marked from '@/lib/marked.js';
 import { reg } from '@/lib/registry.js';
+import { shim } from '@/lib/shim.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
 import { globalStyle } from '@/lib/components/global-style.js';
@@ -78,7 +80,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             showNoteMetadata: false,
             folder: null,
             lastSavedNote: null,
-            isLoading: true
+            isLoading: true,
+            resources: {}
         };
 
         this.bodyScrollTop_ = 0;
@@ -254,6 +257,17 @@ class NoteScreenComponent extends BaseScreenComponent {
         this.refreshNoteMetadata(true);
     }
 
+    async loadResource(id) {
+        const resource = await Resource.load(id);
+        resource.base64 = await shim.readLocalFileBase64(
+            Resource.fullPath(resource)
+        );
+
+        let newResources = Object.assign({}, this.state.resources);
+        newResources[id] = resource;
+        this.setState({ resources: newResources });
+    }
+
     async showOnMap_onPress() {
         if (!this.state.note.id) return;
 
@@ -407,6 +421,9 @@ class NoteScreenComponent extends BaseScreenComponent {
                     style.htmlDividerColor +
                     `;
 					}
+                    img {
+						width: 100%;
+					}
 				`;
 
                 let counter = -1;
@@ -423,13 +440,44 @@ class NoteScreenComponent extends BaseScreenComponent {
 
                 const renderer = new marked.Renderer();
                 renderer.link = function (href, title, text) {
-                    const js =
-                        'window.ReactNativeWebView.postMessage(' +
-                        JSON.stringify(href) +
-                        '); return false;';
-                    let output =
-                        "<a href='#' onclick='" + js + "'>" + text + '</a>';
-                    return output;
+                    if (Resource.isResourceUrl(href)) {
+                        return '[Resource not yet supported: ' + href + ']'; // TODO: add title
+                    } else {
+                        const js =
+                            'postMessage(' +
+                            JSON.stringify(href) +
+                            '); return false;';
+                        let output =
+                            "<a title='" +
+                            title +
+                            "' href='#' onclick='" +
+                            js +
+                            "'>" +
+                            text +
+                            '</a>';
+                        return output;
+                    }
+                };
+
+                renderer.image = (href, title, text) => {
+                    const resourceId = Resource.urlToId(href);
+                    if (!this.state.resources[resourceId]) {
+                        this.loadResource(resourceId);
+                        return '';
+                    }
+
+                    const r = this.state.resources[resourceId];
+                    if (
+                        r.mime == 'image/png' ||
+                        r.mime == 'image/jpg' ||
+                        r.mime == 'image/gif'
+                    ) {
+                        const src = 'data:' + r.mime + ';base64,' + r.base64;
+                        let output = '<img src="' + src + '"/>';
+                        return output;
+                    }
+
+                    return '[Image: ' + r.title + '(' + r.mime + ')]';
                 };
 
                 let html = note
@@ -453,7 +501,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                             const js =
                                 "window.ReactNativeWebView.postMessage('checkboxclick:" +
                                 type +
-                                '_' +
+                                ':' +
                                 index +
                                 "'); this.textContent = this.textContent == '☐' ? '☑' : '☐'; return false";
                             return (
@@ -489,7 +537,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                         }}
                         onMessage={event => {
                             let msg = event.nativeEvent.data;
-                            reg.logger().info('postMessage received: ' + msg);
+                            // reg.logger().info('postMessage received: ' + msg);
                             if (msg.indexOf('checkboxclick:') === 0) {
                                 msg = msg.split(':');
                                 let index = Number(msg[msg.length - 1]);
