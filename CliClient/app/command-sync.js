@@ -78,7 +78,7 @@ class Command extends BaseCommand {
 
             if (
                 this.syncTarget_ == Setting.SYNC_TARGET_ONEDRIVE &&
-                !(await reg.syncHasAuth(this.syncTarget_))
+                !reg.syncHasAuth(this.syncTarget_)
             ) {
                 const oneDriveApiUtils = new OneDriveApiNodeUtils(
                     reg.oneDriveApi()
@@ -153,7 +153,7 @@ class Command extends BaseCommand {
 
         vorpalUtils.redrawDone();
         this.log(_('Cancelling...'));
-        if (await reg.syncHasAuth(target)) {
+        if (reg.syncHasAuth(target)) {
             let sync = await reg.synchronizer(target);
             if (sync) sync.cancel();
         } else {

@@ -19,6 +19,16 @@ class OneDriveApiNodeUtils {
         return [1917, 9917, 8917];
     }
 
+    makePage(message) {
+        const header = `
+		<!doctype html>
+		<html><head><meta charset="utf-8"></head><body>`;
+        const footer = `
+		</body></html>
+		`;
+        return header + message + footer;
+    }
+
     async oauthDance(targetConsole = null) {
         if (targetConsole === null) targetConsole = console;
 
@@ -43,11 +53,11 @@ class OneDriveApiNodeUtils {
             server.on('request', (request, response) => {
                 const query = urlParser.parse(request.url, true).query;
 
-                function writeResponse(code, message) {
+                const writeResponse = (code, message) => {
                     response.writeHead(code, { 'Content-Type': 'text/html' });
-                    response.write(message);
+                    response.write(this.makePage(message));
                     response.end();
-                }
+                };
 
                 if (!query.code)
                     return writeResponse(
