@@ -133,7 +133,7 @@ class SideMenuContentComponent extends Component {
 
     folderItem(folder, selected) {
         const iconComp = selected ? (
-            <Icon name="folder-open-outline" style={globalStyle.icon} />
+            <Icon name="folder-open" style={globalStyle.icon} />
         ) : (
             <Icon name="folder-outline" style={globalStyle.icon} />
         );
@@ -159,9 +159,7 @@ class SideMenuContentComponent extends Component {
     }
 
     tagItem(tag, selected) {
-        const iconComp = (
-            <Icon name="pricetag-outline" style={styles.folderIcon} />
-        );
+        const iconComp = <Icon name="pricetag" style={styles.folderIcon} />;
         const tagButtonStyle = selected
             ? styles.tagButtonSelected
             : styles.tagButton;
@@ -188,9 +186,9 @@ class SideMenuContentComponent extends Component {
             state == 'sync' ? _('Synchronise') : _('Cancel synchronisation');
         const iconComp =
             state == 'sync' ? (
-                <Icon name="sync-outline" style={globalStyle.icon} />
+                <Icon name="sync" style={globalStyle.icon} />
             ) : (
-                <Icon name="close-outline" style={globalStyle.icon} />
+                <Icon name="close" style={globalStyle.icon} />
             );
 
         return (

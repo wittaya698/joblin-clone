@@ -8,7 +8,7 @@ import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'mv <pattern> <destination>';
+        return _('mv <pattern> <destination>');
     }
 
     description() {

@@ -600,7 +600,7 @@ class NoteScreenComponent extends BaseScreenComponent {
 
             buttons.push({
                 title: _('Edit'),
-                icon: 'file-edit-outline',
+                icon: 'file-edit',
                 onPress: () => {
                     this.setState({ mode: 'edit' });
                 }

@@ -35,9 +35,7 @@ class Checkbox extends Component {
     }
 
     render() {
-        const iconName = this.state.checked
-            ? 'checkbox-outline'
-            : 'square-outline';
+        const iconName = this.state.checked ? 'checkbox' : 'square-outline';
 
         let style = this.props.style ? Object.assign({}, this.props.style) : {};
         style.justifyContent = 'center';

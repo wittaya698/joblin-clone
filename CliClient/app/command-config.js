@@ -5,7 +5,7 @@ import { Setting } from '@/lib/models/setting.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'config [name] [value]';
+        return _('config [name] [value]');
     }
 
     options() {

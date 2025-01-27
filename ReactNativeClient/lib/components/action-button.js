@@ -70,7 +70,7 @@ class ActionButtonComponent extends React.Component {
             if (this.props.folders.length) {
                 buttons.push({
                     title: 'New todo',
-                    icon: 'checkbox-outline',
+                    icon: 'checkbox',
                     onPress: () => {
                         this.newTodo_press();
                     }

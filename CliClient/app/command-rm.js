@@ -10,7 +10,7 @@ import { vorpalUtils } from './vorpal-utils.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'rm <pattern>';
+        return _('rm <pattern>');
     }
 
     description() {

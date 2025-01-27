@@ -7,7 +7,7 @@
     "url": "https://github.com/wittaya698/joplin-clone"
   },
   "url": "git://github.com/wittaya698/joplin-clone",
-  "version": "0.8.68",
+  "version": "0.8.70",
   "bin": {
     "joplin": "./main_launcher.js"
   },
@@ -53,6 +53,7 @@
     "tsconfig-paths": "^4.2.0",
     "uuid": "^11.0.3",
     "vorpal": "^1.12.0",
+    "word-wrap": "^1.2.5",
     "xml2js": "^0.6.2"
   },
   "scripts": {

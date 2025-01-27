@@ -141,7 +141,7 @@ class SearchScreenComponent extends BaseScreenComponent {
                             onPress={() => this.clearButton_press()}
                         >
                             <Icon
-                                name="close-circle-outline"
+                                name="close-circle"
                                 style={styles.clearIcon}
                             />
                         </TouchableHighlight>
