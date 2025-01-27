@@ -223,12 +223,6 @@ class SideMenuContentComponent extends Component {
         );
     }
 
-    // onLayout(event) {
-    // 	const newWidth = event.nativeEvent.layout.width;
-    // 	if (this.state.width == newWidth) return;
-    // 	this.setState({ width: newWidth });
-    // }
-
     render() {
         let items = [];
 
@@ -275,6 +269,7 @@ class SideMenuContentComponent extends Component {
         if (items.length) items.push(this.makeDivider('divider_2'));
 
         let lines = Synchronizer.reportToLines(this.props.syncReport);
+        while (lines.length < 10) lines.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling
         const syncReportText = lines.join('\n');
 
         items.push(

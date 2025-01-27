@@ -16,10 +16,6 @@ class Command extends BaseCommand {
         );
     }
 
-    aliases() {
-        return ['cd'];
-    }
-
     autocomplete() {
         return { data: autocompleteFolders };
     }

@@ -253,7 +253,11 @@ const reducer = (state = defaultState, action) => {
                 )
                     newNotes.push(modNote);
 
-                // newNotes = Note.sortNotes(newNotes, state.notesOrder);
+                newNotes = Note.sortNotes(
+                    newNotes,
+                    state.notesOrder,
+                    newState.settings.uncompletedTodosOnTop
+                );
                 newState = Object.assign({}, state);
                 newState.notes = newNotes;
                 break;

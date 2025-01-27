@@ -172,17 +172,17 @@ reg.syncStarted = async () => {
 };
 
 reg.setupRecurrentSync = () => {
-    if (this.recurrentSyncId_) {
-        PoorManIntervals.clearInterval(this.recurrentSyncId_);
-        this.recurrentSyncId_ = null;
+    if (reg.recurrentSyncId_) {
+        PoorManIntervals.clearInterval(reg.recurrentSyncId_);
+        reg.recurrentSyncId_ = null;
     }
 
-    console.info(
+    reg.logger().debug(
         'Setting up recurrent sync with interval ' +
             Setting.value('sync.interval')
     );
 
-    this.recurrentSyncId_ = PoorManIntervals.setInterval(() => {
+    reg.recurrentSyncId_ = PoorManIntervals.setInterval(() => {
         reg.logger().info('Running background sync on timer...');
         reg.scheduleSync(0);
     }, 1000 * Setting.value('sync.interval'));

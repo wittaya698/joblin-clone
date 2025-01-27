@@ -105,6 +105,10 @@ msgstr ""
 msgid "No active notebook."
 msgstr "Aucun carnet actif."
 
+#, fuzzy, javascript-format
+msgid "Note does not exist: \"%s\". Create it?"
+msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
+
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
