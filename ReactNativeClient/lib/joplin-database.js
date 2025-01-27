@@ -127,7 +127,7 @@ class JoplinDatabase extends Database {
         //
         // 1. Add the new version number to the existingDatabaseVersions array
         // 2. Add the upgrade logic to the "switch (targetVersion)" statement below
-        const existingDatabaseVersions = [1, 2, 3];
+        const existingDatabaseVersions = [0, 1, 2, 3];
 
         let currentVersionIndex = existingDatabaseVersions.indexOf(fromVersion);
         if (currentVersionIndex == existingDatabaseVersions.length - 1)
@@ -140,6 +140,10 @@ class JoplinDatabase extends Database {
                 'Converting database to version ' + targetVersion
             );
             let queries = [];
+
+            if (targetVersion == 1) {
+                queries = this.wrapQueries(this.sqlStringToLines(structureSql));
+            }
 
             if (targetVersion == 2) {
                 const newTableSql = `
@@ -160,7 +164,10 @@ class JoplinDatabase extends Database {
             }
 
             if (targetVersion == 3) {
-                queries = this.alterColumnQueries('settings', ['key', 'value']);
+                queries = this.alterColumnQueries('settings', {
+                    key: 'TEXT PRIMARY KEY',
+                    value: 'TEXT'
+                });
             }
 
             queries.push({
@@ -259,79 +266,32 @@ class JoplinDatabase extends Database {
     async initialize() {
         this.logger().info('Checking for database schema update...');
 
-        for (let initLoopCount = 1; initLoopCount <= 2; initLoopCount++) {
-            try {
-                let row = await this.selectOne('SELECT * FROM version LIMIT 1');
-                let currentVersion = row.version;
-                this.logger().info('Current database version', currentVersion);
+        let versionRow = null;
+        try {
+            // Will throw if the database has not been created yet, but this is handled below
+            versionRow = await this.selectOne('SELECT * FROM version LIMIT 1');
+        } catch (error) {
+            console.info(error);
+        }
 
-                const upgraded = await this.upgradeDatabase(currentVersion);
-                if (upgraded) await this.refreshTableFields();
+        const version = !versionRow ? 0 : versionRow.version;
+        this.logger().info('Current database version', version);
 
-                // TODO: version update logic
-                // TODO: only do this if db has been updated:
-                // return this.refreshTableFields();
-            } catch (error) {
-                // Critical -> error.code != 5 need to be removed
-                if (
-                    error &&
-                    error.code != 0 &&
-                    error.code != 5 &&
-                    error.code != 'SQLITE_ERROR'
-                )
-                    throw this.sqliteErrorToJsError(error);
+        const upgraded = await this.upgradeDatabase(version);
+        if (upgraded) await this.refreshTableFields();
 
-                // Assume that error was:
-                // { message: 'no such table: version (code 1): , while compiling: SELECT * FROM version', code: 0 }
-                // which means the database is empty and the tables need to be created.
-                // If it's any other error there's nothing we can do anyway.
+        this.tableFields_ = {};
+        let rows = await this.selectAll('SELECT * FROM table_fields');
 
-                this.logger().info('Database is new - creating the schema...');
-
-                let queries = this.wrapQueries(
-                    this.sqlStringToLines(structureSql)
-                );
-                queries.push(
-                    this.wrapQuery(
-                        'INSERT INTO settings (`key`, `value`, `type`) VALUES ("clientId", "' +
-                            uuid.create() +
-                            '", "' +
-                            Database.enumId('settings', 'string') +
-                            '")'
-                    )
-                );
-
-                try {
-                    await this.transactionExecBatch(queries);
-                    this.logger().info('Database schema created successfully');
-                    await this.refreshTableFields();
-                } catch (error) {
-                    throw this.sqliteErrorToJsError(error);
-                }
-
-                // Now that the database has been created, go through the normal initialisation process
-                continue;
-            }
-
-            this.tableFields_ = {};
-
-            let rows = await this.selectAll('SELECT * FROM table_fields');
-
-            for (let i = 0; i < rows.length; i++) {
-                let row = rows[i];
-                if (!this.tableFields_[row.table_name])
-                    this.tableFields_[row.table_name] = [];
-                this.tableFields_[row.table_name].push({
-                    name: row.field_name,
-                    type: row.field_type,
-                    default: Database.formatValue(
-                        row.field_type,
-                        row.field_default
-                    )
-                });
-            }
-
-            break;
+        for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            if (!this.tableFields_[row.table_name])
+                this.tableFields_[row.table_name] = [];
+            this.tableFields_[row.table_name].push({
+                name: row.field_name,
+                type: row.field_type,
+                default: Database.formatValue(row.field_type, row.field_default)
+            });
         }
     }
 }

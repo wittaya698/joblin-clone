@@ -321,7 +321,8 @@ const SideMenuContent = connect(state => {
         syncReport: state.syncReport,
         selectedFolderId: state.selectedFolderId,
         selectedTagId: state.selectedTagId,
-        notesParentType: state.notesParentType
+        notesParentType: state.notesParentType,
+        locale: state.settings.locale
     };
 })(SideMenuContentComponent);
 

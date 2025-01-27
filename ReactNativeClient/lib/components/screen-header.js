@@ -357,7 +357,8 @@ ScreenHeaderComponent.defaultProps = {
 
 const ScreenHeader = connect(state => {
     return {
-        historyCanGoBack: state.historyCanGoBack
+        historyCanGoBack: state.historyCanGoBack,
+        locale: state.settings.locale
     };
 })(ScreenHeaderComponent);
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, Switch, StyleSheet, Text, Button } from 'react-native';
+import Slider from '@react-native-community/slider';
 import { Picker } from '@react-native-picker/picker';
 import { connect } from 'react-redux';
 import { ScreenHeader } from '@/lib/components/screen-header.js';
@@ -22,9 +23,16 @@ let styles = {
         color: globalStyle.color
     },
     settingControl: {
-        // color: globalStyle.color
+        color: globalStyle.color
     }
 };
+
+styles.switchSettingContainer = Object.assign({}, styles.settingContainer);
+styles.switchSettingContainer.flexDirection = 'row';
+styles.switchSettingContainer.justifyContent = 'space-between';
+
+styles.switchSettingControl = Object.assign({}, styles.settingControl);
+delete styles.switchSettingControl.color;
 
 styles = StyleSheet.create(styles);
 
@@ -95,11 +103,25 @@ class ConfigScreenComponent extends BaseScreenComponent {
             );
         } else if (setting.type == Setting.TYPE_BOOL) {
             return (
-                <View key={key} style={styles.settingContainer}>
+                <View key={key} style={styles.switchSettingContainer}>
                     <Text key="label" style={styles.settingText}>
                         {setting.label()}
                     </Text>
                     <Switch
+                        key="control"
+                        style={styles.switchSettingControl}
+                        value={value}
+                        onValueChange={value => updateSettingValue(key, value)}
+                    />
+                </View>
+            );
+        } else if (setting.type == Setting.TYPE_INT) {
+            return (
+                <View key={key} style={styles.settingContainer}>
+                    <Text key="label" style={styles.settingText}>
+                        {setting.label()}
+                    </Text>
+                    <Slider
                         key="control"
                         style={styles.settingControl}
                         value={value}
