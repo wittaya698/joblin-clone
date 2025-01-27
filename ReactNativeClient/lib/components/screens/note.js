@@ -28,6 +28,8 @@ import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
 import { globalStyle } from '@/lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
+const { encode } = require('html-entities');
+const htmlentities = encode;
 
 const styleObject = {
     titleTextInput: {
@@ -441,7 +443,11 @@ class NoteScreenComponent extends BaseScreenComponent {
                 const renderer = new marked.Renderer();
                 renderer.link = function (href, title, text) {
                     if (Resource.isResourceUrl(href)) {
-                        return '[Resource not yet supported: ' + href + ']'; // TODO: add title
+                        return (
+                            '[Resource not yet supported: ' +
+                            htmlentities(text) +
+                            ']'
+                        ); // TODO: add title
                     } else {
                         const js =
                             'postMessage(' +
@@ -449,11 +455,11 @@ class NoteScreenComponent extends BaseScreenComponent {
                             '); return false;';
                         let output =
                             "<a title='" +
-                            title +
+                            htmlentities(title) +
                             "' href='#' onclick='" +
                             js +
                             "'>" +
-                            text +
+                            htmlentities(text) +
                             '</a>';
                         return output;
                     }
@@ -473,11 +479,22 @@ class NoteScreenComponent extends BaseScreenComponent {
                         r.mime == 'image/gif'
                     ) {
                         const src = 'data:' + r.mime + ';base64,' + r.base64;
-                        let output = '<img src="' + src + '"/>';
+                        let output =
+                            '<img title="' +
+                            htmlentities(title) +
+                            '"src="' +
+                            src +
+                            '"/>';
                         return output;
                     }
 
-                    return '[Image: ' + r.title + '(' + r.mime + ')]';
+                    return (
+                        '[Image: ' +
+                        htmlentities(r.title) +
+                        '(' +
+                        htmlentities(r.mime) +
+                        ')]'
+                    );
                 };
 
                 let html = note
@@ -525,6 +542,8 @@ class NoteScreenComponent extends BaseScreenComponent {
                     html +
                     scriptHtml +
                     '</body>';
+
+                console.info(html);
 
                 return html;
             };
