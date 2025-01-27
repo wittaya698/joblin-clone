@@ -23,7 +23,9 @@ import { globalStyle } from '@/lib/components/global-style.js';
 let styles = {
     menu: {
         flex: 1,
-        backgroundColor: globalStyle.backgroundColor
+        backgroundColor: globalStyle.backgroundColor,
+        borderTopWidth: 1,
+        borderTopColor: globalStyle.dividerColor
     },
     name: {
         position: 'absolute',
@@ -183,7 +185,7 @@ class SideMenuContentComponent extends Component {
 
     synchronizeButton(state) {
         const title =
-            state == 'sync' ? _('Synchronize') : _('Cancel synchronization');
+            state == 'sync' ? _('Synchronise') : _('Cancel synchronisation');
         const iconComp =
             state == 'sync' ? (
                 <Icon name="sync-outline" style={globalStyle.icon} />
@@ -301,7 +303,7 @@ class SideMenuContentComponent extends Component {
             >
                 <View style={{ flexDirection: 'row' }}>
                     <Image
-                        style={{ flex: 1, height: 150 }}
+                        style={{ flex: 1, height: 100 }}
                         source={require('../images/SideMenuHeader.png')}
                     />
                 </View>

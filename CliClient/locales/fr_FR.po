@@ -39,7 +39,7 @@ msgid ""
 "Command line argument \"%s\" contains both quotes and double-quotes - "
 "aborting."
 msgstr ""
-"Paramètre de ligne de command \"%s\" contient à la fois des guillemets "
+"Le paramètre de ligne de commande \"%s\" contient à la fois des guillemets "
 "simples et doubles - impossible de continuer."
 
 msgid "Provides help for a given command."
@@ -73,7 +73,7 @@ msgid ""
 msgstr ""
 "Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas "
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
-"sont fournies, la configuration complète est affichée."
+"sont fournis, la configuration complète est affichée."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -176,7 +176,7 @@ msgid ""
 "for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
 "todos, while `-ttd` would display notes and todos."
 msgstr ""
-"Affiche uniquement les notes du ou  des types spécifiés. Le type peut-être "
+"Affiche uniquement les notes du ou des types spécifiés. Le type peut-être "
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
 "uniquement les tâches, tandis que `-ttd` affiche les notes et les tâches)."
 
@@ -188,7 +188,7 @@ msgstr ""
 "les carnets), DATE, TACHE_TERMINE (pour les tâches), TITRE"
 
 msgid "Please select a notebook first."
-msgstr "Veuillez sélectionner un carnet d'abord."
+msgstr "Veuillez d'abord sélectionner un carnet."
 
 msgid "Creates a new notebook."
 msgstr "Créer un carnet."
@@ -234,7 +234,7 @@ msgstr "Assigner la valeur [value] à la propriété <name> de la <note> donnée
 msgid "Displays summary about the notes and notebooks."
 msgstr "Afficher un résumé des notes et carnets."
 
-msgid "Synchronizes with remote storage."
+msgid "Synchronises with remote storage."
 msgstr "Synchroniser les notes et carnets."
 
 msgid "Sync to provided target (defaults to sync.target config value)"
@@ -243,16 +243,16 @@ msgstr ""
 "`sync.target`)."
 
 msgid "Synchronisation is already in progress."
-msgstr "Synchronisation est déjà en cours."
+msgstr "La synchronisation est déjà en cours."
 
-#, fuzzy, javascript-format
-msgid "Synchronization target: %s (%s)"
-msgstr "Cible de la synchronisation : %s"
+#, javascript-format
+msgid "Synchronisation target: %s (%s)"
+msgstr "Cible de la synchronisation : %s (%s)"
 
-msgid "Cannot initialize synchronizer."
-msgstr "Impossible d'initialiser le synchroniseur."
+msgid "Cannot initialize synchroniser."
+msgstr "Impossible d'initialiser la synchronisation."
 
-msgid "Starting synchronization..."
+msgid "Starting synchronisation..."
 msgstr "Commencement de la synchronisation..."
 
 msgid "Done."
@@ -273,14 +273,19 @@ msgstr ""
 
 #, javascript-format
 msgid "Invalid command: \"%s\""
-msgstr "Commande invalie : \"%s\""
+msgstr "Commande invalide : \"%s\""
 
+#, fuzzy
 msgid ""
 "<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
-"given todo between completed and uncompleted state (If the target is not a "
-"single note it will be converted to a todo). Use \"clear\" to convert the "
+"given todo between completed and uncompleted state (If the target is a "
+"regular note it will be converted to a todo). Use \"clear\" to convert the "
 "todo back to a regular note."
 msgstr ""
+"Gère le status des tâches. <action> peut être \"toggle\" ou \"clear\". "
+"Utilisez \"toggle\" pour basculer la tâche entre le status terminé et non-"
+"terminé (Si la cible est une note, elle sera convertie en tâche). Utilisez "
+"\"clear\" pour convertir la tâche en note."
 
 msgid ""
 "Switches to [notebook] - all further operations will happen within this "
@@ -313,8 +318,8 @@ msgstr "Le logiciel a été autorisé."
 
 msgid "Please open this URL in your browser to authenticate the application:"
 msgstr ""
-"Veuillez ouvrir cette URL dans votre navigateur internet pour authentifier "
-"le logiciel :"
+"Veuillez ouvrir cette URL dans votre navigateur internet pour autoriser le "
+"logiciel :"
 
 msgid ""
 "Please set the \"sync.2.path\" config value to the desired synchronisation "
@@ -360,8 +365,8 @@ msgid "Completed: %s"
 msgstr "Terminé : %s"
 
 #, javascript-format
-msgid "Synchronization is already in progress. State: %s"
-msgstr "Synchronisation est déjà en cours. Etat : %s"
+msgid "Synchronisation is already in progress. State: %s"
+msgstr "La synchronisation est déjà en cours. Etat : %s"
 
 msgid "Conflicts"
 msgstr "Conflits"
@@ -415,29 +420,28 @@ msgid "Non-completed and recently completed ones"
 msgstr "Tâches non-complétées et récentes"
 
 msgid "Non-completed ones only"
-msgstr "Tâche complétée seulement"
+msgstr "Tâches complétées seulement"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr ""
+msgstr "Montrer les tâches non-terminées en haut des listes"
 
 msgid "Save location with notes"
-msgstr ""
+msgstr "Enregistrer l'emplacement avec les notes"
 
-#, fuzzy
 msgid "Synchronisation interval"
-msgstr "Cible de la synchronisation"
+msgstr "Interval de synchronisation"
 
 #, javascript-format
 msgid "%d minutes"
-msgstr ""
+msgstr "%d minutes"
 
 #, javascript-format
 msgid "%d hour"
-msgstr ""
+msgstr "%d heure"
 
 #, javascript-format
 msgid "%d hours"
-msgstr ""
+msgstr "%d heures"
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"
@@ -479,13 +483,13 @@ msgstr "Etat"
 msgid "Configuration"
 msgstr "Configuration"
 
-msgid "Synchronize"
+msgid "Synchronise"
 msgstr "Synchroniser"
 
-msgid "Cancel synchronization"
+msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
-#, fuzzy, javascript-format
+#, javascript-format
 msgid "The notebook could not be saved: %s"
 msgstr "Ce carnet n'a pas pu être sauvegardé : %s"
 
@@ -497,9 +501,6 @@ msgstr "Sans titre"
 
 msgid "Delete note?"
 msgstr "Supprimer la note ?"
-
-msgid "Attach file"
-msgstr "Attacher un fichier"
 
 msgid "Delete note"
 msgstr "Supprimer la note"
@@ -532,10 +533,10 @@ msgid "Delete notebook"
 msgstr "Supprimer le carnet"
 
 msgid "Login with OneDrive"
-msgstr ""
+msgstr "Se connecter avec OneDrive"
 
 msgid "Search"
-msgstr ""
+msgstr "Chercher"
 
 msgid ""
 "Click on the (+) button to create a new note or notebook. Click on the side "
@@ -550,7 +551,7 @@ msgstr ""
 "(+)."
 
 msgid "Welcome"
-msgstr ""
+msgstr "Bienvenu"
 
 #~ msgid "Either \"text\" or \"json\""
 #~ msgstr "Soit \"text\" soit \"json\""
@@ -560,6 +561,9 @@ msgstr ""
 
 #~ msgid "New notebook"
 #~ msgstr "Nouveau carnet"
+
+#~ msgid "Attach file"
+#~ msgstr "Attacher un fichier"
 
 #~ msgid "Imported - %s"
 #~ msgstr "Importé - %s"

@@ -286,12 +286,12 @@ class NoteScreenComponent extends BaseScreenComponent {
         const note = this.state.note;
 
         return [
-            {
-                title: _('Attach file'),
-                onPress: () => {
-                    this.attachFile_onPress();
-                }
-            },
+            // {
+            //     title: _('Attach file'),
+            //     onPress: () => {
+            //         this.attachFile_onPress();
+            //     }
+            // },
             {
                 title: _('Delete note'),
                 onPress: () => {

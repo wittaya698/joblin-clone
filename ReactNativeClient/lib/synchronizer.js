@@ -174,7 +174,7 @@ class Synchronizer {
         if (this.state() != 'idle') {
             let error = new Error(
                 _(
-                    'Synchronization is already in progress. State: %s',
+                    'Synchronisation is already in progress. State: %s',
                     this.state()
                 )
             );
@@ -213,7 +213,7 @@ class Synchronizer {
             'starting',
             null,
             null,
-            'Starting synchronization to target ' +
+            'Starting synchronisation to target ' +
                 syncTargetId +
                 '... [' +
                 synchronizationId +
@@ -559,7 +559,7 @@ class Synchronizer {
         }
 
         if (this.cancelling()) {
-            this.logger().info('Synchronization was cancelled.');
+            this.logger().info('Synchronisation was cancelled.');
             this.cancelling_ = false;
         }
 
@@ -571,7 +571,7 @@ class Synchronizer {
             'finished',
             null,
             null,
-            'Synchronization finished [' + synchronizationId + ']'
+            'Synchronisation finished [' + synchronizationId + ']'
         );
 
         await this.logSyncSummary(this.progressReport_);
