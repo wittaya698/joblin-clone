@@ -423,7 +423,7 @@ msgid "Non-completed ones only"
 msgstr "Tâches complétées seulement"
 
 msgid "Show uncompleted todos on top of the lists"
-msgstr "Montrer les tâches non-terminées en haut des listes"
+msgstr "Tâches non-terminées en haut des listes"
 
 msgid "Save location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
@@ -518,7 +518,7 @@ msgid "Show metadata"
 msgstr "Afficher les métadonnées"
 
 msgid "View location on map"
-msgstr "Voir l'emplacement sur une carte"
+msgstr "Voir l'emplacement sur la carte"
 
 msgid "New note"
 msgstr "Nouvelle note"
