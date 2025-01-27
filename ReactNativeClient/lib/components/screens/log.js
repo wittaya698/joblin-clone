@@ -77,7 +77,7 @@ class LogScreenComponent extends BaseScreenComponent {
                     renderItem={({ item }) => renderRow(item)}
                 />
                 <Button
-                    title="Refresh"
+                    title={_('Refresh')}
                     onPress={() => {
                         this.resfreshLogEntries();
                     }}

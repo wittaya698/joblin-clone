@@ -105,7 +105,7 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
                 />
 
                 <Button
-                    title="Retry"
+                    title={_('Refresh')}
                     onPress={() => {
                         this.retryButton_click();
                     }}
