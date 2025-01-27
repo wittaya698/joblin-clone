@@ -338,11 +338,12 @@ Setting.metadata_ = {
             return supportedLocalesToLanguages();
         }
     },
+    // Not used for now:
     todoFilter: {
         value: 'all',
         type: Setting.TYPE_STRING,
         isEnum: true,
-        public: true,
+        public: false,
         appTypes: ['mobile'],
         label: () => _('Todo filter'),
         options: () => ({

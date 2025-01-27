@@ -233,38 +233,41 @@ class SideMenuContentComponent extends Component {
             />
         );
 
-        for (let i = 0; i < this.props.folders.length; i++) {
-            let folder = this.props.folders[i];
+        if (this.props.folders.length) {
+            for (let i = 0; i < this.props.folders.length; i++) {
+                let folder = this.props.folders[i];
+                items.push(
+                    this.folderItem(
+                        folder,
+                        this.props.selectedFolderId == folder.id &&
+                            this.props.notesParentType == 'Folder'
+                    )
+                );
+            }
+            if (items.length) items.push(this.makeDivider('divider_1'));
+        }
+
+        if (this.props.tags.length) {
+            let tagItems = [];
+            for (let i = 0; i < this.props.tags.length; i++) {
+                const tag = this.props.tags[i];
+                tagItems.push(
+                    this.tagItem(
+                        tag,
+                        this.props.selectedTagId == tag.id &&
+                            this.props.notesParentType == 'Tag'
+                    )
+                );
+            }
+
             items.push(
-                this.folderItem(
-                    folder,
-                    this.props.selectedFolderId == folder.id &&
-                        this.props.notesParentType == 'Folder'
-                )
+                <View style={styles.tagItemList} key="tag_items">
+                    {tagItems}
+                </View>
             );
+
+            if (items.length) items.push(this.makeDivider('divider_2'));
         }
-
-        if (items.length) items.push(this.makeDivider('divider_1'));
-
-        let tagItems = [];
-        for (let i = 0; i < this.props.tags.length; i++) {
-            const tag = this.props.tags[i];
-            tagItems.push(
-                this.tagItem(
-                    tag,
-                    this.props.selectedTagId == tag.id &&
-                        this.props.notesParentType == 'Tag'
-                )
-            );
-        }
-
-        items.push(
-            <View style={styles.tagItemList} key="tag_items">
-                {tagItems}
-            </View>
-        );
-
-        if (items.length) items.push(this.makeDivider('divider_2'));
 
         let lines = Synchronizer.reportToLines(this.props.syncReport);
         while (lines.length < 10) lines.push(''); // Add blank lines so that height of report text is fixed and doesn't affect scrolling

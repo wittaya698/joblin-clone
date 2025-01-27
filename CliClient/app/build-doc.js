@@ -60,6 +60,7 @@ function getCommands() {
         let CommandClass = require('./' + path);
         let cmd = new CommandClass();
         if (!cmd.enabled()) return;
+        if (cmd.hidden()) return;
         output.push(cmd);
     });
     return output;
@@ -125,11 +126,11 @@ function getHeader() {
 function getFooter() {
     let output = [];
 
-    output.push(_('WEBSITE'));
-    output.push('');
-    output.push(INDENT + 'https://joplin.cozic.net');
+    // output.push(_('WEBSITE'));
+    // output.push('');
+    // output.push(INDENT + 'https://joplin.cozic.net');
 
-    output.push('');
+    // output.push('');
 
     output.push(_('LICENSE'));
     output.push('');
