@@ -57,6 +57,7 @@ const styleObject = {
 };
 
 styleObject.titleContainer = {
+    flex: 0,
     flexDirection: 'row',
     paddingLeft: globalStyle.marginLeft,
     paddingRight: globalStyle.marginRight,
@@ -83,7 +84,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             folder: null,
             lastSavedNote: null,
             isLoading: true,
-            resources: {}
+            resources: {},
+            titleTextInputHeight: 20
         };
 
         this.saveButtonHasBeenShown_ = false;
@@ -318,6 +320,11 @@ class NoteScreenComponent extends BaseScreenComponent {
         );
     }
 
+    titleTextInput_contentSizeChange(event) {
+        let height = event.nativeEvent.contentSize.height;
+        this.setState({ titleTextInputHeight: height });
+    }
+
     render() {
         if (this.state.isLoading) {
             return (
@@ -413,6 +420,38 @@ class NoteScreenComponent extends BaseScreenComponent {
         const titleContainerStyle = isTodo
             ? styles.titleContainerTodo
             : styles.titleContainer;
+
+        const titleTextInputStyle = Object.assign(
+            {},
+            styleObject.titleTextInput
+        );
+        titleTextInputStyle.height = this.state.titleTextInputHeight;
+
+        const titleComp = (
+            <View style={titleContainerStyle}>
+                {isTodo && (
+                    <Checkbox
+                        checked={!!Number(note.todo_completed)}
+                        onChange={checked => {
+                            this.todoCheckbox_change(checked);
+                        }}
+                    />
+                )}
+                <TextInput
+                    onContentSizeChange={event =>
+                        this.titleTextInput_contentSizeChange(event)
+                    }
+                    autoFocus={isNew}
+                    multiline={true}
+                    underlineColorAndroid="#ffffff00"
+                    autoCapitalize="sentences"
+                    style={titleTextInputStyle}
+                    value={note.title}
+                    onChangeText={text => this.title_changeText(text)}
+                />
+            </View>
+        );
+
         return (
             <View style={this.styles().screen}>
                 <ScreenHeader
@@ -453,24 +492,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                     saveButtonDisabled={saveButtonDisabled}
                     onSaveButtonPress={() => this.saveNoteButton_press()}
                 />
-                <View style={titleContainerStyle}>
-                    {isTodo && (
-                        <Checkbox
-                            checked={!!Number(note.todo_completed)}
-                            onChange={checked => {
-                                this.todoCheckbox_change(checked);
-                            }}
-                        />
-                    )}
-                    <TextInput
-                        autoFocus={isNew}
-                        underlineColorAndroid="#ffffff00"
-                        autoCapitalize="sentences"
-                        style={styles.titleTextInput}
-                        value={note.title}
-                        onChangeText={text => this.title_changeText(text)}
-                    />
-                </View>
+                {titleComp}
                 {bodyComponent}
                 {actionButtonComp}
                 {this.state.showNoteMetadata && (
