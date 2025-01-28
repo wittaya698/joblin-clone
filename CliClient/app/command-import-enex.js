@@ -28,46 +28,21 @@ class Command extends BaseCommand {
         let folderTitle = args['notebook'];
         let force = args.options.force === true;
 
-        if (folderTitle) {
-            folder = await Folder.loadByField('title', folderTitle);
-            if (!folder) {
-                let ok = force
-                    ? true
-                    : await vorpalUtils.cmdPromptConfirm(
-                          this,
-                          _(
-                              'Folder does not exists: "%s". Create it?',
-                              folderTitle
-                          )
-                      );
-                if (!ok) return;
-
-                folder = await Folder.save({ title: folderTitle });
-            }
-        } else {
-            folderTitle = filename(filePath);
-            let inc = 0;
-            while (true) {
-                let t = folderTitle + (inc ? ' (' + inc + ')' : '');
-                let f = await Folder.loadByField('title', t);
-                if (!f) {
-                    folderTitle = t;
-                    break;
-                }
-                inc++;
-            }
-        }
-
-        let ok = force
-            ? true
-            : await vorpalUtils.cmdPromptConfirm(
-                  this,
-                  _(
-                      'File "%s" will be imported into notebook "%s". Continue?',
-                      basename(filePath),
-                      folderTitle
-                  )
+        if (!folderTitle) folderTitle = filename(filePath);
+        folder = await Folder.loadByField('title', folderTitle);
+        const msg = folder
+            ? _(
+                  'File "%s" will be imported into existing notebook "%s". Continue?',
+                  basename(filePath),
+                  folderTitle
+              )
+            : _(
+                  'New notebook "%s" will be created and file "%s" will be imported into it. Continue?',
+                  folderTitle,
+                  basename(filePath)
               );
+        const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, msg);
+
         if (!ok) return;
 
         let options = {
