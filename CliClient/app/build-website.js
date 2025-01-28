@@ -88,8 +88,8 @@ const headerHtml = `
 <body>
 <div class="container">
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="images/Icon512.png">oplin</h1>
+	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="docs/images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="docs/images/Icon512.png">oplin</h1>
 	<p class="sub-title">A free, open source, note taking and todo application with synchronisation capabilities.</p>
 </div>
 <div class="content">
@@ -113,23 +113,23 @@ const screenshotHtml = `
 	</tr>
 	<tr>
 		<td>
-			<img class="mobile-screenshot" src="images/Mobile.png"/>
+			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
 		</td>
 		<td class="cli-screenshot-wrapper">
 			<pre class="cli-screenshot">
-<span class="prompt">joplin:/My notebook$</span> ls -n 12
-[ ] 8am conference call ☎
-[ ] Make vet appointment
-[ ] Go pick up parcel
-[ ] Pay flat rent 💸
-[X] Book ferry 🚢
-[X] Deploy Joplin app
-    Open source stuff
-    Swimming pool time table 🏊
-    Grocery shopping list 📝
-    Work itinerary
-    Tuesday random note
-    Vacation plans ☀️
+            <span class="prompt">joplin:/My notebook$</span> ls -n 12
+            [ ] 8am conference call ☎
+            [ ] Make vet appointment
+            [ ] Go pick up parcel
+            [ ] Pay flat rent 💸
+            [X] Book ferry 🚢
+            [X] Deploy Joplin app
+                Open source stuff
+                Swimming pool time table 🏊
+                Grocery shopping list 📝
+                Work itinerary
+                Tuesday random note
+                Vacation plans ☀️
 			</pre>
 		</td>
 	</tr>
@@ -137,7 +137,6 @@ const screenshotHtml = `
 `;
 
 const rootDir = dirname(dirname(__dirname));
-const docDir = rootDir + '/docs';
 
 function markdownToHtml(md) {
     const renderer = new marked.Renderer();
@@ -160,7 +159,7 @@ async function main() {
     const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
     const html = markdownToHtml(md);
 
-    fs.writeFileSync(docDir + '/index.html', html);
+    fs.writeFileSync(rootDir + '/index.html', html);
 }
 
 main().catch(error => {
