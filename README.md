@@ -1,18 +1,26 @@
-# Joplin (BETA)
+# Joplin
 
-Joplin is a note taking and todo application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor. The Android application supports markdown rendering.
+<!-- [SCREENSHOTS] -->
+
+Joplin is a free, open source note taking and todo application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor. The Android application supports markdown rendering.
 
 The notes can be synchronised with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 
 Notes exported from Evenotes via .enex files can be imported into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
 
+The current release has been heavily tested so it should be stable enough for every day use. Some features however are missing such as the ability to attach resources to notes and (in the mobile app) to tag notes. For the full list of current and planned features see the Features and Roadmap sections below.
+
 # Install
 
-An Android app and a command line interface are currently available:
+An Android app and a command line interface are currently available. Both can synchronise with each others.
 
-<a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+## Android
 
-TODO
+<a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="100px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a>
+
+## Command line
+
+    npm install joplin
 
 # Features
 
@@ -51,6 +59,18 @@ The applications are currently available in English and French. If you would lik
 - CLI: Improve autocompletion.
 
 # Command line usage
+
+Joplin can work either as an interactive CLI application or, if a command is provided to the executable, as a one-off command.
+
+For example, this would start the CLI application, from where commands can be ran interactively.
+
+    joplin
+
+While this would create a new note and exit:
+
+    joplin mknote "my new note"
+
+## Full commands:
 
     cat <title>
 
@@ -112,6 +132,10 @@ The applications are currently available in English and French. If you would lik
     mknote <note>
 
         Creates a new note.
+
+    mktodo <note>
+
+        Creates a new todo.
 
     mv <pattern> <destination>
 
