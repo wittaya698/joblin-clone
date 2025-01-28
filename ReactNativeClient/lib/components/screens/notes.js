@@ -42,6 +42,7 @@ class NotesScreenComponent extends BaseScreenComponent {
         };
 
         const parent = this.parentItem(props);
+        if (!parent) return;
 
         const source = JSON.stringify({
             options: options,
@@ -123,6 +124,7 @@ class NotesScreenComponent extends BaseScreenComponent {
         } else if (props.notesParentType == 'Tag') {
             output = Tag.byId(props.tags, props.selectedTagId);
         } else {
+            return null;
             throw new Error('Invalid parent type: ' + props.notesParentType);
         }
         return output;
@@ -147,8 +149,14 @@ class NotesScreenComponent extends BaseScreenComponent {
             this.props.selectedFolderId &&
             this.props.selectedFolderId != Folder.conflictFolderId();
 
+        let rootStyle = Object.assign({}, this.styleObject().screen);
+        if (!this.props.visible) {
+            rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
+        }
+
+        const { navigate } = this.props.navigation;
         return (
-            <View style={this.styles().screen}>
+            <View style={rootStyle}>
                 <ScreenHeader title={title} menuOptions={this.menuOptions()} />
                 <NoteList style={{ flex: 1 }} />
                 <ActionButton
