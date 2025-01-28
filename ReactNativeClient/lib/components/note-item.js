@@ -23,9 +23,11 @@ let styles = {
         borderBottomColor: globalStyle.dividerColor,
         alignItems: 'center',
         paddingLeft: globalStyle.marginLeft,
+        paddingRight: globalStyle.marginRight,
         backgroundColor: globalStyle.backgroundColor
     },
     listItemText: {
+        flex: 1,
         color: globalStyle.color
     }
 };
@@ -78,6 +80,7 @@ class NoteItemComponent extends Component {
 
         return (
             <TouchableHighlight
+                style={{ borderWidth: 1, borderColor: 'red' }}
                 onPress={() => this.onPress()}
                 onLongPress={() => onLongPress(note)}
                 underlayColor="#0066FF"

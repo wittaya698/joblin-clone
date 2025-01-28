@@ -184,6 +184,8 @@ class Synchronizer {
             return;
         }
 
+        this.state_ = 'in_progress';
+
         this.onProgress_ = options.onProgress
             ? options.onProgress
             : function (o) {};
@@ -204,8 +206,6 @@ class Synchronizer {
         let synchronizationId = time.unixMs().toString();
 
         let outputContext = Object.assign({}, lastContext);
-
-        this.state_ = 'in_progress';
 
         this.dispatch({ type: 'SYNC_STARTED' });
 
@@ -563,8 +563,6 @@ class Synchronizer {
             this.cancelling_ = false;
         }
 
-        this.state_ = 'idle';
-
         this.progressReport_.completedTime = time.unixMs();
 
         this.logSyncOperation(
@@ -580,6 +578,8 @@ class Synchronizer {
         this.progressReport_ = {};
 
         this.dispatch({ type: 'SYNC_COMPLETED' });
+
+        this.state_ = 'idle';
 
         return outputContext;
     }
