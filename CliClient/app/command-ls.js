@@ -11,7 +11,7 @@ import { vorpalUtils } from './vorpal-utils.js';
 
 class Command extends BaseCommand {
     usage() {
-        return _('ls [pattern]');
+        return 'ls [pattern]';
     }
 
     description() {
@@ -23,23 +23,23 @@ class Command extends BaseCommand {
     options() {
         return [
             [
-                _('-n, --limit <num>'),
+                '-n, --limit <num>',
                 _('Displays only the first top <num> notes.')
             ],
             [
-                _('-s, --sort <field>'),
+                '-s, --sort <field>',
                 _(
                     'Sorts the item by <field> (eg. title, updated_time, created_time).'
                 )
             ],
             ['-r, --reverse', _('Reverses the sorting order.')],
             [
-                _('-t, --type <type>'),
+                '-t, --type <type>',
                 _(
                     'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'
                 )
             ],
-            [_('-f, --format <format>'), 'Either "text" or "json"'],
+            ['-f, --format <format>', 'Either "text" or "json"'],
             [
                 '-l, --long',
                 _(

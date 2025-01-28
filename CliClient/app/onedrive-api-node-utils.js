@@ -16,7 +16,7 @@ class OneDriveApiNodeUtils {
     }
 
     possibleOAuthDancePorts() {
-        return [1917, 9917, 8917];
+        return [9967, 8967, 8867];
     }
 
     makePage(message) {

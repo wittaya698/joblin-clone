@@ -50,7 +50,7 @@ class Command extends BaseCommand {
     options() {
         return [
             [
-                _('--target <target>'),
+                '--target <target>',
                 _(
                     'Sync to provided target (defaults to sync.target config value)'
                 )

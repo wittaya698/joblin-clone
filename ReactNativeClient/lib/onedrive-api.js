@@ -270,7 +270,9 @@ class OneDriveApi {
         if (!this.auth_ || !this.auth_.refresh_token) {
             this.setAuth(null);
             throw new Error(
-                'Cannot refresh token: authentication data is missing'
+                _(
+                    'Cannot refresh token: authentication data is missing. Starting the synchronisation again may fix the problem.'
+                )
             );
         }
 

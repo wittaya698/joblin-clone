@@ -135,14 +135,16 @@ class Application {
             let nextArg = argv.length >= 2 ? argv[1] : null;
 
             if (arg == '--profile') {
-                if (!nextArg) throw new Error(_('Usage: --profile <dir-path>'));
+                if (!nextArg)
+                    throw new Error(_('Usage: %s', 'profile <dir-path>'));
                 matched.profileDir = nextArg;
                 argv.splice(0, 2);
                 continue;
             }
 
             if (arg == '--env') {
-                if (!nextArg) throw new Error(_('Usage: --env <dev|prod>'));
+                if (!nextArg)
+                    throw new Error(_('Usage: %s', '--env <dev|prod>'));
                 matched.env = nextArg;
                 argv.splice(0, 2);
                 continue;
@@ -169,7 +171,10 @@ class Application {
             if (arg == '--log-level') {
                 if (!nextArg)
                     throw new Error(
-                        _('Usage: --log-level <none|error|warn|info|debug>')
+                        _(
+                            'Usage: %s',
+                            '--log-level <none|error|warn|info|debug>'
+                        )
                     );
                 matched.logLevel = Logger.levelStringToId(nextArg);
                 argv.splice(0, 2);
