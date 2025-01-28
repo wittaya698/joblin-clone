@@ -102,6 +102,8 @@ class SideMenuContentComponent extends Component {
     }
 
     async synchronize_press() {
+        const action = this.props.syncStarted ? 'cancel' : 'start';
+
         if (
             Setting.value('sync.target') == Setting.SYNC_TARGET_ONEDRIVE &&
             !reg.oneDriveApi().auth()
@@ -117,13 +119,13 @@ class SideMenuContentComponent extends Component {
 
         let sync = null;
         try {
-            sync = await reg.synchronizer(Setting.value('sync.target'));
+            sync = await reg.initSynchronizer_(Setting.value('sync.target'));
         } catch (error) {
             reg.logger().info('Could not acquire synchroniser:');
             reg.logger().info(error);
             return;
         }
-        if (this.props.syncStarted) {
+        if (action == 'cancel') {
             sync.cancel();
         } else {
             reg.scheduleSync(0);
