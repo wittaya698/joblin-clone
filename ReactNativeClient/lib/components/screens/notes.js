@@ -7,6 +7,8 @@ import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Tag } from '@/lib/models/tag.js';
 import { Note } from '@/lib/models/note.js';
+import { Setting } from '@/lib/models/setting.js';
+import { themeStyle } from '@/lib/components/global-style.js';
 import { _ } from '@/lib/locale.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import { dialogs } from '@/lib/dialogs.js';
@@ -149,7 +151,13 @@ class NotesScreenComponent extends BaseScreenComponent {
             this.props.selectedFolderId &&
             this.props.selectedFolderId != Folder.conflictFolderId();
 
-        let rootStyle = Object.assign({}, this.styleObject().screen);
+        const theme = themeStyle(Setting.value('theme'));
+
+        let rootStyle = {
+            flex: 1,
+            backgroundColor: theme.backgroundColor
+        };
+
         if (!this.props.visible) {
             rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
         }
@@ -184,7 +192,8 @@ const NotesScreen = connect(state => {
         notes: state.notes,
         notesOrder: state.notesOrder,
         notesSource: state.notesSource,
-        uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop
+        uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
+        theme: state.settings.theme
     };
 })(NotesScreenComponent);
 

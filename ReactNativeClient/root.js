@@ -344,10 +344,12 @@ const reducer = (state = defaultState, action) => {
             case 'SEARCH_QUERY':
                 newState = Object.assign({}, state);
                 newState.searchQuery = action.query.trim();
+                break;
 
             case 'SET_APP_STATE':
                 newState = Object.assign({}, state);
                 newState.appState = action.state;
+                break;
         }
     } catch (error) {
         error.message =

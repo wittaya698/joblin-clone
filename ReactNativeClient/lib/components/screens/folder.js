@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextInput, View } from 'react-native';
+import { View, Button, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Log } from '@/lib/log.js';
 import { ActionButton } from '@/lib/components/action-button.js';
@@ -9,6 +9,7 @@ import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { reg } from '@/lib/registry.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
+import { themeStyle } from '@/lib/components/global-style.js';
 import { _ } from '@/lib/locale.js';
 
 class FolderScreenComponent extends BaseScreenComponent {
@@ -22,6 +23,24 @@ class FolderScreenComponent extends BaseScreenComponent {
             folder: Folder.new(),
             lastSavedFolder: null
         };
+        this.styles_ = {};
+    }
+
+    styles() {
+        const theme = themeStyle(this.props.theme);
+
+        if (this.styles_[this.props.theme])
+            return this.styles_[this.props.theme];
+        this.styles_ = {};
+
+        let styles = {
+            textInput: {
+                color: theme.color
+            }
+        };
+
+        this.styles_[this.props.theme] = StyleSheet.create(styles);
+        return this.styles_[this.props.theme];
     }
 
     UNSAFE_componentWillMount() {
@@ -90,7 +109,7 @@ class FolderScreenComponent extends BaseScreenComponent {
     render() {
         let saveButtonDisabled = !this.isModified();
         return (
-            <View style={this.styles().screen}>
+            <View style={this.rootStyle(this.props.theme).root}>
                 <ScreenHeader
                     title={_('Edit notebook')}
                     showSaveButton={true}
@@ -98,6 +117,7 @@ class FolderScreenComponent extends BaseScreenComponent {
                     onSaveButtonPress={() => this.saveFolderButton_press()}
                 />
                 <TextInput
+                    style={this.styles().textInput}
                     autoFocus={true}
                     value={this.state.folder.title}
                     onChangeText={text => this.title_changeText(text)}
@@ -113,7 +133,7 @@ class FolderScreenComponent extends BaseScreenComponent {
 }
 
 const FolderScreen = connect(state => {
-    return { folderId: state.selectedFolderId };
+    return { folderId: state.selectedFolderId, theme: state.settings.theme };
 })(FolderScreenComponent);
 
 export { FolderScreen };

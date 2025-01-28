@@ -13,34 +13,47 @@ import { Checkbox } from '@/lib/components/checkbox.js';
 import { reg } from '@/lib/registry.js';
 import { Note } from '@/lib/models/note.js';
 import { time } from '@/lib/time-utils.js';
-import { globalStyle } from '@/lib/components/global-style.js';
-
-let styles = {
-    listItem: {
-        flexDirection: 'row',
-        // height: 40,
-        borderBottomWidth: 1,
-        borderBottomColor: globalStyle.dividerColor,
-        alignItems: 'center',
-        paddingLeft: globalStyle.marginLeft,
-        paddingRight: globalStyle.marginRight,
-        paddingTop: globalStyle.itemMarginTop,
-        paddingBottom: globalStyle.itemMarginBottom,
-        backgroundColor: globalStyle.backgroundColor
-    },
-    listItemText: {
-        flex: 1,
-        color: globalStyle.color,
-        fontSize: globalStyle.fontSize
-    }
-};
-
-styles.listItemFadded = Object.assign({}, styles.listItem);
-styles.listItemFadded.opacity = 0.4;
-
-styles = StyleSheet.create(styles);
+import { globalStyle, themeStyle } from '@/lib/components/global-style.js';
 
 class NoteItemComponent extends Component {
+    constructor() {
+        super();
+        this.styles_ = {};
+    }
+
+    styles() {
+        const theme = themeStyle(this.props.theme);
+        if (this.styles_[this.props.theme])
+            return this.styles_[this.props.theme];
+        this.styles_ = {};
+
+        let styles = {
+            listItem: {
+                flexDirection: 'row',
+                //height: 40,
+                borderBottomWidth: 1,
+                borderBottomColor: theme.dividerColor,
+                alignItems: 'center',
+                paddingLeft: theme.marginLeft,
+                paddingRight: theme.marginRight,
+                paddingTop: theme.itemMarginTop,
+                paddingBottom: theme.itemMarginBottom,
+                backgroundColor: theme.backgroundColor
+            },
+            listItemText: {
+                flex: 1,
+                color: theme.color,
+                fontSize: theme.fontSize
+            }
+        };
+
+        styles.listItemFadded = Object.assign({}, styles.listItem);
+        styles.listItemFadded.opacity = 0.4;
+
+        this.styles_[this.props.theme] = StyleSheet.create(styles);
+        return this.styles_[this.props.theme];
+    }
+
     noteItem_press(noteId) {
         this.props.dispatch({
             type: 'NAV_GO',
@@ -70,16 +83,17 @@ class NoteItemComponent extends Component {
         const note = this.props.note ? this.props.note : {};
         const onPress = this.props.onPress;
         const onCheckboxChange = this.props.onCheckboxChange;
+        const theme = themeStyle(this.props.theme);
 
         const checkboxStyle = !Number(note.is_todo)
             ? { display: 'none' }
-            : { color: globalStyle.color };
+            : { color: theme.color };
         const checkboxChecked = !!Number(note.todo_completed);
 
         const listItemStyle =
             !!Number(note.is_todo) && checkboxChecked
-                ? styles.listItemFadded
-                : styles.listItem;
+                ? this.styles().listItemFadded
+                : this.styles().listItem;
 
         return (
             <TouchableHighlight
@@ -93,7 +107,7 @@ class NoteItemComponent extends Component {
                         checked={checkboxChecked}
                         onChange={checked => this.todoCheckbox_change(checked)}
                     />
-                    <Text style={styles.listItemText}>{note.title}</Text>
+                    <Text style={this.styles().listItemText}>{note.title}</Text>
                 </View>
             </TouchableHighlight>
         );
@@ -101,6 +115,6 @@ class NoteItemComponent extends Component {
 }
 
 const NoteItem = connect(state => {
-    return {};
+    return { theme: state.settings.theme };
 })(NoteItemComponent);
 export { NoteItem };

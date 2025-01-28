@@ -14,30 +14,7 @@ import { _ } from '@/lib/locale.js';
 import { Note } from '@/lib/models/note.js';
 import { NoteItem } from '@/lib/components/note-item.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
-import { globalStyle } from '@/lib/components/global-style.js';
-
-let styles = {
-    body: {
-        flex: 1
-    },
-    searchContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        borderWidth: 1,
-        borderColor: globalStyle.dividerColor
-    }
-};
-
-styles.searchTextInput = Object.assign({}, globalStyle.lineInput);
-styles.searchTextInput.paddingLeft = globalStyle.marginLeft;
-styles.searchTextInput.flex = 1;
-
-styles.clearIcon = Object.assign({}, globalStyle.icon);
-styles.clearIcon.color = globalStyle.colorFaded;
-styles.clearIcon.paddingRight = globalStyle.marginRight;
-styles.clearIcon.backgroundColor = globalStyle.backgroundColor;
-
-styles = StyleSheet.create(styles);
+import { themeStyle } from '@/lib/components/global-style.js';
 
 class SearchScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -51,6 +28,40 @@ class SearchScreenComponent extends BaseScreenComponent {
             notes: []
         };
         this.isMounted_ = false;
+        this.styles_ = {};
+    }
+
+    styles() {
+        const theme = themeStyle(this.props.theme);
+        if (this.styles_[this.props.theme])
+            return this.styles_[this.props.theme];
+        this.styles_ = {};
+
+        let styles = {
+            body: {
+                flex: 1
+            },
+            searchContainer: {
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderWidth: 1,
+                borderColor: theme.dividerColor
+            }
+        };
+
+        styles.searchTextInput = Object.assign({}, theme.lineInput);
+        styles.searchTextInput.paddingLeft = theme.marginLeft;
+        styles.searchTextInput.flex = 1;
+        styles.searchTextInput.backgroundColor = theme.backgroundColor;
+        styles.searchTextInput.color = theme.color;
+
+        styles.clearIcon = Object.assign({}, theme.icon);
+        styles.clearIcon.color = theme.colorFaded;
+        styles.clearIcon.paddingRight = theme.marginRight;
+        styles.clearIcon.backgroundColor = theme.backgroundColor;
+
+        this.styles_[this.props.theme] = StyleSheet.create(styles);
+        return this.styles_[this.props.theme];
     }
 
     componentDidMount() {
@@ -121,12 +132,12 @@ class SearchScreenComponent extends BaseScreenComponent {
         if (!this.isMounted_) return null;
 
         return (
-            <View style={this.styles().screen}>
+            <View style={this.rootStyle(this.props.theme).root}>
                 <ScreenHeader title={_('Search')} />
-                <View style={styles.body}>
-                    <View style={styles.searchContainer}>
+                <View style={this.styles().body}>
+                    <View style={this.styles().searchContainer}>
                         <TextInput
-                            style={styles.searchTextInput}
+                            style={this.styles().searchTextInput}
                             autoFocus={true}
                             underlineColorAndroid="#ffffff00"
                             onSubmitEditing={() => {
@@ -142,7 +153,7 @@ class SearchScreenComponent extends BaseScreenComponent {
                         >
                             <Icon
                                 name="close-circle"
-                                style={styles.clearIcon}
+                                style={this.styles().clearIcon}
                             />
                         </TouchableHighlight>
                     </View>
@@ -159,7 +170,8 @@ class SearchScreenComponent extends BaseScreenComponent {
 
 const SearchScreen = connect(state => {
     return {
-        query: state.searchQuery
+        query: state.searchQuery,
+        theme: state.settings.theme
     };
 })(SearchScreenComponent);
 export { SearchScreen };
