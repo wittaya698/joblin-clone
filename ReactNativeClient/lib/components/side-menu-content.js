@@ -27,15 +27,6 @@ let styles = {
         borderTopWidth: 1,
         borderTopColor: globalStyle.dividerColor
     },
-    name: {
-        position: 'absolute',
-        left: 70,
-        top: 20
-    },
-    item: {
-        fontSize: 14,
-        fontWeight: '300'
-    },
     button: {
         flex: 1,
         flexDirection: 'row',
@@ -47,12 +38,14 @@ let styles = {
     buttonText: {
         flex: 1,
         color: globalStyle.color,
-        paddingLeft: 10
+        paddingLeft: 10,
+        fontSize: globalStyle.fontSize
     },
     syncStatus: {
         paddingLeft: globalStyle.marginLeft,
         paddingRight: globalStyle.marginRight,
-        color: globalStyle.colorFaded
+        color: globalStyle.colorFaded,
+        fontSize: globalStyle.fontSizeSmaller
     },
     tagItemList: {
         flex: 1,

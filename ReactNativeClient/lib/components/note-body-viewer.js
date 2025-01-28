@@ -64,6 +64,7 @@ class NoteBodyViewer extends Component {
 				color: ` +
             style.htmlColor +
             `;
+            line-height: 1.5em;
 			}
 			h1 {
 				font-size: 1.2em;
@@ -80,7 +81,7 @@ class NoteBodyViewer extends Component {
 				padding-left: 1em;
 			}
 			a.checkbox {
-				font-size: 1.4em;
+				font-size: 1.6em;
 				position: relative;
 				top: 0.1em;
 				text-decoration: none;

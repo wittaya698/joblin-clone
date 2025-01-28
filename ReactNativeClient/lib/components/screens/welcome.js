@@ -10,7 +10,8 @@ import { globalStyle } from '@/lib/components/global-style.js';
 
 const styles = StyleSheet.create({
     message: {
-        margin: globalStyle.margin
+        margin: globalStyle.margin,
+        fontSize: globalStyle.fontSize
     }
 });
 

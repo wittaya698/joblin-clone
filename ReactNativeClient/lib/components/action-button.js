@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons.js';
 import { FAB, Provider } from 'react-native-paper';
 import { connect } from 'react-redux';
+import { globalStyle } from '@/lib/components/global-style.js';
 import { Log } from '@/lib/log.js';
 import { _ } from '@/lib/locale.js';
 
@@ -11,6 +12,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         height: 22,
         color: 'dark'
+    },
+    itemText: {
+        // fontSize: 14, // Cannot currently set fontsize since the bow surrounding the label has a fixed size
     }
 });
 

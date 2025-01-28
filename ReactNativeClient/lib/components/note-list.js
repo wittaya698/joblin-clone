@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
         paddingLeft: globalStyle.marginLeft,
         paddingRight: globalStyle.marginRight,
         paddingTop: globalStyle.marginTop,
-        paddingBottom: globalStyle.marginBottom
+        paddingBottom: globalStyle.marginBottom,
+        fontSize: globalStyle.fontSize
     }
 });
 
