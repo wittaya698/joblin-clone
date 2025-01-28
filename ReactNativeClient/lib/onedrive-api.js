@@ -182,8 +182,11 @@ class OneDriveApi {
                 if (error.message == 'Network request failed') {
                     // Unfortunately the error 'Network request failed' doesn't have a type
                     // or error code, so hopefully that message won't change and is not localized
-                    this.logger().warn('Got error below - retrying...');
-                    this.logger().warn(error);
+                    this.logger().info(
+                        'Got error "Network request failed" - retrying (' +
+                            i +
+                            ')...'
+                    );
                     await time.sleep((i + 1) * 3);
                     continue;
                 } else {
@@ -221,8 +224,10 @@ class OneDriveApi {
                     //   message: 'request to https://graph.microsoft.com/v1.0/drive/root:/Apps/Joplin/.sync/7ee5dc04afcb414aa7c684bfc1edba8b.md_1499352102856 failed, reason: connect EAGAIN 65.52.64.250:443 - Local (0.0.0.0:54374)',
                     //   type: 'system',
                     //   errno: 'EAGAIN',
-                    this.logger().warn('Got error below - retrying...');
-                    this.logger().warn(error);
+                    this.logger().info(
+                        'Got error below - retrying (' + i + ')...'
+                    );
+                    this.logger().info(error);
                     await time.msleep(1000 * i);
                     continue;
                 } else if (error.code == 'itemNotFound' && method == 'DELETE') {

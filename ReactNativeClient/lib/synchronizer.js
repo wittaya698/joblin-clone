@@ -60,7 +60,7 @@ class Synchronizer {
             lines.push(_('Deleted local items: %d.', report.deleteLocal));
         if (report.deleteRemote)
             lines.push(_('Deleted remote items: %d.', report.deleteRemote));
-        if (report.state)
+        if (!report.completedTime && report.state)
             lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
         if (report.errors && report.errors.length)
             lines.push(

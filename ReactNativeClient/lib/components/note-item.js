@@ -80,7 +80,6 @@ class NoteItemComponent extends Component {
 
         return (
             <TouchableHighlight
-                style={{ borderWidth: 1, borderColor: 'red' }}
                 onPress={() => this.onPress()}
                 onLongPress={() => onLongPress(note)}
                 underlayColor="#0066FF"

@@ -9,6 +9,7 @@ import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
 import { shim } from '@/lib/shim.js';
 import { FileApiDriverMemory } from '@/lib/file-api-driver-memory.js';
 import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
+import { _ } from '@/lib/locale.js';
 
 const reg = {};
 
@@ -139,19 +140,24 @@ reg.scheduleSync = async (delay = null) => {
             return;
         }
 
-        const sync = await reg.synchronizer(syncTargetId);
-
-        let context = Setting.value('sync.context');
-        context = context ? JSON.parse(context) : {};
         try {
-            let newContext = await sync.start({ context: context });
-            Setting.setValue('sync.context', JSON.stringify(newContext));
-        } catch (error) {
-            if (error.code == 'alreadyStarted') {
-                reg.logger().info(error.message);
-            } else {
-                throw error;
+            const sync = await reg.synchronizer(syncTargetId);
+
+            let context = Setting.value('sync.context');
+            context = context ? JSON.parse(context) : {};
+            try {
+                let newContext = await sync.start({ context: context });
+                Setting.setValue('sync.context', JSON.stringify(newContext));
+            } catch (error) {
+                if (error.code == 'alreadyStarted') {
+                    reg.logger().info(error.message);
+                } else {
+                    throw error;
+                }
             }
+        } catch (error) {
+            reg.logger().info('Could not run background sync: ');
+            reg.logger().info(error);
         }
 
         reg.setupRecurrentSync();
