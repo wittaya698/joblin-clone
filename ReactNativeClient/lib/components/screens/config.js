@@ -49,52 +49,39 @@ class ConfigScreenComponent extends BaseScreenComponent {
         return { header: null };
     }
 
-    constructor() {
-        super();
-        this.state = {
-            values: {}
-        };
-    }
-
-    UNSAFE_componentWillMount() {
-        const settings = Setting.publicSettings(Setting.value('appType'));
-
-        let values = {};
-        for (let key in settings) {
-            if (!settings.hasOwnProperty(key)) continue;
-            values[key] = settings[key].value;
-        }
-
-        this.setState({ values: values });
-    }
-
-    settingToComponent(key, setting) {
+    settingToComponent(key, value) {
         let output = null;
 
         const updateSettingValue = (key, value) => {
-            let values = this.state.values;
-            values[key] = value;
-            this.setState({ values: values });
-            this.saveSettings();
+            Setting.setValue(key, value);
         };
 
-        const value = this.state.values[key];
+        const md = Setting.settingMetadata(key);
 
-        if (setting.isEnum) {
+        if (md.isEnum) {
+            // The Picker component doesn't work properly with int values, so
+            // convert everything to string (Setting.setValue will convert
+            // back to the correct type.
+            value = value.toString();
+
             let items = [];
-            const settingOptions = setting.options();
+            const settingOptions = md.options();
 
             for (let k in settingOptions) {
                 if (!settingOptions.hasOwnProperty(k)) continue;
                 items.push(
-                    <Picker.Item label={settingOptions[k]} value={k} key={k} />
+                    <Picker.Item
+                        label={settingOptions[k]}
+                        value={k.toString()}
+                        key={k}
+                    />
                 );
             }
 
             return (
                 <View key={key} style={styles.settingContainer}>
                     <Text key="label" style={styles.settingText}>
-                        {setting.label()}
+                        {md.label()}
                     </Text>
                     <Picker
                         key="control"
@@ -109,11 +96,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
                     </Picker>
                 </View>
             );
-        } else if (setting.type == Setting.TYPE_BOOL) {
+        } else if (md.type == Setting.TYPE_BOOL) {
             return (
                 <View key={key} style={styles.switchSettingContainer}>
                     <Text key="label" style={styles.switchSettingText}>
-                        {setting.label()}
+                        {md.label()}
                     </Text>
                     <Switch
                         key="control"
@@ -123,11 +110,11 @@ class ConfigScreenComponent extends BaseScreenComponent {
                     />
                 </View>
             );
-        } else if (setting.type == Setting.TYPE_INT) {
+        } else if (md.type == Setting.TYPE_INT) {
             return (
                 <View key={key} style={styles.settingContainer}>
                     <Text key="label" style={styles.settingText}>
-                        {setting.label()}
+                        {md.label()}
                     </Text>
                     <Slider
                         key="control"
@@ -144,24 +131,15 @@ class ConfigScreenComponent extends BaseScreenComponent {
         return output;
     }
 
-    saveSettings() {
-        const values = this.state.values;
-        for (let key in values) {
-            if (!values.hasOwnProperty(key)) continue;
-            Setting.setValue(key, values[key]);
-        }
-        Setting.saveAll();
-
-        setLocale(Setting.value('locale'));
-    }
-
     render() {
-        const settings = Setting.publicSettings(Setting.value('appType'));
+        const settings = this.props.settings;
         let settingComps = [];
         for (let key in settings) {
             if (key == 'sync.target') continue;
 
             if (!settings.hasOwnProperty(key)) continue;
+            if (!Setting.isPublic(key)) continue;
+
             const comp = this.settingToComponent(key, settings[key]);
             if (!comp) continue;
             settingComps.push(comp);
@@ -177,7 +155,7 @@ class ConfigScreenComponent extends BaseScreenComponent {
 }
 
 const ConfigScreen = connect(state => {
-    return {};
+    return { settings: state.settings };
 })(ConfigScreenComponent);
 
 export { ConfigScreen };
