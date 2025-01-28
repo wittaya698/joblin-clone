@@ -21,34 +21,25 @@ class WelcomeScreenComponent extends BaseScreenComponent {
     }
 
     render() {
-        if (this.props.loading) {
-            return (
-                <View style={{ flex: 1 }}>
-                    <Text>Loading...</Text>
-                </View>
-            );
-        } else {
-            let message = this.props.folders.length
-                ? _(
-                      'Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks.'
-                  )
-                : _(
-                      'You currently have no notebook. Create one by clicking on (+) button.'
-                  );
-            return (
-                <View style={this.styles().screen}>
-                    <ScreenHeader title={_('Welcome')} />
-                    <Text style={styles.message}>{message}</Text>
-                    <ActionButton addFolderNoteButtons={true}></ActionButton>
-                </View>
-            );
-        }
+        let message = this.props.folders.length
+            ? _(
+                  'Click on the (+) button to create a new note or notebook. Click on the side menu to access your existing notebooks.'
+              )
+            : _(
+                  'You currently have no notebook. Create one by clicking on (+) button.'
+              );
+        return (
+            <View style={this.styles().screen}>
+                <ScreenHeader title={_('Welcome')} />
+                <Text style={styles.message}>{message}</Text>
+                <ActionButton addFolderNoteButtons={true} />
+            </View>
+        );
     }
 }
 
 const WelcomeScreen = connect(state => {
     return {
-        loading: state.loading,
         folders: state.folders
     };
 })(WelcomeScreenComponent);
