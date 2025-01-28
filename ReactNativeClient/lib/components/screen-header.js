@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+    View,
+    Text,
+    Button,
+    StyleSheet,
+    TouchableOpacity,
+    Image
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Log } from '@/lib/log.js';
 import { Picker } from '@react-native-picker/picker';
@@ -18,18 +25,20 @@ import {
     MenuTrigger
 } from 'react-native-popup-menu';
 
+// Rather than applying a padding to the whole bar, it is applied to each
+// individual component (button, picker, etc.) so that the touchable areas
+// are widder and to give more room to the picker component which has a larger
+// default height.
+const PADDING_V = 10;
 let styleObject = {
     container: {
         flexDirection: 'row',
-        paddingTop: 10,
-        paddingBottom: 10,
         backgroundColor: globalStyle.raisedBackgroundColor,
         alignItems: 'center',
         shadowColor: '#000000',
         elevation: 5
     },
     folderPicker: {
-        // height: 30,
         flex: 1,
         color: globalStyle.raisedHighlightedColor
         // Note: cannot set backgroundStyle as that would remove the arrow in the component
@@ -45,34 +54,42 @@ let styleObject = {
         backgroundColor: globalStyle.raisedBackgroundColor,
         paddingLeft: globalStyle.marginLeft,
         paddingRight: 5,
-        marginRight: 2
+        marginRight: 2,
+        paddingTop: PADDING_V,
+        paddingBottom: PADDING_V
     },
     iconButton: {
         flex: 1,
         backgroundColor: globalStyle.raisedBackgroundColor,
         paddingLeft: 15,
-        paddingRight: 15
+        paddingRight: 15,
+        paddingTop: PADDING_V,
+        paddingBottom: PADDING_V
     },
     saveButton: {
-        flex: 1,
+        flex: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        paddingLeft: 15,
-        paddingRight: 15,
-        marginRight: 10,
+        padding: 10,
         borderWidth: 1,
         borderColor: globalStyle.raisedHighlightedColor,
-        borderRadius: 4
+        borderRadius: 4,
+        marginRight: 8
     },
     saveButtonText: {
         textAlignVertical: 'center',
         color: globalStyle.raisedHighlightedColor,
         fontWeight: 'bold'
     },
-    saveButtonIcon: {
+    savedButtonIcon: {
         fontSize: 20,
         color: globalStyle.raisedHighlightedColor,
-        marginRight: 5
+        width: 18,
+        height: 18
+    },
+    saveButtonIcon: {
+        width: 18,
+        height: 18
     },
     contextMenuTrigger: {
         fontSize: 25,
@@ -196,9 +213,20 @@ class ScreenHeaderComponent extends Component {
         function saveButton(styles, onPress, disabled, show) {
             if (!show) return null;
 
-            const title = disabled ? _('Saved') : _('Save');
+            const icon = disabled ? (
+                <Icon name="checkmark" style={styles.savedButtonIcon} />
+            ) : (
+                <Image
+                    style={styles.saveButtonIcon}
+                    source={require('./SaveIcon.png')}
+                />
+            );
             return (
-                <TouchableOpacity onPress={onPress} disabled={disabled}>
+                <TouchableOpacity
+                    onPress={onPress}
+                    disabled={disabled}
+                    style={{ padding: 0 }}
+                >
                     <View
                         style={
                             disabled
@@ -206,13 +234,7 @@ class ScreenHeaderComponent extends Component {
                                 : styles.saveButton
                         }
                     >
-                        {disabled && (
-                            <Icon
-                                name="checkmark"
-                                style={styles.saveButtonIcon}
-                            />
-                        )}
-                        <Text style={styles.saveButtonText}>{title}</Text>
+                        {icon}
                     </View>
                 </TouchableOpacity>
             );
@@ -302,6 +324,7 @@ class ScreenHeaderComponent extends Component {
                     );
                 }
                 return (
+                    // <View style={{ flex: 1 }}>
                     <Picker
                         style={styles.folderPicker}
                         itemStyle={{ color: 'black' }}
@@ -313,6 +336,7 @@ class ScreenHeaderComponent extends Component {
                     >
                         {items}
                     </Picker>
+                    // </View>
                 );
             } else {
                 let title =
@@ -348,7 +372,12 @@ class ScreenHeaderComponent extends Component {
                     onSelect={value => this.menu_select(value)}
                     style={styles.contextMenu}
                 >
-                    <MenuTrigger>
+                    <MenuTrigger
+                        style={{
+                            paddingTop: PADDING_V,
+                            paddingBottom: PADDING_V
+                        }}
+                    >
                         <Text style={styles.contextMenuTrigger}> &#8942; </Text>
                     </MenuTrigger>
                     <MenuOptions>{menuOptionComponents}</MenuOptions>

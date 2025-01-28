@@ -173,7 +173,12 @@ class NoteBodyViewer extends Component {
               '\n' +
               css +
               '</style>' +
-              marked(body, { gfm: true, breaks: true, renderer: renderer })
+              marked(body, {
+                  gfm: true,
+                  breaks: true,
+                  renderer: renderer,
+                  sanitize: true
+              })
             : '';
 
         let elementId = 1;
