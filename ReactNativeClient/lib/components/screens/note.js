@@ -6,7 +6,8 @@ import {
     TextInput,
     Text,
     StyleSheet,
-    Linking
+    Linking,
+    Image
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
@@ -31,6 +32,8 @@ import DialogBox from 'react-native-dialogbox';
 import { NoteBodyViewer } from '@/lib/components/note-body-viewer.js';
 import RNFS from 'react-native-fs';
 import * as DocumentPicker from 'react-native-document-picker';
+
+import ImageResizer from 'react-native-image-resizer';
 
 class NoteScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -104,6 +107,11 @@ class NoteScreenComponent extends BaseScreenComponent {
                 paddingRight: theme.marginRight,
                 paddingTop: theme.marginTop,
                 paddingBottom: theme.marginBottom
+            },
+            metadata: {
+                paddingLeft: globalStyle.marginLeft,
+                paddingRight: globalStyle.marginRight,
+                color: theme.color
             }
         };
 
@@ -277,8 +285,26 @@ class NoteScreenComponent extends BaseScreenComponent {
         }
     }
 
+    async imageDimensions(uri) {
+        return new Promise((resolve, reject) => {
+            Image.getSize(
+                uri,
+                (width, height) => {
+                    resolve({ width: width, height: height });
+                },
+                error => {
+                    reject(error);
+                }
+            );
+        });
+    }
+
     async attachFile_onPress() {
         const res = await this.pickDocument();
+
+        const localFilePath = res.uri;
+        reg.logger().info('Got file: ' + localFilePath);
+        reg.logger().info('Got type: ' + res.type);
 
         // res.uri,
         // res.type, // mime type
@@ -290,9 +316,47 @@ class NoteScreenComponent extends BaseScreenComponent {
         resource.mime = res.type;
         resource.title = res.name ? res.name : _('Untitled');
 
-        const targetPath = Resource.fullPath(resource);
+        let targetPath = Resource.fullPath(resource);
 
-        RNFS.copyFile(res.uri, targetPath);
+        if (
+            res.type == 'image/jpeg' ||
+            res.type == 'image/jpg' ||
+            res.type == 'image/png'
+        ) {
+            const maxSize = 1920;
+
+            let dimensions = await this.imageDimensions(localFilePath);
+
+            reg.logger().info('Original dimensions ', dimensions);
+
+            if (dimensions.width > maxSize || dimensions.height > maxSize) {
+                dimensions.width = maxSize;
+                dimensions.height = maxSize;
+            }
+            reg.logger().info('New dimensions ', dimensions);
+
+            const format = res.type == 'image/png' ? 'PNG' : 'JPEG';
+            reg.logger().info('Resizing image ' + localFilePath);
+            const resizedImage = await ImageResizer.createResizedImage(
+                localFilePath,
+                dimensions.width,
+                dimensions.height,
+                format,
+                85
+            );
+            const resizedImagePath = resizedImage.uri;
+            reg.logger().info('Resized image ', resizedImagePath);
+
+            RNFS.copyFile(resizedImagePath, targetPath); // mv doesn't work ("source path does not exist") so need to do cp and unlink
+
+            try {
+                RNFS.unlink(resizedImagePath);
+            } catch (error) {
+                reg.logger().info('Error when unlinking cached file: ', error);
+            }
+        } else {
+            RNFS.copyFile(localFilePath, targetPath);
+        }
 
         await Resource.save(resource, { isNew: true });
 
@@ -562,12 +626,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                 {bodyComponent}
                 {actionButtonComp}
                 {this.state.showNoteMetadata && (
-                    <Text
-                        style={{
-                            paddingLeft: globalStyle.marginLeft,
-                            paddingRight: globalStyle.marginRight
-                        }}
-                    >
+                    <Text style={this.styles().metadata}>
                         {this.state.noteMetadata}
                     </Text>
                 )}

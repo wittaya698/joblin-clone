@@ -62,7 +62,7 @@ class Synchronizer {
         if (report.deleteRemote)
             lines.push(_('Deleted remote items: %d.', report.deleteRemote));
         if (!report.completedTime && report.state)
-            lines.push(_('State: %s.', report.state.replace(/_/g, ' ')));
+            lines.push(_('State: "%s".', report.state));
         if (report.errors && report.errors.length)
             lines.push(
                 _(

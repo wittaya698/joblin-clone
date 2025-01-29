@@ -162,7 +162,7 @@ class NoteBodyViewer extends Component {
                     '<img title="' +
                     htmlentities(title) +
                     '" src="' +
-                    htmlentities(src) +
+                    src +
                     '"/>';
                 return output;
             }

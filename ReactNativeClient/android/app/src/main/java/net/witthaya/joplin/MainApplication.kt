@@ -14,6 +14,8 @@ import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import org.pgsqlite.SQLitePluginPackage;
 import com.rnfs.RNFSPackage;
+// import com.reactnativedocumentpicker.DocumentPickerPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
 
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
@@ -29,6 +31,8 @@ class MainApplication : Application(), ReactApplication {
             // packages.add(new MyReactNativePackage());
             packages.add(SQLitePluginPackage());
             packages.add(RNFSPackage());
+            // packages.add(DocumentPickerPackage());
+            packages.add(ImageResizerPackage());
             return packages
           }
 

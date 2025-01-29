@@ -319,7 +319,7 @@ msgid "Deleted remote items: %d."
 msgstr ""
 
 #, javascript-format
-msgid "State: %s."
+msgid "State: \"%s\"."
 msgstr ""
 
 #, javascript-format
@@ -476,6 +476,9 @@ msgid "Untitled"
 msgstr ""
 
 msgid "Delete note?"
+msgstr ""
+
+msgid "Attach file"
 msgstr ""
 
 msgid "Delete note"
