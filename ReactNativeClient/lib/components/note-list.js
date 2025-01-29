@@ -115,7 +115,9 @@ class NoteListComponent extends Component {
             const noItemMessage = _(
                 'There are currently no notes. Create one by clicking on the (+) button.'
             );
-            return <Text style={styles.noItemMessage}>{noItemMessage}</Text>;
+            return (
+                <Text style={this.styles().noItemMessage}>{noItemMessage}</Text>
+            );
         }
     }
 }

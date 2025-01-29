@@ -78,44 +78,34 @@ function getOptionColWidth(options) {
 function getHeader() {
     let output = [];
 
-    output.push(_('NAME'));
+    output.push('NAME');
     output.push('');
     output.push(
         wrap(
-            _(
-                'joplin - a note taking and todo app with synchronisation capabilities'
-            ),
-            INDENT
-        )
+            'joplin - a note taking and todo app with synchronisation capabilities'
+        ),
+        INDENT
     );
 
     output.push('');
 
-    output.push(_('DESCRIPTION'));
+    output.push('DESCRIPTION');
     output.push('');
 
     let description = [];
     description.push(
-        _(
-            'Joplin is a note taking and todo application, which can handle a large number of notes organised into notebooks.'
-        )
+        'Joplin is a note taking and todo application, which can handle a large number of notes organised into notebooks.'
     );
     description.push(
-        _(
-            'The notes are searchable, can be copied, tagged and modified with your own text editor.'
-        )
+        'The notes are searchable, can be copied, tagged and modified with your own text editor.'
     );
     description.push('\n\n');
     description.push(
-        _(
-            'The notes can be synchronised with various target including the file system (for example with a network directory) or with Microsoft OneDrive.'
-        )
+        'The notes can be synchronised with various target including the file system (for example with a network directory) or with Microsoft OneDrive.'
     );
     description.push('\n\n');
     description.push(
-        _(
-            'Notes exported from Evenotes via .enex files can be imported into Joplin, including the formatted content, resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).'
-        )
+        'Notes exported from Evenotes via .enex files can be imported into Joplin, including the formatted content, resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).'
     );
 
     output.push(wrap(description.join(''), INDENT));
@@ -126,13 +116,13 @@ function getHeader() {
 function getFooter() {
     let output = [];
 
-    // output.push(_('WEBSITE'));
+    // output.push('WEBSITE');
     // output.push('');
     // output.push(INDENT + 'https://joplin.cozic.net');
 
     // output.push('');
 
-    output.push(_('LICENSE'));
+    output.push('LICENSE');
     output.push('');
     let filePath = rootDir + '/LICENSE_' + languageCode();
     if (!fs.existsSync(filePath)) filePath = rootDir + '/LICENSE';
@@ -160,7 +150,7 @@ async function main() {
     console.info(
         headerText +
             '\n\n' +
-            _('USAGE') +
+            'USAGE' +
             '\n\n' +
             commandsText +
             '\n\n' +

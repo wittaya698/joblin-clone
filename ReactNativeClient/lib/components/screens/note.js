@@ -25,49 +25,9 @@ import { reg } from '@/lib/registry.js';
 import { shim } from '@/lib/shim.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
 import { dialogs } from '@/lib/dialogs.js';
-import { globalStyle } from '@/lib/components/global-style.js';
+import { globalStyle, themeStyle } from '@/lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
 import { NoteBodyViewer } from '@/lib/components/note-body-viewer.js';
-
-const styleObject = {
-    titleTextInput: {
-        flex: 1,
-        paddingLeft: 0,
-        color: globalStyle.color,
-        backgroundColor: globalStyle.backgroundColor,
-        fontWeight: 'bold',
-        fontSize: globalStyle.fontSize
-    },
-    bodyTextInput: {
-        flex: 1,
-        paddingLeft: globalStyle.marginLeft,
-        paddingRight: globalStyle.marginRight,
-        textAlignVertical: 'top',
-        color: globalStyle.color,
-        backgroundColor: globalStyle.backgroundColor,
-        fontSize: globalStyle.fontSize
-    },
-    noteBodyViewer: {
-        flex: 1,
-        paddingLeft: globalStyle.marginLeft,
-        paddingRight: globalStyle.marginRight,
-        paddingTop: globalStyle.marginTop,
-        paddingBottom: globalStyle.marginBottom
-    }
-};
-
-styleObject.titleContainer = {
-    flex: 0,
-    flexDirection: 'row',
-    paddingLeft: globalStyle.marginLeft,
-    paddingRight: globalStyle.marginRight,
-    borderBottomColor: globalStyle.dividerColor,
-    borderBottomWidth: 1
-};
-
-styleObject.titleContainerTodo = Object.assign({}, styleObject.titleContainer);
-
-const styles = StyleSheet.create(styleObject);
 
 class NoteScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -90,6 +50,8 @@ class NoteScreenComponent extends BaseScreenComponent {
 
         this.saveButtonHasBeenShown_ = false;
 
+        this.styles_ = {};
+
         // Disabled for now because it doesn't work consistently and proabably interfer with the backHandler
         // on root.js. Handling of the back button should be in one single place for this to work well.
 
@@ -106,6 +68,55 @@ class NoteScreenComponent extends BaseScreenComponent {
         //     }
         //     return false;
         // };
+    }
+
+    styles() {
+        const themeId = this.props.theme;
+        const theme = themeStyle(themeId);
+
+        if (this.styles_[themeId]) return this.styles_[themeId];
+        this.styles_ = {};
+
+        let styles = {
+            // titleTextInput: {
+            // 	flex: 1,
+            // 	paddingLeft: 0,
+            // 	color: theme.color,
+            // 	backgroundColor: theme.backgroundColor,
+            // 	fontWeight: 'bold',
+            // 	fontSize: theme.fontSize,
+            // },
+            bodyTextInput: {
+                flex: 1,
+                paddingLeft: theme.marginLeft,
+                paddingRight: theme.marginRight,
+                textAlignVertical: 'top',
+                color: theme.color,
+                backgroundColor: theme.backgroundColor,
+                fontSize: theme.fontSize
+            },
+            noteBodyViewer: {
+                flex: 1,
+                paddingLeft: theme.marginLeft,
+                paddingRight: theme.marginRight,
+                paddingTop: theme.marginTop,
+                paddingBottom: theme.marginBottom
+            }
+        };
+
+        styles.titleContainer = {
+            flex: 0,
+            flexDirection: 'row',
+            paddingLeft: theme.marginLeft,
+            paddingRight: theme.marginRight,
+            borderBottomColor: theme.dividerColor,
+            borderBottomWidth: 1
+        };
+
+        styles.titleContainerTodo = Object.assign({}, styles.titleContainer);
+
+        this.styles_[themeId] = StyleSheet.create(styles);
+        return this.styles_[themeId];
     }
 
     isModified() {
@@ -337,6 +348,7 @@ class NoteScreenComponent extends BaseScreenComponent {
             );
         }
 
+        const theme = themeStyle(this.props.theme);
         const note = this.state.note;
         const isTodo = !!Number(note.is_todo);
         const folder = this.state.folder;
@@ -349,7 +361,8 @@ class NoteScreenComponent extends BaseScreenComponent {
             };
             bodyComponent = (
                 <NoteBodyViewer
-                    style={styles.noteBodyViewer}
+                    style={this.styles().noteBodyViewer}
+                    webViewStyle={theme}
                     note={note}
                     onCheckboxChange={newBody => {
                         onCheckboxChange(newBody);
@@ -362,7 +375,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                 <TextInput
                     autoCapitalize="sentences"
                     autoFocus={focusBody}
-                    style={styles.bodyTextInput}
+                    style={this.styles().bodyTextInput}
                     multiline={true}
                     value={note.body}
                     onChangeText={text => this.body_changeText(text)}
@@ -421,19 +434,25 @@ class NoteScreenComponent extends BaseScreenComponent {
         if (showSaveButton) this.saveButtonHasBeenShown_ = true;
 
         const titleContainerStyle = isTodo
-            ? styles.titleContainerTodo
-            : styles.titleContainer;
+            ? this.styles().titleContainerTodo
+            : this.styles().titleContainer;
 
-        const titleTextInputStyle = Object.assign(
-            {},
-            styleObject.titleTextInput
-        );
+        let titleTextInputStyle = {
+            flex: 1,
+            paddingLeft: 0,
+            color: theme.color,
+            backgroundColor: theme.backgroundColor,
+            fontWeight: 'bold',
+            fontSize: theme.fontSize
+        };
+
         titleTextInputStyle.height = this.state.titleTextInputHeight;
 
         const titleComp = (
             <View style={titleContainerStyle}>
                 {isTodo && (
                     <Checkbox
+                        style={{ color: theme.color }}
                         checked={!!Number(note.todo_completed)}
                         onChange={checked => {
                             this.todoCheckbox_change(checked);
@@ -456,7 +475,7 @@ class NoteScreenComponent extends BaseScreenComponent {
         );
 
         return (
-            <View style={this.styles().screen}>
+            <View style={this.rootStyle(this.props.theme).root}>
                 <ScreenHeader
                     titlePicker={{
                         items: titlePickerItems(),
@@ -523,7 +542,8 @@ const NoteScreen = connect(state => {
         noteId: state.selectedNoteId,
         folderId: state.selectedFolderId,
         itemType: state.selectedItemType,
-        folders: state.folders
+        folders: state.folders,
+        theme: state.settings.theme
     };
 })(NoteScreenComponent);
 

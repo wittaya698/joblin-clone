@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Linking } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { globalStyle } from '@/lib/components/global-style.js';
 import { Resource } from '@/lib/models/resource.js';
@@ -65,6 +65,9 @@ class NoteBodyViewer extends Component {
             style.htmlColor +
             `;
             line-height: 1.5em;
+            background-color: ` +
+            style.htmlBackgroundColor +
+            `;
 			}
 			h1 {
 				font-size: 1.2em;
@@ -74,9 +77,11 @@ class NoteBodyViewer extends Component {
 				font-size: 1em;
 				font-weight: bold;
 			}
-			li {
-
-			}
+			a {
+				color: ` +
+            style.htmlLinkColor +
+            `
+            }
             ul {
 				padding-left: 1em;
 			}
@@ -167,19 +172,16 @@ class NoteBodyViewer extends Component {
             );
         };
 
+        let styleHtml = '<style>' + normalizeCss + '\n' + css + '</style>';
         let html = body
-            ? '<style>' +
-              normalizeCss +
-              '\n' +
-              css +
-              '</style>' +
+            ? styleHtml +
               marked(body, {
                   gfm: true,
                   breaks: true,
                   renderer: renderer,
                   sanitize: true
               })
-            : '';
+            : styleHtml;
 
         let elementId = 1;
         while (html.indexOf('°°JOP°') >= 0) {
@@ -229,7 +231,7 @@ class NoteBodyViewer extends Component {
                     source={{
                         html: this.markdownToHtml(
                             note ? note.body : '',
-                            globalStyle
+                            this.props.webViewStyle
                         )
                     }}
                     onMessage={event => {
