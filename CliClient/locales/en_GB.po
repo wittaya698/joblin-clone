@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Wittaya698
+# Copyright (C) YEAR Laurent Cozic
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -12,7 +12,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "No notebook selected."
@@ -41,26 +41,23 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
-msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+msgid "Displays the given note."
 msgstr ""
 
-msgid "Displays the given item data."
-msgstr ""
-
-msgid "Shows complete information about note."
+msgid "Displays the complete information about note."
 msgstr ""
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr ""
 
-msgid "Also displays hidden config variables."
-msgstr ""
-
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
+msgstr ""
+
+msgid "Also displays hidden config variables."
 msgstr ""
 
 #, javascript-format
@@ -87,6 +84,9 @@ msgid ""
 msgstr ""
 
 msgid "No active notebook."
+msgstr ""
+
+msgid "Note does not exist."
 msgstr ""
 
 #, javascript-format
@@ -162,6 +162,9 @@ msgid ""
 "todos, while `-ttd` would display notes and todos."
 msgstr ""
 
+msgid "Either \"text\" or \"json\""
+msgstr ""
+
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for todos), TITLE"
@@ -195,10 +198,6 @@ msgid "Deletes the items without asking for confirmation."
 msgstr ""
 
 msgid "Deletes a notebook."
-msgstr ""
-
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
 msgstr ""
 
 #, javascript-format
@@ -269,9 +268,6 @@ msgid "%s %s (%s)"
 msgstr ""
 
 msgid "Fatal error:"
-msgstr ""
-
-msgid "All potential ports are in use"
 msgstr ""
 
 msgid ""
@@ -444,6 +440,15 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
+msgid "New todo"
+msgstr ""
+
+msgid "New note"
+msgstr ""
+
+msgid "New notebook"
+msgstr ""
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
@@ -497,9 +502,6 @@ msgid "Show metadata"
 msgstr ""
 
 msgid "View location on map"
-msgstr ""
-
-msgid "New note"
 msgstr ""
 
 msgid "Edit"

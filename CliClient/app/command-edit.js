@@ -2,7 +2,6 @@ import fs from 'fs-extra';
 import { BaseCommand } from './base-command.js';
 import { app } from './app.js';
 import { _ } from '@/lib/locale.js';
-import { vorpalUtils } from './vorpal-utils.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
 import { Setting } from '@/lib/models/setting.js';
@@ -28,7 +27,7 @@ class Command extends BaseCommand {
 
         const onFinishedEditing = async () => {
             if (watcher) watcher.close();
-            app().vorpal().show();
+            // app().vorpal().show();
             newNote = null;
             this.log(_('Done editing.'));
         };
@@ -51,6 +50,9 @@ class Command extends BaseCommand {
             let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
             if (!note) {
+                // TODO
+                throw new Error(_('Note does not exist.'));
+
                 let ok = await vorpalUtils.cmdPromptConfirm(
                     this,
                     _('Note does not exist: "%s". Create it?', title)
@@ -82,7 +84,7 @@ class Command extends BaseCommand {
                 )
             );
 
-            app().vorpal().hide();
+            // app().vorpal().hide();
 
             await fs.writeFile(tempFilePath, content);
 

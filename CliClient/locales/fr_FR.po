@@ -43,23 +43,15 @@ msgstr "Affiche l'aide pour la commande donnée."
 msgid "Exits the application."
 msgstr "Quitter le logiciel."
 
-msgid "No notebook is defined. Create one with `mkbook <notebook>`."
-msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
-
-#, fuzzy
-msgid "Displays the given item data."
+msgid "Displays the given note."
 msgstr "Affiche la note."
 
-#, fuzzy
-msgid "Shows complete information about note."
+msgid "Displays the complete information about note."
 msgstr "Affiche tous les détails de la note."
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
-
-msgid "Also displays hidden config variables."
-msgstr "Afficher également les variables cachées."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
@@ -69,6 +61,9 @@ msgstr ""
 "Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas "
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournis, la configuration complète est affichée."
+
+msgid "Also displays hidden config variables."
+msgstr "Afficher également les variables cachées."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -99,6 +94,10 @@ msgstr ""
 
 msgid "No active notebook."
 msgstr "Aucun carnet actif."
+
+#, fuzzy
+msgid "Note does not exist."
+msgstr "Ce carnet n'existe pas : \"%s\". Le créer ?"
 
 #, javascript-format
 msgid "Note does not exist: \"%s\". Create it?"
@@ -184,6 +183,9 @@ msgstr ""
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
 "uniquement les tâches, tandis que `-ttd` affiche les notes et les tâches)."
 
+msgid "Either \"text\" or \"json\""
+msgstr "Soit \"text\" soit \"json\""
+
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
 "TODO_CHECKED (for todos), TITLE"
@@ -223,10 +225,6 @@ msgstr "Supprime les objets sans demander la confirmation."
 
 msgid "Deletes a notebook."
 msgstr "Supprime le carnet."
-
-#, javascript-format
-msgid "Delete notebook \"%s\"?"
-msgstr "Supprimer le carnet \"%s\" ?"
 
 #, javascript-format
 msgid "%d notes match this pattern. Delete them?"
@@ -308,12 +306,6 @@ msgstr "%s %s (%s)"
 
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
-
-#, fuzzy
-msgid "All potential ports are in use"
-msgstr ""
-"Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
-"sur %s"
 
 msgid ""
 "The application has been authorised - you may now close this browser tab."
@@ -491,6 +483,15 @@ msgstr "Carnets"
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
 
+msgid "New todo"
+msgstr "Nouvelle tâche"
+
+msgid "New note"
+msgstr "Nouvelle note"
+
+msgid "New notebook"
+msgstr "Nouveau carnet"
+
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 "Ce carnet ne contient aucune note. Créez-en une en appuyant sur le bouton "
@@ -548,9 +549,6 @@ msgstr "Afficher les métadonnées"
 msgid "View location on map"
 msgstr "Voir l'emplacement sur la carte"
 
-msgid "New note"
-msgstr "Nouvelle note"
-
 msgid "Edit"
 msgstr "Editer"
 
@@ -581,14 +579,11 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#~ msgid "Either \"text\" or \"json\""
-#~ msgstr "Soit \"text\" soit \"json\""
+#~ msgid "Delete notebook \"%s\"?"
+#~ msgstr "Supprimer le carnet \"%s\" ?"
 
-#~ msgid "New todo"
-#~ msgstr "Nouvelle tâche"
-
-#~ msgid "New notebook"
-#~ msgstr "Nouveau carnet"
+#~ msgid "No notebook is defined. Create one with `mkbook <notebook>`."
+#~ msgstr "Aucun carnet n'est défini. Créez-en un avec `mkbook <carnet>`."
 
 #~ msgid "NAME"
 #~ msgstr "NOM"
@@ -662,6 +657,11 @@ msgstr "Bienvenue"
 #, fuzzy
 #~ msgid "use <notebook>"
 #~ msgstr "Nouveau carnet"
+
+#~ msgid "All potential ports are in use - please report the issue at %s"
+#~ msgstr ""
+#~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
+#~ "sur %s"
 
 #~ msgid "Imported - %s"
 #~ msgstr "Importé - %s"

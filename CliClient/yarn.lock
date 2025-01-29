@@ -3180,6 +3180,11 @@ cacache@^18.0.2:
     tar "^6.1.11"
     unique-filename "^3.0.0"
 
+cache-require-paths@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/cache-require-paths/-/cache-require-paths-0.3.0.tgz"
+  integrity sha512-HKlzq/UL6KNlOynm4qGcSAQIRv0EpD+GlypeUEN9dwil46Rm458tsVPQ/QME/iogUzWtbHEFw2r2BF4mBBJeGw==
+
 caller-callsite@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npmjs.org/caller-callsite/-/caller-callsite-2.0.0.tgz"
@@ -6114,6 +6119,11 @@ object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
   integrity sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==
+
+omelette@^0.4.17:
+  version "0.4.17"
+  resolved "https://registry.npmjs.org/omelette/-/omelette-0.4.17.tgz"
+  integrity sha512-UlU69G6Bhu0XFjw3tjFZ0qyiMUjAOR+rdzblA1nLQ8xiqFtxOVlkhM39BlgTpLFx9fxkm6rnxNNRsS5GxE/yww==
 
 on-finished@~2.3.0:
   version "2.3.0"
