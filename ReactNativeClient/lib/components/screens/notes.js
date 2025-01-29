@@ -151,7 +151,7 @@ class NotesScreenComponent extends BaseScreenComponent {
             this.props.selectedFolderId &&
             this.props.selectedFolderId != Folder.conflictFolderId();
 
-        const theme = themeStyle(Setting.value('theme'));
+        const theme = themeStyle(this.props.theme);
 
         let rootStyle = {
             flex: 1,
@@ -162,7 +162,6 @@ class NotesScreenComponent extends BaseScreenComponent {
             rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
         }
 
-        const { navigate } = this.props.navigation;
         return (
             <View style={rootStyle}>
                 <ScreenHeader title={title} menuOptions={this.menuOptions()} />

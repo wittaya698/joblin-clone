@@ -101,6 +101,8 @@ class SearchScreenComponent extends BaseScreenComponent {
     }
 
     async refreshSearch(query = null) {
+        if (!this.props.visible) return;
+
         query = query === null ? this.state.query.trim : query.trim();
 
         let notes = [];
@@ -131,8 +133,19 @@ class SearchScreenComponent extends BaseScreenComponent {
     render() {
         if (!this.isMounted_) return null;
 
+        const theme = themeStyle(this.props.theme);
+
+        let rootStyle = {
+            flex: 1,
+            backgroundColor: theme.backgroundColor
+        };
+
+        if (!this.props.visible) {
+            rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
+        }
+
         return (
-            <View style={this.rootStyle(this.props.theme).root}>
+            <View style={rootStyle}>
                 <ScreenHeader title={_('Search')} />
                 <View style={this.styles().body}>
                     <View style={this.styles().searchContainer}>
