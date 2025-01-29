@@ -6,18 +6,35 @@ import { ScreenHeader } from '@/lib/components/screen-header.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import { _ } from '@/lib/locale.js';
 import { BaseScreenComponent } from '@/lib/components/base-screen.js';
-import { globalStyle } from '@/lib/components/global-style.js';
-
-const styles = StyleSheet.create({
-    message: {
-        margin: globalStyle.margin,
-        fontSize: globalStyle.fontSize
-    }
-});
+import { themeStyle } from '@/lib/components/global-style.js';
 
 class WelcomeScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
         return { header: null };
+    }
+
+    constructor() {
+        super();
+        this.styles_ = {};
+    }
+
+    styles() {
+        const themeId = this.props.theme;
+        const theme = themeStyle(themeId);
+
+        if (this.styles_[themeId]) return this.styles_[themeId];
+        this.styles_ = {};
+
+        let styles = {
+            message: {
+                margin: theme.margin,
+                fontSize: theme.fontSize,
+                color: theme.color
+            }
+        };
+
+        this.styles_[themeId] = StyleSheet.create(styles);
+        return this.styles_[themeId];
     }
 
     render() {
@@ -29,9 +46,9 @@ class WelcomeScreenComponent extends BaseScreenComponent {
                   'You currently have no notebook. Create one by clicking on (+) button.'
               );
         return (
-            <View style={this.styles().screen}>
+            <View style={this.rootStyle(this.props.theme).root}>
                 <ScreenHeader title={_('Welcome')} />
-                <Text style={styles.message}>{message}</Text>
+                <Text style={this.styles().message}>{message}</Text>
                 <ActionButton addFolderNoteButtons={true} />
             </View>
         );
@@ -40,7 +57,8 @@ class WelcomeScreenComponent extends BaseScreenComponent {
 
 const WelcomeScreen = connect(state => {
     return {
-        folders: state.folders
+        folders: state.folders,
+        theme: state.settings.theme
     };
 })(WelcomeScreenComponent);
 
