@@ -112,7 +112,7 @@ class Logger {
                     line + serializedObject + '\n'
                 );
             } else if (target.type == 'vorpal') {
-                target.vorpa.log(...object);
+                // target.vorpa.log(...object);
             } else if (target.type == 'database') {
                 let msg = this.objectToString(...object);
                 let queries = [

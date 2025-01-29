@@ -8,7 +8,7 @@ import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'cat <title>';
+        return 'cat <note>';
     }
 
     description() {
@@ -24,7 +24,7 @@ class Command extends BaseCommand {
     }
 
     async action(args) {
-        let title = args['title'];
+        let title = args['note'];
 
         let item = await app().loadItem(BaseModel.TYPE_NOTE, title, {
             parent: app().currentFolder()

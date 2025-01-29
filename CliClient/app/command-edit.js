@@ -10,7 +10,7 @@ import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'edit <title>';
+        return 'edit <note>';
     }
 
     description() {
@@ -43,7 +43,7 @@ class Command extends BaseCommand {
         };
 
         try {
-            let title = args['title'];
+            let title = args['note'];
 
             if (!app().currentFolder())
                 throw new Error(_('No active notebook.'));
@@ -83,8 +83,6 @@ class Command extends BaseCommand {
                     'Starting to edit note. Close the editor to get back to the prompt.'
                 )
             );
-
-            // app().vorpal().hide();
 
             await fs.writeFile(tempFilePath, content);
 
