@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
+import { uuid } from '@/lib/uuid.js';
 import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { Resource } from '@/lib/models/resource.js';
@@ -28,6 +29,8 @@ import { dialogs } from '@/lib/dialogs.js';
 import { globalStyle, themeStyle } from '@/lib/components/global-style.js';
 import DialogBox from 'react-native-dialogbox';
 import { NoteBodyViewer } from '@/lib/components/note-body-viewer.js';
+import RNFS from 'react-native-fs';
+import * as DocumentPicker from 'react-native-document-picker';
 
 class NoteScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -259,7 +262,46 @@ class NoteScreenComponent extends BaseScreenComponent {
         });
     }
 
-    attachFile_onPress() {}
+    async pickDocument() {
+        try {
+            const res = await DocumentPicker.pickSingle({
+                type: [DocumentPicker.types.images]
+            });
+            return res;
+        } catch (error) {
+            if (DocumentPicker.isCancel(error)) {
+                console.log('User canceled document picker');
+            } else {
+                throw error;
+            }
+        }
+    }
+
+    async attachFile_onPress() {
+        const res = await this.pickDocument();
+
+        // res.uri,
+        // res.type, // mime type
+        // res.fileName,
+        // res.fileSize
+
+        let resource = Resource.new();
+        resource.id = uuid.create();
+        resource.mime = res.type;
+        resource.title = res.name ? res.name : _('Untitled');
+
+        const targetPath = Resource.fullPath(resource);
+
+        RNFS.copyFile(res.uri, targetPath);
+
+        await Resource.save(resource, { isNew: true });
+
+        const resourceTag = Resource.markdownTag(resource);
+
+        const newNote = Object.assign({}, this.state.note);
+        newNote.body += '\n' + resourceTag;
+        this.setState({ note: newNote });
+    }
 
     toggleIsTodo_onPress() {
         let newNote = Note.toggleIsTodo(this.state.note);
@@ -289,12 +331,12 @@ class NoteScreenComponent extends BaseScreenComponent {
         const note = this.state.note;
 
         return [
-            // {
-            //     title: _('Attach file'),
-            //     onPress: () => {
-            //         this.attachFile_onPress();
-            //     }
-            // },
+            {
+                title: _('Attach file'),
+                onPress: () => {
+                    this.attachFile_onPress();
+                }
+            },
             {
                 title: _('Delete note'),
                 onPress: () => {
@@ -406,11 +448,13 @@ class NoteScreenComponent extends BaseScreenComponent {
                 return <ActionButton style={{ display: 'none' }} />;
 
             return (
-                <ActionButton
-                    multiStates={true}
-                    buttons={buttons}
-                    buttonIndex={0}
-                />
+                <View>
+                    <ActionButton
+                        multiStates={true}
+                        buttons={buttons}
+                        buttonIndex={0}
+                    />
+                </View>
             );
         };
 

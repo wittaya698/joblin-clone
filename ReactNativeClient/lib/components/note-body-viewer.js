@@ -127,7 +127,9 @@ class NoteBodyViewer extends Component {
                 );
             } else {
                 const js =
-                    'postMessage(' + JSON.stringify(href) + '); return false;';
+                    'window.ReactNativeWebView.postMessage(' +
+                    JSON.stringify(href) +
+                    '); return false;';
                 let output =
                     "<a title='" +
                     htmlentities(title) +
@@ -148,17 +150,19 @@ class NoteBodyViewer extends Component {
             }
 
             const r = this.state.resources[resourceId];
+            const mime = r.mime.toLowerCase();
             if (
-                r.mime == 'image/png' ||
-                r.mime == 'image/jpg' ||
-                r.mime == 'image/gif'
+                mime == 'image/png' ||
+                mime == 'image/jpg' ||
+                mime == 'image/jpeg' ||
+                mime == 'image/gif'
             ) {
                 const src = 'data:' + r.mime + ';base64,' + r.base64;
                 let output =
                     '<img title="' +
                     htmlentities(title) +
                     '" src="' +
-                    src +
+                    htmlentities(src) +
                     '"/>';
                 return output;
             }
@@ -166,8 +170,8 @@ class NoteBodyViewer extends Component {
             return (
                 '[Image: ' +
                 htmlentities(r.title) +
-                '(' +
-                htmlentities(r.mime) +
+                ' (' +
+                htmlentities(mime) +
                 ')]'
             );
         };
@@ -211,7 +215,7 @@ class NoteBodyViewer extends Component {
             ';</script>';
 
         html =
-            '<body onscroll="postMessage(\'bodyscroll:\' + document.body.scrollTop);">' +
+            '<body onscroll="window.ReactNativeWebView.postMessage(\'bodyscroll:\' + document.body.scrollTop);">' +
             html +
             scriptHtml +
             '</body>';

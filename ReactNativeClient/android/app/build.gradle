@@ -176,6 +176,7 @@ dependencies {
 
     implementation project(':react-native-sqlite-storage')
     implementation project(':react-native-fs')
+    implementation project(':react-native-document-picker')
 }
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

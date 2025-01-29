@@ -172,7 +172,12 @@ class OneDriveApi {
 
             let response = null;
             try {
-                if (options.target == 'string') {
+                if (
+                    options.source == 'file' &&
+                    (method == 'POST' || method == 'PUT')
+                ) {
+                    response = await shim.uploadBlob(url, options);
+                } else if (options.target == 'string') {
                     response = await shim.fetch(url, options);
                 } else {
                     // file
