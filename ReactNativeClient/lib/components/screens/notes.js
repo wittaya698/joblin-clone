@@ -135,9 +135,20 @@ class NotesScreenComponent extends BaseScreenComponent {
     render() {
         const parent = this.parentItem();
 
+        const theme = themeStyle(this.props.theme);
+
+        let rootStyle = {
+            flex: 1,
+            backgroundColor: theme.backgroundColor
+        };
+
+        if (!this.props.visible) {
+            rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
+        }
+
         if (!parent) {
             return (
-                <View style={this.styles().screen}>
+                <View style={rootStyle}>
                     <ScreenHeader
                         title={title}
                         menuOptions={this.menuOptions()}
@@ -150,17 +161,6 @@ class NotesScreenComponent extends BaseScreenComponent {
         const addFolderNoteButtons =
             this.props.selectedFolderId &&
             this.props.selectedFolderId != Folder.conflictFolderId();
-
-        const theme = themeStyle(this.props.theme);
-
-        let rootStyle = {
-            flex: 1,
-            backgroundColor: theme.backgroundColor
-        };
-
-        if (!this.props.visible) {
-            rootStyle.flex = 0.001; // This is a bit of a hack but it seems to work fine - it makes the component invisible but without unmounting it
-        }
 
         return (
             <View style={rootStyle}>
