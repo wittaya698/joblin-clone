@@ -9,7 +9,7 @@
   "url": "git://github.com/wittaya698/joplin-clone",
   "version": "0.9.0",
   "bin": {
-    "joplin": "./main_launcher.js"
+    "joplin": "./main.js"
   },
   "private": true,
   "dependencies": {
