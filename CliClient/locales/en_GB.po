@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Laurent Cozic
+# Copyright (C) YEAR Wittaya698
 # This file is distributed under the same license as the Joplin-CLI package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -12,7 +12,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "No notebook selected."
@@ -41,23 +41,36 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
-msgid "Displays the given note."
+msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
-msgid "Displays the complete information about note."
+#, javascript-format
+msgid "Missing required argument: %s"
+msgstr ""
+
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
+msgid "Displays the given item data."
+msgstr ""
+
+msgid "Shows complete information about note."
 msgstr ""
 
 #, javascript-format
 msgid "Cannot find \"%s\"."
 msgstr ""
 
+msgid "Also displays hidden config variables."
+msgstr ""
+
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
 "value of [name]. If neither [name] nor [value] is provided, it will list the "
 "current configuration."
-msgstr ""
-
-msgid "Also displays hidden config variables."
 msgstr ""
 
 #, javascript-format
@@ -69,7 +82,7 @@ msgid "%s = %s"
 msgstr ""
 
 msgid ""
-"Duplicates the notes matching <pattern> to [notebook]. If no notebook is "
+"Duplicates the notes matching <note> to [notebook]. If no notebook is "
 "specified the note is duplicated in the current notebook."
 msgstr ""
 
@@ -84,9 +97,6 @@ msgid ""
 msgstr ""
 
 msgid "No active notebook."
-msgstr ""
-
-msgid "Note does not exist."
 msgstr ""
 
 #, javascript-format
@@ -143,8 +153,8 @@ msgid "Importing notes..."
 msgstr ""
 
 msgid ""
-"Displays the notes in [notebook]. Use `ls /` to display the list of "
-"notebooks."
+"Displays the notes in the current notebook. Use `ls /` to display the list "
+"of notebooks."
 msgstr ""
 
 msgid "Displays only the first top <num> notes."
@@ -160,9 +170,6 @@ msgid ""
 "Displays only the items of the specific type(s). Can be `n` for notes, `t` "
 "for todos, or `nt` for notes and todos (eg. `-tt` would display only the "
 "todos, while `-ttd` would display notes and todos."
-msgstr ""
-
-msgid "Either \"text\" or \"json\""
 msgstr ""
 
 msgid ""
@@ -185,19 +192,13 @@ msgstr ""
 msgid "Creates a new todo."
 msgstr ""
 
-msgid ""
-"Moves the notes matching <pattern> to <destination>. If <pattern> is a note, "
-"it will be moved to the notebook <destination>. If <pattern> is a notebook, "
-"it will be renamed to <destination>."
+msgid "Moves the notes matching <note-pattern> to [notebook]."
 msgstr ""
 
-msgid "Deletes the items matching <pattern>."
+msgid "Deletes the notes matching <note-pattern>."
 msgstr ""
 
 msgid "Deletes the items without asking for confirmation."
-msgstr ""
-
-msgid "Deletes a notebook."
 msgstr ""
 
 #, javascript-format
@@ -223,6 +224,13 @@ msgid "Synchronisation is already in progress."
 msgstr ""
 
 #, javascript-format
+msgid ""
+"Lock file is already being hold. If you know that no synchronisation is "
+"taking place, you may delete the lock file at \"%s\" and resume the "
+"operation."
+msgstr ""
+
+#, javascript-format
 msgid "Synchronisation target: %s (%s)"
 msgstr ""
 
@@ -235,13 +243,13 @@ msgstr ""
 msgid "Done."
 msgstr ""
 
-msgid "Cancelling..."
+msgid "Cancelling... Please wait."
 msgstr ""
 
 msgid ""
-"<command> can be \"add\", \"remove\" or \"list\" to assign or remove [tag] "
-"from [note], or to list the notes associated with [tag]. The command `tag "
-"list` can be used to list all the tags."
+"<tag-command> can be \"add\", \"remove\" or \"list\" to assign or remove "
+"[tag] from [note], or to list the notes associated with [tag]. The command "
+"`tag list` can be used to list all the tags."
 msgstr ""
 
 #, javascript-format
@@ -249,10 +257,10 @@ msgid "Invalid command: \"%s\""
 msgstr ""
 
 msgid ""
-"<action> can either be \"toggle\" or \"clear\". Use \"toggle\" to toggle the "
-"given todo between completed and uncompleted state (If the target is a "
-"regular note it will be converted to a todo). Use \"clear\" to convert the "
-"todo back to a regular note."
+"<todo-command> can either be \"toggle\" or \"clear\". Use \"toggle\" to "
+"toggle the given todo between completed and uncompleted state (If the target "
+"is a regular note it will be converted to a todo). Use \"clear\" to convert "
+"the todo back to a regular note."
 msgstr ""
 
 msgid ""
@@ -267,7 +275,14 @@ msgstr ""
 msgid "%s %s (%s)"
 msgstr ""
 
+#, javascript-format
+msgid "Received %s"
+msgstr ""
+
 msgid "Fatal error:"
+msgstr ""
+
+msgid "All potential ports are in use"
 msgstr ""
 
 msgid ""
@@ -320,6 +335,9 @@ msgstr ""
 
 #, javascript-format
 msgid "Last error: %s (stacktrace in log)."
+msgstr ""
+
+msgid "Cancelling..."
 msgstr ""
 
 #, javascript-format
@@ -440,15 +458,6 @@ msgstr ""
 msgid "%s: %d notes"
 msgstr ""
 
-msgid "New todo"
-msgstr ""
-
-msgid "New note"
-msgstr ""
-
-msgid "New notebook"
-msgstr ""
-
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
 
@@ -502,6 +511,9 @@ msgid "Show metadata"
 msgstr ""
 
 msgid "View location on map"
+msgstr ""
+
+msgid "New note"
 msgstr ""
 
 msgid "Edit"

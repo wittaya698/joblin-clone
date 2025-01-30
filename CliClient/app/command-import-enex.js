@@ -4,6 +4,7 @@ import { _ } from '@/lib/locale.js';
 import { Folder } from '@/lib/models/folder.js';
 import { importEnex } from 'import-enex';
 import { filename, basename } from '@/lib/path-utils.js';
+import { cliUtils } from './cli-utils.js';
 
 class Command extends BaseCommand {
     usage() {
@@ -27,8 +28,6 @@ class Command extends BaseCommand {
         let folderTitle = args['notebook'];
         let force = args.options.force === true;
 
-        force = true; // TODO
-
         if (!folderTitle) folderTitle = filename(filePath);
         folder = await Folder.loadByField('title', folderTitle);
         const msg = folder
@@ -42,8 +41,7 @@ class Command extends BaseCommand {
                   folderTitle,
                   basename(filePath)
               );
-        const ok = force ? true : await vorpalUtils.cmdPromptConfirm(this, msg);
-
+        const ok = force ? true : await cliUtils.promptConfirm(msg);
         if (!ok) return;
 
         let options = {
@@ -62,8 +60,7 @@ class Command extends BaseCommand {
                     );
                 if (progressState.notesTagged)
                     line.push(_('Tagged: %d.', progressState.notesTagged));
-                this.log(line.join(' ')); // TODO
-                //vorpalUtils.redraw(line.join(' '));
+                cliUtils.redraw(line.join(' '));
             },
             onError: error => {
                 let s = error.trace ? error.trace : error.toString();
@@ -74,6 +71,7 @@ class Command extends BaseCommand {
         folder = !folder ? await Folder.save({ title: folderTitle }) : folder;
         this.log(_('Importing notes...'));
         await importEnex(folder.id, filePath, options);
+        cliUtils.redrawDone();
     }
 }
 

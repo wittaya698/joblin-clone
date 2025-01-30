@@ -6,6 +6,7 @@ import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { autocompleteItems } from './autocomplete.js';
+import { cliUtils } from './cli-utils.js';
 
 class Command extends BaseCommand {
     usage() {
@@ -32,7 +33,7 @@ class Command extends BaseCommand {
     async action(args) {
         const pattern = args['pattern'].toString();
         const recursive = args.options && args.options.recursive === true;
-        const force = true || (args.options && args.options.force === true); // TODO
+        const force = args.options && args.options.force === true;
 
         // if (recursive) {
         //     const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
@@ -52,8 +53,7 @@ class Command extends BaseCommand {
         if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
         const ok = force
             ? true
-            : await vorpalUtils.cmdPromptConfirm(
-                  this,
+            : await cliUtils.promptConfirm(
                   _('%d notes match this pattern. Delete them?', notes.length)
               );
         if (!ok) return;
