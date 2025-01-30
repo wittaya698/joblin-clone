@@ -179,9 +179,7 @@ class FileApiDriverLocal {
                     return;
                 }
 
-                const { mkdirp } = require('mkdirp');
-
-                mkdirp(path)
+                fs.mkdirp(path)
                     .then(() => {
                         resolve();
                     })
