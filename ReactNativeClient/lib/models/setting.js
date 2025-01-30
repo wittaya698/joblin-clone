@@ -388,6 +388,7 @@ Setting.metadata_ = {
         label: () => _('Synchronisation interval'),
         options: () => {
             return {
+                0: _('Disabled'),
                 300: _('%d minutes', 5),
                 600: _('%d minutes', 10),
                 1800: _('%d minutes', 30),

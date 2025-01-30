@@ -175,6 +175,10 @@ class Command extends BaseCommand {
 
         this.syncTarget_ = null;
     }
+
+    cancellable() {
+        return true;
+    }
 }
 
 module.exports = Command;

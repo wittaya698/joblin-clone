@@ -27,6 +27,10 @@ class BaseCommand {
         return true;
     }
 
+    cancellable() {
+        return false;
+    }
+
     async cancel() {}
 
     name() {

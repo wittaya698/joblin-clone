@@ -54,17 +54,23 @@ if (process.platform === 'win32') {
     });
 }
 
+let commandCancelCalled_ = false;
+
+process.on('SIGINT', async function () {
+    const cmd = application.currentCommand();
+    if (!cmd.cancellable() || commandCancelCalled_) {
+        process.exit(0);
+    } else {
+        commandCancelCalled_ = true;
+        await cmd.cancel();
+    }
+});
+
 process.stdout.on('error', function (err) {
     // https://stackoverflow.com/questions/12329816/error-write-epipe-when-piping-node-output-to-head#15884508
     if (err.code == 'EPIPE') {
         process.exit(0);
     }
-});
-
-process.on('SIGINT', async function () {
-    throw new Error("Received some 'SIGINT'");
-    console.info(_('Received %s', 'SIGINT'));
-    await application.cancelCurrentCommand();
 });
 
 application.start().catch(error => {
