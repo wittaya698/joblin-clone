@@ -43,6 +43,7 @@ shimInit();
 const application = app();
 
 if (process.platform === 'win32') {
+    throw new Error("process.platform === 'win32' in main.js");
     var rl = require('readline').createInterface({
         input: process.stdin,
         output: process.stdout
@@ -52,7 +53,16 @@ if (process.platform === 'win32') {
         process.emit('SIGINT');
     });
 }
+
+process.stdout.on('error', function (err) {
+    // https://stackoverflow.com/questions/12329816/error-write-epipe-when-piping-node-output-to-head#15884508
+    if (err.code == 'EPIPE') {
+        process.exit(0);
+    }
+});
+
 process.on('SIGINT', async function () {
+    throw new Error("Received some 'SIGINT'");
     console.info(_('Received %s', 'SIGINT'));
     await application.cancelCurrentCommand();
 });

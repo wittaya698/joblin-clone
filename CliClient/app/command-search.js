@@ -4,7 +4,6 @@ import { _ } from '@/lib/locale.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
-import { autocompleteFolders } from './autocomplete.js';
 import { sprintf } from 'sprintf-js';
 import { time } from '@/lib/time-utils.js';
 
@@ -56,8 +55,8 @@ class Command extends BaseCommand {
                 line = sprintf(
                     '%s: %s / %s: %s',
                     BaseModel.shortId(note.id),
-                    note.title,
                     parent.title,
+                    note.title,
                     fragment
                 );
             } else {

@@ -130,6 +130,7 @@ cliUtils.makeCommandArgs = function (cmd, argv) {
 };
 
 cliUtils.promptConfirm = function (message, answers = null) {
+    throw new Error('cliUtils.promptConfirm() was called');
     if (!answers) answers = [_('Y'), _('n')];
     const readline = require('readline');
 
