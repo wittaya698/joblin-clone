@@ -144,8 +144,6 @@ class Command extends BaseCommand {
                 }
             }
             await app().refreshCurrentFolder();
-
-            this.log(_('Done.'));
         } catch (error) {
             this.releaseLockFn_();
             this.releaseLockFn_ = null;
