@@ -19,7 +19,10 @@ import {
 import os from 'os';
 import fs from 'fs-extra';
 import yargParser from 'yargs-parser';
-import { handleAutocompletion } from './autocompletion.js';
+import {
+    handleAutocompletion,
+    installAutocompletionFile
+} from './autocompletion.js';
 import { cliUtils } from './cli-utils.js';
 
 class Application {
@@ -185,6 +188,12 @@ class Application {
                 continue;
             }
 
+            if (arg == '--ac-install') {
+                this.autocompletion_.install = true;
+                argv.splice(0, 1);
+                continue;
+            }
+
             if (arg == '--ac-current') {
                 if (!nextArg)
                     throw new Error(_('Usage: %s', '--ac-current <num>'));
@@ -344,6 +353,11 @@ class Application {
         let initArgs = startFlags.matched;
         if (argv.length) this.showPromptString_ = false;
 
+        Setting.setConstant(
+            'appName',
+            initArgs.env == 'dev' ? 'joplindev' : 'joplin'
+        );
+
         const profileDir = initArgs.profileDir
             ? initArgs.profileDir
             : os.homedir() + '/.config/' + Setting.value('appName');
@@ -416,11 +430,28 @@ class Application {
         );
 
         if (this.autocompletion_.active) {
-            let items = await handleAutocompletion(this.autocompletion_);
-            for (let i = 0; i < items.length; i++) {
-                items[i] = items[i].replace(/ /g, '\\ ');
+            if (this.autocompletion_.install) {
+                try {
+                    installAutocompletionFile(
+                        Setting.value('appName'),
+                        Setting.value('profileDir')
+                    );
+                } catch (error) {
+                    if (error.code == 'shellNotSupported') {
+                        console.info(error.message);
+                        return;
+                    }
+                    throw error;
+                }
+            } else {
+                let items = await handleAutocompletion(this.autocompletion_);
+                if (!items.length) return;
+                for (let i = 0; i < items.length; i++) {
+                    items[i] = items[i].replace(/ /g, '\\ ');
+                }
+                //console.info(items);
+                console.info(items.join('\n'));
             }
-            console.info(items.join('\n'));
             return;
         }
 

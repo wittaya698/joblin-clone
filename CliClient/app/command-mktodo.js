@@ -5,7 +5,7 @@ import { Note } from 'lib/models/note.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'mktodo <note>';
+        return 'mktodo <new-note>';
     }
 
     description() {
@@ -17,7 +17,7 @@ class Command extends BaseCommand {
             throw new Error(_('Notes can only be created within a notebook.'));
 
         let note = {
-            title: args.note,
+            title: args['new-todo'],
             parent_id: app().currentFolder().id,
             is_todo: 1
         };

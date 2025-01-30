@@ -6,7 +6,7 @@ import { reg } from '@/lib/registry.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'mkbook <notebook>';
+        return 'mkbook <new-notebook>';
     }
 
     description() {
@@ -19,7 +19,7 @@ class Command extends BaseCommand {
 
     async action(args, end) {
         let folder = await Folder.save(
-            { title: args['notebook'] },
+            { title: args['new-notebook'] },
             { userSideValidation: true }
         );
 

@@ -6,12 +6,12 @@ import { BaseModel } from '@/lib/base-model.js';
 
 class Command extends BaseCommand {
     usage() {
-        return 'tag <command> [tag] [note]';
+        return 'tag <tag-command> [tag] [note]';
     }
 
     description() {
         return _(
-            '<command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags.'
+            '<tag-command> can be "add", "remove" or "list" to assign or remove [tag] from [note], or to list the notes associated with [tag]. The command `tag list` can be used to list all the tags.'
         );
     }
 
@@ -22,24 +22,27 @@ class Command extends BaseCommand {
         if (args.note) {
             notes = await app().loadItems(BaseModel.TYPE_NOTE, args.note);
         }
-        if (args.command == 'remove' && !tag)
+
+        const command = args['tag-command'];
+
+        if (command == 'remove' && !tag)
             throw new Error(_('Cannot find "%s".', args.tag));
 
-        if (args.command == 'add') {
+        if (command == 'add') {
             if (!notes.length)
                 throw new Error(_('Cannot find "%s".', args.note));
             if (!tag) tag = await Tag.save({ title: args.tag });
             for (let i = 0; i < notes.length; i++) {
                 await Tag.addNote(tag.id, notes[i].id);
             }
-        } else if (args.command == 'remove') {
+        } else if (command == 'remove') {
             if (!tag) throw new Error(_('Cannot find "%s".', args.tag));
             if (!notes.length)
                 throw new Error(_('Cannot find "%s".', args.note));
             for (let i = 0; i < notes.length; i++) {
                 await Tag.removeNote(tag.id, notes[i].id);
             }
-        } else if (args.command == 'list') {
+        } else if (command == 'list') {
             if (tag) {
                 let notes = await Tag.notes(tag.id);
                 notes.map(note => {
@@ -52,7 +55,7 @@ class Command extends BaseCommand {
                 });
             }
         } else {
-            throw new Error(_('Invalid command: "%s"', args.command));
+            throw new Error(_('Invalid command: "%s"', command));
         }
     }
 }

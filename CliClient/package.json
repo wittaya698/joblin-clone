@@ -36,6 +36,7 @@
     "moment-timezone": "^0.5.46",
     "node-cache": "^5.1.2",
     "node-fetch": "^3.3.2",
+    "node-persist": "^4.0.4",
     "os-tmpdir": "^1.0.2",
     "promise": "^8.3.0",
     "proper-lockfile": "^4.1.2",

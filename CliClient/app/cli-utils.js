@@ -49,12 +49,12 @@ cliUtils.parseFlags = function (flags) {
             output.long = f[0].substr(2).trim();
             if (f.length == 2) {
                 output.arg = cliUtils.parseCommandArg(f[1].trim());
-            } else if (f.substr(0, 1) == '-') {
-                output.short = f.substr(1);
             }
+        } else if (f.substr(0, 1) == '-') {
+            output.short = f.substr(1);
         }
-        return output;
     }
+    return output;
 };
 
 cliUtils.parseCommandArg = function (arg) {
