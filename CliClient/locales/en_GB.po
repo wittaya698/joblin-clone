@@ -109,6 +109,9 @@ msgstr ""
 msgid "Displays a geolocation URL for the note."
 msgstr ""
 
+msgid "Displays usage information."
+msgstr ""
+
 msgid "Imports an Evernote notebook file (.enex file)."
 msgstr ""
 

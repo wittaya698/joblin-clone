@@ -4,7 +4,6 @@ import { _ } from '@/lib/locale.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
-import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
@@ -17,10 +16,6 @@ class Command extends BaseCommand {
 
     options() {
         return [['-v, --verbose', _('Shows complete information about note.')]];
-    }
-
-    autocomplete() {
-        return { data: autocompleteItems };
     }
 
     async action(args) {

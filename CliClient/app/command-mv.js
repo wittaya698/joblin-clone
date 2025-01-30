@@ -4,7 +4,6 @@ import { _ } from '@/lib/locale.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
-import { autocompleteItems } from './autocomplete.js';
 
 class Command extends BaseCommand {
     usage() {
@@ -13,10 +12,6 @@ class Command extends BaseCommand {
 
     description() {
         return _('Moves the notes matching <note-pattern> to [notebook].');
-    }
-
-    autocomplete() {
-        return { data: autocompleteItems };
     }
 
     async action(args) {

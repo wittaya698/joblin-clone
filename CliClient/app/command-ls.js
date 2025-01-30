@@ -5,7 +5,6 @@ import { BaseModel } from '@/lib/base-model.js';
 import { Folder } from '@/lib/models/folder.js';
 import { Setting } from '@/lib/models/setting.js';
 import { Note } from '@/lib/models/note.js';
-import { autocompleteFolders } from './autocomplete.js';
 import { sprintf } from 'sprintf-js';
 import { time } from '@/lib/time-utils.js';
 import { cliUtils } from './cli-utils.js';
@@ -48,10 +47,6 @@ class Command extends BaseCommand {
                 )
             ]
         ];
-    }
-
-    autocomplete() {
-        return { data: autocompleteFolders };
     }
 
     async action(args) {
