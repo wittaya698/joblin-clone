@@ -159,6 +159,8 @@ class BaseModel {
             params.push(pattern);
         }
 
+        if ('limit' in options && options.limit <= 0) return [];
+
         let sql =
             'SELECT ' +
             this.db().escapeFields(options.fields) +
