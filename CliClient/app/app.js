@@ -174,12 +174,6 @@ class Application {
                 continue;
             }
 
-            if (arg == '--autocompletion') {
-                this.autocompletion_.active = true;
-                argv.splice(0, 1);
-                continue;
-            }
-
             if (arg == '--ac-install') {
                 this.autocompletion_.install = true;
                 argv.splice(0, 1);
@@ -342,7 +336,7 @@ class Application {
 
         let CommandClass = null;
         try {
-            CommandClass = require('./command-' + name + '.js');
+            CommandClass = require(__dirname + '/command-' + name + '.js');
         } catch (error) {
             let e = new Error('No such command: ' + name);
             e.type = 'notFound';
