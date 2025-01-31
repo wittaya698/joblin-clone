@@ -35,6 +35,7 @@ class Application {
         this.commandMetadata_ = null;
         this.activeCommand_ = null;
         this.allCommandsLoaded_ = false;
+        this.showStackTraces_ = false;
     }
 
     currentFolder() {
@@ -150,7 +151,7 @@ class Application {
             }
 
             if (arg == '--stack-trace-enabled') {
-                // vorpalUtils.setStackTraceEnabled(true);
+                this.showStackTraces_ = true;
                 argv.splice(0, 1);
                 continue;
             }
@@ -486,7 +487,11 @@ class Application {
         try {
             await this.execCommand(argv);
         } catch (error) {
-            console.info(error);
+            if (this.showStackTraces_) {
+                console.info(error);
+            } else {
+                console.info(error.message);
+            }
         }
     }
 }
