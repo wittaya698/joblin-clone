@@ -68,7 +68,8 @@ msgstr "Affiche tous les détails de la note."
 msgid "Cannot find \"%s\"."
 msgstr "Impossible de trouver \"%s\"."
 
-msgid "Also displays hidden config variables."
+#, fuzzy
+msgid "Also displays unset and hidden config variables."
 msgstr "Afficher également les variables cachées."
 
 msgid ""
@@ -453,9 +454,9 @@ msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
-#, javascript-format
-msgid "%s (%s)"
-msgstr "%s (%s)"
+#, fuzzy, javascript-format
+msgid "%s: %s"
+msgstr "%s: %d/%d"
 
 msgid "Synchronisation target"
 msgstr "Cible de la synchronisation"
@@ -626,6 +627,10 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#, javascript-format
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
 
 #, javascript-format
 #~ msgid "Last error: %s (stacktrace in log)."

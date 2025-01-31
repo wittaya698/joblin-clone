@@ -64,7 +64,7 @@ msgstr ""
 msgid "Cannot find \"%s\"."
 msgstr ""
 
-msgid "Also displays hidden config variables."
+msgid "Also displays unset and hidden config variables."
 msgstr ""
 
 msgid ""
@@ -402,7 +402,7 @@ msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
 #, javascript-format
-msgid "%s (%s)"
+msgid "%s: %s"
 msgstr ""
 
 msgid "Synchronisation target"

@@ -19,27 +19,35 @@ class Setting extends BaseModel {
         return output;
     }
 
-    static keys() {
-        if (this.keys_) return this.keys_;
-        this.keys_ = [];
-        for (let n in this.metadata_) {
-            if (!this.metadata_.hasOwnProperty(n)) continue;
-            this.keys_.push(n);
+    static keys(publicOnly = false, appType = null) {
+        if (!this.keys_) {
+            if (!this.keys_) {
+                this.keys_ = [];
+                for (let n in this.metadata_) {
+                    if (!this.metadata_.hasOwnProperty(n)) continue;
+                    this.keys_.push(n);
+                }
+                this.keys_.sort();
+            }
         }
-        return this.keys_;
-    }
 
-    static publicKeys() {
-        let output = [];
-        for (let n in this.metadata_) {
-            if (!this.metadata_.hasOwnProperty(n)) continue;
-            if (this.metadata_[n].public) output.push(n);
+        if (appType || publicOnly) {
+            let output = [];
+            for (let i = 0; i < this.keys_.length; i++) {
+                const md = this.settingMetadata(this.keys_[i]);
+                if (publicOnly && !md.public) continue;
+                if (appType && md.appTypes && md.appTypes.indexOf(appType) < 0)
+                    continue;
+                output.push(md.key);
+            }
+            return output;
+        } else {
+            return this.keys_;
         }
-        return output;
     }
 
     static isPublic(key) {
-        return this.publicKeys().indexOf(key) >= 0;
+        return this.keys(true).indexOf(key) >= 0;
     }
 
     static load() {
@@ -215,7 +223,7 @@ class Setting extends BaseModel {
         let output = [];
         for (let n in options) {
             if (!options.hasOwnProperty(n)) continue;
-            output.push(_('%s (%s)', n, options[n]));
+            output.push(_('%s: %s', n, options[n]));
         }
         return output.join(', ');
     }
@@ -389,6 +397,7 @@ Setting.metadata_ = {
         type: Setting.TYPE_INT,
         isEnum: true,
         public: true,
+        appTypes: ['mobile'],
         label: () => _('Synchronisation interval'),
         options: () => {
             return {

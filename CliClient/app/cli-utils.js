@@ -131,7 +131,6 @@ cliUtils.makeCommandArgs = function (cmd, argv) {
 };
 
 cliUtils.promptConfirm = function (message, answers = null) {
-    throw new Error('cliUtils.promptConfirm() was called');
     if (!answers) answers = [_('Y'), _('n')];
     const readline = require('readline');
 
@@ -148,6 +147,22 @@ cliUtils.promptConfirm = function (message, answers = null) {
                 !answer || answer.toLowerCase() == answers[0].toLowerCase();
             rl.close();
             resolve(ok);
+        });
+    });
+};
+
+cliUtils.promptInput = function (message) {
+    const readline = require('readline');
+
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+
+    return new Promise((resolve, reject) => {
+        rl.question(message + ' ', answer => {
+            rl.close();
+            resolve(answer);
         });
     });
 };

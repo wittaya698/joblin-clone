@@ -458,7 +458,7 @@ class Application {
         if (this.autocompletion_.active) {
             if (this.autocompletion_.install) {
                 try {
-                    installAutocompletionFile(
+                    await installAutocompletionFile(
                         Setting.value('appName'),
                         Setting.value('profileDir')
                     );

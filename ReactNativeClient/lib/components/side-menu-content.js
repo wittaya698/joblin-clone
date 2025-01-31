@@ -263,9 +263,13 @@ class SideMenuContentComponent extends Component {
         }
 
         if (this.props.tags.length) {
+            let tags = this.props.tags.slice();
+            tags.sort((a, b) => {
+                return a.title < b.title ? -1 : +1;
+            });
             let tagItems = [];
-            for (let i = 0; i < this.props.tags.length; i++) {
-                const tag = this.props.tags[i];
+            for (let i = 0; i < tags.length; i++) {
+                const tag = tags[i];
                 tagItems.push(
                     this.tagItem(
                         tag,

@@ -8,16 +8,15 @@ import fs from 'fs-extra';
 import os from 'os';
 import yargParser from 'yargs-parser';
 
-function autocompletionFileContent(appName) {
-    let content = fs.readFileSync(
-        __dirname + '/autocompletion_template.txt',
-        'utf8'
-    );
-    content = content.replace(/\|__APPNAME__\|/g, appName);
-    return content;
+function autocompletionFileContent(appName, alias) {
+    throw new Error('autocompletionFileContent() need to be implemented');
 }
 
-function installAutocompletionFile(appName, profileDir) {
+function autocompletionScriptPath(profileDir) {
+    return profileDir + '/autocompletion.sh';
+}
+
+async function installAutocompletionFile(appName, profileDir) {
     if (process.env.SHELL.indexOf('bash') < 0) {
         let error = new Error(
             _('Only Bash is currently supported for autocompletion.')
@@ -26,7 +25,7 @@ function installAutocompletionFile(appName, profileDir) {
         throw error;
     }
 
-    // HAVE MORE
+    throw new Error('autocompletionFileContent() need to be implemented');
 }
 
 async function handleAutocompletion(autocompletion) {
@@ -148,4 +147,8 @@ function filterList(list, currentWord) {
     return output;
 }
 
-export { handleAutocompletion, installAutocompletionFile };
+export {
+    handleAutocompletion,
+    installAutocompletionFile,
+    autocompletionScriptPath
+};
