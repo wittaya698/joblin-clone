@@ -54,7 +54,7 @@ let defaultState = {
     showSideMenu: false,
     screens: {},
     historyCanGoBack: false,
-    notesOrder: [{ by: 'updated_time', dir: 'DESC' }],
+    notesOrder: [{ by: 'user_updated_time', dir: 'DESC' }],
     syncStarted: false,
     syncReport: {},
     searchQuery: '',

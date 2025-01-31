@@ -1,5 +1,6 @@
 import { BaseModel } from '@/lib/base-model.js';
 import { Database } from '@/lib/database.js';
+import { Logger } from '@/lib/logger.js';
 import { _, supportedLocalesToLanguages, defaultLocale } from '@/lib/locale.js';
 
 class Setting extends BaseModel {
@@ -354,6 +355,9 @@ Setting.metadata_ = {
             return supportedLocalesToLanguages();
         }
     },
+    // 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
+    // 	return Logger.levelEnum();
+    // }},
     // Not used for now:
     todoFilter: {
         value: 'all',

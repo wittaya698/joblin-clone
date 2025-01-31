@@ -111,7 +111,8 @@ class Note extends BaseItem {
             'is_todo',
             'todo_completed',
             'parent_id',
-            'updated_time'
+            'updated_time',
+            'user_updated_time'
         ];
     }
 
@@ -140,7 +141,7 @@ class Note extends BaseItem {
 
         if (!options) options = {};
         if (!options.order)
-            options.order = [{ by: 'updated_time', dir: 'DESC' }];
+            options.order = [{ by: 'user_updated_time', dir: 'DESC' }];
         if (!options.conditions) options.conditions = [];
         if (!options.conditionsParams) options.conditionsParams = [];
         if (!options.fields) options.fields = this.previewFields();
@@ -322,11 +323,16 @@ class Note extends BaseItem {
                 )
             );
 
-        return Note.save({
+        // When moving a note to a different folder, the user timestamp is not updated.
+        // However updated_time is updated so that the note can be synced later on.
+        const modifiedNote = {
             id: noteId,
             parent_id: folderId,
-            is_conflict: 0
-        });
+            is_conflict: 0,
+            updated_time: time.unixMs()
+        };
+
+        return Note.save(modifiedNote, { autoTimestamp: false });
     }
 
     static toggleIsTodo(note) {

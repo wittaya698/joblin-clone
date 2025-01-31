@@ -61,7 +61,7 @@ class NoteListComponent extends Component {
             if (note.is_todo) {
                 if (
                     todoFilter == 'recent' &&
-                    note.updated_time < notRecentTime &&
+                    note.user_updated_time < notRecentTime &&
                     !!note.todo_completed
                 )
                     continue;

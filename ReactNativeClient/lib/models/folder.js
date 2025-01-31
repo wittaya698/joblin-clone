@@ -105,7 +105,8 @@ class Folder extends BaseItem {
             type_: this.TYPE_FOLDER,
             id: this.conflictFolderId(),
             title: this.conflictFolderTitle(),
-            updated_time: time.unixMs()
+            updated_time: time.unixMs(),
+            user_updated_time: time.unixMs()
         };
     }
 
