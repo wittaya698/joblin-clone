@@ -103,7 +103,8 @@ cliUtils.makeCommandArgs = function (cmd, argv) {
 
     let args = yargParser(argv, {
         boolean: booleanFlags,
-        alias: aliases
+        alias: aliases,
+        string: ['_']
     });
 
     for (let i = 1; i < cmdUsage['_'].length; i++) {

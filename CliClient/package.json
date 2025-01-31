@@ -7,7 +7,7 @@
     "url": "https://github.com/wittaya698/joplin-clone"
   },
   "url": "git://github.com/wittaya698/joplin-clone",
-  "version": "0.9.8",
+  "version": "0.9.10",
   "bin": {
     "joplin": "./main.js"
   },

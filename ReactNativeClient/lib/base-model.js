@@ -108,7 +108,7 @@ class BaseModel {
     }
 
     static shortId(id) {
-        return id.substr(0, 4);
+        return id.substr(0, 5);
     }
 
     static loadByPartialId(partialId) {
