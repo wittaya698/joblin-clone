@@ -1,13 +1,13 @@
 {
-  "name": "joplin_clone",
-  "description": "CLI client for Joplin_Clone",
+  "name": "joplin",
+  "description": "CLI client for Joplin",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/wittaya698/joplin-clone"
   },
   "url": "git://github.com/wittaya698/joplin-clone",
-  "version": "0.9.16",
+  "version": "0.9.17",
   "bin": {
     "joplin": "./main.js"
   },

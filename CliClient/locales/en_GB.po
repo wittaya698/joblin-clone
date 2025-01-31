@@ -516,6 +516,18 @@ msgstr ""
 msgid "Refresh"
 msgstr ""
 
+msgid "This note has been modified:"
+msgstr ""
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Discard changes"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
 msgid "Delete note?"
 msgstr ""
 

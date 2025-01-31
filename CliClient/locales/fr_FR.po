@@ -571,6 +571,20 @@ msgstr "Editer le carnet"
 msgid "Refresh"
 msgstr "Rafraîchir"
 
+#, fuzzy
+msgid "This note has been modified:"
+msgstr "Aucun carnet n'est spécifié."
+
+msgid "Save changes"
+msgstr ""
+
+msgid "Discard changes"
+msgstr ""
+
+#, fuzzy
+msgid "Cancel"
+msgstr "Annulation..."
+
 msgid "Delete note?"
 msgstr "Supprimer la note ?"
 

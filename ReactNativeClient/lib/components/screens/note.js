@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+    Keyboard,
     BackHandler,
     View,
     Button,
@@ -16,6 +17,7 @@ import { Log } from '@/lib/log.js';
 import { Note } from '@/lib/models/note.js';
 import { Resource } from '@/lib/models/resource.js';
 import { Folder } from '@/lib/models/folder.js';
+import { BackButtonService } from '@/lib/services/back-button.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { ActionButton } from '@/lib/components/action-button.js';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -58,22 +60,39 @@ class NoteScreenComponent extends BaseScreenComponent {
 
         this.styles_ = {};
 
-        // Disabled for now because it doesn't work consistently and proabably interfer with the backHandler
-        // on root.js. Handling of the back button should be in one single place for this to work well.
+        this.backHandler = async () => {
+            if (this.isModified()) {
+                let buttonId = await dialogs.pop(
+                    this,
+                    _('This note has been modified:'),
+                    [
+                        { title: _('Save changes'), id: 'save' },
+                        { title: _('Discard changes'), id: 'discard' },
+                        { title: _('Cancel'), id: 'cancel' }
+                    ]
+                );
 
-        // this.backHandler = () => {
-        //     if (!this.state.note.id) {
-        //         return false;
-        //     }
-        //     if (this.state.mode == 'edit') {
-        //         this.setState({
-        //             note: Object.assign({}, this.state.lastSavedNote),
-        //             mode: 'view'
-        //         });
-        //         return true;
-        //     }
-        //     return false;
-        // };
+                if (buttonId == 'cancel') return true;
+                if (buttonId == 'save') await this.saveNoteButton_press();
+            }
+
+            if (!this.state.note.id) {
+                return false;
+            }
+
+            if (this.state.mode == 'edit') {
+                Keyboard.dismiss();
+
+                this.setState({
+                    note: Object.assign({}, this.state.lastSavedNote),
+                    mode: 'view'
+                });
+
+                return true;
+            }
+
+            return false;
+        };
     }
 
     styles() {
@@ -134,7 +153,7 @@ class NoteScreenComponent extends BaseScreenComponent {
     }
 
     async UNSAFE_componentWillMount() {
-        // BackHandler.addEventListener('hardwareBackPress', this.backHandler);
+        BackButtonService.addHandler(this.backHandler);
 
         let note = null;
         let mode = 'view';
@@ -162,7 +181,7 @@ class NoteScreenComponent extends BaseScreenComponent {
     }
 
     componentWillUnmount() {
-        // BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
+        BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
     }
 
     async refreshNoteMetadata(force = null) {
