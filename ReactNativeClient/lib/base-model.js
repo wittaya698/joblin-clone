@@ -112,7 +112,7 @@ class BaseModel {
     }
 
     static loadByPartialId(partialId) {
-        return this.modelSelectOne(
+        return this.modelSelectAll(
             'SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?',
             [partialId + '%']
         );
