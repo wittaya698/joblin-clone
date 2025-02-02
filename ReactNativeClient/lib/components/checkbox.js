@@ -19,7 +19,7 @@ class Checkbox extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        this.state = { checked: this.props.checked };
+        this.setState({ checked: this.props.checked });
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {

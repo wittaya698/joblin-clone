@@ -78,11 +78,11 @@ class NoteListComponent extends Component {
             [],
             this.filterNotes(this.props.items)
         );
-        this.state = {
+        this.setState({
             dataSource: newDataSource,
             items: [],
             selectedItemIds: []
-        };
+        });
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {
