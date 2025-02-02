@@ -642,14 +642,6 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
-#, javascript-format
-#~ msgid "%s (%s)"
-#~ msgstr "%s (%s)"
-
-#, javascript-format
-#~ msgid "Last error: %s (stacktrace in log)."
-#~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
-
 #~ msgid "Either \"text\" or \"json\""
 #~ msgstr "Soit \"text\" soit \"json\""
 
@@ -658,6 +650,16 @@ msgstr "Bienvenue"
 
 #~ msgid "New notebook"
 #~ msgstr "Nouveau carnet"
+
+#, fuzzy
+#~ msgid "Confirm"
+#~ msgstr "Conflits"
+
+#~ msgid "%s (%s)"
+#~ msgstr "%s (%s)"
+
+#~ msgid "Last error: %s (stacktrace in log)."
+#~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
 
 #, fuzzy
 #~ msgid "Cancelling command..."

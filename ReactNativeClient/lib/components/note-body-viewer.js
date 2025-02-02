@@ -244,7 +244,7 @@ class NoteBodyViewer extends Component {
             if (!this.isMounted_) return;
 
             this.setState({ webViewLoaded: true });
-        }, 200);
+        }, 100);
     }
 
     render() {
@@ -257,9 +257,7 @@ class NoteBodyViewer extends Component {
         );
 
         let webViewStyle = {};
-
-        // Critical -> Uncomment
-        // if (!this.state.webViewLoaded) webViewStyle.display = 'none';
+        webViewStyle.opacity = this.state.webViewLoaded ? 1 : 0.01;
 
         return (
             <View style={style}>
