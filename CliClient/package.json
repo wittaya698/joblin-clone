@@ -50,6 +50,7 @@
     "string-padding": "^1.0.2",
     "string-to-stream": "^3.0.1",
     "tcp-port-used": "^1.0.2",
+    "tkwidgets": "^0.5.27",
     "tsconfig-paths": "^4.2.0",
     "uuid": "^11.0.3",
     "word-wrap": "^1.2.5",
@@ -60,8 +61,7 @@
     "babelbuild": "babel app -d build",
     "build": "npx babel app --out-dir build --source-maps && npx babel app/lib/models --out-dir build/lib/models --source-maps",
     "clean": "babel-changed --reset",
-    "test": "npx babel tests --out-dir tests-build --source-maps && jasmine",
-    "postinstall": "joplin --autocompletion --ac-install"
+    "test": "npx babel tests --out-dir tests-build --source-maps && jasmine"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
