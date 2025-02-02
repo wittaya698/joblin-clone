@@ -125,6 +125,7 @@ class AppGui {
     setupShortcuts() {
         const shortcuts = {};
 
+        shortcuts['DELETE'] = 'rm $n';
         shortcuts['t'] = 'todo toggle $n';
         shortcuts['c'] = () => {
             this.widget('console').focus();

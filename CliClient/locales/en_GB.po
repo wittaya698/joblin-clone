@@ -51,6 +51,12 @@ msgstr ""
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -64,12 +70,6 @@ msgstr ""
 
 #, javascript-format
 msgid "Invalid answer: %s"
-msgstr ""
-
-msgid "Y"
-msgstr ""
-
-msgid "n"
 msgstr ""
 
 msgid "Displays the given item data."

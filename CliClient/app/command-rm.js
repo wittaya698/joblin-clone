@@ -7,6 +7,8 @@ import { Note } from '@/lib/models/note.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { cliUtils } from './cli-utils.js';
 
+import { reg } from '@/lib/registry.js';
+
 class Command extends BaseCommand {
     usage() {
         return 'rm <note-pattern>';
@@ -46,14 +48,17 @@ class Command extends BaseCommand {
 
         const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
         if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
+
         const ok = force
             ? true
-            : await cliUtils.promptConfirm(
+            : await this.prompt(
                   _('%d notes match this pattern. Delete them?', notes.length)
               );
-        if (!ok) return;
-        let ids = notes.map(n => n.id);
-        await Note.batchDelete(ids);
+        reg.logger().info('OK', ok);
+        // const ok = force ? true : await cliUtils.promptConfirm(_('%d notes match this pattern. Delete them?', notes.length));
+        // if (!ok) return;
+        // let ids = notes.map((n) => n.id);
+        // await Note.batchDelete(ids);
     }
 }
 

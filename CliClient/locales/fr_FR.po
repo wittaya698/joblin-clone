@@ -54,6 +54,12 @@ msgstr "Quitter le logiciel."
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
+msgid "Y"
+msgstr ""
+
+msgid "n"
+msgstr ""
+
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -68,12 +74,6 @@ msgstr ""
 #, fuzzy, javascript-format
 msgid "Invalid answer: %s"
 msgstr "Commande invalide : \"%s\""
-
-msgid "Y"
-msgstr ""
-
-msgid "n"
-msgstr ""
 
 #, fuzzy
 msgid "Displays the given item data."
