@@ -33,6 +33,11 @@ class AppGui {
         );
         this.renderer_ = new Renderer(this.term(), this.rootWidget_);
 
+        this.renderer_.on('renderDone', async event => {
+            if (this.widget('console').hasFocus())
+                this.widget('console').resetCursor();
+        });
+
         this.app_.on('modelAction', async event => {
             await this.handleModelAction(event.action);
         });
@@ -56,6 +61,7 @@ class AppGui {
         // folderList.setVStretch(true);
         folderList.on('currentItemChange', async () => {
             const folder = folderList.currentItem();
+            this.app().switchCurrentFolder(folder);
             await this.updateNoteList(folder ? folder.id : null);
         });
 
@@ -166,6 +172,8 @@ class AppGui {
     }
 
     async handleModelAction(action) {
+        this.logger().info('Action:', action);
+
         let state = Object.assign({}, defaultState);
         state.notes = this.widget('noteList').items();
 

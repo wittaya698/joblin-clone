@@ -55,10 +55,14 @@ class Command extends BaseCommand {
                   _('%d notes match this pattern. Delete them?', notes.length)
               );
         reg.logger().info('OK', ok);
+
         // const ok = force ? true : await cliUtils.promptConfirm(_('%d notes match this pattern. Delete them?', notes.length));
         // if (!ok) return;
         // let ids = notes.map((n) => n.id);
         // await Note.batchDelete(ids);
+        if (!ok) return;
+        let ids = notes.map(n => n.id);
+        await Note.batchDelete(ids);
     }
 }
 
