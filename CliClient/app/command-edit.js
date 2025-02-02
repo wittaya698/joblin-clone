@@ -25,7 +25,7 @@ class Command extends BaseCommand {
             if (watcher) watcher.close();
             // app().vorpal().show();
             newNote = null;
-            this.log(_('Done editing.'));
+            this.stdout(_('Done editing.'));
         };
 
         const textEditorPath = () => {
@@ -70,7 +70,7 @@ class Command extends BaseCommand {
 
             const spawn = require('child_process').spawn;
 
-            this.log(
+            this.stdout(
                 _(
                     'Starting to edit note. Close the editor to get back to the prompt.'
                 )

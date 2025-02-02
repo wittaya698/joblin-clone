@@ -41,6 +41,10 @@ class Application {
         this.eventEmitter_ = new EventEmitter();
     }
 
+    logger() {
+        return this.logger_;
+    }
+
     currentFolder() {
         return this.currentFolder_;
     }
@@ -281,15 +285,6 @@ class Application {
 
     baseModelListener(action) {
         this.eventEmitter_.emit('modelAction', { action: action });
-
-        // switch (action.type) {
-        //     case 'NOTES_UPDATE_ONE':
-        //     case 'NOTES_DELETE':
-        //     case 'FOLDERS_UPDATE_ONE':
-        //     case 'FOLDER_DELETE':
-        //         // reg.scheduleSync();
-        //         break;
-        // }
     }
 
     on(eventName, callback) {
@@ -308,9 +303,9 @@ class Application {
             let cmd = new CommandClass();
             if (!cmd.enabled()) return;
 
-            cmd.log = (...object) => {
-                return console.log(...object);
-            };
+            cmd.setStdout((...object) => {
+                this.commandStdout(...object);
+            });
 
             this.commands_[cmd.name()] = cmd;
         });
@@ -328,6 +323,13 @@ class Application {
             output.push(n);
         }
         return output;
+    }
+
+    commandStdout(...object) {
+        const consoleWidget = this.gui_.widget('console');
+        for (let i = 0; i < object.length; i++) {
+            consoleWidget.bufferPush(object[i]);
+        }
     }
 
     async commandMetadata() {
@@ -374,14 +376,9 @@ class Application {
         let cmd = new CommandClass();
         cmd.buffer_ = [];
 
-        cmd.log = (...object) => {
-            cmd.buffer_ = cmd.buffer_.concat(object);
-            //return console.log(...object);
-        };
-
-        cmd.buffer = () => {
-            return cmd.buffer_;
-        };
+        cmd.setStdout((...object) => {
+            this.commandStdout(...object);
+        });
 
         this.commands_[name] = cmd;
         return this.commands_[name];
@@ -389,6 +386,7 @@ class Application {
 
     async execCommand(argv) {
         if (!argv.length) return this.execCommand(['help']);
+        reg.logger().info('execCommand()', argv);
         const commandName = argv[0];
         this.activeCommand_ = this.findCommandByName(commandName);
         const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
@@ -457,6 +455,7 @@ class Application {
 
         this.database_ = new JoplinDatabase(new DatabaseDriverNode());
         this.database_.setLogger(this.dbLogger_);
+        this.database_.setLogExcludedQueryTypes(['SELECT']);
         await this.database_.open({ name: profileDir + '/database.sqlite' });
 
         reg.setDb(this.database_);

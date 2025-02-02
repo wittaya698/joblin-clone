@@ -35,7 +35,7 @@ class Command extends BaseCommand {
 
         items = items.concat(tags);
 
-        this.log(JSON.stringify(items));
+        this.stdout(JSON.stringify(items));
     }
 }
 

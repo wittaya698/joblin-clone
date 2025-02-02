@@ -78,7 +78,7 @@ class Command extends BaseCommand {
                     'Lock file is already being hold. If you know that no synchronisation is taking place, you may delete the lock file at "%s" and resume the operation.',
                     error.file
                 );
-                this.log(msg);
+                this.stdout(msg);
                 return;
             }
             throw error;
@@ -112,12 +112,12 @@ class Command extends BaseCommand {
                 },
                 onMessage: msg => {
                     cliUtils.redrawDone();
-                    this.log(msg);
+                    this.stdout(msg);
                 },
                 randomFailures: args.options['random-failures'] === true
             };
 
-            this.log(
+            this.stdout(
                 _(
                     'Synchronisation target: %s (%s)',
                     Setting.enumOptionLabel('sync.target', this.syncTarget_),
@@ -127,7 +127,7 @@ class Command extends BaseCommand {
 
             if (!sync) throw new Error(_('Cannot initialize synchroniser.'));
 
-            this.log(_('Starting synchronisation...'));
+            this.stdout(_('Starting synchronisation...'));
 
             const contextKey = 'sync.' + this.syncTarget_ + '.context';
             let context = Setting.value(contextKey);
@@ -140,7 +140,7 @@ class Command extends BaseCommand {
                 Setting.setValue(contextKey, JSON.stringify(newContext));
             } catch (error) {
                 if (error.code == 'alreadyStarted') {
-                    this.log(error.message);
+                    this.stdout(error.message);
                 } else {
                     throw error;
                 }
@@ -163,7 +163,7 @@ class Command extends BaseCommand {
             : Setting.value('sync.target');
 
         cliUtils.redrawDone();
-        this.log(_('Cancelling... Please wait.'));
+        this.stdout(_('Cancelling... Please wait.'));
 
         if (reg.syncHasAuth(target)) {
             let sync = await reg.synchronizer(target);

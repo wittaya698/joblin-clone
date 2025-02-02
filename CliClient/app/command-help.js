@@ -29,7 +29,7 @@ class Command extends BaseCommand {
 
         output.sort();
 
-        this.log(output.join('\n\n'));
+        this.stdout(output.join('\n\n'));
     }
 }
 

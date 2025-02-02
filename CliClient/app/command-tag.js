@@ -46,12 +46,12 @@ class Command extends BaseCommand {
             if (tag) {
                 let notes = await Tag.notes(tag.id);
                 notes.map(note => {
-                    this.log(note.title);
+                    this.stdout(note.title);
                 });
             } else {
                 let tags = await Tag.all();
                 tags.map(tag => {
-                    this.log(tag.title);
+                    this.stdout(tag.title);
                 });
             }
         } else {
