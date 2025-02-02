@@ -31,10 +31,7 @@ class AppGui {
             return item.title;
         };
         folderList.style = {
-            //borderTopWidth: 1,
             borderBottomWidth: 1
-            //borderLeftWidth: 1,
-            //borderRightWidth: 1,
         };
         folderList.name = 'folderList';
         folderList.on('currentItemChange', async () => {
@@ -49,7 +46,6 @@ class AppGui {
         };
         noteList.name = 'noteList';
         noteList.style = {
-            //borderTopWidth: 1,
             borderBottomWidth: 1,
             borderLeftWidth: 1,
             borderRightWidth: 1
@@ -62,25 +58,21 @@ class AppGui {
         const noteText = new TextWidget();
         noteText.name = 'noteText';
         noteText.style = {
-            //borderTopWidth: 1,
             borderBottomWidth: 1
-            //borderLeftWidth: 1,
-            //borderRightWidth: 1,
         };
 
         // ------------------- To Verify ------------------------
-        const layout1 = new HLayoutWidget();
-        //layout1.addChild(noteText, { type: 'fixed', factor: 20 });
-        layout1.addChild(folderList, { type: 'stretch', factor: 1 });
-        layout1.addChild(noteList, { type: 'stretch', factor: 1 });
-        layout1.addChild(noteText, { type: 'stretch', factor: 1 });
+        const hLayout = new HLayoutWidget();
+        hLayout.addChild(folderList, { type: 'stretch', factor: 1 });
+        hLayout.addChild(noteList, { type: 'stretch', factor: 1 });
+        hLayout.addChild(noteText, { type: 'stretch', factor: 1 });
 
         // const layout2 = new VLayoutWidget();
         // layout2.addChild(layout1, { type: 'stretch', factor: 1 });
         // layout2.addChild(listWidget3, { type: 'fixed', factor: 5 });
 
         const win1 = new WindowWidget();
-        win1.addChild(layout1);
+        win1.addChild(hLayout);
         win1.name = 'mainWindow';
         win1.x = 1;
         win1.y = 1;
