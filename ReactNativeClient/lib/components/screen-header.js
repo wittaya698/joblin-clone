@@ -288,38 +288,40 @@ class ScreenHeaderComponent extends Component {
             );
         }
 
-        if (menuOptionComponents.length) {
+        if (this.props.showAdvancedOptions) {
+            if (menuOptionComponents.length) {
+                menuOptionComponents.push(
+                    <View
+                        key={'menuOption_' + key++}
+                        style={this.styles().divider}
+                    />
+                );
+            }
+
             menuOptionComponents.push(
-                <View
+                <MenuOption
+                    value={() => this.log_press()}
                     key={'menuOption_' + key++}
-                    style={this.styles().divider}
-                />
+                    style={this.styles().contextMenuItem}
+                >
+                    <Text style={this.styles().contextMenuItemText}>
+                        {_('Log')}
+                    </Text>
+                </MenuOption>
+            );
+
+            menuOptionComponents.push(
+                <MenuOption
+                    value={() => this.status_press()}
+                    key={'menuOption_' + key++}
+                    style={this.styles().contextMenuItem}
+                >
+                    <Text style={this.styles().contextMenuItemText}>
+                        {_('Status')}
+                    </Text>
+                </MenuOption>
             );
         }
-
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.log_press()}
-                key={'menuOption_' + key++}
-                style={this.styles().contextMenuItem}
-            >
-                <Text style={this.styles().contextMenuItemText}>
-                    {_('Log')}
-                </Text>
-            </MenuOption>
-        );
-
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.status_press()}
-                key={'menuOption_' + key++}
-                style={this.styles().contextMenuItem}
-            >
-                <Text style={this.styles().contextMenuItemText}>
-                    {_('Status')}
-                </Text>
-            </MenuOption>
-        );
 
         if (menuOptionComponents.length) {
             menuOptionComponents.push(
@@ -433,7 +435,8 @@ const ScreenHeader = connect(state => {
     return {
         historyCanGoBack: state.historyCanGoBack,
         locale: state.settings.locale,
-        theme: state.settings.theme
+        theme: state.settings.theme,
+        showAdvancedOptions: state.settings.showAdvancedOptions
     };
 })(ScreenHeaderComponent);
 

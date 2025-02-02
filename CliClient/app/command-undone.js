@@ -18,7 +18,7 @@ class Command extends BaseCommand {
     }
 
     async action(args) {
-        CommandDone.handleAction(args, false);
+        await CommandDone.handleAction(args, false);
     }
 }
 module.exports = Command;

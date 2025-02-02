@@ -29,7 +29,7 @@ class Command extends BaseCommand {
     }
 
     async action(args) {
-        Command.handleAction(args, true);
+        await Command.handleAction(args, true);
     }
 }
 module.exports = Command;

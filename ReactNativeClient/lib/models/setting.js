@@ -386,6 +386,13 @@ Setting.metadata_ = {
         public: true,
         label: () => _('Show uncompleted todos on top of the lists')
     },
+    showAdvancedOptions: {
+        value: false,
+        type: Setting.TYPE_BOOL,
+        public: true,
+        appTypes: ['mobile'],
+        label: () => _('Show advanced options')
+    },
     trackLocation: {
         value: true,
         type: Setting.TYPE_BOOL,
