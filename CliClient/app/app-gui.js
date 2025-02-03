@@ -383,8 +383,31 @@ class AppGui {
                     : object[i];
             this.widget('console').addItem(v);
         }
-        if (object.length)
-            this.widget('statusBar').setItemAt(0, object[object.length - 1]);
+        if (object.length) this.updateStatusBarMessage();
+    }
+
+    updateStatusBarMessage() {
+        const consoleWidget = this.widget('console');
+
+        let msg = '';
+
+        const text = consoleWidget.items.length
+            ? consoleWidget.items[consoleWidget.items.length - 1]
+            : '';
+
+        const cmd = this.app().currentCommand();
+
+        if (cmd) {
+            msg += cmd.name();
+            if (cmd.cancellable()) msg += ' [Press Ctrl+C to cancel]';
+            msg += ': ';
+        }
+
+        if (text && text.length) {
+            msg += text;
+        }
+
+        if (msg !== '') this.widget('statusBar').setItemAt(0, msg);
     }
 
     async start() {
