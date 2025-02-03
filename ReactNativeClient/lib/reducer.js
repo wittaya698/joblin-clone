@@ -121,6 +121,11 @@ const reducer = (state = defaultState, action) => {
                 newState.selectedNoteId = action.noteId;
                 break;
 
+            case 'FOLDERS_SELECT':
+                newState = Object.assign({}, state);
+                newState.selectedFolderId = action.folderId;
+                break;
+
             case 'SETTINGS_UPDATE_ALL':
                 newState = Object.assign({}, state);
                 newState.settings = action.settings;

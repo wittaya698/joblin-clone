@@ -19,6 +19,7 @@ const RootWidget = require('tkwidgets/RootWidget.js');
 const WindowWidget = require('tkwidgets/WindowWidget.js');
 
 const NoteWidget = require('./gui/NoteWidget.js');
+const FolderListWidget = require('./gui/FolderListWidget.js');
 
 class AppGui {
     constructor(app, store) {
@@ -53,20 +54,22 @@ class AppGui {
         this.rootWidget_ = new ReduxRootWidget(this.store_);
         this.rootWidget_.name = 'rootWidget';
 
-        const folderList = new ListWidget();
-        folderList.items = [];
-        folderList.itemRenderer = item => {
-            return item.title;
-        };
-        folderList.style = {
-            borderBottomWidth: 1
-        };
+        const folderList = new FolderListWidget();
+        folderList.style = { borderBottomWidth: 1 };
         folderList.name = 'folderList';
         // folderList.setVStretch(true);
         folderList.on('currentItemChange', async () => {
             const folder = folderList.currentItem;
-            this.app().switchCurrentFolder(folder);
-            await this.updateNoteList(folder ? folder.id : null);
+            this.store_.dispatch({
+                type: 'FOLDERS_SELECT',
+                folderId: folder ? folder.id : 0
+            });
+        });
+        this.rootWidget_.connect(folderList, state => {
+            return {
+                selectedFolderId: state.selectedFolderId,
+                items: state.folders
+            };
         });
 
         const noteList = new ListWidget();
@@ -87,25 +90,22 @@ class AppGui {
         };
         noteList.on('currentItemChange', async () => {
             let note = noteList.currentItem;
-            if (note) {
-                if (!('body' in note)) {
-                    note = await Note.load(note.id);
-                }
-                noteList.setCurrentItem(note);
-            }
             this.store_.dispatch({
                 type: 'NOTES_SELECT',
                 noteId: note ? note.id : 0
             });
-            //await this.updateNoteText(note);
+        });
+        this.rootWidget_.connect(noteList, state => {
+            return {
+                selectedNoteId: state.selectedNoteId,
+                items: state.notes
+            };
         });
 
         const noteText = new NoteWidget();
         // noteText.setVStretch(true);
         noteText.name = 'noteText';
-        noteText.style = {
-            borderBottomWidth: 1
-        };
+        noteText.style = { borderBottomWidth: 1 };
 
         this.rootWidget_.connect(noteText, state => {
             return { noteId: state.selectedNoteId };
@@ -252,7 +252,7 @@ class AppGui {
 
             const consoleWidget = this.widget('console');
 
-            await this.updateFolderList();
+            // await this.updateFolderList();
 
             term.grabInput();
 
@@ -282,6 +282,13 @@ class AppGui {
             // termutils.showCursor(term);
             console.error(error);
         }
+
+        process.on('unhandledRejection', (reason, p) => {
+            term.fullscreen(false);
+            // termutils.showCursor(term);
+            console.error('Unhandled promise rejection', p, 'reason:', reason);
+            process.exit(1);
+        });
     }
 }
 

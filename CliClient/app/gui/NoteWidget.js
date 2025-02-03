@@ -1,5 +1,3 @@
-//import { Note } from 'lib/models/note.js';
-
 const Note = require('lib/models/note.js').Note;
 const TextWidget = require('tkwidgets/TextWidget.js');
 
@@ -24,7 +22,7 @@ class NoteWidget extends TextWidget {
     async willRender() {
         if (!this.note_ && this.noteId_) {
             this.note_ = await Note.load(this.noteId_);
-            this.text = this.note_.body;
+            this.text = this.note_.title + '\n\n' + this.note_.body;
         }
     }
 }
