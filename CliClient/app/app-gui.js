@@ -5,6 +5,7 @@ import { cliUtils } from './cli-utils.js';
 import { reducer, defaultState } from '@/lib/reducer.js';
 import { _ } from '@/lib/locale.js';
 
+const chalk = require('chalk');
 const tk = require('terminal-kit');
 const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
 const Renderer = require('tkwidgets/framework/Renderer.js');
@@ -117,10 +118,8 @@ class AppGui {
         const consoleWidget = new ConsoleWidget();
         consoleWidget.hStretch = true;
         consoleWidget.name = 'console';
-
-        // Critical --> need to be uncommented
-        // consoleWidget.prompt = this.term().format('^gJoplin^ ^y>^ ');
-
+        consoleWidget.prompt =
+            chalk.green('Joplin') + ' ' + chalk.magenta('>') + ' ';
         consoleWidget.on('accept', async event => {
             consoleWidget.promptVisible = false;
             await this.processCommand(event.input, 'console');
