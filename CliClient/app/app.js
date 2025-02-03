@@ -1,3 +1,5 @@
+import { createStore } from 'redux';
+import { reducer, defaultState } from 'lib/reducer.js';
 import { JoplinDatabase } from '@/lib/joplin-database.js';
 import { Database } from '@/lib/database.js';
 import { DatabaseDriverNode } from '@/lib/database-driver-node.js';
@@ -480,9 +482,10 @@ class Application {
 
         reg.setDb(this.database_);
         BaseModel.db_ = this.database_;
-        BaseModel.dispatch = action => {
-            this.baseModelListener(action);
-        };
+        // BaseModel.dispatch = action => {
+        //     this.baseModelListener(action);
+        // };
+
         await Setting.load();
 
         if (Setting.value('firstStart')) {
@@ -508,8 +511,11 @@ class Application {
             this.currentFolder_ ? this.currentFolder_.id : ''
         );
 
+        let store = createStore(reducer);
+        BaseModel.dispatch = store.dispatch;
+
         const AppGui = require('./app-gui.js');
-        this.gui_ = new AppGui(this);
+        this.gui_ = new AppGui(this, store);
         this.gui_.setLogger(this.logger_);
         await this.gui_.start();
 
