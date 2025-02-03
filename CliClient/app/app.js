@@ -91,12 +91,17 @@ class Application {
             for (let i = 0; i < output.length; i++) {
                 answers[i + 1] = output[i].title;
             }
-            let msg = _(
-                'More than one item match "%s". Please select one:',
-                pattern
+            // Not really useful with new UI?
+            throw new Error(
+                _(
+                    'More than one item match "%s". Please narrow down your query.',
+                    pattern
+                )
             );
-            const response = await cliUtils.promptMcq(msg, answers);
-            if (!response) return null;
+            // let msg = _('More than one item match "%s". Please select one:', pattern);
+            // const response = await cliUtils.promptMcq(msg, answers);
+            // if (!response) return null;
+
             return output[response - 1];
         } else {
             return output.length ? output[0] : null;

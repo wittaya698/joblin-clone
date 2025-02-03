@@ -46,7 +46,7 @@ class Command extends BaseCommand {
             let note = await app().loadItem(BaseModel.TYPE_NOTE, title);
 
             if (!note) {
-                const ok = await cliUtils.promptConfirm(
+                const ok = await this.prompt(
                     _('Note does not exist: "%s". Create it?', title)
                 );
                 if (!ok) return;
@@ -89,7 +89,7 @@ class Command extends BaseCommand {
                     updatedNote = await Note.unserializeForEdit(updatedNote);
                     updatedNote.id = note.id;
                     await Note.save(updatedNote);
-                    process.stdout.write('.');
+                    // process.stdout.write('.');
                     watchTimeout = null;
                 }, 200);
             });

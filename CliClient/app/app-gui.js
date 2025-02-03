@@ -115,7 +115,7 @@ class AppGui {
         // consoleWidget.setHStretch(true);
         consoleWidget.name = 'console';
         consoleWidget.on('accept', event => {
-            this.processCommand(event.input);
+            this.processCommand(event.input, 'console');
         });
 
         const hLayout = new HLayoutWidget();
@@ -141,12 +141,30 @@ class AppGui {
     setupShortcuts() {
         const shortcuts = {};
 
+        const consoleWidget = this.widget('console');
+
         shortcuts['DELETE'] = 'rm $n';
-        shortcuts['t'] = 'todo toggle $n';
+        shortcuts[' '] = 'todo toggle $n';
         shortcuts['c'] = () => {
-            this.widget('console').focus();
+            consoleWidget.focus();
         };
-        shortcuts[' '] = 'edit $n';
+        shortcuts['ENTER'] = () => {
+            const w = this.widget('mainWindow').focusedWidget();
+            if (w.name == 'folderList') {
+                this.widget('noteList').focus();
+            } else if (w.name == 'noteList') {
+                this.processCommand('edit $n');
+            }
+        };
+        shortcuts[':nn'] = () => {
+            consoleWidget.focus('mknote ');
+        };
+        shortcuts[':nt'] = () => {
+            consoleWidget.focus('mktodo ');
+        };
+        shortcuts[':nb'] = () => {
+            consoleWidget.focus('mkbook ');
+        };
 
         return shortcuts;
     }
@@ -175,7 +193,7 @@ class AppGui {
         const widget = this.widget('mainWindow').focusedWidget();
         if (!widget) return null;
 
-        if (widget.name() == 'noteList' || widget.name() == 'folderList') {
+        if (widget.name == 'noteList' || widget.name == 'folderList') {
             return widget.currentItem;
         }
         return null;
@@ -200,9 +218,13 @@ class AppGui {
         if (!cmd.length) return;
 
         const consoleWidget = this.widget('console');
-        const metaCmd = cmd.substr(0, 2);
-        if (metaCmd === ':m') {
-            throw new Error("metaCmd === ':m' in processCommand()");
+        if (cmd === ':m') {
+            throw new Error("cmd === ':m' in processCommand()");
+        } else if (cmd[0] === ':') {
+            if (this.shortcuts_[cmd]) {
+                this.shortcuts_[cmd]();
+                return;
+            }
         }
 
         let note = this.widget('noteList').currentItem;
@@ -210,9 +232,14 @@ class AppGui {
         let args = cliUtils.splitCommandString(cmd);
 
         for (let i = 0; i < args.length; i++) {
-            throw new Error(
-                'for (let i = 0; i < args.length; i++) in processCommand'
-            );
+            if (args[i] == '$n') {
+                args[i] = note ? note.id : '';
+            } else if (args[i] == '$b') {
+                args[i] = folder ? folder.id : '';
+            } else if (args[i] == '$c') {
+                const item = this.activeListItem();
+                args[i] = item ? item.id : '';
+            }
         }
 
         try {
@@ -252,8 +279,6 @@ class AppGui {
 
             const consoleWidget = this.widget('console');
 
-            // await this.updateFolderList();
-
             term.grabInput();
 
             term.on('key', async (name, matches, data) => {
@@ -265,7 +290,9 @@ class AppGui {
                 }
 
                 if (!consoleWidget.hasFocus()) {
-                    if (name in this.shortcuts_) {
+                    if (name == ':') {
+                        consoleWidget.focus(':');
+                    } else if (name in this.shortcuts_) {
                         const cmd = this.shortcuts_[name];
                         if (typeof cmd === 'function') {
                             cmd();

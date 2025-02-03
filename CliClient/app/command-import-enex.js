@@ -41,7 +41,7 @@ class Command extends BaseCommand {
                   folderTitle,
                   basename(filePath)
               );
-        const ok = force ? true : await cliUtils.promptConfirm(msg);
+        const ok = force ? true : await this.prompt(msg);
         if (!ok) return;
 
         let options = {
