@@ -28,7 +28,7 @@ class Command extends BaseCommand {
     }
 
     async action(args) {
-        const pattern = args['pattern'].toString();
+        const pattern = args['note-pattern'];
         const recursive = args.options && args.options.recursive === true;
         const force = args.options && args.options.force === true;
 
@@ -54,12 +54,6 @@ class Command extends BaseCommand {
             : await this.prompt(
                   _('%d notes match this pattern. Delete them?', notes.length)
               );
-        reg.logger().info('OK', ok);
-
-        // const ok = force ? true : await cliUtils.promptConfirm(_('%d notes match this pattern. Delete them?', notes.length));
-        // if (!ok) return;
-        // let ids = notes.map((n) => n.id);
-        // await Note.batchDelete(ids);
         if (!ok) return;
         let ids = notes.map(n => n.id);
         await Note.batchDelete(ids);

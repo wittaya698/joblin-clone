@@ -1,26 +1,36 @@
-const Note = require('@/lib/models/note.js').Note;
+const Note = require('lib/models/note.js').Note;
 const ListWidget = require('tkwidgets/ListWidget.js');
 
 class NoteListWidget extends ListWidget {
     constructor() {
         super();
         this.selectedNoteId_ = 0;
-    }
 
-    get selectedNoteId() {
-        throw new Error(
-            'NoteListWidget get selectedNoteId() need to be implemented'
-        );
+        this.updateIndexFromSelectedNoteId_ = false;
+
+        this.itemRenderer = note => {
+            let label = note.title; //+ ' ' + note.id;
+            if (note.is_todo) {
+                label = '[' + (note.todo_completed ? 'X' : ' ') + '] ' + label;
+            }
+            return label;
+        };
     }
 
     set selectedNoteId(v) {
-        throw new Error(
-            'NoteListWidget set selectedNoteId() need to be implemented'
-        );
+        if (v === this.selectedNoteId_) return;
+        this.updateIndexFromSelectedNoteId_ = true;
+        this.selectedNoteId_ = v;
     }
 
     render() {
-        throw new Error('NoteListWidget render() need to be implemented');
+        if (this.updateIndexFromSelectedNoteId_) {
+            const index = this.itemIndexByKey('id', this.selectedNoteId_);
+            this.currentIndex = index >= 0 ? index : 0;
+            this.updateIndexFromSelectedNoteId_ = false;
+        }
+
+        super.render();
     }
 }
 

@@ -95,7 +95,11 @@ class Command extends BaseCommand {
                 const oneDriveApiUtils = new OneDriveApiNodeUtils(
                     reg.oneDriveApi()
                 );
-                const auth = await oneDriveApiUtils.oauthDance(this);
+                const auth = await oneDriveApiUtils.oauthDance({
+                    log: (...s) => {
+                        return this.stdout(...s);
+                    }
+                });
                 Setting.setValue(
                     'sync.3.auth',
                     auth ? JSON.stringify(auth) : null

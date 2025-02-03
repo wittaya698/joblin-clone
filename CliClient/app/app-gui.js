@@ -6,7 +6,7 @@ import { reducer, defaultState } from '@/lib/reducer.js';
 import { _ } from '@/lib/locale.js';
 
 const tk = require('terminal-kit');
-const termutils = require('tkwidgets/framework/termutils.js');
+const TermWrapper = require('tkwidgets/framework/TermWrapper.js');
 const Renderer = require('tkwidgets/framework/Renderer.js');
 
 const BaseWidget = require('tkwidgets/BaseWidget.js');
@@ -30,7 +30,7 @@ class AppGui {
 
         BaseWidget.setLogger(app.logger());
 
-        this.term_ = tk.terminal;
+        this.term_ = new TermWrapper(tk.terminal);
         this.renderer_ = null;
         this.logger_ = new Logger();
         this.buildUi();
@@ -105,7 +105,10 @@ class AppGui {
         const consoleWidget = new ConsoleWidget();
         consoleWidget.hStretch = true;
         consoleWidget.name = 'console';
-        consoleWidget.prompt = this.term().format('^gJoplin^ ^y>^ ');
+
+        // Critical --> need to be uncommented
+        // consoleWidget.prompt = this.term().format('^gJoplin^ ^y>^ ');
+
         consoleWidget.on('accept', event => {
             this.processCommand(event.input, 'console');
         });
@@ -210,13 +213,26 @@ class AppGui {
     }
 
     toggleMaximizeConsole() {
-        throw new Error(
-            'toggleMaximizeConsole() in AppGui need to be implemented'
-        );
+        this.maximizeConsole(!this.consoleIsMaximized());
     }
 
     maximizeConsole(doMaximize = true) {
-        throw new Error('maximizeConsole() in AppGui need to be implemented');
+        const consoleWidget = this.widget('console');
+
+        if (consoleWidget.isMaximized__ === undefined) {
+            consoleWidget.isMaximized__ = false;
+        }
+
+        if (consoleWidget.isMaximized__ === doMaximize) return;
+
+        let constraints = {
+            type: 'fixed',
+            factor: !doMaximize ? 5 : this.widget('vLayout').height - 4
+        };
+
+        consoleWidget.isMaximized__ = doMaximize;
+
+        this.widget('vLayout').setWidgetConstraints(consoleWidget, constraints);
     }
 
     minimizeConsole() {
@@ -253,26 +269,28 @@ class AppGui {
     }
 
     activeListItem() {
-        const widget = this.widget('mainWindow').focusedWidget;
-        if (!widget) return null;
+        throw new Error('AppGUI activeListItem() is called');
+        // const widget = this.widget('mainWindow').focusedWidget;
+        // if (!widget) return null;
 
-        if (widget.name == 'noteList' || widget.name == 'folderList') {
-            return widget.currentItem;
-        }
-        return null;
+        // if (widget.name == 'noteList' || widget.name == 'folderList') {
+        //     return widget.currentItem;
+        // }
+        // return null;
     }
 
     async handleModelAction(action) {
-        this.logger().info('Action:', action);
+        throw new Error('AppGUI handleModelAction() is called');
+        // this.logger().info('Action:', action);
 
-        let state = Object.assign({}, defaultState);
-        state.notes = this.widget('noteList').items;
+        // let state = Object.assign({}, defaultState);
+        // state.notes = this.widget('noteList').items;
 
-        let newState = reducer(state, action);
+        // let newState = reducer(state, action);
 
-        if (newState !== state) {
-            this.widget('noteList').items = newState.notes;
-        }
+        // if (newState !== state) {
+        //     this.widget('noteList').items = newState.notes;
+        // }
     }
 
     async processCommand(cmd) {
@@ -290,8 +308,11 @@ class AppGui {
             } else if (args[i] == '$b') {
                 args[i] = folder ? folder.id : '';
             } else if (args[i] == '$c') {
-                const item = this.activeListItem();
-                args[i] = item ? item.id : '';
+                throw new Error(
+                    'args[i] == "$c" in processCommand need to be implemented'
+                );
+                // const item = this.activeListItem();
+                // args[i] = item ? item.id : '';
             }
         }
 
@@ -308,12 +329,13 @@ class AppGui {
     }
 
     async updateNoteList(folderId) {
-        const fields = Note.previewFields();
-        fields.splice(fields.indexOf('body'), 1);
-        const notes = folderId
-            ? await Note.previews(folderId, { fields: fields })
-            : [];
-        this.widget('noteList').items = notes;
+        throw new Error('AppGUI updateNoteList() was called');
+        // const fields = Note.previewFields();
+        // fields.splice(fields.indexOf('body'), 1);
+        // const notes = folderId
+        //     ? await Note.previews(folderId, { fields: fields })
+        //     : [];
+        // this.widget('noteList').items = notes;
     }
 
     async updateNoteText(note) {
@@ -343,7 +365,7 @@ class AppGui {
         const term = this.term();
 
         term.fullscreen();
-        // termutils.hideCursor(term);
+        term.hideCursor();
 
         try {
             this.renderer_.start();
@@ -354,26 +376,73 @@ class AppGui {
 
             term.on('key', async (name, matches, data) => {
                 if (name === 'CTRL_C') {
-                    // termutils.showCursor(term);
+                    term.showCursor();
                     term.fullscreen(false);
                     await process.exit();
                     return;
                 }
 
-                throw new Error(
-                    'OnTerm in AppGUI start() need futher implementation'
-                );
+                const now = new Date().getTime();
+
+                if (
+                    now - this.lastShortcutKeyTime_ > 800 ||
+                    this.isSpecialKey(name)
+                ) {
+                    this.currentShortcutKeys_ = [name];
+                } else {
+                    // If the previous key was a special key (eg. up, down arrow), this new key
+                    // starts a new shortcut.
+                    if (
+                        this.currentShortcutKeys_.length &&
+                        this.isSpecialKey(this.currentShortcutKeys_[0])
+                    ) {
+                        this.currentShortcutKeys_ = [name];
+                    } else {
+                        this.currentShortcutKeys_.push(name);
+                    }
+                }
+
+                this.lastShortcutKeyTime_ = now;
+
+                console.log(this.currentShortcutKeys_);
+                // Don't process shortcut keys if the console is active, except if the shortcut
+                // starts with CTRL (eg. CTRL+J CTRL+Z to maximize the console window).
+                if (
+                    !consoleWidget.hasFocus ||
+                    (this.currentShortcutKeys_.length &&
+                        this.currentShortcutKeys_[0].indexOf('CTRL') === 0)
+                ) {
+                    this.logger().debug(
+                        'Now: ' + name + ', Keys: ',
+                        this.currentShortcutKeys_
+                    );
+                    const shortcutKey = this.currentShortcutKeys_.join('');
+                    if (shortcutKey in this.shortcuts_) {
+                        const cmd = this.shortcuts_[shortcutKey].action;
+                        if (!cmd.isDocOnly) {
+                            this.currentShortcutKeys_ = [];
+                            if (typeof cmd === 'function') {
+                                cmd();
+                            } else {
+                                consoleWidget.bufferPush(cmd);
+                                consoleWidget.pause();
+                                await this.processCommand(cmd);
+                                consoleWidget.resume();
+                            }
+                        }
+                    }
+                }
             });
         } catch (error) {
             this.logger().error(error);
             term.fullscreen(false);
-            // termutils.showCursor(term);
+            term.showCursor();
             console.error(error);
         }
 
         process.on('unhandledRejection', (reason, p) => {
             term.fullscreen(false);
-            // termutils.showCursor(term);
+            term.showCursor();
             console.error('Unhandled promise rejection', p, 'reason:', reason);
             process.exit(1);
         });
