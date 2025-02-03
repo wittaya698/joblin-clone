@@ -52,7 +52,12 @@ class Command extends BaseCommand {
         const ok = force
             ? true
             : await this.prompt(
-                  _('%d notes match this pattern. Delete them?', notes.length)
+                  notes.length > 1
+                      ? _(
+                            '%d notes match this pattern. Delete them?',
+                            notes.length
+                        )
+                      : _('Delete note?')
               );
         if (!ok) return;
         let ids = notes.map(n => n.id);

@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^2.5.0",
     "app-module-path": "^2.2.0",
     "cache-require-paths": "^0.3.0",
+    "chalk": "^5.4.1",
     "cross-fetch": "^4.1.0",
     "dropbox": "^10.34.0",
     "expo-location": "^18.0.4",
