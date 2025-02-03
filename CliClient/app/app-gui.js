@@ -3,6 +3,7 @@ import { Folder } from '@/lib/models/folder.js';
 import { Note } from '@/lib/models/note.js';
 import { cliUtils } from './cli-utils.js';
 import { reducer, defaultState } from '@/lib/reducer.js';
+import { _ } from '@/lib/locale.js';
 
 const tk = require('terminal-kit');
 const termutils = require('tkwidgets/framework/termutils.js');
@@ -48,11 +49,16 @@ class AppGui {
         });
 
         this.shortcuts_ = this.setupShortcuts();
+
+        this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
+
+        this.currentShortcutKeys_ = '';
+        this.lastShortcutKeyTime_ = 0;
     }
 
     buildUi() {
         this.rootWidget_ = new ReduxRootWidget(this.store_);
-        this.rootWidget_.name = 'rootWidget';
+        this.rootWidget_.name = 'root';
 
         const folderList = new FolderListWidget();
         folderList.style = { borderBottomWidth: 1 };
@@ -127,7 +133,7 @@ class AppGui {
         const vLayout = new VLayoutWidget();
         vLayout.name = 'vLayout';
         vLayout.addChild(hLayout, { type: 'stretch', factor: 1 });
-        vLayout.addChild(consoleWidget, { type: 'fixed', factor: 5 });
+        vLayout.addChild(consoleWidget, { type: 'fixed', factor: 6 });
 
         const win1 = new WindowWidget();
         win1.addChild(vLayout);
@@ -143,33 +149,100 @@ class AppGui {
 
         const consoleWidget = this.widget('console');
 
-        shortcuts['DELETE'] = 'rm $n';
-        shortcuts[' '] = 'todo toggle $n';
-        shortcuts['c'] = () => {
-            consoleWidget.focus();
+        shortcuts['DELETE'] = {
+            description: _('Delete a note'),
+            action: 'rm $n'
         };
-        shortcuts['ENTER'] = () => {
-            const w = this.widget('mainWindow').focusedWidget();
-            if (w.name == 'folderList') {
-                this.widget('noteList').focus();
-            } else if (w.name == 'noteList') {
-                this.processCommand('edit $n');
+
+        shortcuts[' '] = {
+            friendlyName: 'SPACE',
+            description: _('Set a todo as completed / not completed'),
+            action: 'todo toggle $n'
+        };
+
+        shortcuts['c'] = {
+            description: _('Enter the console'),
+            action: () => {
+                consoleWidget.focus();
             }
         };
-        shortcuts[':nn'] = () => {
-            consoleWidget.focus('mknote ');
+
+        shortcuts['ESC'] = {
+            description: _('Exit the console'),
+            isDocOnly: true
         };
-        shortcuts[':nt'] = () => {
-            consoleWidget.focus('mktodo ');
+
+        shortcuts['ENTER'] = {
+            description: null,
+            action: () => {
+                const w = this.widget('mainWindow').focusedWidget();
+                if (w.name == 'folderList') {
+                    this.widget('noteList').focus();
+                } else if (w.name == 'noteList') {
+                    this.processCommand('edit $n');
+                }
+            }
         };
-        shortcuts[':nb'] = () => {
-            consoleWidget.focus('mkbook ');
+
+        shortcuts['nt'] = {
+            description: _('Create a new todo'),
+            action: () => {
+                consoleWidget.focus('mktodo ');
+            }
+        };
+
+        shortcuts['nn'] = {
+            description: _('Create a new note'),
+            action: () => {
+                consoleWidget.focus('mknote ');
+            }
+        };
+
+        shortcuts['nt'] = {
+            description: _('Create a new todo'),
+            action: () => {
+                consoleWidget.focus('mktodo ');
+            }
+        };
+
+        shortcuts['nb'] = {
+            description: _('Create a new notebook'),
+            action: () => {
+                consoleWidget.focus('mkbook ');
+            }
+        };
+
+        shortcuts['CTRL_JCTRL_Z'] = {
+            friendlyName: 'Ctrl+J Ctrl+Z',
+            description: _('Maximise/minimise the console'),
+            action: () => {
+                this.toggleMaximizeConsole();
+            }
         };
 
         return shortcuts;
     }
 
+    toggleMaximizeConsole() {
+        throw new Error(
+            'toggleMaximizeConsole() in AppGui need to be implemented'
+        );
+    }
+
+    maximizeConsole(doMaximize = true) {
+        throw new Error('maximizeConsole() in AppGui need to be implemented');
+    }
+
+    minimizeConsole() {
+        this.maximizeConsole(false);
+    }
+
+    consoleIsMaximized() {
+        return this.widget('console').isMaximized__ === true;
+    }
+
     widget(name) {
+        if (name === 'root') return this.rootWidget_;
         child = this.rootWidget_.childByName(name);
     }
 
@@ -183,6 +256,10 @@ class AppGui {
 
     logger() {
         return this.logger_;
+    }
+
+    shortcuts() {
+        return this.shortcuts_;
     }
 
     term() {
@@ -217,16 +294,6 @@ class AppGui {
         cmd = cmd.trim();
         if (!cmd.length) return;
 
-        const consoleWidget = this.widget('console');
-        if (cmd === ':m') {
-            throw new Error("cmd === ':m' in processCommand()");
-        } else if (cmd[0] === ':') {
-            if (this.shortcuts_[cmd]) {
-                this.shortcuts_[cmd]();
-                return;
-            }
-        }
-
         let note = this.widget('noteList').currentItem;
         let folder = this.widget('folderList').currentItem;
         let args = cliUtils.splitCommandString(cmd);
@@ -245,7 +312,7 @@ class AppGui {
         try {
             await this.app().execCommand(args);
         } catch (error) {
-            consoleWidget.bufferPush(error.message);
+            this.widget('console').bufferPush(error.message);
         }
     }
 
@@ -268,55 +335,29 @@ class AppGui {
         this.widget('noteText').text = text;
     }
 
+    isSpecialKey(name) {
+        return (
+            [
+                'ENTER',
+                'DOWN',
+                'UP',
+                'LEFT',
+                'RIGHT',
+                'DELETE',
+                'BACKSPACE',
+                'ESCAPE',
+                'TAB',
+                'SHIFT_TAB'
+            ].indexOf(name) >= 0
+        );
+    }
+
     async start() {
-        const term = this.term();
-
-        term.fullscreen();
-        // termutils.hideCursor(term);
-
-        try {
-            this.renderer_.start();
-
-            const consoleWidget = this.widget('console');
-
-            term.grabInput();
-
-            term.on('key', async (name, matches, data) => {
-                if (name === 'CTRL_C') {
-                    // termutils.showCursor(term);
-                    term.fullscreen(false);
-                    process.exit();
-                    return;
-                }
-
-                if (!consoleWidget.hasFocus()) {
-                    if (name == ':') {
-                        consoleWidget.focus(':');
-                    } else if (name in this.shortcuts_) {
-                        const cmd = this.shortcuts_[name];
-                        if (typeof cmd === 'function') {
-                            cmd();
-                        } else {
-                            consoleWidget.bufferPush(cmd);
-                            await this.processCommand(cmd);
-                        }
-                    }
-                }
-            });
-        } catch (error) {
-            this.logger().error(error);
-            term.fullscreen(false);
-            // termutils.showCursor(term);
-            console.error(error);
-        }
-
-        process.on('unhandledRejection', (reason, p) => {
-            term.fullscreen(false);
-            // termutils.showCursor(term);
-            console.error('Unhandled promise rejection', p, 'reason:', reason);
-            process.exit(1);
-        });
+        throw new Error('start() in AppGui need to be implemented');
     }
 }
+
+AppGui.INPUT_MODE_NORMAL = 1;
+AppGui.INPUT_MODE_META = 2;
 
 module.exports = AppGui;
