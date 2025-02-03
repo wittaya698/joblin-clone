@@ -21,6 +21,7 @@ const WindowWidget = require('tkwidgets/WindowWidget.js');
 
 const NoteWidget = require('./gui/NoteWidget.js');
 const FolderListWidget = require('./gui/FolderListWidget.js');
+const NoteListWidget = require('./gui/NoteListWidget.js');
 
 class AppGui {
     constructor(app, store) {
@@ -44,7 +45,7 @@ class AppGui {
 
         this.inputMode_ = AppGui.INPUT_MODE_NORMAL;
 
-        this.currentShortcutKeys_ = '';
+        this.currentShortcutKeys_ = [];
         this.lastShortcutKeyTime_ = 0;
     }
 
@@ -70,15 +71,7 @@ class AppGui {
             };
         });
 
-        const noteList = new ListWidget();
-        noteList.items = [];
-        noteList.itemRenderer = note => {
-            let label = note.title;
-            if (note.is_todo) {
-                label = '[' + (note.todo_completed ? 'X' : ' ') + '] ' + label;
-            }
-            return label;
-        };
+        const noteList = new NoteListWidget();
         noteList.name = 'noteList';
         noteList.vStretch = true;
         noteList.style = {
@@ -327,6 +320,7 @@ class AppGui {
         this.widget('noteText').text = text;
     }
 
+    // Any key after which a shortcut is not possible.
     isSpecialKey(name) {
         return (
             [

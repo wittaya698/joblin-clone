@@ -5,20 +5,22 @@ class NoteListWidget extends ListWidget {
     constructor() {
         super();
         this.selectedNoteId_ = 0;
-        this.itemRenderer = item => {
-            return item.title;
-        };
     }
 
     get selectedNoteId() {
-        return this.selectedNoteId_;
+        throw new Error(
+            'NoteListWidget get selectedNoteId() need to be implemented'
+        );
     }
 
     set selectedNoteId(v) {
-        if (v === this.selectedNoteId_) return;
-        this.selectedNoteId_ = v;
-        const index = this.itemIndexByKey('id', this.selectedNoteId_);
-        this.currentIndex = index >= 0 ? index : 0;
+        throw new Error(
+            'NoteListWidget set selectedNoteId() need to be implemented'
+        );
+    }
+
+    render() {
+        throw new Error('NoteListWidget render() need to be implemented');
     }
 }
 

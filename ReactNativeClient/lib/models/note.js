@@ -394,6 +394,17 @@ class Note extends BaseItem {
             noteId: id
         });
     }
+
+    static batchDelete(ids, options = null) {
+        const result = super.batchDelete(ids, options);
+        for (let i = 0; i < ids.length; i++) {
+            this.dispatch({
+                type: 'NOTES_DELETE',
+                noteId: ids[i]
+            });
+        }
+        return result;
+    }
 }
 
 Note.updateGeolocationEnabled_ = true;
