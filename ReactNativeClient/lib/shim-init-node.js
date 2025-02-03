@@ -7,9 +7,15 @@ function shimInit() {
     shim.fs = fs;
     shim.FileApiDriverLocal = FileApiDriverLocal;
     shim.Geolocation = GeolocationNode;
-
-    shim.fetch = require('cross-fetch');
     shim.FormData = require('form-data');
+
+    const nodeFetch = require('cross-fetch');
+
+    shim.fetch = function (url, options = null) {
+        if (!options) options = {};
+        if (!options.timeout) options.timeout = 1000 * 120; // ms
+        return nodeFetch(url, options);
+    };
 
     shim.fetchBlob = async function (url, option) {
         error_msg = 'node shim.fetchBlob has been called';
