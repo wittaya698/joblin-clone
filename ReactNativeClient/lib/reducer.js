@@ -150,11 +150,13 @@ const reducer = (state = defaultState, action) => {
             case 'NOTES_UPDATE_ONE':
                 const modNote = action.note;
 
+                let noteFolderHasChanged = false;
                 let newNotes = state.notes.slice();
                 var found = false;
                 for (let i = 0; i < newNotes.length; i++) {
                     let n = newNotes[i];
                     if (n.id == modNote.id) {
+                        // Note is still in the same folder
                         if (
                             !('parent_id' in modNote) ||
                             modNote.parent_id == n.parent_id
@@ -168,7 +170,9 @@ const reducer = (state = defaultState, action) => {
                                 newNotes[i][n] = modNote[n];
                             }
                         } else {
+                            // Note has moved to a different folder
                             newNotes.splice(i, 1);
+                            noteFolderHasChanged = true;
                         }
                         found = true;
                         break;
@@ -189,6 +193,12 @@ const reducer = (state = defaultState, action) => {
                 );
                 newState = Object.assign({}, state);
                 newState.notes = newNotes;
+
+                if (noteFolderHasChanged) {
+                    newState.selectedNoteId = newNotes.length
+                        ? newNotes[0].id
+                        : null;
+                }
                 break;
 
             case 'NOTES_DELETE':

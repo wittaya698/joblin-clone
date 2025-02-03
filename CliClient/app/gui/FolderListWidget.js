@@ -5,6 +5,7 @@ class FolderListWidget extends ListWidget {
     constructor() {
         super();
         this.selectedFolderId_ = 0;
+        this.updateIndexFromSelectedFolderId_ = false;
         this.itemRenderer = item => {
             return item.title;
         };
@@ -15,10 +16,19 @@ class FolderListWidget extends ListWidget {
     }
 
     set selectedFolderId(v) {
-        if (v === this.selectedFolderId_) return;
         this.selectedFolderId_ = v;
+
         const index = this.itemIndexByKey('id', this.selectedFolderId_);
         this.currentIndex = index >= 0 ? index : 0;
+    }
+
+    render() {
+        if (this.updateIndexFromSelectedFolderId_) {
+            const index = this.itemIndexByKey('id', this.selectedFolderId_);
+            this.currentIndex = index >= 0 ? index : 0;
+            this.updateIndexFromSelectedFolderId_ = false;
+        }
+        super.render();
     }
 }
 

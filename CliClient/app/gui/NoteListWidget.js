@@ -18,7 +18,6 @@ class NoteListWidget extends ListWidget {
     }
 
     set selectedNoteId(v) {
-        if (v === this.selectedNoteId_) return;
         this.updateIndexFromSelectedNoteId_ = true;
         this.selectedNoteId_ = v;
     }
