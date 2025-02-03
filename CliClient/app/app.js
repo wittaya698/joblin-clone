@@ -320,9 +320,8 @@ class Application {
             }
         });
 
-        cmd.setForceRender(async () => {
-            this.gui_.widget('root').invalidate();
-            await this.gui_.renderer().forceRender();
+        cmd.setDispatcher(action => {
+            return this.store().dispatch(action);
         });
 
         cmd.setPrompt(async (message, options) => {
@@ -346,6 +345,7 @@ class Application {
 
     async exit(code = 0) {
         await Setting.saveAll();
+        this.gui().fullScreen(false);
         process.exit(code);
     }
 
