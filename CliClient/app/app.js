@@ -320,6 +320,11 @@ class Application {
             }
         });
 
+        cmd.setForceRender(async () => {
+            this.gui_.widget('root').invalidate();
+            await this.gui_.renderer().forceRender();
+        });
+
         cmd.setPrompt(async (message, options) => {
             consoleWidget.focus();
             if (options.type == 'boolean') {
