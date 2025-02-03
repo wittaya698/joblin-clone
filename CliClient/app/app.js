@@ -457,6 +457,24 @@ class Application {
         });
     }
 
+    generalMiddleware() {
+        const middleware = store => next => async action => {
+            this.logger().info('Middleware reducer action', action.type);
+
+            const result = next(action);
+            const newState = store.getState();
+
+            if (action.type == 'FOLDERS_SELECT') {
+                Setting.setValue('activeFolderId', newState.selectedFolderId);
+                await this.refreshNotes();
+            }
+
+            return result;
+        };
+
+        return middleware;
+    }
+
     async start() {
         let argv = process.argv;
         let startFlags = await this.handleStartFlags_(argv);
@@ -564,10 +582,7 @@ class Application {
 
         await FoldersScreenUtils.refreshFolders();
 
-        this.store().dispatch({
-            type: 'FOLDERS_SELECT',
-            folderId: Setting.value('activeFolderId')
-        });
+        throw new Error('App start() need further implementation');
 
         // if (this.autocompletion_.active) {
         //     if (this.autocompletion_.install) {

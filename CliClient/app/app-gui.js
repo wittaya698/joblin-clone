@@ -34,15 +34,7 @@ class AppGui {
         this.logger_ = new Logger();
         this.buildUi();
 
-        throw new Error(
-            'Tkwidget is uncompatible with terminal-kit: term.drawHLine is not a function'
-        );
         this.renderer_ = new Renderer(this.term(), this.rootWidget_);
-
-        this.renderer_.on('renderDone', async event => {
-            if (this.widget('console').hasFocus())
-                this.widget('console').resetCursor();
-        });
 
         this.app_.on('modelAction', async event => {
             await this.handleModelAction(event.action);
@@ -63,7 +55,7 @@ class AppGui {
         const folderList = new FolderListWidget();
         folderList.style = { borderBottomWidth: 1 };
         folderList.name = 'folderList';
-        // folderList.setVStretch(true);
+        folderList.vStretch = true;
         folderList.on('currentItemChange', async () => {
             const folder = folderList.currentItem;
             this.store_.dispatch({
@@ -88,7 +80,7 @@ class AppGui {
             return label;
         };
         noteList.name = 'noteList';
-        // noteList.setVStretch(true);
+        noteList.vStretch = true;
         noteList.style = {
             borderBottomWidth: 1,
             borderLeftWidth: 1,
@@ -109,7 +101,7 @@ class AppGui {
         });
 
         const noteText = new NoteWidget();
-        // noteText.setVStretch(true);
+        noteText.vStretch = true;
         noteText.name = 'noteText';
         noteText.style = { borderBottomWidth: 1 };
 
@@ -118,7 +110,7 @@ class AppGui {
         });
 
         const consoleWidget = new ConsoleWidget();
-        // consoleWidget.setHStretch(true);
+        consoleWidget.hStretch = true;
         consoleWidget.name = 'console';
         consoleWidget.on('accept', event => {
             this.processCommand(event.input, 'console');
@@ -175,7 +167,7 @@ class AppGui {
         shortcuts['ENTER'] = {
             description: null,
             action: () => {
-                const w = this.widget('mainWindow').focusedWidget();
+                const w = this.widget('mainWindow').focusedWidget;
                 if (w.name == 'folderList') {
                     this.widget('noteList').focus();
                 } else if (w.name == 'noteList') {
@@ -243,7 +235,7 @@ class AppGui {
 
     widget(name) {
         if (name === 'root') return this.rootWidget_;
-        child = this.rootWidget_.childByName(name);
+        return this.rootWidget_.childByName(name);
     }
 
     app() {
@@ -267,7 +259,7 @@ class AppGui {
     }
 
     activeListItem() {
-        const widget = this.widget('mainWindow').focusedWidget();
+        const widget = this.widget('mainWindow').focusedWidget;
         if (!widget) return null;
 
         if (widget.name == 'noteList' || widget.name == 'folderList') {
@@ -353,7 +345,43 @@ class AppGui {
     }
 
     async start() {
-        throw new Error('start() in AppGui need to be implemented');
+        const term = this.term();
+
+        term.fullscreen();
+        // termutils.hideCursor(term);
+
+        try {
+            this.renderer_.start();
+
+            const consoleWidget = this.widget('console');
+
+            term.grabInput();
+
+            term.on('key', async (name, matches, data) => {
+                if (name === 'CTRL_C') {
+                    // termutils.showCursor(term);
+                    term.fullscreen(false);
+                    process.exit();
+                    return;
+                }
+
+                throw new Error(
+                    'OnTerm in AppGUI start() need futher implementation'
+                );
+            });
+        } catch (error) {
+            this.logger().error(error);
+            term.fullscreen(false);
+            // termutils.showCursor(term);
+            console.error(error);
+        }
+
+        process.on('unhandledRejection', (reason, p) => {
+            term.fullscreen(false);
+            // termutils.showCursor(term);
+            console.error('Unhandled promise rejection', p, 'reason:', reason);
+            process.exit(1);
+        });
     }
 }
 

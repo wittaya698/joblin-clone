@@ -1,4 +1,4 @@
-const Folder = require('@/lib/models/folder.js').Folder;
+const Folder = require('lib/models/folder.js').Folder;
 const ListWidget = require('tkwidgets/ListWidget.js');
 
 class FolderListWidget extends ListWidget {
