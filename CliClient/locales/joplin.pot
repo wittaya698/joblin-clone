@@ -161,6 +161,9 @@ msgstr ""
 msgid "Starting to edit note. Close the editor to get back to the prompt."
 msgstr ""
 
+msgid "Note has been saved."
+msgstr ""
+
 msgid "Exports Joplin data to the given target."
 msgstr ""
 

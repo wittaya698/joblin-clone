@@ -543,12 +543,10 @@ class AppGui {
                         ? this.shortcuts_[shortcutKey]
                         : null;
 
-                let processShortcutKeys =
-                    !this.app().currentCommand() &&
-                    !statusBar.promptActive &&
-                    cmd;
+                let processShortcutKeys = !this.app().currentCommand() && cmd;
                 if (cmd && cmd.canRunAlongOtherCommands)
                     processShortcutKeys = true;
+                if (statusBar.promptActive) processShortcutKeys = false;
                 if (cmd && cmd.isDocOnly) processShortcutKeys = false;
 
                 this.logger().info(
@@ -559,6 +557,11 @@ class AppGui {
                 );
 
                 if (processShortcutKeys) {
+                    this.logger().info(
+                        'Shortcut:',
+                        shortcutKey,
+                        cmd.description
+                    );
                     this.currentShortcutKeys_ = [];
                     if (typeof cmd.action === 'function') {
                         await cmd.action();

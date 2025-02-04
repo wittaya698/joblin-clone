@@ -7,6 +7,7 @@ class ConsoleWidget extends TextWidget {
         this.updateText_ = false;
         this.markdownRendering = false;
         this.stickToBottom = true;
+        this.maxLines_ = 1000;
     }
 
     get name() {
@@ -35,6 +36,9 @@ class ConsoleWidget extends TextWidget {
 
     render() {
         if (this.updateText_) {
+            if (this.lines_.length > this.maxLines_) {
+                this.lines_.splice(0, this.lines_.length - this.maxLines_);
+            }
             this.text = this.lines_.join('\n');
             this.updateText_ = false;
         }

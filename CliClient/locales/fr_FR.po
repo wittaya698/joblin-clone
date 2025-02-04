@@ -184,6 +184,10 @@ msgstr ""
 "Edition de la note en cours. Fermez l'éditeur de texte pour retourner à "
 "l'invite de commande."
 
+#, fuzzy
+msgid "Note has been saved."
+msgstr "Aucun carnet n'est spécifié."
+
 msgid "Exports Joplin data to the given target."
 msgstr ""
 
