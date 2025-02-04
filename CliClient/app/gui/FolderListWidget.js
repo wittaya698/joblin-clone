@@ -7,7 +7,7 @@ class FolderListWidget extends ListWidget {
         this.selectedFolderId_ = 0;
         this.updateIndexFromSelectedFolderId_ = false;
         this.itemRenderer = item => {
-            return item.title + '' + item.id;
+            return item.title; // + '' + item.id;
         };
     }
 

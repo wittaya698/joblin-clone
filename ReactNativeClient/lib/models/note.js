@@ -294,11 +294,23 @@ class Note extends BaseItem {
             geoData = Object.assign({}, this.geolocationCache_);
         } else {
             this.geolocationUpdating_ = true;
-            this.logger().info('Fetching geolocation...');
+            try {
+                geoData = await shim.Geolocation.currentPosition();
+            } catch (error) {
+                this.logger().error(
+                    'Could not get lat/long for note ' + noteId + ': ',
+                    error
+                );
+                geoData = null;
+            }
+
+            this.geolocationUpdating_ = false;
+
+            if (!geoData) return;
+
             geoData = await shim.Geolocation.currentPosition();
             this.logger().info('Got lat/long');
             this.geolocationCache_ = geoData;
-            this.geolocationUpdating_ = false;
         }
 
         this.logger().info('Updating lat/long of note ' + noteId);
