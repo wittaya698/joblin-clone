@@ -688,14 +688,6 @@ class Application {
             currentFolder ? currentFolder.id : ''
         );
 
-        setInterval(() => {
-            this.logger().debug(
-                Setting.value('activeFolderId'),
-                this.store().getState().settings.activeFolderId,
-                this.store().getState().selectedFolderId
-            );
-        }, 1000);
-
         // If we have some arguments left at this point, it's a command
         // so execute it.
         if (argv.length) {
