@@ -1,6 +1,23 @@
 const BaseWidget = require('tkwidgets/BaseWidget.js');
 // const chalk = require('chalk');
 const termutils = require('tkwidgets/framework/termutils.js');
+// const stripAnsi = require('strip-ansi');
+
+// Critical: to be removed when chalk is available
+const chalk = {
+    bgBlueBright: {
+        white: text => {
+            return text;
+        }
+    }
+};
+
+// Critical: to be removed when stripAnsi is available
+function stripAnsi(text) {
+    return text;
+}
+
+chalk.bgBlueBright.white;
 
 class StatusBarWidget extends BaseWidget {
     constructor() {
@@ -20,7 +37,7 @@ class StatusBarWidget extends BaseWidget {
     }
 
     setItemAt(index, text) {
-        this.items_[index] = text;
+        this.items_[index] = stripAnsi(text).trim();
         this.invalidate();
     }
 
@@ -30,8 +47,8 @@ class StatusBarWidget extends BaseWidget {
 
         this.promptState_ = {
             promise: null,
-            initialText: initialText,
-            promptString: promptString
+            initialText: stripAnsi(initialText),
+            promptString: stripAnsi(promptString)
         };
 
         this.promptState_.promise = new Promise((resolve, reject) => {
@@ -78,21 +95,19 @@ class StatusBarWidget extends BaseWidget {
 
         this.innerClear();
 
-        // Critical -> to be uncommented when possible
-        // const textStyle = chalk.bgBlueBright.white;
+        const textStyle = chalk.bgBlueBright.white;
 
-        // this.term.drawHLine(
-        //     this.absoluteInnerX,
-        //     this.absoluteInnerY,
-        //     this.innerWidth
-        //     // textStyle(' ')
-        // );
+        this.term.drawHLine(
+            this.absoluteInnerX,
+            this.absoluteInnerY,
+            this.innerWidth,
+            textStyle(' ')
+        );
 
         this.term.moveTo(this.absoluteInnerX, this.absoluteInnerY);
 
         if (this.promptActive) {
-            // this.term.write(textStyle(this.promptState_.promptString));
-            this.term.write(this.promptState_.promptString);
+            this.term.write(textStyle(this.promptState_.promptString));
 
             if (this.inputEventEmitter_) {
                 // inputField is already waiting for input so in that case just make
@@ -152,8 +167,8 @@ class StatusBarWidget extends BaseWidget {
             );
         } else {
             for (let i = 0; i < this.items_.length; i++) {
-                // this.term.write(textStyle(this.items_[i].trim()));
-                this.term.write(this.items_[i].trim());
+                const s = this.items_[i].substr(0, this.innerWidth - 1);
+                this.term.write(textStyle(s));
             }
         }
 

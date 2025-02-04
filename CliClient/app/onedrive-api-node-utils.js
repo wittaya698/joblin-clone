@@ -9,6 +9,7 @@ import enableServerDestroy from 'server-destroy';
 class OneDriveApiNodeUtils {
     constructor(api) {
         this.api_ = api;
+        this.oauthServer_ = null;
     }
 
     api() {
@@ -29,6 +30,11 @@ class OneDriveApiNodeUtils {
         return header + message + footer;
     }
 
+    cancelOAuthDance() {
+        if (!this.oauthServer_) return;
+        this.oauthServer_.destroy();
+    }
+
     async oauthDance(targetConsole = null) {
         if (targetConsole === null) targetConsole = console;
 
@@ -47,10 +53,10 @@ class OneDriveApiNodeUtils {
         let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);
 
         return new Promise((resolve, reject) => {
-            let server = http.createServer();
+            this.oauthServer_ = http.createServer();
             let errorMessage = null;
 
-            server.on('request', (request, response) => {
+            this.oauthServer_.on('request', (request, response) => {
                 const query = urlParser.parse(request.url, true).query;
 
                 const writeResponse = (code, message) => {
@@ -64,7 +70,8 @@ class OneDriveApiNodeUtils {
                 // though it worked).
                 const waitAndDestroy = () => {
                     setTimeout(() => {
-                        server.destroy();
+                        this.oauthServer_.destroy();
+                        this.oauthServer_ = null;
                     }, 1000);
                 };
 
@@ -102,7 +109,7 @@ class OneDriveApiNodeUtils {
                     });
             });
 
-            server.on('close', () => {
+            this.oauthServer_.on('close', () => {
                 if (errorMessage) {
                     reject(new Error(errorMessage));
                 } else {
@@ -110,9 +117,9 @@ class OneDriveApiNodeUtils {
                 }
             });
 
-            server.listen(port);
+            this.oauthServer_.listen(port);
 
-            enableServerDestroy(server);
+            enableServerDestroy(this.oauthServer_);
 
             targetConsole.log(
                 _(
