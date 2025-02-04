@@ -505,7 +505,6 @@ class Synchronizer {
                         let newContent = Object.assign({}, content);
                         let options = {
                             autoTimestamp: false,
-                            applyMetadataChanges: true,
                             nextQueries: BaseItem.updateSyncTimeQueries(
                                 syncTargetId,
                                 newContent,
@@ -527,6 +526,13 @@ class Synchronizer {
                                 target: 'file'
                             });
                         }
+
+                        if (!newContent.user_updated_time)
+                            newContent.user_updated_time =
+                                newContent.updated_time;
+                        if (!newContent.user_created_time)
+                            newContent.user_created_time =
+                                newContent.created_time;
 
                         await ItemClass.save(newContent, options);
                     } else if (action == 'deleteLocal') {
