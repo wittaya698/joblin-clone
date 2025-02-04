@@ -18,4 +18,5 @@ tests/cli-integration/
 tests/sync
 out.txt
 linkToLocal.sh
+yarn-error.log
 Samples/

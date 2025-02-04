@@ -47,11 +47,15 @@ class Command extends BaseCommand {
                 if (!verbose && !value) continue;
                 this.stdout(renderKeyValue(keys[i]));
             }
+            app().gui().showConsole();
+            app().gui().maximizeConsole();
             return;
         }
 
         if (args.name && !args.value) {
             this.stdout(renderKeyValue(args.name));
+            app().gui().showConsole();
+            app().gui().maximizeConsole();
             return;
         }
 
