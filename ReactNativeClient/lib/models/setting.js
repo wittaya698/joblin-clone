@@ -74,15 +74,19 @@ class Setting extends BaseModel {
                 this.cache_.push(c);
             }
 
-            const keys = this.keys();
-            let keyToValues = {};
-            for (let i = 0; i < keys.length; i++) {
-                keyToValues[keys[i]] = this.value(keys[i]);
-            }
-            this.dispatch({
-                type: 'SETTINGS_UPDATE_ALL',
-                settings: keyToValues
-            });
+            this.dispatchUpdateAll();
+        });
+    }
+
+    static dispatchUpdateAll() {
+        const keys = this.keys();
+        let keyToValues = {};
+        for (let i = 0; i < keys.length; i++) {
+            keyToValues[keys[i]] = this.value(keys[i]);
+        }
+        this.dispatch({
+            type: 'SETTINGS_UPDATE_ALL',
+            settings: keyToValues
         });
     }
 

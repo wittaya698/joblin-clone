@@ -351,6 +351,12 @@ class AppGui {
 
         this.logger().info('Got command: ' + cmd);
 
+        if (cmd === 'q' || cmd === 'wq' || cmd === 'qa') {
+            // Vim bonus
+            await this.app().exit();
+            return;
+        }
+
         let note = this.widget('noteList').currentItem;
         let folder = this.widget('folderList').currentItem;
         let args = cliUtils.splitCommandString(cmd);
