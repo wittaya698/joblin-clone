@@ -491,10 +491,21 @@ class Application {
             options: options,
             parentId: parentId
         });
-        const notes =
-            parentType === Folder.modelType()
-                ? await Note.previews(parentId, options)
-                : await Tag.notes(parentId);
+
+        let notes = [];
+        if (parentType === Folder.modelType()) {
+            notes = await Note.previews(parentId, options);
+        } else if (parentType === Tag.modelType()) {
+            notes = await Tag.notes(parentId);
+        } else if (parentType === BaseModel.TYPE_SEARCH) {
+            this.logger().info('DOING SEARCH');
+            let fields = Note.previewFields();
+            let search = BaseModel.byId(state.searches, parentId);
+            notes = await Note.previews(null, {
+                fields: fields,
+                anywherePattern: '*' + search.query_pattern + '*'
+            });
+        }
 
         this.store().dispatch({
             type: 'NOTES_UPDATE_ALL',
@@ -539,6 +550,10 @@ class Application {
 
             if (action.type == 'TAGS_SELECT') {
                 await this.refreshNotes(Tag.modelType(), action.tagId);
+            }
+
+            if (action.type == 'SEARCH_SELECT') {
+                await this.refreshNotes(BaseModel.TYPE_SEARCH, action.searchId);
             }
 
             if (
