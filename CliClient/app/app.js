@@ -530,6 +530,7 @@ class Application {
 
     reducerActionToString(action) {
         let o = [action.type];
+        if (action.id) o.push(action.id);
         if (action.noteId) o.push(action.noteId);
         if (action.folderId) o.push(action.folderId);
         if (action.tagId) o.push(action.tagId);
