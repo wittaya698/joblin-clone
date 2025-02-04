@@ -360,9 +360,26 @@ class Application {
     }
 
     async exit(code = 0) {
-        await Setting.saveAll();
-        this.gui().fullScreen(false);
-        process.exit(code);
+        const doExit = async () => {
+            await Setting.saveAll();
+            this.gui().exit();
+            process.exit(code);
+        };
+
+        // Give it a few seconds to cancel otherwise exit anyway
+        setTimeout(async () => {
+            await doExit();
+        }, 5000);
+
+        if (await reg.syncStarted()) {
+            this.stdout(
+                _('Cancelling background synchronisation... Please wait.')
+            );
+            const sync = await reg.synchronizer(Setting.value('sync.target'));
+            await sync.cancel();
+        }
+
+        await doExit();
     }
 
     commands() {
@@ -460,7 +477,8 @@ class Application {
             stdout: text => {
                 console.info(text);
             },
-            fullScreen: (b = true) => {}
+            fullScreen: (b = true) => {},
+            exit: () => {}
         };
     }
 

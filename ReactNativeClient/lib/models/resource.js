@@ -63,7 +63,7 @@ class Resource extends BaseItem {
         return filename(path);
     }
 
-    static content(resource) {
+    static async content(resource) {
         return this.fsDriver().readFile(this.fullPath(resource));
     }
 

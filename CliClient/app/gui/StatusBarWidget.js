@@ -4,13 +4,7 @@ const termutils = require('tkwidgets/framework/termutils.js');
 // const stripAnsi = require('strip-ansi');
 
 // Critical: to be removed when chalk is available
-const chalk = {
-    bgBlueBright: {
-        white: text => {
-            return text;
-        }
-    }
-};
+const chalk = { bgBlueBright: { white: text => text } };
 
 // Critical: to be removed when stripAnsi is available
 function stripAnsi(text) {
@@ -41,8 +35,11 @@ class StatusBarWidget extends BaseWidget {
         this.invalidate();
     }
 
-    async prompt(initialText = '', promptString = ':') {
+    async prompt(initialText = '', promptString = null, options = null) {
         if (this.promptState_) throw new Error('Another prompt already active');
+        if (promptString === null) promptString = ':';
+        if (options === null) options = {};
+
         this.root.globalDisableKeyboard(this);
 
         this.promptState_ = {
@@ -50,6 +47,9 @@ class StatusBarWidget extends BaseWidget {
             initialText: stripAnsi(initialText),
             promptString: stripAnsi(promptString)
         };
+
+        if ('cursorPosition' in options)
+            this.promptState_.cursorPosition = options.cursorPosition;
 
         this.promptState_.promise = new Promise((resolve, reject) => {
             this.promptState_.resolve = resolve;
@@ -124,6 +124,9 @@ class StatusBarWidget extends BaseWidget {
                 default: this.promptState_.initialText,
                 style: this.term.innerStyle.bgBrightBlue.white // NOTE: Need to use TK style for this as inputField is not compatible with chalk
             };
+
+            if ('cursorPosition' in this.promptState_)
+                options.cursorPosition = this.promptState_.cursorPosition;
 
             this.inputEventEmitter_ = this.term.inputField(
                 options,

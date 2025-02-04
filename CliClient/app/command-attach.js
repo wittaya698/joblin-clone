@@ -9,7 +9,7 @@ import { uuid } from '@/lib/uuid.js';
 import { filename } from '@/lib/path-utils.js';
 
 const fs = require('fs-extra');
-// const mime = require('mime');
+const mime = require('mime-types');
 const sharp = require('sharp');
 
 class Command extends BaseCommand {
@@ -52,27 +52,26 @@ class Command extends BaseCommand {
 
         let resource = Resource.new();
         resource.id = uuid.create();
-        resource.mime = mime.getType(localFilePath);
+        resource.mime = mime.lookup(localFilePath);
 
-        throw new Error('Command-attach action need further implementation');
-        // resource.title = filename(localFilePath);
+        resource.title = filename(localFilePath);
 
-        // let targetPath = Resource.fullPath(resource);
+        let targetPath = Resource.fullPath(resource);
 
-        // if (
-        //     resource.mime == 'image/jpeg' ||
-        //     resource.mime == 'image/jpg' ||
-        //     resource.mime == 'image/png'
-        // ) {
-        //     const result = await this.resizeImage_(localFilePath, targetPath);
-        //     this.logger().info(result);
-        // } else {
-        //     await fs.copy(localFilePath, targetPath, { overwrite: true });
-        // }
-        // await Resource.save(resource, { isNew: true });
+        if (
+            resource.mime == 'image/jpeg' ||
+            resource.mime == 'image/jpg' ||
+            resource.mime == 'image/png'
+        ) {
+            const result = await this.resizeImage_(localFilePath, targetPath);
+            this.logger().info(result);
+        } else {
+            await fs.copy(localFilePath, targetPath, { overwrite: true });
+        }
+        await Resource.save(resource, { isNew: true });
 
-        // note.body += '\n' + Resource.markdownTag(resource);
-        // await Note.save(note);
+        note.body += '\n\n' + Resource.markdownTag(resource);
+        await Note.save(note);
     }
 }
 
