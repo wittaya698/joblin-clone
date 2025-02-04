@@ -1,15 +1,29 @@
 {
   "name": "joplin",
-  "description": "CLI client for Joplin",
+  "description": "Joplin CLI Client",
   "license": "MIT",
+  "author": "Witthaya Thongchin",
+  "bugs": {
+    "url": "https://github.com/wittaya698/joplin-clone/issues"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/wittaya698/joplin-clone"
   },
-  "url": "git://github.com/wittaya698/joplin-clone",
-  "version": "0.10.43",
+  "copyright": {
+    "title": "Joplin CLI",
+    "years": [
+      2024,
+      2025
+    ],
+    "owner": "Witthaya Thongchin"
+  },
+  "version": "0.10.44",
   "bin": {
     "joplin": "./main.js"
+  },
+  "engines": {
+    "node": ">=8.7.0"
   },
   "private": true,
   "dependencies": {
