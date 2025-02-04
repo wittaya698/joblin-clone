@@ -84,4 +84,7 @@ class Resource extends BaseItem {
         return url.substr(2);
     }
 }
+
+Resource.IMAGE_MAX_DIMENSION = 1920;
+
 export { Resource };

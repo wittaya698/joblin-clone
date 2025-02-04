@@ -67,21 +67,6 @@ class Command extends BaseCommand {
 
         app().gui().showConsole();
         app().gui().maximizeConsole();
-
-        const commands = args['command']
-            ? [app().findCommandByName(args['command'])]
-            : app().commands();
-
-        let output = [];
-        for (let n in commands) {
-            if (!commands.hasOwnProperty(n)) continue;
-            const command = commands[n];
-            output.push(renderCommandHelp(command));
-        }
-
-        output.sort();
-
-        this.stdout(output.join('\n\n'));
     }
 }
 

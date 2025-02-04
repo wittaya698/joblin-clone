@@ -7,7 +7,7 @@
     "url": "https://github.com/wittaya698/joplin-clone"
   },
   "url": "git://github.com/wittaya698/joplin-clone",
-  "version": "0.10.38",
+  "version": "0.10.42",
   "bin": {
     "joplin": "./main.js"
   },
@@ -31,6 +31,7 @@
     "levenshtein": "^1.0.5",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
+    "mime": "^4.0.6",
     "moment": "^2.30.1",
     "node-fetch": "^3.3.2",
     "node-persist": "^4.0.4",
@@ -46,6 +47,7 @@
     "redux": "^5.0.1",
     "sax": "^1.4.1",
     "server-destroy": "^1.0.1",
+    "sharp": "^0.33.5",
     "source-map-support": "^0.5.21",
     "sprintf-js": "^1.1.3",
     "sqlite3": "^5.1.7",

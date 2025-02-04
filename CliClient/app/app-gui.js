@@ -76,6 +76,10 @@ class AppGui {
         await this.renderer_.renderRoot();
     }
 
+    prompt(initialText = '', promptString = ':') {
+        return this.widget('statusBar').prompt(initialText, promptString);
+    }
+
     buildUi() {
         this.rootWidget_ = new ReduxRootWidget(this.store_);
         this.rootWidget_.name = 'root';
@@ -91,6 +95,7 @@ class AppGui {
                 folderId: folder ? folder.id : 0
             });
         });
+
         this.rootWidget_.connect(folderList, state => {
             return {
                 selectedFolderId: state.selectedFolderId,
@@ -113,6 +118,7 @@ class AppGui {
                 noteId: note ? note.id : 0
             });
         });
+
         this.rootWidget_.connect(noteList, state => {
             return {
                 selectedNoteId: state.selectedNoteId,
@@ -342,6 +348,8 @@ class AppGui {
         if (!cmd) return;
         cmd = cmd.trim();
         if (!cmd.length) return;
+
+        this.logger().info('Got command: ' + cmd);
 
         let note = this.widget('noteList').currentItem;
         let folder = this.widget('folderList').currentItem;

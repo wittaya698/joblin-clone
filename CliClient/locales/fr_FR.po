@@ -116,16 +116,24 @@ msgid "Invalid answer: %s"
 msgstr "Commande invalide : \"%s\""
 
 #, fuzzy
+msgid "Attaches the given file to the note."
+msgstr "Chercher le motif <pattern> dans toutes les notes."
+
+#, javascript-format
+msgid "Cannot find \"%s\"."
+msgstr "Impossible de trouver \"%s\"."
+
+#, fuzzy, javascript-format
+msgid "Cannot access %s"
+msgstr "Impossible de trouver \"%s\"."
+
+#, fuzzy
 msgid "Displays the given item data."
 msgstr "Affiche la note."
 
 #, fuzzy
 msgid "Shows complete information about note."
 msgstr "Affiche tous les détails de la note."
-
-#, javascript-format
-msgid "Cannot find \"%s\"."
-msgstr "Impossible de trouver \"%s\"."
 
 #, fuzzy
 msgid "Also displays unset and hidden config variables."
@@ -421,6 +429,24 @@ msgstr "Affiche les informations de version"
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
 
+msgid "Enum"
+msgstr ""
+
+#, javascript-format
+msgid "Type: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Possible values: %s."
+msgstr ""
+
+#, javascript-format
+msgid "Default: %s"
+msgstr ""
+
+msgid "Possible keys/values:"
+msgstr ""
+
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
@@ -544,8 +570,10 @@ msgstr "Système de fichier"
 msgid "OneDrive"
 msgstr "OneDrive"
 
-msgid "Language"
-msgstr "Langue"
+msgid ""
+"The editor that will be used to open a note. If none is provided it will try "
+"to auto-detect the default editor."
+msgstr ""
 
 msgid "Todo filter"
 msgstr "Filtre des tâches"
@@ -718,6 +746,9 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Language"
+#~ msgstr "Langue"
 
 #, fuzzy
 #~ msgid "Exit the console"

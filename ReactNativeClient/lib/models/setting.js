@@ -1,6 +1,7 @@
 import { BaseModel } from '@/lib/base-model.js';
 import { Database } from '@/lib/database.js';
 import { Logger } from '@/lib/logger.js';
+import { sprintf } from 'sprintf-js';
 import { _, supportedLocalesToLanguages, defaultLocale } from '@/lib/locale.js';
 
 class Setting extends BaseModel {
@@ -218,12 +219,14 @@ class Setting extends BaseModel {
         return this.metadata_[key].options();
     }
 
-    static enumOptionsDoc(key) {
+    static enumOptionsDoc(key, templateString = null) {
+        if (templateString === null) templateString = '%s: %s';
+        console.info(templateString);
         const options = this.enumOptions(key);
         let output = [];
         for (let n in options) {
             if (!options.hasOwnProperty(n)) continue;
-            output.push(_('%s: %s', n, options[n]));
+            output.push(sprintf(templateString, n, options[n]));
         }
         return output.join(', ');
     }
@@ -304,6 +307,12 @@ class Setting extends BaseModel {
 
         return output;
     }
+
+    static typeToString(typeId) {
+        if (typeId === Setting.TYPE_INT) return 'int';
+        if (typeId === Setting.TYPE_STRING) return 'string';
+        if (typeId === Setting.TYPE_BOOL) return 'bool';
+    }
 }
 
 Setting.SYNC_TARGET_MEMORY = 1;
@@ -358,7 +367,10 @@ Setting.metadata_ = {
         type: Setting.TYPE_STRING,
         isEnum: true,
         public: true,
-        label: () => _('Language'),
+        label: () =>
+            _(
+                'The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.'
+            ),
         options: () => {
             return supportedLocalesToLanguages();
         }
@@ -404,7 +416,6 @@ Setting.metadata_ = {
         type: Setting.TYPE_INT,
         isEnum: true,
         public: true,
-        appTypes: ['mobile'],
         label: () => _('Synchronisation interval'),
         options: () => {
             return {

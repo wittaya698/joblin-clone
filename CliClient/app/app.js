@@ -311,13 +311,21 @@ class Application {
         return this.eventEmitter_.on(eventName, callback);
     }
 
+    stdout(text) {
+        return this.gui().stdout(text);
+    }
+
     setupCommand(cmd) {
         cmd.setStdout(text => {
-            this.gui().stdout(text);
+            return this.stdout(text);
         });
 
         cmd.setDispatcher(action => {
-            return this.store().dispatch(action);
+            if (this.store()) {
+                return this.store().dispatch(action);
+            } else {
+                return action => {};
+            }
         });
 
         cmd.setPrompt(async (message, options) => {
@@ -325,9 +333,7 @@ class Application {
                 message += ' (' + options.answers.join('/') + ')';
             }
 
-            const answer = await this.gui()
-                .widget('statusBar')
-                .prompt('', message + ' ');
+            const answer = await this.gui().prompt('', message + ' ');
             if (options.type === 'boolean') {
                 if (answer === null) return false;
                 return (
@@ -429,6 +435,20 @@ class Application {
 
         this.commands_[name] = cmd;
         return this.commands_[name];
+    }
+
+    dummyGui() {
+        return {
+            prompt: (initialText = '', promptString = '') => {
+                return cliUtils.prompt(initialText, promptString);
+            },
+            showConsole: () => {},
+            maximizeConsole: () => {},
+            stdout: text => {
+                console.info(text);
+            },
+            fullScreen: (b = true) => {}
+        };
     }
 
     async execCommand(argv) {
@@ -578,12 +598,12 @@ class Application {
         reg.setDb(this.database_);
         BaseModel.db_ = this.database_;
 
-        this.store_ = createStore(
-            reducer,
-            applyMiddleware(this.generalMiddleware())
-        );
-        BaseModel.dispatch = this.store().dispatch;
-        FoldersScreenUtils.dispatch = this.store().dispatch;
+        // this.store_ = createStore(
+        //     reducer,
+        //     applyMiddleware(this.generalMiddleware())
+        // );
+        // BaseModel.dispatch = this.store().dispatch;
+        // FoldersScreenUtils.dispatch = this.store().dispatch;
 
         await Setting.load();
 
@@ -610,53 +630,41 @@ class Application {
             this.currentFolder_ ? this.currentFolder_.id : ''
         );
 
-        const AppGui = require('./app-gui.js');
-        this.gui_ = new AppGui(this, this.store());
-        this.gui_.setLogger(this.logger_);
-        await this.gui_.start();
+        // If we have some arguments left at this point, it's a command
+        // so execute it.
+        if (argv.length) {
+            this.gui_ = this.dummyGui();
 
-        await FoldersScreenUtils.refreshFolders();
+            try {
+                await this.execCommand(argv);
+            } catch (error) {
+                if (this.showStackTraces_) {
+                    console.info(error);
+                } else {
+                    console.info(error.message);
+                }
+            }
+        } else {
+            // Otherwise open the GUI
+            this.store_ = createStore(
+                reducer,
+                applyMiddleware(this.generalMiddleware())
+            );
+            BaseModel.dispatch = this.store().dispatch;
+            FoldersScreenUtils.dispatch = this.store().dispatch;
 
-        throw new Error('App start() need further implementation');
+            const AppGui = require('./app-gui.js');
+            this.gui_ = new AppGui(this, this.store());
+            this.gui_.setLogger(this.logger_);
+            await this.gui_.start();
 
-        // if (this.autocompletion_.active) {
-        //     if (this.autocompletion_.install) {
-        //         try {
-        //             await installAutocompletionFile(
-        //                 Setting.value('appName'),
-        //                 Setting.value('profileDir')
-        //             );
-        //         } catch (error) {
-        //             if (error.code == 'shellNotSupported') {
-        //                 console.info(error.message);
-        //                 return;
-        //             }
-        //             throw error;
-        //         }
-        //     } else {
-        //         let items = await handleAutocompletion(this.autocompletion_);
-        //         if (!items.length) return;
-        //         for (let i = 0; i < items.length; i++) {
-        //             items[i] = items[i].replace(/ /g, '\\ ');
-        //             items[i] = items[i].replace(/'/g, "\\'");
-        //             items[i] = items[i].replace(/:/g, '\\:');
-        //             items[i] = items[i].replace(/\(/g, '\\(');
-        //             items[i] = items[i].replace(/\)/g, '\\)');
-        //         }
-        //         console.info(items.join('\n'));
-        //     }
-        //     return;
-        // }
+            await FoldersScreenUtils.refreshFolders();
 
-        // try {
-        //     await this.execCommand(argv);
-        // } catch (error) {
-        //     if (this.showStackTraces_) {
-        //         console.info(error);
-        //     } else {
-        //         console.info(error.message);
-        //     }
-        // }
+            this.store().dispatch({
+                type: 'FOLDERS_SELECT',
+                folderId: Setting.value('activeFolderId')
+            });
+        }
     }
 }
 
