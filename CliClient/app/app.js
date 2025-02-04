@@ -80,7 +80,7 @@ class Application {
 
         this.dispatch({
             type: 'FOLDERS_SELECT',
-            folderId: folder ? folder.id : ''
+            id: folder ? folder.id : ''
         });
     }
 
@@ -343,10 +343,14 @@ class Application {
             const answer = await this.gui().prompt('', message + ' ');
             if (options.type === 'boolean') {
                 if (answer === null) return false;
-                return (
+                let output = false;
+                if (
                     answer === '' ||
                     answer.toLowerCase() == options.answers[0].toLowerCase()
-                );
+                ) {
+                    output = true;
+                }
+                return options.booleanAnswerDefault === 'y' ? output : !output;
             }
         });
 
@@ -463,10 +467,10 @@ class Application {
         reg.logger().info('execCommand()', argv);
         const commandName = argv[0];
         this.activeCommand_ = this.findCommandByName(commandName);
-        const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
         let outException = null;
 
         try {
+            const cmdArgs = cliUtils.makeCommandArgs(this.activeCommand_, argv);
             await this.activeCommand_.action(cmdArgs);
         } catch (error) {
             outException = error;
@@ -481,6 +485,8 @@ class Application {
     }
 
     async refreshNotes(parentType, parentId) {
+        this.logger().debug('Refreshing notes:', parentType, parentId);
+
         const state = this.store().getState();
         let options = {
             order: state.notesOrder,
@@ -493,18 +499,21 @@ class Application {
         });
 
         let notes = [];
-        if (parentType === Folder.modelType()) {
-            notes = await Note.previews(parentId, options);
-        } else if (parentType === Tag.modelType()) {
-            notes = await Tag.notes(parentId);
-        } else if (parentType === BaseModel.TYPE_SEARCH) {
-            this.logger().info('DOING SEARCH');
-            let fields = Note.previewFields();
-            let search = BaseModel.byId(state.searches, parentId);
-            notes = await Note.previews(null, {
-                fields: fields,
-                anywherePattern: '*' + search.query_pattern + '*'
-            });
+
+        if (parentId) {
+            if (parentType === Folder.modelType()) {
+                notes = await Note.previews(parentId, options);
+            } else if (parentType === Tag.modelType()) {
+                notes = await Tag.notes(parentId);
+            } else if (parentType === BaseModel.TYPE_SEARCH) {
+                this.logger().info('DOING SEARCH');
+                let fields = Note.previewFields();
+                let search = BaseModel.byId(state.searches, parentId);
+                notes = await Note.previews(null, {
+                    fields: fields,
+                    anywherePattern: '*' + search.query_pattern + '*'
+                });
+            }
         }
 
         this.store().dispatch({
@@ -549,11 +558,11 @@ class Application {
             }
 
             if (action.type == 'TAGS_SELECT') {
-                await this.refreshNotes(Tag.modelType(), action.tagId);
+                await this.refreshNotes(Tag.modelType(), action.id);
             }
 
             if (action.type == 'SEARCH_SELECT') {
-                await this.refreshNotes(BaseModel.TYPE_SEARCH, action.searchId);
+                await this.refreshNotes(BaseModel.TYPE_SEARCH, action.id);
             }
 
             if (
@@ -719,7 +728,7 @@ class Application {
 
             this.store().dispatch({
                 type: 'FOLDERS_SELECT',
-                folderId: Setting.value('activeFolderId')
+                id: Setting.value('activeFolderId')
             });
         }
     }

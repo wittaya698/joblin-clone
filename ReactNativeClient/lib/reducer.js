@@ -66,6 +66,19 @@ function updateOneTagOrFolder(state, action) {
     return newState;
 }
 
+function defaultNotesParentType(state, exclusion) {
+    throw new Error('Reducer defaultNotesParentType() need to be implemented');
+    // let newNotesParentType = null;
+    // if (exclusion !== 'Folder' && state.selectedFolderId) {
+    //     newNotesParentType = 'Folder';
+    // } else if (exclusion !== 'Tag' && state.selectedTagId) {
+    //     newNotesParentType = 'Tag';
+    // } else if (exclusion !== 'Search' && state.selectedSearchId) {
+    //     newNotesParentType = 'Search';
+    // }
+    // return newNotesParentType;
+}
+
 const reducer = (state = defaultState, action) => {
     let newState = state;
     let historyGoingBack = false;
@@ -154,8 +167,15 @@ const reducer = (state = defaultState, action) => {
 
             case 'FOLDERS_SELECT':
                 newState = Object.assign({}, state);
-                newState.selectedFolderId = action.folderId;
-                newState.notesParentType = 'Folder';
+                newState.selectedFolderId = action.id;
+                if (!action.id) {
+                    newState.notesParentType = defaultNotesParentType(
+                        state,
+                        'Folder'
+                    );
+                } else {
+                    newState.notesParentType = 'Folder';
+                }
                 break;
 
             case 'SETTINGS_UPDATE_ALL':
@@ -267,8 +287,15 @@ const reducer = (state = defaultState, action) => {
 
             case 'TAGS_SELECT':
                 newState = Object.assign({}, state);
-                newState.selectedTagId = action.tagId;
-                newState.notesParentType = 'Tag';
+                newState.selectedTagId = action.id;
+                if (!action.id) {
+                    newState.notesParentType = defaultNotesParentType(
+                        state,
+                        'Tag'
+                    );
+                } else {
+                    newState.notesParentType = 'Tag';
+                }
                 break;
 
             case 'TAGS_UPDATE_ONE':
@@ -362,7 +389,7 @@ const reducer = (state = defaultState, action) => {
             case 'SEARCH_REMOVE':
                 let foundIndex = -1;
                 for (let i = 0; i < state.searches.length; i++) {
-                    if (state.searches[i].id === action.searchId) {
+                    if (state.searches[i].id === action.id) {
                         foundIndex = i;
                         break;
                     }
@@ -377,8 +404,15 @@ const reducer = (state = defaultState, action) => {
 
             case 'SEARCH_SELECT':
                 newState = Object.assign({}, state);
-                newState.selectedSearchId = action.searchId;
-                newState.notesParentType = 'Search';
+                newState.selectedSearchId = action.id;
+                if (!action.id) {
+                    newState.notesParentType = defaultNotesParentType(
+                        state,
+                        'Search'
+                    );
+                } else {
+                    newState.notesParentType = 'Search';
+                }
                 break;
 
             case 'SET_APP_STATE':

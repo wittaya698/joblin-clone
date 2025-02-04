@@ -7,11 +7,13 @@ import { Note } from '@/lib/models/note.js';
 import { BaseModel } from '@/lib/base-model.js';
 import { cliUtils } from './cli-utils.js';
 
-import { reg } from '@/lib/registry.js';
-
 class Command extends BaseCommand {
     usage() {
-        return 'rm <note-pattern>';
+        return 'rmnote <note-pattern>';
+    }
+
+    aliases() {
+        return ['rm'];
     }
 
     description() {
@@ -22,29 +24,14 @@ class Command extends BaseCommand {
         return [
             [
                 '-f, --force',
-                _('Deletes the items without asking for confirmation.')
+                _('Deletes the notes without asking for confirmation.')
             ]
         ];
     }
 
     async action(args) {
         const pattern = args['note-pattern'];
-        const recursive = args.options && args.options.recursive === true;
         const force = args.options && args.options.force === true;
-
-        // if (recursive) {
-        //     const folder = await app().loadItem(BaseModel.TYPE_FOLDER, pattern);
-        //     if (!folder) throw new Error(_('Cannot find "%s".', pattern));
-        //     // const ok = force
-        //     //     ? true
-        //     //     : await vorpalUtils.cmdPromptConfirm(
-        //     //           this,
-        //     //           _('Delete notebook "%s"?', folder.title)
-        //     //       );
-        //     if (!ok) return;
-        //     await Folder.delete(folder.id);
-        //     await app().refreshCurrentFolder();
-        // } else {
 
         const notes = await app().loadItems(BaseModel.TYPE_NOTE, pattern);
         if (!notes.length) throw new Error(_('Cannot find "%s".', pattern));
@@ -57,7 +44,8 @@ class Command extends BaseCommand {
                             '%d notes match this pattern. Delete them?',
                             notes.length
                         )
-                      : _('Delete note?')
+                      : _('Delete note?'),
+                  { booleanAnswerDefault: 'n' }
               );
         if (!ok) return;
         let ids = notes.map(n => n.id);
