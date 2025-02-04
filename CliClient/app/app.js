@@ -473,9 +473,19 @@ class Application {
         });
     }
 
+    reducerActionToString(action) {
+        let o = [action.type];
+        if (action.noteId) o.push(action.noteId);
+        if (action.folderI) o.push(action.folderI);
+        return o.join(', ');
+    }
+
     generalMiddleware() {
         const middleware = store => next => async action => {
-            this.logger().info('Reducer action', action.type);
+            this.logger().info(
+                'Reducer action',
+                this.reducerActionToString(action)
+            );
 
             const result = next(action);
             const newState = store.getState();
@@ -483,6 +493,15 @@ class Application {
             if (action.type == 'FOLDERS_SELECT') {
                 Setting.setValue('activeFolderId', newState.selectedFolderId);
                 await this.refreshNotes();
+            }
+
+            if (
+                (this.gui() &&
+                    action.type == 'SETTINGS_UPDATE_ONE' &&
+                    action.key == 'sync.interval') ||
+                action.type == 'SETTINGS_UPDATE_ALL'
+            ) {
+                reg.setupRecurrentSync();
             }
 
             return result;

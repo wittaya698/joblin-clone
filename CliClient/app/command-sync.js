@@ -92,6 +92,8 @@ class Command extends BaseCommand {
                 this.syncTarget_ == Setting.SYNC_TARGET_ONEDRIVE &&
                 !reg.syncHasAuth(this.syncTarget_)
             ) {
+                app().gui().showConsole();
+                app().gui().maximizeConsole();
                 const oneDriveApiUtils = new OneDriveApiNodeUtils(
                     reg.oneDriveApi()
                 );

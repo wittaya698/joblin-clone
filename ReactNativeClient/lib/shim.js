@@ -20,5 +20,7 @@ shim.readLocalFileBase64 = () => {
 shim.uploadBlob = () => {
     throw new Error('Not implemented');
 };
+shim.setInterval = setInterval;
+shim.clearInterval = clearInterval;
 
 export { shim };
