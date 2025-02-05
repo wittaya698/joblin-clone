@@ -6,10 +6,6 @@ class FileApiDriverMemory {
         this.deletedItems_ = [];
     }
 
-    supportsDelta() {
-        return true;
-    }
-
     itemIndexByPath(path) {
         for (let i = 0; i < this.items_.length; i++) {
             if (this.items_[i].path == path) return i;

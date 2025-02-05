@@ -11,10 +11,6 @@ class FileApiDriverOneDrive {
         return this.api_;
     }
 
-    supportsDelta() {
-        return true;
-    }
-
     itemFilter_() {
         return {
             select: 'name,file,folder,fileSystemInfo,parentReference'

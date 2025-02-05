@@ -33,10 +33,6 @@ class FileApiDriverLocal {
         return output;
     }
 
-    supportsDelta() {
-        return false;
-    }
-
     stat(path) {
         return new Promise((resolve, reject) => {
             fs.stat(path, (error, s) => {
