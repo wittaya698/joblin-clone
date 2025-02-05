@@ -67,7 +67,7 @@ class Application {
     }
 
     commandStdoutMaxWidth() {
-        return 78;
+        return this.gui().stdoutMaxWidth();
     }
 
     async refreshCurrentFolder() {
@@ -480,7 +480,10 @@ class Application {
             fullScreen: (b = true) => {},
             exit: () => {},
             showModalOverlay: text => {},
-            hideModalOverlay: () => {}
+            hideModalOverlay: () => {},
+            stdoutMaxWidth: () => {
+                return 78;
+            }
         };
     }
 

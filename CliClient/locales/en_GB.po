@@ -15,6 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
+msgid "Give focus to next widget"
+msgstr ""
+
+msgid "Give focus to previous widget"
+msgstr ""
+
 msgid "Delete a note"
 msgstr ""
 
@@ -207,6 +213,9 @@ msgstr ""
 msgid "Type `help [command]` for more information about a command."
 msgstr ""
 
+msgid "To move from one widget to another, press Tab or Shift+Tab."
+msgstr ""
+
 msgid "The possible commands are:"
 msgstr ""
 
@@ -219,7 +228,8 @@ msgstr ""
 msgid "To exit the console, press ESCAPE"
 msgstr ""
 
-msgid "To view a list of available shortcuts type `help shortcuts`"
+msgid ""
+"For the complete list of available keyboard shortcuts, type `help shortcuts`"
 msgstr ""
 
 msgid "Imports an Evernote notebook file (.enex file)."
@@ -263,6 +273,10 @@ msgid "Tagged: %d."
 msgstr ""
 
 msgid "Importing notes..."
+msgstr ""
+
+#, javascript-format
+msgid "The notes have been imported: %s"
 msgstr ""
 
 msgid ""
@@ -530,7 +544,20 @@ msgstr ""
 msgid "Invalid option value: \"%s\". Possible values are: %s."
 msgstr ""
 
+msgid "File system synchronisation target directory"
+msgstr ""
+
+msgid ""
+"The path to synchronise with when file system synchronisation is enabled. "
+"See `sync.target`."
+msgstr ""
+
 msgid "Synchronisation target"
+msgstr ""
+
+msgid ""
+"The target to synchonise to. If synchronising with the file system, set "
+"`sync.2.path` to specify the target directory."
 msgstr ""
 
 msgid "File system"
@@ -539,21 +566,12 @@ msgstr ""
 msgid "OneDrive"
 msgstr ""
 
+msgid "Text editor"
+msgstr ""
+
 msgid ""
 "The editor that will be used to open a note. If none is provided it will try "
 "to auto-detect the default editor."
-msgstr ""
-
-msgid "Todo filter"
-msgstr ""
-
-msgid "Show all"
-msgstr ""
-
-msgid "Non-completed and recently completed ones"
-msgstr ""
-
-msgid "Non-completed ones only"
 msgstr ""
 
 msgid "Show uncompleted todos on top of the lists"
@@ -562,7 +580,7 @@ msgstr ""
 msgid "Show advanced options"
 msgstr ""
 
-msgid "Save location with notes"
+msgid "Save geo-location with notes"
 msgstr ""
 
 msgid "Synchronisation interval"

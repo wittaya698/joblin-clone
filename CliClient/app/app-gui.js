@@ -94,6 +94,10 @@ class AppGui {
         return this.widget('statusBar').prompt(initialText, promptString);
     }
 
+    stdoutMaxWidth() {
+        return this.widget('console').innerWidth - 1;
+    }
+
     buildUi() {
         this.rootWidget_ = new ReduxRootWidget(this.store_);
         this.rootWidget_.name = 'root';
@@ -275,6 +279,18 @@ class AppGui {
 
     setupShortcuts() {
         const shortcuts = {};
+
+        shortcuts['TAB'] = {
+            friendlyName: 'Tab',
+            description: _('Give focus to next widget'),
+            isDocOnly: true
+        };
+
+        shortcuts['SHIFT_TAB'] = {
+            friendlyName: 'Shift+Tab',
+            description: _('Give focus to previous widget'),
+            isDocOnly: true
+        };
 
         shortcuts['DELETE'] = {
             description: _('Delete a note'),

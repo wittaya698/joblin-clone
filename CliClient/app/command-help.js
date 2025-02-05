@@ -51,6 +51,9 @@ class Command extends BaseCommand {
                 _('Type `help [command]` for more information about a command.')
             );
             this.stdout('');
+            this.stdout(
+                _('To move from one widget to another, press Tab or Shift+Tab.')
+            );
             this.stdout(_('The possible commands are:'));
             this.stdout('');
             this.stdout(commandNames.join(', '));
@@ -61,7 +64,9 @@ class Command extends BaseCommand {
             this.stdout(_('To enter the console, press C'));
             this.stdout(_('To exit the console, press ESCAPE'));
             this.stdout(
-                _('To view a list of available shortcuts type `help shortcuts`')
+                _(
+                    'For the complete list of available keyboard shortcuts, type `help shortcuts`'
+                )
             );
         }
 

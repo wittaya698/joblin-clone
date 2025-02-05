@@ -48,11 +48,16 @@ function renderCommandHelp(cmd, width = null) {
     if (cmd.name() === 'config') {
         const renderMetadata = md => {
             let desc = [];
+
             if (md.label) {
                 let label = md.label();
                 if (label.length && label[label.length - 1] !== '.')
                     label += '.';
                 desc.push(label);
+            }
+
+            if (md.description) {
+                desc.push(md.description());
             }
 
             desc.push(

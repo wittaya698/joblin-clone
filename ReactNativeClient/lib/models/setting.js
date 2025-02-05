@@ -337,7 +337,12 @@ Setting.metadata_ = {
         value: '',
         type: Setting.TYPE_STRING,
         public: true,
-        appTypes: ['cli']
+        appTypes: ['cli'],
+        label: () => _('File system synchronisation target directory'),
+        description: () =>
+            _(
+                'The path to synchronise with when file system synchronisation is enabled. See `sync.target`.'
+            )
     },
     'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
     'sync.target': {
@@ -346,6 +351,10 @@ Setting.metadata_ = {
         isEnum: true,
         public: true,
         label: () => _('Synchronisation target'),
+        description: () =>
+            _(
+                'The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'
+            ),
         options: () => {
             let output = {};
             output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
@@ -364,7 +373,12 @@ Setting.metadata_ = {
         value: '',
         type: Setting.TYPE_STRING,
         public: true,
-        appTypes: ['cli']
+        appTypes: ['cli'],
+        label: () => _('Text editor'),
+        description: () =>
+            _(
+                'The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.'
+            )
     },
     locale: {
         value: defaultLocale(),
@@ -383,19 +397,19 @@ Setting.metadata_ = {
     // 	return Logger.levelEnum();
     // }},
     // Not used for now:
-    todoFilter: {
-        value: 'all',
-        type: Setting.TYPE_STRING,
-        isEnum: true,
-        public: false,
-        appTypes: ['mobile'],
-        label: () => _('Todo filter'),
-        options: () => ({
-            all: _('Show all'),
-            recent: _('Non-completed and recently completed ones'),
-            nonCompleted: _('Non-completed ones only')
-        })
-    },
+    // todoFilter: {
+    //     value: 'all',
+    //     type: Setting.TYPE_STRING,
+    //     isEnum: true,
+    //     public: false,
+    //     appTypes: ['mobile'],
+    //     label: () => _('Todo filter'),
+    //     options: () => ({
+    //         all: _('Show all'),
+    //         recent: _('Non-completed and recently completed ones'),
+    //         nonCompleted: _('Non-completed ones only')
+    //     })
+    // },
     uncompletedTodosOnTop: {
         value: true,
         type: Setting.TYPE_BOOL,
@@ -413,7 +427,7 @@ Setting.metadata_ = {
         value: true,
         type: Setting.TYPE_BOOL,
         public: true,
-        label: () => _('Save location with notes')
+        label: () => _('Save geo-location with notes')
     },
     'sync.interval': {
         value: 300,
