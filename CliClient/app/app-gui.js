@@ -148,8 +148,6 @@ class AppGui {
         });
 
         this.rootWidget_.connect(folderList, state => {
-            this.logger().info('Updating folder list...');
-
             return {
                 selectedFolderId: state.selectedFolderId,
                 selectedTagId: state.selectedTagId,
