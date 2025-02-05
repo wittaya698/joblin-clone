@@ -39,7 +39,9 @@ class OneDriveApiNodeUtils {
         if (targetConsole === null) targetConsole = console;
 
         this.api().setAuth(null);
-        const port = netUtils.findAvailablePort(this.possibleOAuthDancePorts());
+        const port = await netUtils.findAvailablePort(
+            this.possibleOAuthDancePorts()
+        );
 
         if (!port) throw new Error(_('All potential ports are in use'));
         let authCodeUrl = this.api().authCodeUrl('http://localhost:' + port);
