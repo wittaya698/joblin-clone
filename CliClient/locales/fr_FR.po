@@ -35,8 +35,9 @@ msgstr "Annulation..."
 msgid "Exit the application."
 msgstr "Quitter le logiciel."
 
-msgid "Delete the currently selected note or notebook."
-msgstr ""
+#, fuzzy
+msgid "Delete a note"
+msgstr "Supprimer la note"
 
 msgid "To delete a tag, untag the associated notes."
 msgstr ""
@@ -50,9 +51,6 @@ msgid "Set a todo as completed / not completed"
 msgstr "Tâches non-complétées et récentes"
 
 msgid "[t]oggle [c]onsole between maximized/minimized/hidden/visible."
-msgstr ""
-
-msgid "[t]oggle note [m]etadata."
 msgstr ""
 
 #, fuzzy
@@ -133,40 +131,6 @@ msgstr ""
 msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
-msgid ""
-"Autocompletion can be made to work with an alias too (such as a one-letter "
-"command like \"j\").\n"
-"If you would like to enable this, please type the alias now (leave it empty "
-"for no alias):"
-msgstr ""
-
-#, javascript-format
-msgid "Created autocompletion script \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Autocompletion script is already present in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added autocompletion to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Alias is already set in \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid "Added alias to \"%s\"."
-msgstr ""
-
-#, javascript-format
-msgid ""
-"IMPORTANT: run the following command to initialise autocompletion in the "
-"current shell:\n"
-"source '%s'"
-msgstr ""
-
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -194,11 +158,17 @@ msgstr "Impossible de trouver \"%s\"."
 msgid "Cannot access %s"
 msgstr "Impossible de trouver \"%s\"."
 
-msgid "Displays the given note."
+#, fuzzy
+msgid "Displays the given item data."
 msgstr "Affiche la note."
 
-msgid "Displays the complete information about note."
+#, fuzzy
+msgid "Shows complete information about note."
 msgstr "Affiche tous les détails de la note."
+
+#, fuzzy
+msgid "Also displays unset and hidden config variables."
+msgstr "Afficher également les variables cachées."
 
 msgid ""
 "Gets or sets a config value. If [value] is not provided, it will show the "
@@ -208,10 +178,6 @@ msgstr ""
 "Obtient ou modifie une valeur de configuration. Si la [valeur] n'est pas "
 "fournie, la valeur de [nom] est affichée. Si ni le [nom] ni la [valeur] ne "
 "sont fournis, la configuration complète est affichée."
-
-#, fuzzy
-msgid "Also displays unset and hidden config variables."
-msgstr "Afficher également les variables cachées."
 
 #, javascript-format
 msgid "%s = %s (%s)"
@@ -285,9 +251,6 @@ msgstr ""
 msgid "Type `help [command]` for more information about a command."
 msgstr ""
 
-msgid "The possible commands are:"
-msgstr ""
-
 msgid "To move from one widget to another, press Tab or Shift+Tab."
 msgstr ""
 
@@ -296,15 +259,20 @@ msgid ""
 "(including this console)."
 msgstr ""
 
+msgid "The possible commands are:"
+msgstr ""
+
 #, fuzzy
-msgid "To maximise/minimise the console, press \"C\"."
+msgid "To maximise/minimise the console, press Ctrl+J Ctrl+Z."
 msgstr "Quitter le logiciel."
 
-msgid "To enter command line mode, press \":\""
-msgstr ""
+#, fuzzy
+msgid "To enter the console, press C"
+msgstr "Quitter le logiciel."
 
-msgid "To exit command line mode, press ESCAPE"
-msgstr ""
+#, fuzzy
+msgid "To exit the console, press ESCAPE"
+msgstr "Quitter le logiciel."
 
 msgid ""
 "For the complete list of available keyboard shortcuts, type `help shortcuts`"
@@ -386,9 +354,6 @@ msgstr ""
 "Affiche uniquement les notes du ou des types spécifiés. Le type peut-être "
 "`n` pour les notes, `t` pour les tâches (par exemple, `-tt` affiche "
 "uniquement les tâches, tandis que `-ttd` affiche les notes et les tâches)."
-
-msgid "Either \"text\" or \"json\""
-msgstr "Soit \"text\" soit \"json\""
 
 msgid ""
 "Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, "
@@ -555,6 +520,12 @@ msgstr ""
 msgid "Fatal error:"
 msgstr "Erreur fatale :"
 
+#, fuzzy
+msgid "All potential ports are in use"
+msgstr ""
+"Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
+"sur %s"
+
 msgid ""
 "The application has been authorised - you may now close this browser tab."
 msgstr "Le logiciel a été autorisé. Vous pouvez maintenant fermer cet onglet."
@@ -691,9 +662,6 @@ msgid ""
 "to auto-detect the default editor."
 msgstr ""
 
-msgid "Language"
-msgstr "Langue"
-
 msgid "Show uncompleted todos on top of the lists"
 msgstr "Tâches non-terminées en haut des listes"
 
@@ -756,15 +724,6 @@ msgstr "Carnets"
 #, javascript-format
 msgid "%s: %d notes"
 msgstr "%s : %d notes"
-
-msgid "New todo"
-msgstr "Nouvelle tâche"
-
-msgid "New note"
-msgstr "Nouvelle note"
-
-msgid "New notebook"
-msgstr "Nouveau carnet"
 
 msgid "There are currently no notes. Create one by clicking on the (+) button."
 msgstr ""
@@ -831,6 +790,9 @@ msgstr "Afficher les métadonnées"
 msgid "View location on map"
 msgstr "Voir l'emplacement sur la carte"
 
+msgid "New note"
+msgstr "Nouvelle note"
+
 msgid "Edit"
 msgstr "Editer"
 
@@ -861,6 +823,18 @@ msgstr ""
 msgid "Welcome"
 msgstr "Bienvenue"
 
+#~ msgid "Either \"text\" or \"json\""
+#~ msgstr "Soit \"text\" soit \"json\""
+
+#~ msgid "Language"
+#~ msgstr "Langue"
+
+#~ msgid "New todo"
+#~ msgstr "Nouvelle tâche"
+
+#~ msgid "New notebook"
+#~ msgstr "Nouveau carnet"
+
 #, fuzzy
 #~ msgid "Create a [n]ew [n]otebook"
 #~ msgstr "Créer un carnet."
@@ -880,10 +854,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Non-completed ones only"
 #~ msgstr "Tâches complétées seulement"
-
-#, fuzzy
-#~ msgid "Delete a note"
-#~ msgstr "Supprimer la note"
 
 #~ msgid "%s (%s)"
 #~ msgstr "%s (%s)"
@@ -1006,11 +976,6 @@ msgstr "Bienvenue"
 #, fuzzy
 #~ msgid "use <notebook>"
 #~ msgstr "Nouveau carnet"
-
-#~ msgid "All potential ports are in use - please report the issue at %s"
-#~ msgstr ""
-#~ "Tous les ports sont en cours d'utilisation. Veuillez signaler ce problème "
-#~ "sur %s"
 
 #~ msgid "Imported - %s"
 #~ msgstr "Importé - %s"

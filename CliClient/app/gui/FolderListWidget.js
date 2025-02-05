@@ -40,8 +40,8 @@ class FolderListWidget extends ListWidget {
     }
 
     set selectedFolderId(v) {
-        this.updateIndexFromSelectedItemId();
         this.selectedFolderId_ = v;
+        this.updateIndexFromSelectedItemId();
         this.invalidate();
     }
 
@@ -50,8 +50,8 @@ class FolderListWidget extends ListWidget {
     }
 
     set selectedSearchId(v) {
-        this.updateIndexFromSelectedItemId();
         this.selectedSearchId_ = v;
+        this.updateIndexFromSelectedItemId();
         this.invalidate();
     }
 
@@ -60,8 +60,8 @@ class FolderListWidget extends ListWidget {
     }
 
     set selectedTagId(v) {
-        this.updateIndexFromSelectedItemId();
         this.selectedTagId_ = v;
+        this.updateIndexFromSelectedItemId();
         this.invalidate();
     }
 
@@ -70,7 +70,7 @@ class FolderListWidget extends ListWidget {
     }
 
     set notesParentType(v) {
-        if (this.notesParentType_ === v) return;
+        // if (this.notesParentType_ === v) return;
         this.notesParentType_ = v;
         this.updateIndexFromSelectedItemId();
         this.invalidate();
@@ -81,7 +81,6 @@ class FolderListWidget extends ListWidget {
     }
 
     set searches(v) {
-        if (this.searches_ === v) return;
         this.searches_ = v;
         this.updateItems_ = true;
         this.updateIndexFromSelectedItemId();
@@ -93,7 +92,6 @@ class FolderListWidget extends ListWidget {
     }
 
     set tags(v) {
-        if (this.tags_ === v) return;
         this.tags_ = v;
         this.updateItems_ = true;
         this.updateIndexFromSelectedItemId();
@@ -105,14 +103,13 @@ class FolderListWidget extends ListWidget {
     }
 
     set folders(v) {
-        if (this.folders_ === v) return;
         this.folders_ = v;
         this.updateItems_ = true;
         this.updateIndexFromSelectedItemId();
         this.invalidate();
     }
 
-    async onWillRender() {
+    render() {
         if (this.updateItems_) {
             this.logger().debug(
                 'Rebuilding items...',
@@ -141,6 +138,8 @@ class FolderListWidget extends ListWidget {
             this.updateIndexFromSelectedItemId(wasSelectedItemId);
             this.updateItems_ = false;
         }
+
+        super.render();
     }
 
     get selectedJoplinItemId() {

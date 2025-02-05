@@ -37,6 +37,39 @@ function historyCanGoBackTo(route) {
     return true;
 }
 
+function folderOrNoteDelete(state, action) {
+    let newState = Object.assign({}, state);
+
+    const idKey = action.type === 'FOLDER_DELETE' ? 'folderId' : 'noteId';
+    const listKey = action.type === 'FOLDER_DELETE' ? 'folders' : 'notes';
+    const selectedItemKey =
+        action.type === 'FOLDER_DELETE' ? 'selectedFolderId' : 'selectedNoteId';
+
+    let previousIndex = 0;
+    let newItems = [];
+    const items = state[listKey];
+    for (let i = 0; i < items.length; i++) {
+        let f = items[i];
+        if (f.id == action[idKey]) {
+            previousIndex = i;
+            continue;
+        }
+        newItems.push(f);
+    }
+
+    newState = Object.assign({}, state);
+    newState[listKey] = newItems;
+
+    if (previousIndex >= newItems.length) {
+        previousIndex = newItems.length - 1;
+    }
+
+    const newIndex = previousIndex >= 0 ? newItems[previousIndex].id : null;
+    newState[selectedItemKey] = newIndex;
+
+    return newState;
+}
+
 function updateOneTagOrFolder(state, action) {
     let newItems =
         action.type === 'TAGS_UPDATE_ONE'
@@ -254,25 +287,7 @@ const reducer = (state = defaultState, action) => {
                 break;
 
             case 'NOTES_DELETE':
-                var previousIndex = 0;
-                newNotes = [];
-                for (let i = 0; i < state.notes.length; i++) {
-                    let f = state.notes[i];
-                    if (f.id == action.noteId) {
-                        previousIndex = i;
-                        continue;
-                    }
-                    newNotes.push(f);
-                }
-
-                newState = Object.assign({}, state);
-                newState.notes = newNotes;
-
-                if (previousIndex >= newNotes.length) {
-                    previousIndex = newNotes.length - 1;
-                }
-                newState.selectedNoteId =
-                    previousIndex >= 0 ? newNotes[previousIndex].id : null;
+                newState = folderOrNoteDelete(state, action);
                 break;
 
             case 'FOLDERS_UPDATE_ALL':
@@ -300,48 +315,14 @@ const reducer = (state = defaultState, action) => {
 
             case 'TAGS_UPDATE_ONE':
                 newState = updateOneTagOrFolder(state, action);
-                // var newTags = state.tags.splice(0);
-                // var found = false;
-                // for (let i = 0; i < newTags.length; i++) {
-                // 	let n = newTags[i];
-                // 	if (n.id == action.tag.id) {
-                // 		newTags[i] = Object.assign(newTags[i], action.tag);
-                // 		found = true;
-                // 		break;
-                // 	}
-                // }
-                // if (!found) newTags.push(action.tag);
-                // newState = Object.assign({}, state);
-                // newState.tags = newTags;
                 break;
 
             case 'FOLDERS_UPDATE_ONE':
                 newState = updateOneTagOrFolder(state, action);
-                // var newFolders = state.folders.splice(0);
-                // var found = false;
-                // for (let i = 0; i < newFolders.length; i++) {
-                // 	let n = newFolders[i];
-                // 	if (n.id == action.folder.id) {
-                // 		newFolders[i] = Object.assign(newFolders[i], action.folder);
-                // 		found = true;
-                // 		break;
-                // 	}
-                // }
-                // if (!found) newFolders.push(action.folder);
-                // newState = Object.assign({}, state);
-                // newState.folders = newFolders;
                 break;
 
             case 'FOLDER_DELETE':
-                var newFolders = [];
-                for (let i = 0; i < state.folders.length; i++) {
-                    let f = state.folders[i];
-                    if (f.id == action.folderId) continue;
-                    newFolders.push(f);
-                }
-
-                newState = Object.assign({}, state);
-                newState.folders = newFolders;
+                newState = folderOrNoteDelete(state, action);
                 break;
 
             case 'SIDE_MENU_TOGGLE':
