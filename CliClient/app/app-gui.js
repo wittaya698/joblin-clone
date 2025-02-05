@@ -272,6 +272,7 @@ class AppGui {
     }
 
     addCommandToConsole(cmd) {
+        if (!cmd) return;
         this.stdout(chalk.cyan.bold('> ' + cmd));
     }
 

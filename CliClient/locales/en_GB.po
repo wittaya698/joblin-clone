@@ -96,16 +96,6 @@ msgstr ""
 msgid "Exits the application."
 msgstr ""
 
-msgid "Cancelling background synchronisation... Please wait."
-msgstr ""
-
-#, javascript-format
-msgid "The command \"%s\" is only available in GUI mode"
-msgstr ""
-
-msgid "Only Bash is currently supported for autocompletion."
-msgstr ""
-
 msgid "Y"
 msgstr ""
 
@@ -116,6 +106,16 @@ msgid "N"
 msgstr ""
 
 msgid "y"
+msgstr ""
+
+msgid "Cancelling background synchronisation... Please wait."
+msgstr ""
+
+#, javascript-format
+msgid "The command \"%s\" is only available in GUI mode"
+msgstr ""
+
+msgid "Only Bash is currently supported for autocompletion."
 msgstr ""
 
 #, javascript-format
