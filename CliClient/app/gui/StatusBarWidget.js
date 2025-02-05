@@ -4,14 +4,12 @@ const termutils = require('tkwidgets/framework/termutils.js');
 // const stripAnsi = require('strip-ansi');
 
 // Critical: to be removed when chalk is available
-const chalk = { bgBlueBright: { white: text => text } };
+const chalk = { gray: text => text };
 
 // Critical: to be removed when stripAnsi is available
 function stripAnsi(text) {
     return text;
 }
-
-chalk.bgBlueBright.white;
 
 class StatusBarWidget extends BaseWidget {
     constructor() {
