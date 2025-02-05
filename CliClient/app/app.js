@@ -478,7 +478,9 @@ class Application {
                 console.info(text);
             },
             fullScreen: (b = true) => {},
-            exit: () => {}
+            exit: () => {},
+            showModalOverlay: text => {},
+            hideModalOverlay: () => {}
         };
     }
 
