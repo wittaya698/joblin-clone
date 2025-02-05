@@ -73,7 +73,7 @@ class ActionButtonComponent extends React.Component {
         if (this.props.addFolderNoteButtons) {
             if (this.props.folders.length) {
                 buttons.push({
-                    title: 'New todo',
+                    title: 'New to-do',
                     icon: 'checkbox',
                     onPress: () => {
                         this.newTodo_press();

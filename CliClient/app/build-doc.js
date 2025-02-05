@@ -82,7 +82,7 @@ function getHeader() {
     output.push('');
     output.push(
         wrap(
-            'joplin - a note taking and todo app with synchronisation capabilities',
+            'joplin - a note taking and to-do app with synchronisation capabilities',
             INDENT
         )
     );
@@ -94,7 +94,7 @@ function getHeader() {
 
     let description = [];
     description.push(
-        'Joplin is a note taking and todo application, which can handle a large number of notes organised into notebooks.'
+        'Joplin is a note taking and to-do application, which can handle a large number of notes organised into notebooks.'
     );
     description.push(
         'The notes are searchable, can be copied, tagged and modified with your own text editor.'

@@ -9,7 +9,7 @@ class Command extends BaseCommand {
     }
 
     description() {
-        return _('Creates a new todo.');
+        return _('Creates a new to-do.');
     }
 
     async action(args) {
