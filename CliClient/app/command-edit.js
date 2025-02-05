@@ -81,12 +81,6 @@ class Command extends BaseCommand {
             // -------------------------------------------------------------------------
             this.logger().info('Disabling fullscreen...');
 
-            // this.stdout(
-            //     _(
-            //         'Starting to edit note. Close the editor to get back to the prompt.'
-            //     )
-            // );
-
             app()
                 .gui()
                 .showModalOverlay(
