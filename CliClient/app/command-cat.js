@@ -18,6 +18,10 @@ class Command extends BaseCommand {
         return [['-v, --verbose', _('Shows complete information about note.')]];
     }
 
+    enabled() {
+        return false;
+    }
+
     async action(args) {
         let title = args['note'];
 

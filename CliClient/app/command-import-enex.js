@@ -16,10 +16,7 @@ class Command extends BaseCommand {
     }
 
     options() {
-        return [
-            ['-f, --force', _('Do not ask for confirmation.')],
-            ['--fuzzy-matching', 'For debugging purposes. Do not use.']
-        ];
+        return [['-f, --force', _('Do not ask for confirmation.')]];
     }
 
     async action(args) {
@@ -47,7 +44,6 @@ class Command extends BaseCommand {
         let lastProgress = '';
 
         let options = {
-            fuzzyMatching: args.options['fuzzy-matching'] === true,
             onProgress: progressState => {
                 let line = [];
                 line.push(_('Found: %d.', progressState.loaded));

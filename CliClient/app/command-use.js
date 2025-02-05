@@ -19,6 +19,10 @@ class Command extends BaseCommand {
         return { data: autocompleteFolders };
     }
 
+    enabled() {
+        return false;
+    }
+
     async action(args) {
         let folder = await app().loadItem(
             BaseModel.TYPE_FOLDER,

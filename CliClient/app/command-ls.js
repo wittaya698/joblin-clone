@@ -20,6 +20,10 @@ class Command extends BaseCommand {
         );
     }
 
+    enabled() {
+        return false;
+    }
+
     options() {
         return [
             [

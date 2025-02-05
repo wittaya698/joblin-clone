@@ -19,6 +19,14 @@ class BaseCommand {
         throw new Error('Action not defined');
     }
 
+    compatibleUis() {
+        return ['cli', 'gui'];
+    }
+
+    supportsUi(ui) {
+        return this.compatibleUis().indexOf(ui) >= 0;
+    }
+
     aliases() {
         return [];
     }
