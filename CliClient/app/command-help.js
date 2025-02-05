@@ -80,6 +80,12 @@ class Command extends BaseCommand {
             this.stdout(commandNames.join(', '));
             this.stdout('');
             this.stdout(
+                _(
+                    'In any command, a note or notebook can be refered to by title or ID, or using the shortcuts `$n` or `$b` for, respectively, the currently selected note or notebook. `$c` can be used to refer to the currently selected item.'
+                )
+            );
+            this.stdout('');
+            this.stdout(
                 _('To maximise/minimise the console, press Ctrl+J Ctrl+Z.')
             );
             this.stdout(_('To enter the console, press C'));
