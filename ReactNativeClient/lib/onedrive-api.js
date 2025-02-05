@@ -276,6 +276,7 @@ class OneDriveApi {
                         JSON.stringify(data) +
                         ' ' +
                         JSON.stringify(options);
+                    error.headers = await response.headers;
                     throw error;
                 }
             }

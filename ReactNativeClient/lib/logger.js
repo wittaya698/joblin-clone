@@ -44,6 +44,8 @@ class Logger {
             if (object instanceof Error) {
                 output = object.toString();
                 if (object.code) output += '\nCode: ' + object.code;
+                if (object.headers)
+                    output += '\nHeader: ' + JSON.stringify(object.headers);
                 if (object.request) output += '\nRequest: ' + object.request;
                 if (object.stack) output += '\n' + object.stack;
             } else {
