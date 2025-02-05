@@ -331,9 +331,9 @@ class AppGui {
             action: 'todo toggle $n'
         };
 
-        shortcuts['c'] = {
+        shortcuts['tc'] = {
             description: _(
-                'Toggle console between maximized/minimized/hidden/visible.'
+                '[t]oggle [c]onsole between maximized/minimized/hidden/visible.'
             ),
             action: () => {
                 if (!this.consoleIsShown()) {
@@ -350,8 +350,10 @@ class AppGui {
             canRunAlongOtherCommands: true
         };
 
-        shortcuts['m'] = {
-            description: _('Toggle note metadata.'),
+        shortcuts['tc'] = {
+            description: _(
+                '[t]oggle [c]onsole between maximized/minimized/hidden/visible.'
+            ),
             action: () => {
                 this.toggleNoteMetadata();
             },
@@ -400,7 +402,7 @@ class AppGui {
         };
 
         shortcuts['nn'] = {
-            description: _('Create a new note'),
+            description: _('Create a [n]ew [n]ote'),
             action: {
                 type: 'prompt',
                 initialText: 'mknote ""',
@@ -409,7 +411,7 @@ class AppGui {
         };
 
         shortcuts['nt'] = {
-            description: _('Create a new todo'),
+            description: _('Create a [n]ew [t]odo'),
             action: {
                 type: 'prompt',
                 initialText: 'mktodo ""',
@@ -418,10 +420,28 @@ class AppGui {
         };
 
         shortcuts['nb'] = {
-            description: _('Create a new notebook'),
+            description: _('Create a [n]ew [n]otebook'),
             action: {
                 type: 'prompt',
                 initialText: 'mkbook ""',
+                cursorPosition: -2
+            }
+        };
+
+        shortcuts['cp'] = {
+            description: _('Copy the note to a notebook.'),
+            action: {
+                type: 'prompt',
+                initialText: 'cp $n ""',
+                cursorPosition: -2
+            }
+        };
+
+        shortcuts['mv'] = {
+            description: _('Move the note to a notebook.'),
+            action: {
+                type: 'prompt',
+                initialText: 'mv $n ""',
                 cursorPosition: -2
             }
         };

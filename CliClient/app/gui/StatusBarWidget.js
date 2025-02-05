@@ -95,7 +95,7 @@ class StatusBarWidget extends BaseWidget {
 
         this.innerClear();
 
-        const textStyle = chalk.bgBlueBright.white;
+        const textStyle = this.promptActive ? s => s : chalk.bgBlueBright.white;
 
         this.term.drawHLine(
             this.absoluteInnerX,
@@ -121,8 +121,7 @@ class StatusBarWidget extends BaseWidget {
             let options = {
                 cancelable: true,
                 history: this.history,
-                default: this.promptState_.initialText,
-                style: this.term.innerStyle.bgBrightBlue.white // NOTE: Need to use TK style for this as inputField is not compatible with chalk
+                default: this.promptState_.initialText
             };
 
             if ('cursorPosition' in this.promptState_)
