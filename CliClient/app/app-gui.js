@@ -343,7 +343,7 @@ class AppGui {
             canRunAlongOtherCommands: true
         };
 
-        shortcuts['tc'] = {
+        shortcuts['tm'] = {
             description: _(
                 '[t]oggle [c]onsole between maximized/minimized/hidden/visible.'
             ),
@@ -374,9 +374,9 @@ class AppGui {
             description: null,
             action: () => {
                 const w = this.widget('mainWindow').focusedWidget;
-                if (w.name == 'folderList') {
+                if (w.name === 'folderList') {
                     this.widget('noteList').focus();
-                } else if (w.name == 'noteList') {
+                } else if (w.name === 'noteList' || w.name === 'noteText') {
                     this.processCommand('edit $n');
                 }
             }
@@ -682,6 +682,15 @@ class AppGui {
 
         const noteLinks = {};
 
+        const hasProtocol = function (s, protocols) {
+            if (!s) return false;
+            s = s.trim().toLowerCase();
+            for (let i = 0; i < protocols.length; i++) {
+                if (s.indexOf(protocols[i] + '://') === 0) return true;
+            }
+            return false;
+        };
+
         // By default, before the server is started, only the regular
         // URLs appear in blue.
         noteTextWidget.markdownRendererOptions = {
@@ -690,10 +699,7 @@ class AppGui {
 
                 if (resourceIdRegex.test(url)) {
                     return url;
-                } else if (
-                    url.indexOf('http://') === 0 ||
-                    url.indexOf('https://') === 0
-                ) {
+                } else if (hasProtocol(url, ['http', 'https'])) {
                     return linkStyle(url);
                 } else {
                     return url;
@@ -737,11 +743,15 @@ class AppGui {
                         type: 'resource',
                         id: url.substr(2)
                     };
-                } else {
+                } else if (hasProtocol(url, ['http', 'https', 'file', 'ftp'])) {
                     noteLinks[index] = {
                         type: 'url',
                         url: url
                     };
+                } else if (url.indexOf('#') === 0) {
+                    return ''; // Anchors aren't supported for now
+                } else {
+                    return url;
                 }
 
                 return linkStyle(this.resourceServer_.baseUrl() + '/' + index);
