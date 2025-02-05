@@ -82,9 +82,9 @@ function getHeader() {
     output.push('');
     output.push(
         wrap(
-            'joplin - a note taking and todo app with synchronisation capabilities'
-        ),
-        INDENT
+            'joplin - a note taking and todo app with synchronisation capabilities',
+            INDENT
+        )
     );
 
     output.push('');
