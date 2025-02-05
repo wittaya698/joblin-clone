@@ -20,6 +20,10 @@ class Setting extends BaseModel {
         return output;
     }
 
+    static keyExists(key) {
+        return key in this.metadata_;
+    }
+
     static keys(publicOnly = false, appType = null) {
         if (!this.keys_) {
             if (!this.keys_) {
@@ -57,17 +61,19 @@ class Setting extends BaseModel {
         return this.modelSelectAll('SELECT * FROM settings').then(rows => {
             this.cache_ = [];
 
-            const ignore = [
-                'clientId',
-                'sync.onedrive.auth',
-                'syncInterval',
-                'todoOnTop',
-                'todosOnTop'
-            ];
+            // Old keys - can be removed later
+            // const ignore = [
+            //     'clientId',
+            //     'sync.onedrive.auth',
+            //     'syncInterval',
+            //     'todoOnTop',
+            //     'todosOnTop'
+            // ];
 
             for (let i = 0; i < rows.length; i++) {
                 let c = rows[i];
-                if (ignore.indexOf(c.key) >= 0) continue;
+                if (!this.keyExists(c.key)) continue;
+                //if (ignore.indexOf(c.key) >= 0) continue;
 
                 // console.info(c.key + ' = ' + c.value);
                 c.value = this.formatValue(c.key, c.value);
@@ -384,10 +390,7 @@ Setting.metadata_ = {
         type: Setting.TYPE_STRING,
         isEnum: true,
         public: true,
-        label: () =>
-            _(
-                'The editor that will be used to open a note. If none is provided it will try to auto-detect the default editor.'
-            ),
+        label: () => _('Language'),
         options: () => {
             return supportedLocalesToLanguages();
         }

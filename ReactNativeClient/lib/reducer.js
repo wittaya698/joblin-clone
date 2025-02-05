@@ -165,9 +165,9 @@ const reducer = (state = defaultState, action) => {
 
                 if (action.routeName == 'Welcome') navHistory = [];
 
-                reg.logger().info(
-                    'Route: ' + currentRouteName + ' => ' + action.routeName
-                );
+                // reg.logger().info(
+                //     'Route: ' + currentRouteName + ' => ' + action.routeName
+                // );
 
                 newState = Object.assign({}, state);
 
