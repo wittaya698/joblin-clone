@@ -26,7 +26,7 @@ class NoteMetadataWidget extends TextWidget {
         if (!this.note_ && this.noteId_) {
             this.note_ = await Note.load(this.noteId_);
             this.text = this.note_
-                ? await Note.serializeAllProps(this.note_)
+                ? await Note.minimalSerializeForDisplay(this.note_)
                 : '';
         }
     }
