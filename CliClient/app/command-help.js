@@ -54,6 +54,11 @@ class Command extends BaseCommand {
             this.stdout(
                 _('To move from one widget to another, press Tab or Shift+Tab.')
             );
+            this.stdout(
+                _(
+                    'Use the arrows and page up/down to scroll the lists and text areas (including this console).'
+                )
+            );
             this.stdout(_('The possible commands are:'));
             this.stdout('');
             this.stdout(commandNames.join(', '));

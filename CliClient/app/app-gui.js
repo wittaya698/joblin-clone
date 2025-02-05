@@ -561,6 +561,8 @@ class AppGui {
         } catch (error) {
             this.stdout(error.message);
         }
+
+        this.widget('console').scrollBottom();
     }
 
     async updateFolderList() {

@@ -143,8 +143,10 @@ class StatusBarWidget extends BaseWidget {
                         if (input === undefined) {
                             // User cancel
                         } else {
-                            resolveResult = input;
-                            if (input && input.trim() != '')
+                            resolveResult = input ? input.trim() : input;
+                            // Add the command to history but only if it's longer than one character.
+                            // Below that it's usually an answer like "y"/"n", etc.
+                            if (input && input.length > 1)
                                 this.history_.push(input);
                         }
                     }
