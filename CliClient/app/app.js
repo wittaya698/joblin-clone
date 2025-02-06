@@ -22,11 +22,6 @@ import {
 } from '@/lib/locale.js';
 import os from 'os';
 import fs from 'fs-extra';
-import yargParser from 'yargs-parser';
-import {
-    handleAutocompletion,
-    installAutocompletionFile
-} from './autocompletion.js';
 import { cliUtils } from './cli-utils.js';
 const EventEmitter = require('events');
 
@@ -35,7 +30,6 @@ class Application {
         this.showPromptString_ = true;
         this.logger_ = new Logger();
         this.dbLogger_ = new Logger();
-        this.autocompletion_ = { active: false };
         this.commands_ = {};
         this.commandMetadata_ = null;
         this.activeCommand_ = null;
@@ -236,39 +230,6 @@ class Application {
                         )
                     );
                 matched.logLevel = Logger.levelStringToId(nextArg);
-                argv.splice(0, 2);
-                continue;
-            }
-
-            if (arg == '--autocompletion') {
-                this.autocompletion_.active = true;
-                argv.splice(0, 1);
-                continue;
-            }
-
-            if (arg == '--ac-install') {
-                this.autocompletion_.install = true;
-                argv.splice(0, 1);
-                continue;
-            }
-
-            if (arg == '--ac-current') {
-                if (!nextArg)
-                    throw new Error(_('Usage: %s', '--ac-current <num>'));
-                this.autocompletion_.current = nextArg;
-                argv.splice(0, 2);
-                continue;
-            }
-
-            if (arg == '--ac-line') {
-                if (!nextArg)
-                    throw new Error(_('Usage: %s', '--ac-line <line>'));
-                let line = nextArg.replace(/\|__QUOTE__\|/g, '"');
-                line = line.replace(/\|__SPACE__\|/g, ' ');
-                line = line.replace(/\|__OPEN_RB__\|/g, '(');
-                line = line.replace(/\|__OPEN_CB__\|/g, ')');
-                line = line.split('|__SEP__|');
-                this.autocompletion_.line = line;
                 argv.splice(0, 2);
                 continue;
             }
@@ -721,13 +682,6 @@ class Application {
         cliUtils.setStdout(object => {
             return this.stdout(object);
         });
-
-        // this.store_ = createStore(
-        //     reducer,
-        //     applyMiddleware(this.generalMiddleware())
-        // );
-        // BaseModel.dispatch = this.store().dispatch;
-        // FoldersScreenUtils.dispatch = this.store().dispatch;
 
         await Setting.load();
 

@@ -118,9 +118,6 @@ msgstr ""
 msgid "The command \"%s\" is only available in GUI mode"
 msgstr ""
 
-msgid "Only Bash is currently supported for autocompletion."
-msgstr ""
-
 #, javascript-format
 msgid "Missing required argument: %s"
 msgstr ""
@@ -225,14 +222,6 @@ msgstr ""
 msgid "Type `help [command]` for more information about a command."
 msgstr ""
 
-msgid "To move from one widget to another, press Tab or Shift+Tab."
-msgstr ""
-
-msgid ""
-"Use the arrows and page up/down to scroll the lists and text areas "
-"(including this console)."
-msgstr ""
-
 msgid "The possible commands are:"
 msgstr ""
 
@@ -242,13 +231,21 @@ msgid ""
 "note or notebook. `$c` can be used to refer to the currently selected item."
 msgstr ""
 
-msgid "To maximise/minimise the console, press Ctrl+J Ctrl+Z."
+msgid "To move from one pane to another, press Tab or Shift+Tab."
 msgstr ""
 
-msgid "To enter the console, press C"
+msgid ""
+"Use the arrows and page up/down to scroll the lists and text areas "
+"(including this console)."
 msgstr ""
 
-msgid "To exit the console, press ESCAPE"
+msgid "To maximise/minimise the console, press \"TC\"."
+msgstr ""
+
+msgid "To enter command line mode, press \":\""
+msgstr ""
+
+msgid "To exit command line mode, press ESCAPE"
 msgstr ""
 
 msgid ""
