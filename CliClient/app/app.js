@@ -349,7 +349,7 @@ class Application extends BaseApplication {
         return this.activeCommand_;
     }
 
-    async start() {
+    async start(argv) {
         argv = await super.start(argv);
 
         cliUtils.setStdout(object => {
@@ -371,13 +371,7 @@ class Application extends BaseApplication {
                 }
             }
         } else {
-            // Otherwise open the GUI
-            this.store_ = createStore(
-                reducer,
-                applyMiddleware(this.generalMiddleware())
-            );
-            BaseModel.dispatch = this.store().dispatch;
-            FoldersScreenUtils.dispatch = this.store().dispatch;
+            this.initRedux();
 
             const AppGui = require('./app-gui.js');
             this.gui_ = new AppGui(this, this.store());

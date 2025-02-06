@@ -103,16 +103,15 @@ function updateOneTagOrFolder(state, action) {
 }
 
 function defaultNotesParentType(state, exclusion) {
-    throw new Error('Reducer defaultNotesParentType() need to be implemented');
-    // let newNotesParentType = null;
-    // if (exclusion !== 'Folder' && state.selectedFolderId) {
-    //     newNotesParentType = 'Folder';
-    // } else if (exclusion !== 'Tag' && state.selectedTagId) {
-    //     newNotesParentType = 'Tag';
-    // } else if (exclusion !== 'Search' && state.selectedSearchId) {
-    //     newNotesParentType = 'Search';
-    // }
-    // return newNotesParentType;
+    let newNotesParentType = null;
+    if (exclusion !== 'Folder' && state.selectedFolderId) {
+        newNotesParentType = 'Folder';
+    } else if (exclusion !== 'Tag' && state.selectedTagId) {
+        newNotesParentType = 'Tag';
+    } else if (exclusion !== 'Search' && state.selectedSearchId) {
+        newNotesParentType = 'Search';
+    }
+    return newNotesParentType;
 }
 
 const reducer = (state = defaultState, action) => {
