@@ -44,7 +44,8 @@ import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
 import { reducer, defaultState } from '@/lib/reducer.js';
 
 const generalMiddleware = store => next => async action => {
-    reg.logger().info('Reducer action', action.type);
+    if (action.type !== 'SIDE_MENU_OPEN_PERCENT')
+        reg.logger().info('Reducer action', action.type);
     PoorManIntervals.update(); // This function needs to be called regularly so put it here
 
     const result = next(action);
@@ -289,6 +290,13 @@ const App = () => {
         <MenuProvider>
             <Drawer.Navigator
                 drawerContent={props => <SideMenuContent {...props} />}
+                onChange={isOpen => this.sideMenu_change(isOpen)}
+                onDrawerSlide={percent => {
+                    this.props.dispatch({
+                        type: 'SIDE_MENU_OPEN_PERCENT',
+                        value: percent
+                    });
+                }}
             >
                 <Drawer.Screen name="Home" component={HomeStack} />
             </Drawer.Navigator>

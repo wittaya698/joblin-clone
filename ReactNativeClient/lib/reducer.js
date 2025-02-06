@@ -21,6 +21,9 @@ const defaultState = {
     searchQuery: '',
     settings: {},
     appState: 'starting',
+
+    // Critical -> To change to 0 when sidebar sliding is available
+    sideMenuOpenPercent: 100,
     route: {
         type: 'NAV_GO',
         routeName: 'Welcome',
@@ -338,6 +341,11 @@ const reducer = (state = defaultState, action) => {
             case 'SIDE_MENU_CLOSE':
                 newState = Object.assign({}, state);
                 newState.showSideMenu = false;
+                break;
+
+            case 'SIDE_MENU_OPEN_PERCENT':
+                newState = Object.assign({}, state);
+                newState.sideMenuOpenPercent = action.value;
                 break;
 
             case 'SYNC_STARTED':

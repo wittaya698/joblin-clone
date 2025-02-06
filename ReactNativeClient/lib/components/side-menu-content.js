@@ -239,6 +239,8 @@ class SideMenuContentComponent extends Component {
     render() {
         let items = [];
 
+        const theme = themeStyle(this.props.theme);
+
         // HACK: inner height of ScrollView doesn't appear to be calculated correctly when
         // using padding. So instead creating blank elements for padding bottom and top.
         items.push(
@@ -247,6 +249,13 @@ class SideMenuContentComponent extends Component {
                 key="bottom_top_hack"
             />
         );
+
+        let style = {
+            flex: 1,
+            borderRightWidth: 1,
+            borderRightColor: globalStyle.dividerColor,
+            backgroundColor: theme.backgroundColor
+        };
 
         if (this.props.folders.length) {
             for (let i = 0; i < this.props.folders.length; i++) {
@@ -309,22 +318,18 @@ class SideMenuContentComponent extends Component {
         );
 
         return (
-            <View
-                style={{
-                    flex: 1,
-                    borderRightWidth: 1,
-                    borderRightColor: globalStyle.dividerColor
-                }}
-            >
-                <View style={{ flexDirection: 'row' }}>
-                    <Image
-                        style={{ flex: 1, height: 100 }}
-                        source={require('../images/SideMenuHeader.png')}
-                    />
+            <View style={style}>
+                <View style={{ flex: 1, opacity: this.props.opacity }}>
+                    <View style={{ flexDirection: 'row' }}>
+                        <Image
+                            style={{ flex: 1, height: 100 }}
+                            source={require('../images/SideMenuHeader.png')}
+                        />
+                    </View>
+                    <ScrollView scrollsToTop={false} style={this.styles().menu}>
+                        {items}
+                    </ScrollView>
                 </View>
-                <ScrollView scrollsToTop={false} style={this.styles().menu}>
-                    {items}
-                </ScrollView>
             </View>
         );
     }
@@ -340,7 +345,8 @@ const SideMenuContent = connect(state => {
         selectedTagId: state.selectedTagId,
         notesParentType: state.notesParentType,
         locale: state.settings.locale,
-        theme: state.settings.theme
+        theme: state.settings.theme,
+        opacity: state.sideMenuOpenPercent
     };
 })(SideMenuContentComponent);
 

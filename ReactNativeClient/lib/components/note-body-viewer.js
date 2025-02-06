@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import { globalStyle } from '@/lib/components/global-style.js';
 import { Resource } from '@/lib/models/resource.js';
 import { shim } from '@/lib/shim.js';
+import { reg } from '@/lib/registry.js';
 import marked from '@/lib/marked.js';
 const { encode } = require('html-entities');
 const htmlentities = encode;
@@ -243,8 +244,6 @@ class NoteBodyViewer extends Component {
             scriptHtml +
             '</body>';
 
-        // console.info(html);
-
         return html;
     }
 
@@ -277,6 +276,7 @@ class NoteBodyViewer extends Component {
                     style={webViewStyle}
                     source={{ html: html }}
                     onLoadEnd={() => this.onLoadEnd()}
+                    onError={e => reg.logger().error('WebView error', e)}
                     onMessage={event => {
                         let msg = event.nativeEvent.data;
                         if (msg.indexOf('checkboxclick:') === 0) {

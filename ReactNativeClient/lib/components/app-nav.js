@@ -4,6 +4,7 @@ import { NotesScreen } from '@/lib/components/screens/notes.js';
 import { SearchScreen } from '@/lib/components/screens/search.js';
 import { View } from 'react-native';
 import { _ } from '@/lib/locale.js';
+import { themeStyle } from '@/lib/components/global-style.js';
 
 class AppNavComponent extends Component {
     constructor() {
@@ -38,8 +39,11 @@ class AppNavComponent extends Component {
             (this.previousRouteName_ == 'Search' && route.routeName == 'Note');
         this.previousRouteName_ = route.routeName;
 
+        const theme = themeStyle(this.props.theme);
+        const style = { flex: 1, backgroundColor: theme.backgroundColor };
+
         return (
-            <View style={{ flex: 1 }}>
+            <View style={style}>
                 <NotesScreen
                     visible={notesScreenVisible}
                     navigation={{ state: route }}
@@ -60,7 +64,8 @@ class AppNavComponent extends Component {
 
 const AppNav = connect(state => {
     return {
-        route: state.route
+        route: state.route,
+        theme: state.settings.theme
     };
 })(AppNavComponent);
 
