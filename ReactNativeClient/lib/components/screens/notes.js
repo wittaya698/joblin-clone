@@ -196,4 +196,4 @@ const NotesScreen = connect(state => {
     };
 })(NotesScreenComponent);
 
-export { NotesScreen };
+module.exports = { NotesScreen };

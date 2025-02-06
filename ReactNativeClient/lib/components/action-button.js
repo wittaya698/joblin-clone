@@ -183,4 +183,4 @@ const ActionButton = connect(state => {
     return { folders: state.folders };
 })(ActionButtonComponent);
 
-export { ActionButton };
+module.exports = { ActionButton };

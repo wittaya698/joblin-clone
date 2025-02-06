@@ -119,4 +119,4 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 const OneDriveLoginScreen = connect(state => {
     return {};
 })(OneDriveLoginScreenComponent);
-export { OneDriveLoginScreen };
+module.exports = { OneDriveLoginScreen };

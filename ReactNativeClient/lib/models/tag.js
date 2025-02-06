@@ -98,4 +98,4 @@ class Tag extends BaseItem {
     }
 }
 
-export { Tag };
+module.exports = { Tag };

@@ -133,4 +133,4 @@ const StatusScreen = connect(state => {
     return { theme: state.settings.theme };
 })(StatusScreenComponent);
 
-export { StatusScreen };
+module.exports = { StatusScreen };

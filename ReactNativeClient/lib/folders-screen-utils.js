@@ -10,4 +10,4 @@ class FoldersScreenUtils {
     }
 }
 
-export { FoldersScreenUtils };
+module.exports = { FoldersScreenUtils };

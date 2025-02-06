@@ -32,4 +32,4 @@ netUtils.findAvailablePort = async (
     return port;
 };
 
-export { netUtils };
+module.exports = { netUtils };

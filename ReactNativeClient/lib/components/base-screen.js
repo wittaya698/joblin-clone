@@ -35,4 +35,4 @@ class BaseScreenComponent extends React.Component {
         return rootStyles_[themeId];
     }
 }
-export { BaseScreenComponent };
+module.exports = { BaseScreenComponent };

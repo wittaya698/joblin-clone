@@ -92,4 +92,4 @@ class FileApiDriverOneDrive {
     }
 }
 
-export { FileApiDriverOneDrive };
+module.exports = { FileApiDriverOneDrive };

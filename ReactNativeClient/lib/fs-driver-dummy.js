@@ -4,4 +4,4 @@ class FsDriverDummy {
     writeBinaryFile(path, content) {}
     readFile(path) {}
 }
-export { FsDriverDummy };
+module.exports = { FsDriverDummy };

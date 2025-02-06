@@ -30,4 +30,4 @@ class EventDispatcher {
     }
 }
 
-export { EventDispatcher };
+module.exports = { EventDispatcher };

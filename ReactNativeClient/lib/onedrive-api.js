@@ -338,4 +338,4 @@ class OneDriveApi {
     }
 }
 
-export { OneDriveApi };
+module.exports = { OneDriveApi };

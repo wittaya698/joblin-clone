@@ -91,4 +91,4 @@ class ReportService {
     }
 }
 
-export { ReportService };
+module.exports = { ReportService };

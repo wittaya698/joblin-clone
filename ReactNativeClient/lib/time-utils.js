@@ -52,4 +52,4 @@ let time = {
     }
 };
 
-export { time };
+module.exports = { time };

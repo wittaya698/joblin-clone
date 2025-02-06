@@ -176,4 +176,4 @@ const ConfigScreen = connect(state => {
     return { settings: state.settings, theme: state.settings.theme };
 })(ConfigScreenComponent);
 
-export { ConfigScreen };
+module.exports = { ConfigScreen };

@@ -507,4 +507,4 @@ BaseItem.syncItemDefinitions_ = [
     { type: BaseModel.TYPE_NOTE_TAG, className: 'NoteTag' }
 ];
 
-export { BaseItem };
+module.exports = { BaseItem };

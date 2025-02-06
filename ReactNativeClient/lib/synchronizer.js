@@ -617,4 +617,4 @@ class Synchronizer {
     }
 }
 
-export { Synchronizer };
+module.exports = { Synchronizer };

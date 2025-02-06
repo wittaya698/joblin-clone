@@ -115,4 +115,4 @@ const LogScreen = connect(state => {
     return { theme: state.settings.theme };
 })(LogScreenComponent);
 
-export { LogScreen };
+module.exports = { LogScreen };

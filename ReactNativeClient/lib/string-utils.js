@@ -293,4 +293,4 @@ function wrap(text, indent, width) {
     });
 }
 
-export { removeDiacritics, escapeFilename, wrap };
+module.exports = { removeDiacritics, escapeFilename, wrap };

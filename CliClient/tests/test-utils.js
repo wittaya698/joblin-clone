@@ -36,7 +36,7 @@ const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
 //const syncTargetId_ = Setting.SYNC_TARGET_ONEDRIVE;
 const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 500;
+const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 600;
 
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -183,7 +183,7 @@ function fileApi() {
     return fileApi_;
 }
 
-export {
+module.exports = {
     setupDatabase,
     setupDatabaseAndSynchronizer,
     db,

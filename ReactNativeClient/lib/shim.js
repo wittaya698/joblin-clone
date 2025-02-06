@@ -23,4 +23,4 @@ shim.uploadBlob = () => {
 shim.setInterval = setInterval;
 shim.clearInterval = clearInterval;
 
-export { shim };
+module.exports = { shim };

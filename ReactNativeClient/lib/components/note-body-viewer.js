@@ -299,4 +299,4 @@ class NoteBodyViewer extends Component {
     }
 }
 
-export { NoteBodyViewer };
+module.exports = { NoteBodyViewer };

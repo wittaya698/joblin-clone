@@ -80,4 +80,4 @@ const TagScreen = connect(state => {
         notesSource: state.notesSource
     };
 })(TagScreenComponent);
-export { TagScreen };
+module.exports = { TagScreen };

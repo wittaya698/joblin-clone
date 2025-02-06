@@ -319,4 +319,4 @@ class Root extends React.Component {
     }
 }
 
-export { Root };
+module.exports = { Root };

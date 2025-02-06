@@ -66,4 +66,4 @@ class DatabaseDriverReactNative {
     }
 }
 
-export { DatabaseDriverReactNative };
+module.exports = { DatabaseDriverReactNative };

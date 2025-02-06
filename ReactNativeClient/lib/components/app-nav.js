@@ -70,4 +70,4 @@ const AppNav = connect(state => {
     };
 })(AppNavComponent);
 
-export { AppNav };
+module.exports = { AppNav };

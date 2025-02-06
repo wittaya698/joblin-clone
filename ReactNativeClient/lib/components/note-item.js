@@ -136,4 +136,4 @@ class NoteItemComponent extends Component {
 const NoteItem = connect(state => {
     return { theme: state.settings.theme };
 })(NoteItemComponent);
-export { NoteItem };
+module.exports = { NoteItem };

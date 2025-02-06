@@ -19,4 +19,4 @@ export default class Main extends Component {
     }
 }
 
-export { Main };
+module.exports = { Main };

@@ -136,4 +136,4 @@ const FolderScreen = connect(state => {
     return { folderId: state.selectedFolderId, theme: state.settings.theme };
 })(FolderScreenComponent);
 
-export { FolderScreen };
+module.exports = { FolderScreen };

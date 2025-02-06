@@ -111,4 +111,4 @@ class Exporter {
     }
 }
 
-export { Exporter };
+module.exports = { Exporter };

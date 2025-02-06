@@ -51,4 +51,4 @@ class PoorManIntervals {
 PoorManIntervals.lastUpdateTime_ = 0;
 PoorManIntervals.intervalId_ = 0;
 PoorManIntervals.intervals_ = [];
-export { PoorManIntervals };
+module.exports = { PoorManIntervals };

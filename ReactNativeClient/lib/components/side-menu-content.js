@@ -351,4 +351,4 @@ const SideMenuContent = connect(state => {
     };
 })(SideMenuContentComponent);
 
-export { SideMenuContent };
+module.exports = { SideMenuContent };

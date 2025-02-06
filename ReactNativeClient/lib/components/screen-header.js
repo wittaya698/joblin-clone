@@ -440,4 +440,4 @@ const ScreenHeader = connect(state => {
     };
 })(ScreenHeaderComponent);
 
-export { ScreenHeader };
+module.exports = { ScreenHeader };

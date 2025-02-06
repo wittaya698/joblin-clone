@@ -167,4 +167,4 @@ class FileApiDriverMemory {
     }
 }
 
-export { FileApiDriverMemory };
+module.exports = { FileApiDriverMemory };

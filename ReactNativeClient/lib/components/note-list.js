@@ -131,4 +131,4 @@ const NoteList = connect(state => {
     };
 })(NoteListComponent);
 
-export { NoteList };
+module.exports = { NoteList };

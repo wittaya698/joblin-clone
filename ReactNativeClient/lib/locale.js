@@ -310,7 +310,7 @@ const localeList = {
     fr_FR: frFRLocale
 };
 
-export {
+module.exports = {
     _,
     supportedLocales,
     localeStrings,

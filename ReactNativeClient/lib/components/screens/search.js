@@ -187,4 +187,4 @@ const SearchScreen = connect(state => {
         theme: state.settings.theme
     };
 })(SearchScreenComponent);
-export { SearchScreen };
+module.exports = { SearchScreen };

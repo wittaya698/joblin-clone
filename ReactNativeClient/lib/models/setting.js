@@ -482,4 +482,4 @@ Setting.constants_ = {
     tempDir: ''
 };
 
-export { Setting };
+module.exports = { Setting };
