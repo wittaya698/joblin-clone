@@ -98,45 +98,45 @@ const headerHtml = `
 `;
 
 const footerHtml = `
-<hr/>Copyright (c) 2017 Witthaya Thongchin
+<hr/>Copyright (c) 2024-2025 Witthaya Thongchin
 </body>
 </html>
 `;
 
-const screenshotHtml = `
-<table class="screenshots">
-	<tr>
-		<th>
-			Mobile
-		</th>
-		<th>
-			Command line
-		</th>
-	</tr>
-	<tr>
-		<td>
-			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-		</td>
-		<td class="cli-screenshot-wrapper">
-			<pre class="cli-screenshot">
-            <span class="prompt">joplin:/My notebook$</span> ls -n 12
-            [ ] 8am conference call ☎
-            [ ] Make vet appointment
-            [ ] Go pick up parcel
-            [ ] Pay flat rent 💸
-            [X] Book ferry 🚢
-            [X] Deploy Joplin app
-                Open source stuff
-                Swimming pool time table 🏊
-                Grocery shopping list 📝
-                Work itinerary
-                Tuesday random note
-                Vacation plans ☀️
-			</pre>
-		</td>
-	</tr>
-</table>
-`;
+// const screenshotHtml = `
+// <table class="screenshots">
+// 	<tr>
+// 		<th>
+// 			Mobile
+// 		</th>
+// 		<th>
+// 			Command line
+// 		</th>
+// 	</tr>
+// 	<tr>
+// 		<td>
+// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
+// 		</td>
+// 		<td class="cli-screenshot-wrapper">
+// 			<pre class="cli-screenshot">
+//             <span class="prompt">joplin:/My notebook$</span> ls -n 12
+//             [ ] 8am conference call ☎
+//             [ ] Make vet appointment
+//             [ ] Go pick up parcel
+//             [ ] Pay flat rent 💸
+//             [X] Book ferry 🚢
+//             [X] Deploy Joplin app
+//                 Open source stuff
+//                 Swimming pool time table 🏊
+//                 Grocery shopping list 📝
+//                 Work itinerary
+//                 Tuesday random note
+//                 Vacation plans ☀️
+// 			</pre>
+// 		</td>
+// 	</tr>
+// </table>
+// `;
 
 const gaHtml = `
 <script>
@@ -163,7 +163,7 @@ function markdownToHtml(md) {
         renderer: renderer
     });
 
-    output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
+    // output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
 
     return headerHtml + output + gaHtml + footerHtml;
 }
