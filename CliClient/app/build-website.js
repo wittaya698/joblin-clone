@@ -20,7 +20,13 @@ const headerHtml = `
 	body {
 		background-color: #F1F1F1;
 		color: #333333;
-	}
+    }
+    table {
+        margin-bottom: 1em;
+    }
+    td {
+        padding: .5em 1em .5em 0;
+    }
 	.title-icon {
 		height: 2em;
 	}
