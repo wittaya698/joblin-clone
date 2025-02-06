@@ -79,6 +79,7 @@ const headerHtml = `
 		padding-left: 2em;
 		padding-right: 2em;
 		padding-bottom: 2em;
+        padding-top: 2em;
 	}
 	.forkme {
 		position: absolute;
@@ -90,7 +91,7 @@ const headerHtml = `
 <body>
 <div class="container">
 <div class="header">
-	<a class="forkme" href="https://github.com/laurent22/joplin"><img src="docs/images/ForkMe.png"/></a>
+	<a class="forkme" href="https://github.com/wittaya698/joplin-clone"><img src="docs/images/ForkMe.png"/></a>
 	<h1 id="joplin"><img class="title-icon" src="docs/images/Icon512.png">oplin</h1>
 	<p class="sub-title">A free, open source, note taking and to-do application with synchronisation capabilities.</p>
 </div>
