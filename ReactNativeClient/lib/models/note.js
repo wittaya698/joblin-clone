@@ -1,11 +1,11 @@
-const { BaseModel } = require('@/lib/base-model.js');
-const { Log } = require('@/lib/log.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Log } = require('lib/log.js');
 const { sprintf } = require('sprintf-js');
-const { BaseItem } = require('@/lib/models/base-item.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { shim } = require('@/lib/shim.js');
-const { time } = require('@/lib/time-utils.js');
-const { _ } = require('@/lib/locale.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Setting } = require('lib/models/setting.js');
+const { shim } = require('lib/shim.js');
+const { time } = require('lib/time-utils.js');
+const { _ } = require('lib/locale.js');
 const moment = require('moment');
 const lodash = require('lodash');
 

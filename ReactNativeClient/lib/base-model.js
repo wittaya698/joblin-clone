@@ -1,7 +1,7 @@
-const { Log } = require('@/lib/log.js');
-const { Database } = require('@/lib/database.js');
-const { uuid } = require('@/lib/uuid.js');
-const { time } = require('@/lib/time-utils.js');
+const { Log } = require('lib/log.js');
+const { Database } = require('lib/database.js');
+const { uuid } = require('lib/uuid.js');
+const { time } = require('lib/time-utils.js');
 
 class BaseModel {
     static modelType() {

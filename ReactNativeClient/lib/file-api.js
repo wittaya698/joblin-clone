@@ -1,5 +1,5 @@
-const { isHidden } = require('@/lib/path-utils.js');
-const { Logger } = require('@/lib/logger.js');
+const { isHidden } = require('lib/path-utils.js');
+const { Logger } = require('lib/logger.js');
 
 class FileApi {
     constructor(baseDir, driver) {

@@ -1,11 +1,11 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('@/lib/locale.js');
+const { _ } = require('lib/locale.js');
 const { OneDriveApiNodeUtils } = require('./onedrive-api-node-utils.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { BaseItem } = require('@/lib/models/base-item.js');
-const { Synchronizer } = require('@/lib/synchronizer.js');
-const { reg } = require('@/lib/registry.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { reg } = require('lib/registry.js');
 const { cliUtils } = require('./cli-utils.js');
 const md5 = require('md5');
 const locker = require('proper-lockfile');

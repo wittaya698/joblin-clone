@@ -2,11 +2,11 @@ const React = require('react');
 const { Component } = require('react');
 const { View, Linking } = require('react-native');
 const { WebView } = require('react-native-webview');
-const { globalStyle } = require('@/lib/components/global-style.js');
-const { Resource } = require('@/lib/models/resource.js');
-const { shim } = require('@/lib/shim.js');
-const { reg } = require('@/lib/registry.js');
-const marked = require('@/lib/marked.js');
+const { globalStyle } = require('lib/components/global-style.js');
+const { Resource } = require('lib/models/resource.js');
+const { shim } = require('lib/shim.js');
+const { reg } = require('lib/registry.js');
+const marked = require('lib/marked.js');
 const { encode } = require('html-entities');
 const htmlentities = encode;
 

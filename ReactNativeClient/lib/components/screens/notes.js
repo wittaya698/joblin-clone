@@ -1,19 +1,19 @@
 const React = require('react');
 const { View, Button } = require('react-native');
 const { connect } = require('react-redux');
-const { reg } = require('@/lib/registry.js');
-const { NoteList } = require('@/lib/components/note-list.js');
-const { ScreenHeader } = require('@/lib/components/screen-header.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Tag } = require('@/lib/models/tag.js');
-const { Note } = require('@/lib/models/note.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { themeStyle } = require('@/lib/components/global-style.js');
-const { _ } = require('@/lib/locale.js');
-const { ActionButton } = require('@/lib/components/action-button.js');
-const { dialogs } = require('@/lib/dialogs.js');
+const { reg } = require('lib/registry.js');
+const { NoteList } = require('lib/components/note-list.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { Folder } = require('lib/models/folder.js');
+const { Tag } = require('lib/models/tag.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { _ } = require('lib/locale.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const { dialogs } = require('lib/dialogs.js');
 const DialogBox = require('react-native-dialogbox').default;
-const { BaseScreenComponent } = require('@/lib/components/base-screen.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class NotesScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {

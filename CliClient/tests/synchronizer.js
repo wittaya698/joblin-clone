@@ -1,6 +1,3 @@
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
-
 const { time } = require('lib/time-utils.js');
 const {
     setupDatabase,

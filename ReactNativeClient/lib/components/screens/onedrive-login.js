@@ -3,12 +3,12 @@ const { Component } = React;
 const { View, Button, Text } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { connect } = require('react-redux');
-const { Log } = require('@/lib/log.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { ScreenHeader } = require('@/lib/components/screen-header.js');
-const { reg } = require('@/lib/registry.js');
-const { _ } = require('@/lib/locale.js');
-const { BaseScreenComponent } = require('@/lib/components/base-screen.js');
+const { Log } = require('lib/log.js');
+const { Setting } = require('lib/models/setting.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
 
 class OneDriveLoginScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {

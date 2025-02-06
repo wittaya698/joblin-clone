@@ -1,13 +1,13 @@
-const { Logger } = require('@/lib/logger.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Tag } = require('@/lib/models/tag.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { Note } = require('@/lib/models/note.js');
-const { Resource } = require('@/lib/models/resource.js');
+const { Logger } = require('lib/logger.js');
+const { Folder } = require('lib/models/folder.js');
+const { Tag } = require('lib/models/tag.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Note } = require('lib/models/note.js');
+const { Resource } = require('lib/models/resource.js');
 const { cliUtils } = require('./cli-utils.js');
-const { reducer, defaultState } = require('@/lib/reducer.js');
-const { reg } = require('@/lib/registry.js');
-const { _ } = require('@/lib/locale.js');
+const { reducer, defaultState } = require('lib/reducer.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
 
 // const chalk = require('chalk');
 const tk = require('terminal-kit');

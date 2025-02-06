@@ -1,8 +1,8 @@
 const fs = require('fs-extra');
-const { shim } = require('@/lib/shim.js');
-const { GeolocationNode } = require('@/lib/geolocation-node.js');
-const { FileApiDriverLocal } = require('@/lib/file-api-driver-local.js');
-const { time } = require('@/lib/time-utils.js');
+const { shim } = require('lib/shim.js');
+const { GeolocationNode } = require('lib/geolocation-node.js');
+const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
+const { time } = require('lib/time-utils.js');
 
 function fetchRequestCanBeRetried(error) {
     if (!error) return false;

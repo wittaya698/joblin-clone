@@ -9,15 +9,15 @@ const {
     View,
     StyleSheet
 } = require('react-native');
-const { Log } = require('@/lib/log.js');
-const { _ } = require('@/lib/locale.js');
-const { Checkbox } = require('@/lib/components/checkbox.js');
-const { NoteItem } = require('@/lib/components/note-item.js');
-const { reg } = require('@/lib/registry.js');
-const { Note } = require('@/lib/models/note.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { time } = require('@/lib/time-utils.js');
-const { themeStyle } = require('@/lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { NoteItem } = require('lib/components/note-item.js');
+const { reg } = require('lib/registry.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { time } = require('lib/time-utils.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class NoteListComponent extends Component {
     constructor() {

@@ -1,7 +1,7 @@
 const React = require('react');
 const { Component } = require('react');
 const { StyleSheet } = require('react-native');
-const { globalStyle, themeStyle } = require('@/lib/components/global-style.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 const styleObject_ = {
     screen: {

@@ -1,10 +1,10 @@
 const { BaseCommand } = require('./base-command.js');
-const { Exporter } = require('@/lib/services/exporter.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { Note } = require('@/lib/models/note.js');
-const { reg } = require('@/lib/registry.js');
+const { Exporter } = require('lib/services/exporter.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Note } = require('lib/models/note.js');
+const { reg } = require('lib/registry.js');
 const { app } = require('./app.js');
-const { _ } = require('@/lib/locale.js');
+const { _ } = require('lib/locale.js');
 const fs = require('fs-extra');
 
 class Command extends BaseCommand {

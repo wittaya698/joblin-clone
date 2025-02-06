@@ -1,16 +1,16 @@
 const React = require('react');
 const { View, Button, TextInput, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const { Log } = require('@/lib/log.js');
-const { ActionButton } = require('@/lib/components/action-button.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { ScreenHeader } = require('@/lib/components/screen-header.js');
-const { reg } = require('@/lib/registry.js');
-const { BaseScreenComponent } = require('@/lib/components/base-screen.js');
-const { dialogs } = require('@/lib/dialogs.js');
-const { themeStyle } = require('@/lib/components/global-style.js');
-const { _ } = require('@/lib/locale.js');
+const { Log } = require('lib/log.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const { Folder } = require('lib/models/folder.js');
+const { BaseModel } = require('lib/base-model.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { reg } = require('lib/registry.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { dialogs } = require('lib/dialogs.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { _ } = require('lib/locale.js');
 
 class FolderScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {

@@ -3,9 +3,9 @@ const { StyleSheet, Text, View } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { FAB, Provider } = require('react-native-paper');
 const { connect } = require('react-redux');
-const { globalStyle } = require('@/lib/components/global-style.js');
-const { Log } = require('@/lib/log.js');
-const { _ } = require('@/lib/locale.js');
+const { globalStyle } = require('lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
 
 const styles = StyleSheet.create({
     actionButtonIcon: {

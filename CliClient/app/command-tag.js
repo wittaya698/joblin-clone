@@ -1,8 +1,8 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('@/lib/locale.js');
-const { Tag } = require('@/lib/models/tag.js');
-const { BaseModel } = require('@/lib/base-model.js');
+const { _ } = require('lib/locale.js');
+const { Tag } = require('lib/models/tag.js');
+const { BaseModel } = require('lib/base-model.js');
 
 class Command extends BaseCommand {
     usage() {

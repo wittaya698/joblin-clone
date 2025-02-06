@@ -1,5 +1,5 @@
-const { shim } = require('@/lib/shim.js');
-const { netUtils } = require('@/lib/net-utils.js');
+const { shim } = require('lib/shim.js');
+const { netUtils } = require('lib/net-utils.js');
 
 class GeolocationNode {
     static async currentPosition(options = null) {

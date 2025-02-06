@@ -4,11 +4,11 @@ const { View, Switch, StyleSheet, Text, Button } = require('react-native');
 const Slider = require('@react-native-community/slider');
 const { Picker } = require('@react-native-picker/picker');
 const { connect } = require('react-redux');
-const { ScreenHeader } = require('@/lib/components/screen-header.js');
-const { _, setLocale } = require('@/lib/locale.js');
-const { BaseScreenComponent } = require('@/lib/components/base-screen.js');
-const { themeStyle } = require('@/lib/components/global-style.js');
-const { Setting } = require('@/lib/models/setting.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { _, setLocale } = require('lib/locale.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { Setting } = require('lib/models/setting.js');
 
 class ConfigScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {

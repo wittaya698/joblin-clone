@@ -1,17 +1,14 @@
 'use strict';
 
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
-
 const fs = require('fs-extra');
-const { Logger } = require('@/lib/logger.js');
-const { dirname } = require('@/lib/path-utils.js');
-const { DatabaseDriverNode } = require('@/lib/database-driver-node.js');
-const { JoplinDatabase } = require('@/lib/joplin-database.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Note } = require('@/lib/models/note.js');
-const { Setting } = require('@/lib/models/setting.js');
+const { Logger } = require('lib/logger.js');
+const { dirname } = require('lib/path-utils.js');
+const { DatabaseDriverNode } = require('lib/database-driver-node.js');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
 const { sprintf } = require('sprintf-js');
 const exec = require('child_process').exec;
 

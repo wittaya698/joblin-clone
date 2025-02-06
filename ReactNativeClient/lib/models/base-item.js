@@ -1,7 +1,7 @@
-const BaseModel = require('@/lib/base-model.js').BaseModel;
-const Database = require('@/lib/database.js').Database;
-const Setting = require('@/lib/models/setting.js').Setting;
-const time = require('@/lib/time-utils.js').time;
+const BaseModel = require('lib/base-model.js').BaseModel;
+const Database = require('lib/database.js').Database;
+const Setting = require('lib/models/setting.js').Setting;
+const time = require('lib/time-utils.js').time;
 const sprintf = require('sprintf-js').sprintf;
 const moment = require('moment');
 

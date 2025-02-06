@@ -2,13 +2,13 @@ const React = require('react');
 const { Component } = require('react');
 const { connect } = require('react-redux');
 const { Text, TouchableHighlight, View, StyleSheet } = require('react-native');
-const { Log } = require('@/lib/log.js');
-const { _ } = require('@/lib/locale.js');
-const { Checkbox } = require('@/lib/components/checkbox.js');
-const { reg } = require('@/lib/registry.js');
-const { Note } = require('@/lib/models/note.js');
-const { time } = require('@/lib/time-utils.js');
-const { globalStyle, themeStyle } = require('@/lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { reg } = require('lib/registry.js');
+const { Note } = require('lib/models/note.js');
+const { time } = require('lib/time-utils.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 class NoteItemComponent extends Component {
     constructor() {

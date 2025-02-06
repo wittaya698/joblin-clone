@@ -1,11 +1,8 @@
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
-
 const fs = require('fs-extra');
-const { wrap } = require('@/lib/string-utils.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { fileExtension, basename, dirname } = require('@/lib/path-utils.js');
-const { _, setLocale, languageCode } = require('@/lib/locale.js');
+const { wrap } = require('lib/string-utils.js');
+const { Setting } = require('lib/models/setting.js');
+const { fileExtension, basename, dirname } = require('lib/path-utils.js');
+const { _, setLocale, languageCode } = require('lib/locale.js');
 const rootDir = dirname(dirname(__dirname));
 const MAX_WIDTH = 78;
 const INDENT = '    ';

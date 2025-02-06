@@ -11,15 +11,15 @@ const {
 } = require('react-native');
 const { connect } = require('react-redux');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { Log } = require('@/lib/log.js');
-const { Tag } = require('@/lib/models/tag.js');
-const { Note } = require('@/lib/models/note.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { FoldersScreenUtils } = require('@/lib/folders-screen-utils.js');
-const { Synchronizer } = require('@/lib/synchronizer.js');
-const { reg } = require('@/lib/registry.js');
-const { _ } = require('@/lib/locale.js');
-const { globalStyle, themeStyle } = require('@/lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { Tag } = require('lib/models/tag.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { Synchronizer } = require('lib/synchronizer.js');
+const { reg } = require('lib/registry.js');
+const { _ } = require('lib/locale.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 class SideMenuContentComponent extends Component {
     constructor(props) {

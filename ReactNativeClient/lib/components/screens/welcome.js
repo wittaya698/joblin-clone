@@ -2,12 +2,12 @@ const React = require('react');
 const { Component } = React;
 const { View, Text, StyleSheet } = require('react-native');
 const { connect } = require('react-redux');
-const { Log } = require('@/lib/log.js');
-const { ScreenHeader } = require('@/lib/components/screen-header.js');
-const { ActionButton } = require('@/lib/components/action-button.js');
-const { _ } = require('@/lib/locale.js');
-const { BaseScreenComponent } = require('@/lib/components/base-screen.js');
-const { themeStyle } = require('@/lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const { _ } = require('lib/locale.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { themeStyle } = require('lib/components/global-style.js');
 
 class WelcomeScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {

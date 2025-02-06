@@ -1,12 +1,12 @@
-const { BaseModel } = require('@/lib/base-model.js');
-const { Database } = require('@/lib/database.js');
-const { Logger } = require('@/lib/logger.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Database } = require('lib/database.js');
+const { Logger } = require('lib/logger.js');
 const { sprintf } = require('sprintf-js');
 const {
     _,
     supportedLocalesToLanguages,
     defaultLocale
-} = require('@/lib/locale.js');
+} = require('lib/locale.js');
 
 class Setting extends BaseModel {
     static tableName() {

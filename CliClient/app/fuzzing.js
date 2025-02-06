@@ -1,12 +1,9 @@
 'use strict';
 
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
-
-const { time } = require('@/lib/time-utils.js');
-const { Logger } = require('@/lib/logger.js');
-const { Resource } = require('@/lib/models/resource.js');
-const { dirname } = require('@/lib/path-utils.js');
+const { time } = require('lib/time-utils.js');
+const { Logger } = require('lib/logger.js');
+const { Resource } = require('lib/models/resource.js');
+const { dirname } = require('lib/path-utils.js');
 const { FsDriverNode } = require('./fs-driver-node.js');
 const lodash = require('lodash');
 const exec = require('child_process').exec;

@@ -1,5 +1,5 @@
-const { _ } = require('@/lib/locale.js');
-const { netUtils } = require('@/lib/net-utils.js');
+const { _ } = require('lib/locale.js');
+const { netUtils } = require('lib/net-utils.js');
 const http = require('http');
 const urlParser = require('url');
 const FormData = require('form-data');

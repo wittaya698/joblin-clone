@@ -1,12 +1,11 @@
 'use strict';
 
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
+require('app-module-path').addPath(__dirname);
 
 const processArgs = process.argv.splice(2, process.argv.length);
 const silentLog = processArgs.indexOf('--silent') >= 0;
 
-const { basename, dirname } = require('@/lib/path-utils.js');
+const { basename, dirname } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 const getTextParser = require('gettext-parser');
 const { exec } = require('child_process');

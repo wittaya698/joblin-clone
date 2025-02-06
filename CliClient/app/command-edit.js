@@ -1,14 +1,14 @@
 const fs = require('fs-extra');
 const { BaseCommand } = require('./base-command.js');
-const { uuid } = require('@/lib/uuid.js');
+const { uuid } = require('lib/uuid.js');
 const { app } = require('./app.js');
-const { _ } = require('@/lib/locale.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Note } = require('@/lib/models/note.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { BaseModel } = require('@/lib/base-model.js');
+const { _ } = require('lib/locale.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseModel } = require('lib/base-model.js');
 const { cliUtils } = require('./cli-utils.js');
-const { time } = require('@/lib/time-utils.js');
+const { time } = require('lib/time-utils.js');
 
 class Command extends BaseCommand {
     usage() {

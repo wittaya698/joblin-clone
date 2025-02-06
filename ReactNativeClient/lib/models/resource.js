@@ -1,10 +1,10 @@
-const { BaseModel } = require('@/lib/base-model.js');
-const { BaseItem } = require('@/lib/models/base-item.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { mime } = require('@/lib/mime-utils.js');
-const { filename } = require('@/lib/path-utils.js');
-const { FsDriverDummy } = require('@/lib/fs-driver-dummy.js');
-const { markdownUtils } = require('@/lib/markdown-utils.js');
+const { BaseModel } = require('lib/base-model.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Setting } = require('lib/models/setting.js');
+const { mime } = require('lib/mime-utils.js');
+const { filename } = require('lib/path-utils.js');
+const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
+const { markdownUtils } = require('lib/markdown-utils.js');
 const lodash = require('lodash');
 
 class Resource extends BaseItem {

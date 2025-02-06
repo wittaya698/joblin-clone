@@ -1,6 +1,6 @@
-const { shim } = require('@/lib/shim.js');
-const { GeolocationReact } = require('@/lib/geolocation-react.js');
-const { PoorManIntervals } = require('@/lib/poor-man-intervals.js');
+const { shim } = require('lib/shim.js');
+const { GeolocationReact } = require('lib/geolocation-react.js');
+const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const RNFS = require('react-native-fs');
 require('react-native-get-random-values');
 

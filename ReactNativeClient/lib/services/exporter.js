@@ -1,11 +1,11 @@
-const { BaseItem } = require('@/lib/models/base-item.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { Resource } = require('@/lib/models/resource.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { NoteTag } = require('@/lib/models/note-tag.js');
-const { Note } = require('@/lib/models/note.js');
-const { Tag } = require('@/lib/models/tag.js');
-const { basename } = require('@/lib/path-utils.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Resource } = require('lib/models/resource.js');
+const { Folder } = require('lib/models/folder.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { Note } = require('lib/models/note.js');
+const { Tag } = require('lib/models/tag.js');
+const { basename } = require('lib/path-utils.js');
 const fs = require('fs-extra');
 
 class Exporter {

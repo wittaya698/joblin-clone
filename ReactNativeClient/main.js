@@ -7,8 +7,8 @@
 // So there's basically still a one way flux: React => SQLite => Redux => React
 const React = require('react');
 const { Component } = React;
-const { Log } = require('@/lib/log.js');
-const { Root } = require('@/root.js');
+const { Log } = require('lib/log.js');
+const { Root } = require('./root.js');
 
 export default class Main extends Component {
     render() {

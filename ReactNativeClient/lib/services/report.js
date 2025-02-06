@@ -1,8 +1,8 @@
-const { time } = require('@/lib/time-utils');
-const { BaseItem } = require('@/lib/models/base-item.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Note } = require('@/lib/models/note.js');
-const { _ } = require('@/lib/locale.js');
+const { time } = require('lib/time-utils');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { _ } = require('lib/locale.js');
 
 class ReportService {
     async syncStatus(syncTarget) {

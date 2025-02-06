@@ -1,5 +1,5 @@
 const Location = require('expo-location');
-const { Setting } = require('@/lib/models/setting.js');
+const { Setting } = require('lib/models/setting.js');
 
 class GeolocationReact {
     static currentPosition_testResponse() {

@@ -1,12 +1,12 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('@/lib/locale.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Note } = require('@/lib/models/note.js');
+const { _ } = require('lib/locale.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
 const { sprintf } = require('sprintf-js');
-const { time } = require('@/lib/time-utils.js');
-const { uuid } = require('@/lib/uuid.js');
+const { time } = require('lib/time-utils.js');
+const { uuid } = require('lib/uuid.js');
 
 class Command extends BaseCommand {
     usage() {

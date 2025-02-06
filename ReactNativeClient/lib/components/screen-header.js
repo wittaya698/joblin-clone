@@ -10,15 +10,15 @@ const {
     Image
 } = require('react-native');
 const Icon = require('react-native-vector-icons/Ionicons').default;
-const { Log } = require('@/lib/log.js');
-const { BackButtonService } = require('@/lib/services/back-button.js');
+const { Log } = require('lib/log.js');
+const { BackButtonService } = require('lib/services/back-button.js');
 const { Picker } = require('@react-native-picker/picker');
-const { _ } = require('@/lib/locale.js');
-const { Setting } = require('@/lib/models/setting.js');
-const { FileApi } = require('@/lib/file-api.js');
-const { FileApiDriverOneDrive } = require('@/lib/file-api-driver-onedrive.js');
-const { reg } = require('@/lib/registry.js');
-const { themeStyle } = require('@/lib/components/global-style.js');
+const { _ } = require('lib/locale.js');
+const { Setting } = require('lib/models/setting.js');
+const { FileApi } = require('lib/file-api.js');
+const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
+const { reg } = require('lib/registry.js');
+const { themeStyle } = require('lib/components/global-style.js');
 const {
     Menu,
     MenuOption,

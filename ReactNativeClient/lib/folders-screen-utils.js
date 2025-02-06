@@ -1,4 +1,4 @@
-const { Folder } = require('@/lib/models/folder.js');
+const { Folder } = require('lib/models/folder.js');
 
 class FoldersScreenUtils {
     static async refreshFolders() {

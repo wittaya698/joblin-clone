@@ -3,50 +3,50 @@ const Component = React.Component;
 const { Keyboard, NativeModules } = require('react-native');
 const Localization = require('expo-localization');
 const { connect, Provider } = require('react-redux');
-const { BackButtonService } = require('@/lib/services/back-button.js');
+const { BackButtonService } = require('lib/services/back-button.js');
 const { applyMiddleware, createStore } = require('redux');
 const { createDrawerNavigator } = require('@react-navigation/drawer');
-const { shimInit } = require('@/lib/shim-init-react.js');
-const { Log } = require('@/lib/log.js');
-const { AppNav } = require('@/lib/components/app-nav.js');
-const { Logger } = require('@/lib/logger.js');
-const { Note } = require('@/lib/models/note.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { FoldersScreenUtils } = require('@/lib/folders-screen-utils.js');
-const { Resource } = require('@/lib/models/resource.js');
-const { Tag } = require('@/lib/models/tag.js');
-const { NoteTag } = require('@/lib/models/note-tag.js');
-const { BaseItem } = require('@/lib/models/base-item.js');
-const { BaseModel } = require('@/lib/base-model.js');
-const { JoplinDatabase } = require('@/lib/joplin-database.js');
-const { Database } = require('@/lib/database.js');
-const { NotesScreen } = require('@/lib/components/screens/notes.js');
-const { NoteScreen } = require('@/lib/components/screens/note.js');
-const { ConfigScreen } = require('@/lib/components/screens/config.js');
-const { FolderScreen } = require('@/lib/components/screens/folder.js');
-const { LogScreen } = require('@/lib/components/screens/log.js');
-const { StatusScreen } = require('@/lib/components/screens/status.js');
-const { WelcomeScreen } = require('@/lib/components/screens/welcome.js');
-const { SearchScreen } = require('@/lib/components/screens/search.js');
+const { shimInit } = require('lib/shim-init-react.js');
+const { Log } = require('lib/log.js');
+const { AppNav } = require('lib/components/app-nav.js');
+const { Logger } = require('lib/logger.js');
+const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { Resource } = require('lib/models/resource.js');
+const { Tag } = require('lib/models/tag.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { Database } = require('lib/database.js');
+const { NotesScreen } = require('lib/components/screens/notes.js');
+const { NoteScreen } = require('lib/components/screens/note.js');
+const { ConfigScreen } = require('lib/components/screens/config.js');
+const { FolderScreen } = require('lib/components/screens/folder.js');
+const { LogScreen } = require('lib/components/screens/log.js');
+const { StatusScreen } = require('lib/components/screens/status.js');
+const { WelcomeScreen } = require('lib/components/screens/welcome.js');
+const { SearchScreen } = require('lib/components/screens/search.js');
 const {
     OneDriveLoginScreen
-} = require('@/lib/components/screens/onedrive-login.js');
-const { Setting } = require('@/lib/models/setting.js');
+} = require('lib/components/screens/onedrive-login.js');
+const { Setting } = require('lib/models/setting.js');
 const { MenuProvider } = require('react-native-popup-menu');
-const { SideMenuContent } = require('@/lib/components/side-menu-content.js');
+const { SideMenuContent } = require('lib/components/side-menu-content.js');
 const {
     DatabaseDriverReactNative
-} = require('@/lib/database-driver-react-native.js');
-const { reg } = require('@/lib/registry.js');
+} = require('lib/database-driver-react-native.js');
+const { reg } = require('lib/registry.js');
 const {
     _,
     setLocale,
     closestSupportedLocale,
     defaultLocale
-} = require('@/lib/locale.js');
+} = require('lib/locale.js');
 const RNFS = require('react-native-fs');
-const { PoorManIntervals } = require('@/lib/poor-man-intervals.js');
-const { reducer, defaultState } = require('@/lib/reducer.js');
+const { PoorManIntervals } = require('lib/poor-man-intervals.js');
+const { reducer, defaultState } = require('lib/reducer.js');
 
 const generalMiddleware = store => next => async action => {
     if (action.type !== 'SIDE_MENU_OPEN_PERCENT')

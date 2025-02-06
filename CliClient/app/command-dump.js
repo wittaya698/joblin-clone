@@ -1,9 +1,9 @@
 const { BaseCommand } = require('./base-command.js');
 const { app } = require('./app.js');
-const { _ } = require('@/lib/locale.js');
-const { Folder } = require('@/lib/models/folder.js');
-const { Note } = require('@/lib/models/note.js');
-const { Tag } = require('@/lib/models/tag.js');
+const { _ } = require('lib/locale.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Tag } = require('lib/models/tag.js');
 
 class Command extends BaseCommand {
     usage() {

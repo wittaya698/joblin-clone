@@ -1,7 +1,7 @@
-const shim = require('@/lib/shim.js');
+const shim = require('lib/shim.js');
 const queryString = require('query-string');
-const { time } = require('@/lib/time-utils.js');
-const Logger = require('@/lib/logger.js');
+const { time } = require('lib/time-utils.js');
+const Logger = require('lib/logger.js');
 
 class OneDriveApi {
     // `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
