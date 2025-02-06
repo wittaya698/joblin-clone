@@ -163,7 +163,7 @@ async function main() {
         'rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"'
     );
 
-    const electronJsonLocaleDir = rootDir + '/ElectronClient/build/locales';
+    const electronJsonLocaleDir = rootDir + '/ElectronClient/app/locales';
     await execCommand(
         'rsync -a "' + jsonLocalesDir + '/" "' + electronJsonLocaleDir + '"'
     );

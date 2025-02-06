@@ -354,3 +354,5 @@ class BaseApplication {
         }
     }
 }
+
+module.exports = { BaseApplication };
