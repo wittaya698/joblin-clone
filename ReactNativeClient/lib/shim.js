@@ -22,5 +22,6 @@ shim.uploadBlob = () => {
 };
 shim.setInterval = setInterval;
 shim.clearInterval = clearInterval;
+shim.detectAndSetLocale = null;
 
 module.exports = { shim };

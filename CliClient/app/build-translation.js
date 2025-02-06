@@ -20,6 +20,8 @@ const rnDir = rootDir + '/ReactNativeClient';
 function execCommand(command) {
     if (!silentLog) console.info('Running: ' + command);
 
+    const exec = require('child_process').exec;
+
     return new Promise((resolve, reject) => {
         let childProcess = exec(command, (error, stdout, stderr) => {
             if (error) {
