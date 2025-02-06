@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
-import { Main } from '@/main.js';
+const React = require('react');
+const { Component } = React;
+const { Main } = require('@/main.js');
 
-export default class AndroidHome extends Component {
+class AndroidHome extends Component {
     render() {
         return <Main />;
     }
 }
+
+export default AndroidHome;

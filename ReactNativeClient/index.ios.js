@@ -4,14 +4,11 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import {
-    // AppRegistry,
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
-export default class Joplin extends Component {
+const React = require('react');
+const { Component } = React;
+const { StyleSheet, Text, View } = require('react-native');
+
+class Joplin extends Component {
     render() {
         return (
             <View style={styles.container}>
@@ -46,3 +43,5 @@ const styles = StyleSheet.create({
         marginBottom: 5
     }
 });
+
+export default Joplin;

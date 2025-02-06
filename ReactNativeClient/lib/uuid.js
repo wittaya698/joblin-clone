@@ -1,4 +1,4 @@
-import { v4 as createUuidV4 } from 'uuid';
+const { v4: createUuidV4 } = require('uuid');
 
 const uuid = {
     create: function () {

@@ -1,5 +1,6 @@
-import DialogBox from 'react-native-dialogbox';
-import { Keyboard } from 'react-native';
+const DialogBox = require('react-native-dialogbox').default;
+const { Keyboard } = require('react-native');
+
 // Add this at the bottom of the component:
 //
 // <DialogBox ref={dialogbox => { this.dialogbox = dialogbox }}/>

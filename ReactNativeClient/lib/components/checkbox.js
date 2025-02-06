@@ -1,6 +1,6 @@
-import { Component } from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons.js';
+const { Component } = require('react');
+const { StyleSheet, TouchableHighlight } = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
 
 const styles = {
     checkboxIcon: {

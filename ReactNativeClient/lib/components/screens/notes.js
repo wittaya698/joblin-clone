@@ -1,19 +1,19 @@
-import React from 'react';
-import { View, Button } from 'react-native';
-import { connect } from 'react-redux';
-import { reg } from '@/lib/registry.js';
-import { NoteList } from '@/lib/components/note-list.js';
-import { ScreenHeader } from '@/lib/components/screen-header.js';
-import { Folder } from '@/lib/models/folder.js';
-import { Tag } from '@/lib/models/tag.js';
-import { Note } from '@/lib/models/note.js';
-import { Setting } from '@/lib/models/setting.js';
-import { themeStyle } from '@/lib/components/global-style.js';
-import { _ } from '@/lib/locale.js';
-import { ActionButton } from '@/lib/components/action-button.js';
-import { dialogs } from '@/lib/dialogs.js';
-import DialogBox from 'react-native-dialogbox';
-import { BaseScreenComponent } from '@/lib/components/base-screen.js';
+const React = require('react');
+const { View, Button } = require('react-native');
+const { connect } = require('react-redux');
+const { reg } = require('@/lib/registry.js');
+const { NoteList } = require('@/lib/components/note-list.js');
+const { ScreenHeader } = require('@/lib/components/screen-header.js');
+const { Folder } = require('@/lib/models/folder.js');
+const { Tag } = require('@/lib/models/tag.js');
+const { Note } = require('@/lib/models/note.js');
+const { Setting } = require('@/lib/models/setting.js');
+const { themeStyle } = require('@/lib/components/global-style.js');
+const { _ } = require('@/lib/locale.js');
+const { ActionButton } = require('@/lib/components/action-button.js');
+const { dialogs } = require('@/lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
+const { BaseScreenComponent } = require('@/lib/components/base-screen.js');
 
 class NotesScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {

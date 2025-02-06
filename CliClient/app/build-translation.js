@@ -4,13 +4,12 @@ require('source-map-support').install();
 require('@babel/plugin-transform-runtime');
 
 const processArgs = process.argv.splice(2, process.argv.length);
-
 const silentLog = processArgs.indexOf('--silent') >= 0;
 
-import { basename, dirname } from '@/lib/path-utils.js';
-import fs from 'fs-extra';
-import getTextParser from 'gettext-parser';
-import { exec } from 'child_process';
+const { basename, dirname } = require('@/lib/path-utils.js');
+const fs = require('fs-extra');
+const getTextParser = require('gettext-parser');
+const { exec } = require('child_process');
 
 const localeDir = __dirname + '/../app/locale';
 const outputDir = __dirname + '/locale';

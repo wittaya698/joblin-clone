@@ -1,30 +1,30 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {
+const React = require('react');
+const { Component } = React;
+const { connect } = require('react-redux');
+const {
     View,
     Text,
     Button,
     StyleSheet,
     TouchableOpacity,
     Image
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Log } from '@/lib/log.js';
-import { BackButtonService } from '@/lib/services/back-button.js';
-import { Picker } from '@react-native-picker/picker';
-import { _ } from '@/lib/locale.js';
-import { Setting } from '@/lib/models/setting.js';
-import { FileApi } from '@/lib/file-api.js';
-import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
-import { reg } from '@/lib/registry.js';
-import { themeStyle } from '@/lib/components/global-style.js';
-
-import {
+} = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { Log } = require('@/lib/log.js');
+const { BackButtonService } = require('@/lib/services/back-button.js');
+const { Picker } = require('@react-native-picker/picker');
+const { _ } = require('@/lib/locale.js');
+const { Setting } = require('@/lib/models/setting.js');
+const { FileApi } = require('@/lib/file-api.js');
+const { FileApiDriverOneDrive } = require('@/lib/file-api-driver-onedrive.js');
+const { reg } = require('@/lib/registry.js');
+const { themeStyle } = require('@/lib/components/global-style.js');
+const {
     Menu,
     MenuOption,
     MenuOptions,
     MenuTrigger
-} from 'react-native-popup-menu';
+} = require('react-native-popup-menu');
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas

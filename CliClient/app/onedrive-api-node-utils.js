@@ -1,10 +1,9 @@
-import { _ } from '@/lib/locale.js';
-import { netUtils } from '@/lib/net-utils.js';
-
-import http from 'http';
-import urlParser from 'url';
-import FormData from 'form-data';
-import enableServerDestroy from 'server-destroy';
+const { _ } = require('@/lib/locale.js');
+const { netUtils } = require('@/lib/net-utils.js');
+const http = require('http');
+const urlParser = require('url');
+const FormData = require('form-data');
+const enableServerDestroy = require('server-destroy');
 
 class OneDriveApiNodeUtils {
     constructor(api) {

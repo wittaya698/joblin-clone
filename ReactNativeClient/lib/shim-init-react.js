@@ -1,8 +1,8 @@
-import { shim } from '@/lib/shim.js';
-import { GeolocationReact } from '@/lib/geolocation-react.js';
-import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
-import RNFS from 'react-native-fs';
-import 'react-native-get-random-values';
+const { shim } = require('@/lib/shim.js');
+const { GeolocationReact } = require('@/lib/geolocation-react.js');
+const { PoorManIntervals } = require('@/lib/poor-man-intervals.js');
+const RNFS = require('react-native-fs');
+require('react-native-get-random-values');
 
 function shimInit() {
     shim.Geolocation = GeolocationReact;

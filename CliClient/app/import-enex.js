@@ -1,21 +1,20 @@
-import { uuid } from '@/lib/uuid.js';
-import sax from 'sax';
-import moment from 'moment';
-import { promiseChain } from '@/lib/promise-utils.js';
-import { folderItemFilename } from '@/lib/string-utils.js';
-import { BaseModel } from '@/lib/base-model.js';
-import { Note } from '@/lib/models/note.js';
-import { Tag } from '@/lib/models/tag.js';
-import { Resource } from '@/lib/models/resource.js';
-import { Folder } from '@/lib/models/folder.js';
-import { enexXmlToMd } from './import-enex-md-gen.js';
-import { time } from '@/lib/time-utils.js';
-import Levenshtein from 'levenshtein';
-import jsSHA from 'jssha';
-
-import Promise from 'promise';
-import fs from 'fs-extra';
-import stringToStream from 'string-to-stream';
+const { uuid } = require('@/lib/uuid.js');
+const sax = require('sax');
+const moment = require('moment');
+const { promiseChain } = require('@/lib/promise-utils.js');
+const { folderItemFilename } = require('@/lib/string-utils.js');
+const { BaseModel } = require('@/lib/base-model.js');
+const { Note } = require('@/lib/models/note.js');
+const { Tag } = require('@/lib/models/tag.js');
+const { Resource } = require('@/lib/models/resource.js');
+const { Folder } = require('@/lib/models/folder.js');
+const { enexXmlToMd } = require('./import-enex-md-gen.js');
+const { time } = require('@/lib/time-utils.js');
+const Levenshtein = require('levenshtein');
+const jsSHA = require('jssha');
+const Promise = require('promise');
+const fs = require('fs-extra');
+const stringToStream = require('string-to-stream');
 
 function dateToTimestamp(s, zeroIfInvalid = false) {
     let m = moment(s, 'YYYYMMDDTHHmmssZ');
