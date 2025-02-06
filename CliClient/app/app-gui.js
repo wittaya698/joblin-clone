@@ -385,6 +385,15 @@ class AppGui {
             canRunAlongOtherCommands: true
         };
 
+        shortcuts['/'] = {
+            description: _('Search'),
+            action: {
+                type: 'prompt',
+                initialText: 'search ""',
+                cursorPosition: -2
+            }
+        };
+
         shortcuts['tm'] = {
             description: _(
                 '[t]oggle [c]onsole between maximized/minimized/hidden/visible.'
