@@ -1,0 +1,26 @@
+{
+  "name": "joplin-desktop",
+  "version": "0.0.1",
+  "description": "Joplin for Desktop",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wittaya698/joplin-clone.git"
+  },
+  "author": "Laurent Cozic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wittaya698/joplin-clone/issues"
+  },
+  "homepage": "https://github.com/wittaya698/joplin-clone#readme",
+  "devDependencies": {
+    "electron-builder": "^25.1.8"
+  },
+  "dependencies": {
+    "sqlite3": "^5.1.7"
+  }
+}
