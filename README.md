@@ -7,7 +7,7 @@ Notes exported from Evernote via .enex files [can be imported](#importing-notes-
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
 The application is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/dev/docs/images/ScreenshotTerminal.png" width="100%">
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminal.png" width="100%">
 
 # Installation
 
@@ -41,7 +41,7 @@ To start it, type `demo-joplin`.
 
 To start the application type `joplin`. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via [shortcuts](#available-shortcuts).
 
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/dev/docs/images/ScreenshotTerminalCaptions.png" height="450px">
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminalCaptions.png" height="450px">
 
 ## Input modes
 
@@ -135,19 +135,19 @@ An Android client is available and can synchronise with the terminal client via 
 
 <!-- <a href='https://play.google.com/store/apps/details?id=net.cozic.joplin&utm_source=GitHub&utm_campaign=README&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' height="60px" src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png'/></a> -->
 
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/dev/docs/images/Phone.png">
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/Phone.png">
 
 # URLs
 
 When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:
 
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/dev/docs/images/UrlCut.png" width="300px">
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/dev/docs/images/UrlNoCut.png" width="300px">
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlNoCut.png" width="300px">
 
 Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.
 
@@ -160,7 +160,7 @@ In Markdown, links to resources are represented as a simple ID to the resource. 
 Joplin is currently available in English and French. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
-- [Download the file to be translated] (https://raw.githubusercontent.com/wittaya698/joplin-clone/refs/heads/dev/CliClient/locales/joplin.pot)
+- [Download the file to be translated] (https://raw.githubusercontent.com/wittaya698/joplin-clone/refs/heads/7aaf4fb/CliClient/locales/joplin.pot)
 - In Poedit, open this .pot file, go into the Catalog menu and click Configuration. Change "Country" and "Language" to your own country and language.
 - From then you can translate the file. Once it's done, please send the file to [this address]() or open a pull request.
 

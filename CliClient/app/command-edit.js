@@ -88,7 +88,7 @@ class Command extends BaseCommand {
                         'Starting to edit note. Close the editor to get back to the prompt.'
                     )
                 );
-            app().gui().forceRender();
+            await app().gui().forceRender();
             const termState = app().gui().term().saveState();
 
             const spawnSync = require('child_process').spawnSync;
