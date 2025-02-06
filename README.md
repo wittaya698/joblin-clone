@@ -166,16 +166,17 @@ There are two types of shortcuts: those that manipulate the user interface direc
     Shift+Tab Give focus to previous pane
     :         Enter command line mode
     ESC       Exit command line mode
+    ENTER     Edit the selected note
     Ctrl+C    Cancel the current command.
     Ctrl+D    Exit the application.
     DELETE    Delete the currently selected note or notebook.
-    SPACE     Set a todo as completed / not completed
+    SPACE     Set a to-do as completed / not completed
     tc        [t]oggle [c]onsole between maximized/minimized/hidden/visible.
     tm        [t]oggle note [m]etadata.
-    mn        [m]ake a new [n]ote
-    mt        [m]ake a new [t]odo
-    mb        [m]ake a new note[b]ook
-    yn        Copy ([y]ank) the [n]ote to a notebook.
+    mn        [M]ake a new [n]ote
+    mt        [M]ake a new [t]odo
+    mb        [M]ake a new note[b]ook
+    yn        Copy ([Y]ank) the [n]ote to a notebook.
     dn        Move the note to a notebook.
 
 # Available commands
