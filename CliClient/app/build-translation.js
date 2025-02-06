@@ -155,9 +155,15 @@ async function main() {
     }
 
     saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales));
+
     const rnJsonLocaleDir = rnDir + '/locales';
     await execCommand(
         'rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"'
+    );
+
+    const electronJsonLocaleDir = rootDir + '/ElectronClient/build/locales';
+    await execCommand(
+        'rsync -a "' + jsonLocalesDir + '/" "' + electronJsonLocaleDir + '"'
     );
 }
 
