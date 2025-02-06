@@ -1,6 +1,6 @@
 {
   "name": "demo-joplin",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Demo for Joplin CLI",
   "bin": {
     "demo-joplin": "./index.js"
@@ -24,7 +24,7 @@
     "owner": "Witthaya Thongchin"
   },
   "dependencies": {
-    "@tarwitthaya/joplin": "^0.10.58",
+    "@tarwitthaya/joplin": "^0.10.63",
     "fs-extra": "^11.3.0"
   },
   "author": "Witthaya Thongchin",

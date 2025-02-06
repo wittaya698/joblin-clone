@@ -505,6 +505,9 @@ class NoteScreenComponent extends BaseScreenComponent {
             );
         } else {
             const focusBody = !isNew && !!note.title;
+
+            // Note: blurOnSubmit is necessary to get multiline to work.
+            // See https://github.com/facebook/react-native/issues/12717#issuecomment-327001997
             bodyComponent = (
                 <TextInput
                     autoCapitalize="sentences"
@@ -513,6 +516,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                     multiline={true}
                     value={note.body}
                     onChangeText={text => this.body_changeText(text)}
+                    blurOnSubmit={false}
                 />
             );
         }

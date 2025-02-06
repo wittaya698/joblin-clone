@@ -40,7 +40,8 @@ class OneDriveApiNodeUtils {
 
         this.api().setAuth(null);
         const port = await netUtils.findAvailablePort(
-            this.possibleOAuthDancePorts()
+            this.possibleOAuthDancePorts(),
+            0
         );
 
         if (!port) throw new Error(_('All potential ports are in use'));

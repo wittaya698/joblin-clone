@@ -5,7 +5,7 @@ Joplin is a free, open source note taking and to-do application, which can handl
 Notes exported from Evernote via .enex files [can be imported](#importing-notes-from-evernote) into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).
 
 The notes can be [synchronised](#synchronisation) with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.
-The application is still under development but is out of Beta and should be suitable for every day use.
+The application is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
 ![Joplin Terminal Screenshot](https://github.com/wittaya698/joplin-clone/blob/dev/docs/images/ScreenshotTerminal.png)
 
