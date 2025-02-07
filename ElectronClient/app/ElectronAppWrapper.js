@@ -26,9 +26,30 @@ class ElectronAppWrapper {
         return this.logger_;
     }
 
+    store() {
+        return this.store_;
+    }
+
+    dispatch(action) {
+        return this.store().dispatch(action);
+    }
+
+    windowContentSize() {
+        if (!this.win_) return { width: 0, height: 0 };
+        const s = this.win_.getContentSize();
+        return { width: s[0], height: s[1] };
+    }
+
     createWindow() {
         // Create the browser window.
-        this.win_ = new BrowserWindow({ width: 800, height: 600 });
+        this.win_ = new BrowserWindow({
+            width: 800,
+            height: 600,
+            webPreferences: {
+                nodeIntegration: true, // Enable node integration
+                contextIsolation: false // Disable context isolation (required for nodeIntegration)
+            }
+        });
 
         // and load the index.html of the app.
         this.win_.loadURL(
@@ -48,6 +69,18 @@ class ElectronAppWrapper {
             // in an array if your app supports multi windows, this is the time
             // when you should delete the corresponding element.
             this.win_ = null;
+        });
+
+        this.win_.on('resize', () => {
+            this.dispatch({
+                type: 'WINDOW_CONTENT_SIZE_SET',
+                size: this.windowContentSize()
+            });
+        });
+
+        this.dispatch({
+            type: 'WINDOW_CONTENT_SIZE_SET',
+            size: this.windowContentSize()
         });
     }
 
