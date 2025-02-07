@@ -14,7 +14,7 @@ shim.FormData = typeof FormData !== 'undefined' ? FormData : null;
 
 shim.fs = null;
 shim.FileApiDriverLocal = null;
-shim.readLocalFileBase64 = () => {
+shim.readLocalFileBase64 = path => {
     throw new Error('Not implemented');
 };
 shim.uploadBlob = () => {
