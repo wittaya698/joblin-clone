@@ -66,7 +66,7 @@ class ReactRootComponent extends React.Component {
         return (
             <div style={style}>
                 <NoteList itemHeight={40} style={noteListStyle}></NoteList>
-                {/* <NoteText style={noteTextStyle}></NoteText> */}
+                <NoteText style={noteTextStyle}></NoteText>
             </div>
         );
     }

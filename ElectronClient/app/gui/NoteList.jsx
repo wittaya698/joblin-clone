@@ -42,12 +42,8 @@ class NoteListComponent extends React.Component {
 }
 
 const mapStateToProps = state => {
-    // let notes = [];
-    // for (let i = 0; i < 100; i++) notes.push({ title: 'Note ' + i });
-
     return {
         notes: state.notes
-        // notes: notes
     };
 };
 
