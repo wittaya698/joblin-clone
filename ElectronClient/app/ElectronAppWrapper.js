@@ -41,7 +41,6 @@ class ElectronAppWrapper {
     }
 
     createWindow() {
-        // Create the browser window.
         this.win_ = new BrowserWindow({
             width: 800,
             height: 600,
@@ -51,7 +50,6 @@ class ElectronAppWrapper {
             }
         });
 
-        // and load the index.html of the app.
         this.win_.loadURL(
             url.format({
                 pathname: path.join(__dirname, 'index.html'),
@@ -60,14 +58,9 @@ class ElectronAppWrapper {
             })
         );
 
-        // Open the DevTools.
         this.win_.webContents.openDevTools();
 
-        // Emitted when the window is closed.
         this.win_.on('closed', () => {
-            // Dereference the window object, usually you would store windows
-            // in an array if your app supports multi windows, this is the time
-            // when you should delete the corresponding element.
             this.win_ = null;
         });
 
@@ -107,7 +100,6 @@ class ElectronAppWrapper {
         await this.waitForElectronAppReady();
         this.createWindow();
 
-        // Quit when all windows are closed.
         this.electronApp_.on('window-all-closed', () => {
             // On macOS it is common for applications and their menu bar
             // to stay active until the user quits explicitly with Cmd + Q
