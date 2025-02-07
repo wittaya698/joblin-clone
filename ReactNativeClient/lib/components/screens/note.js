@@ -35,6 +35,7 @@ const { NoteBodyViewer } = require('lib/components/note-body-viewer.js');
 const RNFS = require('react-native-fs');
 const DocumentPicker = require('react-native-document-picker');
 const ImageResizer = require('react-native-image-resizer');
+const shared = require('lib/components/shared/note-screen-shared.js');
 
 class NoteScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -142,131 +143,35 @@ class NoteScreenComponent extends BaseScreenComponent {
     }
 
     isModified() {
-        if (!this.state.note || !this.state.lastSavedNote) return false;
-        let diff = BaseModel.diffObjects(
-            this.state.note,
-            this.state.lastSavedNote
-        );
-        delete diff.type_;
-        return !!Object.getOwnPropertyNames(diff).length;
+        return shared.isModified(this);
     }
 
     async UNSAFE_componentWillMount() {
         BackButtonService.addHandler(this.backHandler);
-
-        let note = null;
-        let mode = 'view';
-        if (!this.props.noteId) {
-            note =
-                this.props.itemType == 'todo'
-                    ? Note.newTodo(this.props.folderId)
-                    : Note.new(this.props.folderId);
-            mode = 'edit';
-        } else {
-            note = await Note.load(this.props.noteId);
-        }
-
-        const folder = Folder.byId(this.props.folders, note.parent_id);
-
-        this.setState({
-            lastSavedNote: Object.assign({}, note),
-            note: note,
-            mode: mode,
-            folder: folder,
-            isLoading: false
-        });
-
-        this.refreshNoteMetadata();
+        await shared.initState(this);
+        shared.refreshNoteMetadata(this);
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.backHandler);
     }
 
-    async refreshNoteMetadata(force = null) {
-        if (force !== true && !this.state.showNoteMetadata) return;
-
-        let noteMetadata = await Note.serializeAllProps(this.state.note);
-        this.setState({ noteMetadata: noteMetadata });
-    }
-
-    noteComponent_change(propName, propValue) {
-        let note = Object.assign({}, this.state.note);
-        note[propName] = propValue;
-        this.setState({ note: note });
-    }
-
     title_changeText(text) {
-        this.noteComponent_change('title', text);
+        shared.noteComponent_change(this, 'title', text);
     }
 
     body_changeText(text) {
-        this.noteComponent_change('body', text);
-    }
-
-    async noteExists(noteId) {
-        const existingNote = await Note.load(noteId);
-        return !!existingNote;
+        shared.noteComponent_change(this, 'body', text);
     }
 
     async saveNoteButton_press() {
-        let note = Object.assign({}, this.state.note);
-
-        // Note has been deleted while user was modifying it. In that, we
-        // just save a new note by clearing the note ID.
-        if (note.id && !(await this.noteExists(note.id))) delete note.id;
-
-        reg.logger().info('Saving note: ', note);
-
-        if (!note.parent_id) {
-            let folder = await Folder.defaultFolder();
-            if (!folder) {
-                Log.warn('Cannot save note without a notebook');
-                return;
-            }
-            note.parent_id = folder.id;
-        }
-
-        let isNew = !note.id;
-
-        if (isNew && !note.title) {
-            note.title = Note.defaultTitle(note);
-        }
-
-        note = await Note.save(note);
-        this.setState({
-            lastSavedNote: Object.assign({}, note),
-            note: note
-        });
-        if (isNew) Note.updateGeolocation(note.id);
-        this.refreshNoteMetadata();
+        await shared.saveNoteButton_press(this);
 
         Keyboard.dismiss();
     }
 
     async saveOneProperty(name, value) {
-        let note = Object.assign({}, this.state.note);
-
-        // Note has been deleted while user was modifying it. In that, we
-        // just save a new note by clearing the note ID.
-        if (note.id && !(await this.noteExists(note.id))) delete note.id;
-
-        reg.logger().info('Saving note property: ', note.id, name, value);
-
-        if (note.id) {
-            let toSave = { id: note.id };
-            toSave[name] = value;
-            toSave = await Note.save(toSave);
-            note[name] = toSave[name];
-
-            this.setState({
-                lastSavedNote: Object.assign({}, note),
-                note: note
-            });
-        } else {
-            note[name] = value;
-            this.setState({ note: note });
-        }
+        await shared.saveOneProperty(this, name, value);
     }
 
     async deleteNote_onPress() {
@@ -392,15 +297,11 @@ class NoteScreenComponent extends BaseScreenComponent {
     }
 
     toggleIsTodo_onPress() {
-        let newNote = Note.toggleIsTodo(this.state.note);
-        let newState = { note: newNote };
-        // if (!newNote.id) newState.lastSavedNote = Object.assign({}, newNote);
-        this.setState(newState);
+        shared.toggleIsTodo_onPress(this);
     }
 
     showMetadata_onPress() {
-        this.setState({ showNoteMetadata: !this.state.showNoteMetadata });
-        this.refreshNoteMetadata(true);
+        shared.showMetadata_onPress(this);
     }
 
     async showOnMap_onPress() {
