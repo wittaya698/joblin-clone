@@ -3,9 +3,9 @@ const ReactDOM = require('react-dom/client');
 const { createStore } = require('redux');
 const { connect, Provider } = require('react-redux');
 
-const { SideBar } = require('./SideBar.min.js');
-const { NoteList } = require('./NoteList.min.js');
-const { NoteText } = require('./NoteText.min.js');
+const { MainScreen } = require('./MainScreen.min.js');
+const { OneDriveAuthScreen } = require('./OneDriveAuthScreen.min.js');
+const { Navigator } = require('./Navigator.min.js');
 
 const { app } = require('../app');
 
@@ -27,7 +27,7 @@ async function initialize(dispatch) {
     });
 }
 
-class ReactRootComponent extends React.Component {
+class RootComponent extends React.Component {
     async componentDidMount() {
         if (this.props.appState == 'starting') {
             this.props.dispatch({
@@ -45,41 +45,17 @@ class ReactRootComponent extends React.Component {
     }
 
     render() {
-        const style = {
+        const navigatorStyle = {
             width: this.props.size.width,
             height: this.props.size.height
         };
 
-        const noteListStyle = {
-            width: Math.floor(this.props.size.width / 3),
-            height: this.props.size.height,
-            display: 'inline-block',
-            verticalAlign: 'top'
+        const screens = {
+            Main: { screen: MainScreen },
+            OneDriveAuth: { screen: OneDriveAuthScreen }
         };
 
-        const noteTextStyle = {
-            width: noteListStyle.width,
-            height: this.props.size.height,
-            display: 'inline-block',
-            verticalAlign: 'top'
-        };
-
-        const sideBarStyle = {
-            width:
-                this.props.size.width -
-                (noteTextStyle.width + noteListStyle.width),
-            height: this.props.size.height,
-            display: 'inline-block',
-            verticalAlign: 'top'
-        };
-
-        return (
-            <div style={style}>
-                <SideBar style={sideBarStyle}></SideBar>
-                <NoteList itemHeight={40} style={noteListStyle}></NoteList>
-                <NoteText style={noteTextStyle}></NoteText>
-            </div>
-        );
+        return <Navigator style={navigatorStyle} screens={screens} />;
     }
 }
 
@@ -90,13 +66,13 @@ const mapStateToProps = state => {
     };
 };
 
-const ReactRoot = connect(mapStateToProps)(ReactRootComponent);
+const Root = connect(mapStateToProps)(RootComponent);
 
 const store = app().store();
 
 const root = ReactDOM.createRoot(document.getElementById('react-root'));
 root.render(
     <Provider store={store}>
-        <ReactRoot />
+        <Root />
     </Provider>
 );

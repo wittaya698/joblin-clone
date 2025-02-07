@@ -16,6 +16,11 @@ class Bridge {
         const s = this.window().getContentSize();
         return { width: s[0], height: s[1] };
     }
+
+    showMessageBox(options) {
+        const { dialog } = require('electron');
+        return dialog.showMessageBox(options);
+    }
 }
 
 let bridge_ = null;

@@ -18,6 +18,13 @@ class SideBarComponent extends React.Component {
         });
     }
 
+    sync_click() {
+        this.props.dispatch({
+            type: 'NAV_GO',
+            routeName: 'OneDriveAuth'
+        });
+    }
+
     folderItem(folder, selected) {
         let classes = [];
         if (selected) classes.push('selected');
@@ -57,7 +64,17 @@ class SideBarComponent extends React.Component {
     }
 
     synchronizeButton(label) {
-        return <div key="sync_button">{label}</div>;
+        return (
+            <a
+                href="#"
+                key="sync_button"
+                onClick={() => {
+                    this.sync_click();
+                }}
+            >
+                {label}
+            </a>
+        );
     }
 
     render() {

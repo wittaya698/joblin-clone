@@ -99,7 +99,17 @@ function historyCanGoBackTo(route) {
     return true;
 }
 
-const appReducer = (state = defaultState, action) => {
+const appDefaultState = Object.assign({}, defaultState, {
+    // Critical -> To change to 0 when sidebar sliding is available
+    sideMenuOpenPercent: 100,
+    route: {
+        type: 'NAV_GO',
+        routeName: 'Welcome',
+        params: {}
+    }
+});
+
+const appReducer = (state = appDefaultState, action) => {
     let newState = state;
     let historyGoingBack = false;
 

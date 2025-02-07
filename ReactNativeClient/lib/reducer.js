@@ -21,14 +21,6 @@ const defaultState = {
     searchQuery: '',
     settings: {},
     appState: 'starting',
-
-    // Critical -> To change to 0 when sidebar sliding is available
-    sideMenuOpenPercent: 100,
-    route: {
-        type: 'NAV_GO',
-        routeName: 'Welcome',
-        params: {}
-    },
     windowContentSize: { width: 0, height: 0 }
 };
 
@@ -108,7 +100,6 @@ function defaultNotesParentType(state, exclusion) {
 
 const reducer = (state = defaultState, action) => {
     let newState = state;
-    let historyGoingBack = false;
 
     try {
         switch (action.type) {
@@ -303,11 +294,6 @@ const reducer = (state = defaultState, action) => {
             case 'SET_APP_STATE':
                 newState = Object.assign({}, state);
                 newState.appState = action.state;
-                break;
-
-            case 'WINDOW_CONTENT_SIZE_SET':
-                newState = Object.assign({}, state);
-                newState.windowContentSize = action.size;
                 break;
         }
     } catch (error) {

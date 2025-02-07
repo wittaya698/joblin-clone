@@ -1,7 +1,7 @@
-const shim = require('lib/shim.js');
+const { shim } = require('lib/shim.js');
 const queryString = require('query-string');
 const { time } = require('lib/time-utils.js');
-const Logger = require('lib/logger.js');
+const { Logger } = require('lib/logger.js');
 
 class OneDriveApi {
     // `isPublic` is to tell OneDrive whether the application is a "public" one (Mobile and desktop
@@ -44,6 +44,10 @@ class OneDriveApi {
 
     tokenBaseUrl() {
         return 'https://login.microsoftonline.com/6315ae7d-2ca8-436c-babf-b4fe1c0e0a77/oauth2/v2.0/token';
+    }
+
+    nativeClientRedirectUrl() {
+        return 'https://login.microsoftonline.com/common/oauth2/nativeclient';
     }
 
     auth() {

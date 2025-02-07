@@ -259,9 +259,13 @@ class BaseApplication {
         if (this.store()) return this.store().dispatch(action);
     }
 
+    reducer(state = defaultState, action) {
+        return reducer(state, action);
+    }
+
     initRedux() {
         this.store_ = createStore(
-            reducer,
+            this.reducer,
             applyMiddleware(this.generalMiddleware())
         );
         BaseModel.dispatch = this.store().dispatch;
