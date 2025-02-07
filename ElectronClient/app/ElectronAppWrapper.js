@@ -45,6 +45,7 @@ class ElectronAppWrapper {
             width: 800,
             height: 600,
             webPreferences: {
+                webviewTag: true,
                 nodeIntegration: true, // Enable node integration
                 contextIsolation: false // Disable context isolation (required for nodeIntegration)
             }

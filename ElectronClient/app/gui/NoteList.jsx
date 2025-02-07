@@ -4,7 +4,7 @@ const { connect } = require('react-redux');
 
 class NoteListComponent extends React.Component {
     itemRenderer(index, item) {
-        const onClick = () => {
+        const onClick = item => {
             this.props.dispatch({
                 type: 'NOTES_SELECT',
                 noteId: item.id
@@ -16,12 +16,12 @@ class NoteListComponent extends React.Component {
         return (
             <div
                 onClick={() => {
-                    onClick();
+                    onClick(item);
                 }}
                 className={classes.join(' ')}
                 key={index}
             >
-                {item.title}
+                {item.title + ' ' + item.id.substr(0, 4)}
             </div>
         );
     }

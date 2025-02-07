@@ -12,8 +12,8 @@ class MdToHtml {
         // ipcRenderer.sendToHost('pong')
 
         const { Resource } = require('lib/models/resource.js');
-        const Entities = require('html-entities').AllHtmlEntities;
-        const htmlentities = new Entities().encode;
+        const { encode } = require('html-entities');
+        const htmlentities = encode;
         const { shim } = require('lib/shim.js');
 
         const loadResource = async id => {

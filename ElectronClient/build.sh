@@ -8,7 +8,7 @@ for JSX_FILE in "$BUILD_DIR"/gui/*.jsx; do
 	JS_FILE="${JSX_FILE%.jsx}.min.js"
 	if [ $JSX_FILE -nt $JS_FILE ]; then
 		echo "Compile $JS_FILE..."
-		"$ROOT_DIR/app/node_modules/.bin/babel" --presets react "$JSX_FILE" > "$JS_FILE"
+		"$ROOT_DIR/app/node_modules/.bin/babel" --presets react --source-maps inline "$JSX_FILE" > "$JS_FILE"
 		if [[ $? != 0 ]]; then
 			exit 1
 		fi
