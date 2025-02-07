@@ -98,8 +98,6 @@ class NoteTextComponent extends React.Component {
     async reloadNote(noteId) {
         const note = noteId ? await Note.load(noteId) : null;
 
-        console.info('Reload note: ' + noteId, note);
-
         this.setState({
             note: note
         });
@@ -108,10 +106,6 @@ class NoteTextComponent extends React.Component {
     render() {
         const note = this.state.note;
         const body = note ? note.body : 'no note';
-
-        console.info(
-            'NOTE: ' + (note ? note.title + ' ' + note.id : 'UNDEFINED')
-        );
 
         if (this.state.webviewReady) {
             const mdOptions = {
@@ -131,7 +125,8 @@ class NoteTextComponent extends React.Component {
 
         const webviewStyle = {
             width: this.props.style.width,
-            height: this.props.style.height
+            height: this.props.style.height,
+            overflow: 'hidden'
         };
 
         return (
