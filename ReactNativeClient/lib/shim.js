@@ -20,8 +20,12 @@ shim.readLocalFileBase64 = () => {
 shim.uploadBlob = () => {
     throw new Error('Not implemented');
 };
-shim.setInterval = setInterval;
-shim.clearInterval = clearInterval;
+shim.setInterval = function (fn, interval) {
+    return setInterval(fn, interval);
+};
+shim.clearInterval = function (id) {
+    return clearInterval(id);
+};
 shim.detectAndSetLocale = null;
 
 module.exports = { shim };

@@ -6,7 +6,7 @@ rsync -a "$ROOT_DIR/../ReactNativeClient/lib/" "$BUILD_DIR/lib/"
 
 for JSX_FILE in "$BUILD_DIR"/gui/*.jsx; do
 	JS_FILE="${JSX_FILE%.jsx}.min.js"
-	"$ROOT_DIR/app/node_modules/.bin/babel" --presets react "$JSX_FILE" > "$JS_FILE"
+	"$ROOT_DIR/app/node_modules/.bin/babel" --presets react --source-maps inline "$JSX_FILE" > "$JS_FILE"
 	if [[ $? != 0 ]]; then
 		exit 1
 	fi

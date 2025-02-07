@@ -1,13 +1,16 @@
 //const { BaseModel } = require('lib/base-model.js');
 
+const React = require('react');
+const { connect } = require('react-redux');
+
 class NoteTextComponent extends React.Component {
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         this.setState({
             note: null
         });
     }
 
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         if (nextProps.noteId) this.reloadNote();
     }
 

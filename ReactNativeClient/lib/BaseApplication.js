@@ -204,6 +204,10 @@ class BaseApplication {
         return o.join(', ');
     }
 
+    hasGui() {
+        return false;
+    }
+
     generalMiddleware() {
         const middleware = store => next => async action => {
             this.logger().debug(
@@ -237,7 +241,7 @@ class BaseApplication {
             }
 
             if (
-                (this.gui() &&
+                (this.hasGui() &&
                     action.type == 'SETTINGS_UPDATE_ONE' &&
                     action.key == 'sync.interval') ||
                 action.type == 'SETTINGS_UPDATE_ALL'
