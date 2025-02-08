@@ -8,7 +8,7 @@ const { Header } = require('./Header.min.js');
 const { themeStyle } = require('../theme.js');
 const { _ } = require('lib/locale.js');
 
-class OneDriveAuthScreenComponent extends React.Component {
+class OneDriveLoginScreenComponent extends React.Component {
     constructor() {
         super();
         this.webview_ = null;
@@ -110,8 +110,8 @@ const mapStateToProps = state => {
     return {};
 };
 
-const OneDriveAuthScreen = connect(mapStateToProps)(
-    OneDriveAuthScreenComponent
+const OneDriveLoginScreen = connect(mapStateToProps)(
+    OneDriveLoginScreenComponent
 );
 
-module.exports = { OneDriveAuthScreen };
+module.exports = { OneDriveLoginScreen };

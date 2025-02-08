@@ -194,13 +194,13 @@ class BaseApplication {
 
     reducerActionToString(action) {
         let o = [action.type];
-        if (action.id) o.push(action.id);
-        if (action.noteId) o.push(action.noteId);
-        if (action.folderId) o.push(action.folderId);
-        if (action.tagId) o.push(action.tagId);
-        if (action.tag) o.push(action.tag.id);
-        if (action.folder) o.push(action.folder.id);
-        if (action.notesSource) o.push(JSON.stringify(action.notesSource));
+        if ('id' in action) o.push(action.id);
+        if ('noteId' in action) o.push(action.noteId);
+        if ('folderId' in action) o.push(action.folderId);
+        if ('tagId' in action) o.push(action.tagId);
+        if ('tag' in action) o.push(action.tag.id);
+        if ('folder' in action) o.push(action.folder.id);
+        if ('notesSource' in action) o.push(JSON.stringify(action.notesSource));
         return o.join(', ');
     }
 
@@ -270,6 +270,7 @@ class BaseApplication {
         );
         BaseModel.dispatch = this.store().dispatch;
         FoldersScreenUtils.dispatch = this.store().dispatch;
+        reg.dispatch = this.store().dispatch;
     }
 
     async start(argv) {
