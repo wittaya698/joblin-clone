@@ -61,9 +61,9 @@ class ActionButtonComponent extends React.Component {
         });
     }
 
-    handleStateChange = ({ open }) => {
+    handleStateChange({ open }) {
         this.setState({ open });
-    };
+    }
 
     render() {
         const { open } = this.state;
