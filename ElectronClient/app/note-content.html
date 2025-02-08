@@ -1,8 +1,52 @@
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    #content {
+        overflow-y: scroll;
+        height: 100%;
+    }
+</style>
+
 <div id="content"></div>
 
 <script>
-const {ipcRenderer} = require('electron')
-ipcRenderer.on('setHtml', (event, html) => {
- 	document.getElementById('content').innerHTML = html;
-});
+    const { ipcRenderer } = require('electron');
+
+    const contentElement = document.getElementById('content');
+    ipcRenderer.on('setHtml', (event, html) => {
+        contentElement.innerHTML = html;
+    });
+
+    let ignoreNextScroll = false;
+    ipcRenderer.on('setPercentScroll', (event, percent) => {
+        ignoreNextScroll = true;
+        contentElement.scrollTop = percent * maxScrollTop();
+    });
+
+    function elementMapCoordinates(element) {
+        throw new Error(
+            'note-content.html elementMapCoordinates need to be implemented'
+        );
+    }
+
+    function maxScrollTop() {
+        throw new Error(
+            'note-content.html maxScrollTop need to be implemented'
+        );
+    }
+
+    contentElement.addEventListener('scroll', function (e) {
+        throw new Error(
+            'note-content.html scroll EventListener need to be implemented'
+        );
+    });
+
+    // document.addEventListener('click', function(e) {
+    // 	e = e || window.event;
+    // 	const target = e.target || e.srcElement;
+    // 	const coords = elementMapCoordinates(target);
+    // 	ipcRenderer.sendToHost('editNote', coords);
+    // }, false);
 </script>

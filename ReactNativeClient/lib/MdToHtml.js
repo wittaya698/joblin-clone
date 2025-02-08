@@ -148,7 +148,6 @@ class MdToHtml {
                 '(' +
                 JSON.stringify(href) +
                 '); return false;';
-            //let output = "<a title='" + htmlentities(title) + "' href='#' onclick='" + js + "'>" + htmlentities(text) + '</a>';
             let output =
                 "<a title='" +
                 htmlentities(title) +
