@@ -4,18 +4,15 @@ const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const { reg } = require('lib/registry.js');
 const { bridge } = require('@electron/remote').require('./bridge');
+const { Header } = require('./Header.min.js');
+const { themeStyle } = require('../theme.js');
+const { _ } = require('lib/locale.js');
 
 class OneDriveAuthScreenComponent extends React.Component {
     constructor() {
         super();
         this.webview_ = null;
         this.authCode_ = null;
-    }
-
-    back_click() {
-        this.props.dispatch({
-            type: 'NAV_BACK'
-        });
     }
 
     refresh_click() {
@@ -38,9 +35,7 @@ class OneDriveAuthScreenComponent extends React.Component {
     }
 
     webview_domReady() {
-        this.setState({
-            webviewReady: true
-        });
+        this.setState({ webviewReady: true });
 
         this.webview_.addEventListener('did-navigate', async event => {
             const url = event.url;
@@ -77,30 +72,29 @@ class OneDriveAuthScreenComponent extends React.Component {
     }
 
     render() {
+        const style = this.props.style;
+        const theme = themeStyle(this.props.theme);
+
+        const headerStyle = {
+            width: style.width
+        };
+
         const webviewStyle = {
             width: this.props.style.width,
-            height: this.props.style.height,
+            height: this.props.style.height - theme.headerHeight,
             overflow: 'hidden'
         };
 
+        const headerButtons = [
+            {
+                title: _('Refresh'),
+                onClick: () => this.refresh_click()
+            }
+        ];
+
         return (
             <div>
-                <a
-                    href="#"
-                    onClick={() => {
-                        this.back_click();
-                    }}
-                >
-                    BACK
-                </a>
-                <a
-                    href="#"
-                    onClick={() => {
-                        this.refresh_click();
-                    }}
-                >
-                    REFRESH
-                </a>
+                <Header style={headerStyle} buttons={headerButtons} />
                 <webview
                     src={this.startUrl()}
                     style={webviewStyle}
