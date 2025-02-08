@@ -25,6 +25,7 @@ class NoteTextComponent extends React.Component {
         this.lastLoadedNoteId_ = null;
         this.webviewListeners_ = null;
         this.ignoreNextEditorScroll_ = false;
+        this.scheduleSaveTimeout_ = null;
     }
 
     mdToHtml() {
@@ -38,12 +39,28 @@ class NoteTextComponent extends React.Component {
     }
 
     componentWillUnmount() {
+        this.saveIfNeeded();
+
         this.mdToHtml_ = null;
         this.destroyWebview();
     }
 
+    async saveIfNeeded() {
+        if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
+        this.scheduleSaveTimeout_ = null;
+        if (!shared.isModified(this)) return;
+        await shared.saveNoteButton_press(this);
+    }
+
+    scheduleSave() {
+        if (this.scheduleSaveTimeout_) clearTimeout(this.scheduleSaveTimeout_);
+        this.scheduleSaveTimeout_ = setTimeout(() => {
+            this.saveIfNeeded();
+        }, 500);
+    }
+
     async UNSAFE_componentWillReceiveProps(nextProps) {
-        if ('noteId' in nextProps) {
+        if ('noteId' in nextProps && nextProps.noteId !== this.props.noteId) {
             this.mdToHtml_ = null;
 
             const noteId = nextProps.noteId;
@@ -67,23 +84,17 @@ class NoteTextComponent extends React.Component {
 
     title_changeText(text) {
         shared.noteComponent_change(this, 'title', text);
+        this.scheduleSave();
     }
 
-    body_changeText(text) {
-        shared.noteComponent_change(this, 'body', text);
-        //this.updateScrollHeight();
-    }
-
-    async saveNoteButton_press() {
-        await shared.saveNoteButton_press(this);
-    }
-
-    async saveOneProperty(name, value) {
-        await shared.saveOneProperty(this, name, value);
+    editor_change(event) {
+        shared.noteComponent_change(this, 'body', event.target.value);
+        this.scheduleSave();
     }
 
     toggleIsTodo_onPress() {
         shared.toggleIsTodo_onPress(this);
+        this.scheduleSave();
     }
 
     showMetadata_onPress() {
@@ -180,8 +191,6 @@ class NoteTextComponent extends React.Component {
         const note = this.state.note;
         const body = note ? note.body : '';
 
-        console.info(this.state.scrollHeight);
-
         const viewerStyle = {
             width: Math.floor(style.width / 2),
             height: style.height,
@@ -227,8 +236,8 @@ class NoteTextComponent extends React.Component {
                 onScroll={() => {
                     this.editor_scroll();
                 }}
-                onChange={text => {
-                    this.body_changeText(text);
+                onChange={event => {
+                    this.editor_change(event);
                 }}
                 ref={elem => {
                     this.editor_ref(elem);
