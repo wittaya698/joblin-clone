@@ -23,6 +23,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react": "^6.24.1",
     "cross-fetch": "^4.1.0",
+    "electron-context-menu": "^4.0.5",
     "form-data": "^4.0.1",
     "fs-extra": "^11.3.0",
     "html-entities": "^2.5.2",

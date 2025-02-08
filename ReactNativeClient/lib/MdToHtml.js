@@ -239,6 +239,8 @@ class MdToHtml {
         if (!options.postMessageSyntax)
             options.postMessageSyntax = 'window.ReactNativeWebView.postMessage';
 
+        console.info(style);
+
         const cacheKey = this.makeContentKey(
             this.loadedResources_,
             body,
@@ -316,10 +318,17 @@ class MdToHtml {
 				color: ` +
             style.htmlColor +
             `;
-				line-height: 1.5em;
+				line-height: ` +
+            style.htmlLineHeight +
+            `;
 				background-color: ` +
             style.htmlBackgroundColor +
             `;
+            font-family: sans-serif;
+			}
+            p, h1, h2, h3, h4, ul {
+				margin-top: 14px;
+				margin-bottom: 14px;
 			}
 			h1 {
 				font-size: 1.2em;

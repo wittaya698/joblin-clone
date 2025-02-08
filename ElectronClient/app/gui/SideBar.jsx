@@ -2,8 +2,26 @@ const React = require('react');
 const { connect } = require('react-redux');
 const shared = require('lib/components/shared/side-menu-shared.js');
 const { Synchronizer } = require('lib/synchronizer.js');
+const { themeStyle } = require('../theme.js');
 
 class SideBarComponent extends React.Component {
+    style() {
+        const theme = themeStyle(this.props.theme);
+
+        const itemHeight = 20;
+
+        let style = {
+            root: {},
+            listItem: {
+                display: 'block',
+                cursor: 'pointer',
+                height: itemHeight
+            }
+        };
+
+        return style;
+    }
+
     folderItem_click(folder) {
         this.props.dispatch({
             type: 'FOLDERS_SELECT',
@@ -23,34 +41,38 @@ class SideBarComponent extends React.Component {
     }
 
     folderItem(folder, selected) {
-        let classes = [];
-        if (selected) classes.push('selected');
+        const style = Object.assign({}, this.style().listItem, {
+            fontWeight: selected ? 'bold' : 'normal'
+        });
         return (
-            <div
+            <a
+                href="#"
                 key={folder.id}
-                className={classes.join(' ')}
+                style={style}
                 onClick={() => {
                     this.folderItem_click(folder);
                 }}
             >
                 {folder.title}
-            </div>
+            </a>
         );
     }
 
     tagItem(tag, selected) {
-        let classes = [];
-        if (selected) classes.push('selected');
+        const style = Object.assign({}, this.style().listItem, {
+            fontWeight: selected ? 'bold' : 'normal'
+        });
         return (
-            <div
+            <a
+                href="#"
                 key={tag.id}
-                className={classes.join(' ')}
+                style={style}
                 onClick={() => {
                     this.tagItem_click(tag);
                 }}
             >
                 Tag: {tag.title}
-            </div>
+            </a>
         );
     }
 
@@ -75,6 +97,9 @@ class SideBarComponent extends React.Component {
     }
 
     render() {
+        const theme = themeStyle(this.props.theme);
+        const style = Object.assign({}, this.style().root, this.props.style);
+
         let items = [];
 
         if (this.props.folders.length) {
@@ -110,7 +135,7 @@ class SideBarComponent extends React.Component {
         items.push(<div key="sync_report">{syncReportText}</div>);
 
         return (
-            <div className="side-bar" style={this.props.style}>
+            <div className="side-bar" style={style}>
                 {items}
             </div>
         );

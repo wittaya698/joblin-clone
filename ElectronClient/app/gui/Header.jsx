@@ -10,7 +10,6 @@ class HeaderComponent extends React.Component {
     }
 
     makeButton(key, options) {
-        console.info(key, options);
         return (
             <a
                 key={key}
@@ -55,7 +54,7 @@ class HeaderComponent extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return { theme: state.theme };
+    return { theme: state.settings.theme };
 };
 
 const Header = connect(mapStateToProps)(HeaderComponent);

@@ -21,6 +21,30 @@ class Bridge {
         const { dialog } = require('electron');
         return dialog.showMessageBox(options);
     }
+
+    showErrorMessageBox(message) {
+        return this.showMessageBox({
+            type: 'error',
+            message: message
+        });
+    }
+
+    showConfirmMessageBox(message) {
+        const result = this.showMessageBox({
+            type: 'question',
+            message: message,
+            buttons: [_('OK'), _('Cancel')]
+        });
+        return result === 0;
+    }
+
+    get Menu() {
+        return require('electron').Menu;
+    }
+
+    get MenuItem() {
+        return require('electron').MenuItem;
+    }
 }
 
 let bridge_ = null;
