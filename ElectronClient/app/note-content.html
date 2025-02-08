@@ -9,6 +9,9 @@
     }
 </style>
 
+<link rel="stylesheet" href="highlight/styles/atom-one-light.css" />
+<script src="highlight/highlight.pack.js"></script>
+
 <div id="content"></div>
 
 <script>
@@ -17,6 +20,10 @@
     const contentElement = document.getElementById('content');
     ipcRenderer.on('setHtml', (event, html) => {
         contentElement.innerHTML = html;
+
+        throw new Error(
+            'note-content.html on setHtml need further implementation'
+        );
     });
 
     let ignoreNextScroll = false;
@@ -42,11 +49,4 @@
             'note-content.html scroll EventListener need to be implemented'
         );
     });
-
-    // document.addEventListener('click', function(e) {
-    // 	e = e || window.event;
-    // 	const target = e.target || e.srcElement;
-    // 	const coords = elementMapCoordinates(target);
-    // 	ipcRenderer.sendToHost('editNote', coords);
-    // }, false);
 </script>

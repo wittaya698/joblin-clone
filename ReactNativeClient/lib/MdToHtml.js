@@ -176,6 +176,7 @@ class MdToHtml {
             let openTag = null;
             let closeTag = null;
             let attrs = t.attrs ? t.attrs : [];
+            const isCodeBlock = tag === 'code' && t.block;
 
             if (t.map) attrs.push(['data-map', t.map.join(':')]);
 
@@ -187,17 +188,25 @@ class MdToHtml {
                 openTag = tag;
             } else if (t.type === 'link_open') {
                 openTag = 'a';
+            } else if (isCodeBlock) {
+                openTag = 'pre';
             }
 
             if (openTag) {
                 if (openTag === 'a') {
                     output.push(this.renderOpenLink_(attrs, options));
                 } else {
-                    const attrsHtml = attrs ? this.renderAttrs_(attrs) : '';
+                    const attrsHtml = this.renderAttrs_(attrs);
                     output.push(
                         '<' + openTag + (attrsHtml ? ' ' + attrsHtml : '') + '>'
                     );
                 }
+            }
+
+            if (isCodeBlock) {
+                throw new Error(
+                    'MdToHtml CodeBlock process need implementation'
+                );
             }
 
             if (t.type === 'image') {
@@ -221,7 +230,12 @@ class MdToHtml {
                 closeTag = 'a';
             } else if (tag && t.type.indexOf('inline') >= 0) {
                 closeTag = openTag;
+            } else if (isCodeBlock) {
+                closeTag = openTag;
             }
+
+            if (isCodeBlock) output.push('</code>');
+
             if (closeTag) {
                 if (closeTag === 'a') {
                     output.push(this.renderCloseLink_(attrs, options));
