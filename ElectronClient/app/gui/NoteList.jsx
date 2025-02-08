@@ -8,6 +8,37 @@ const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 
 class NoteListComponent extends React.Component {
+    style() {
+        const theme = themeStyle(this.props.theme);
+
+        const itemHeight = 26;
+
+        let style = {
+            root: {
+                backgroundColor: theme.backgroundColor
+            },
+            listItem: {
+                height: itemHeight,
+                fontFamily: theme.fontFamily,
+                fontSize: theme.fontSize,
+                textDecoration: 'none',
+                boxSizing: 'border-box',
+                color: theme.color,
+                paddingLeft: 6,
+                display: 'flex',
+                alignItems: 'center',
+                cursor: 'default',
+                backgroundColor: theme.backgroundColor,
+                borderBottom: '1px solid ' + theme.dividerColor
+            },
+            listItemSelected: {
+                backgroundColor: theme.selectedColor
+            }
+        };
+
+        return style;
+    }
+
     itemContextMenu(event) {
         const noteId = event.target.getAttribute('data-id');
         if (!noteId) throw new Error('No data-id on element');
@@ -36,21 +67,14 @@ class NoteListComponent extends React.Component {
             });
         };
 
-        const style = {
-            height: this.props.itemHeight,
-            display: 'block',
-            cursor: 'pointer',
-            backgroundColor:
-                index % 2 === 0
-                    ? theme.backgroundColor
-                    : theme.oddBackgroundColor,
-            fontWeight:
-                this.props.selectedNoteId === item.id ? 'bold' : 'normal'
-        };
+        let style = Object.assign({}, this.style().listItem);
+        if (this.props.selectedNoteId === item.id)
+            style = Object.assign(style, this.style().listItemSelected);
 
         return (
             <a
                 data-id={item.id}
+                className="list-item"
                 onContextMenu={event => this.itemContextMenu(event)}
                 href="#"
                 style={style}

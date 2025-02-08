@@ -19,7 +19,6 @@ class HeaderComponent extends React.Component {
                 ></i>
             );
         }
-        console.info(style);
         return (
             <a
                 className="button"
@@ -67,7 +66,8 @@ class HeaderComponent extends React.Component {
             textDecoration: 'none',
             fontFamily: theme.fontFamily,
             fontSize: theme.fontSize,
-            boxSizing: 'border-box'
+            boxSizing: 'border-box',
+            cursor: 'default'
         };
 
         if (this.props.buttons) {

@@ -30,7 +30,8 @@ class SideBarComponent extends React.Component {
                 color: theme.color2,
                 paddingLeft: 14,
                 display: 'flex',
-                alignItems: 'center'
+                alignItems: 'center',
+                cursor: 'default'
             },
             listItemSelected: {
                 backgroundColor: theme.selectedColor2
@@ -45,6 +46,22 @@ class SideBarComponent extends React.Component {
                 paddingLeft: 8,
                 display: 'flex',
                 alignItems: 'center'
+            },
+            button: {
+                padding: 6,
+                fontFamily: theme.fontFamily,
+                fontSize: theme.fontSize,
+                textDecoration: 'none',
+                boxSizing: 'border-box',
+                color: theme.color2,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                border: '1px solid rgba(255,255,255,0.2)',
+                marginTop: 10,
+                marginLeft: 5,
+                marginRight: 5,
+                cursor: 'default'
             }
         };
 
@@ -108,6 +125,7 @@ class SideBarComponent extends React.Component {
             style = Object.assign(style, this.style().listItemSelected);
         return (
             <a
+                className="list-item"
                 href="#"
                 data-id={folder.id}
                 data-type={BaseModel.TYPE_FOLDER}
@@ -129,6 +147,7 @@ class SideBarComponent extends React.Component {
             style = Object.assign(style, this.style().listItemSelected);
         return (
             <a
+                className="list-item"
                 href="#"
                 data-id={tag.id}
                 data-type={BaseModel.TYPE_TAG}
@@ -167,8 +186,11 @@ class SideBarComponent extends React.Component {
     }
 
     synchronizeButton(label) {
+        const style = this.style().button;
         return (
             <a
+                className="synchronize-button"
+                style={style}
                 href="#"
                 key="sync_button"
                 onClick={() => {
@@ -221,7 +243,9 @@ class SideBarComponent extends React.Component {
         const syncReportText = lines.join('\n');
 
         items.push(
-            this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync')
+            this.synchronizeButton(
+                this.props.syncStarted ? _('Cancel') : _('Synchronise')
+            )
         );
 
         items.push(<div key="sync_report">{syncReportText}</div>);
