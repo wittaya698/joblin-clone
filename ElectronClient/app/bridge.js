@@ -1,3 +1,5 @@
+const { _ } = require('lib/locale.js');
+
 class Bridge {
     constructor(electronWrapper) {
         this.electronWrapper_ = electronWrapper;

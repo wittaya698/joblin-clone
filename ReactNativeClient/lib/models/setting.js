@@ -83,7 +83,7 @@ class Setting extends BaseModel {
             keyToValues[keys[i]] = this.value(keys[i]);
         }
         this.dispatch({
-            type: 'SETTINGS_UPDATE_ALL',
+            type: 'SETTING_UPDATE_ALL',
             settings: keyToValues
         });
     }
@@ -124,7 +124,7 @@ class Setting extends BaseModel {
                 c.value = this.formatValue(key, value);
 
                 this.dispatch({
-                    type: 'SETTINGS_UPDATE_ONE',
+                    type: 'SETTING_UPDATE_ALL',
                     key: key,
                     value: c.value
                 });
@@ -139,7 +139,7 @@ class Setting extends BaseModel {
         });
 
         this.dispatch({
-            type: 'SETTINGS_UPDATE_ONE',
+            type: 'SETTING_UPDATE_ALL',
             key: key,
             value: this.formatValue(key, value)
         });

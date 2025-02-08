@@ -59,13 +59,9 @@ class PromptDialog extends React.Component {
             maxWidth: 400
         };
 
-        const onAccept = () => {
-            if (this.props.onAccept) this.props.onAccept(this.state.answer);
-            this.setState({ visible: false, answer: '' });
-        };
-
-        const onReject = () => {
-            if (this.props.onReject) this.props.onReject();
+        const onClose = accept => {
+            if (this.props.onClose)
+                this.props.onClose(accept ? this.state.answer : null);
             this.setState({ visible: false, answer: '' });
         };
 
@@ -75,9 +71,9 @@ class PromptDialog extends React.Component {
 
         const onKeyDown = event => {
             if (event.key === 'Enter') {
-                onAccept();
+                onClose(true);
             } else if (event.key === 'Escape') {
-                onReject();
+                onClose(false);
             }
         };
 
@@ -96,10 +92,16 @@ class PromptDialog extends React.Component {
                         onKeyDown={event => onKeyDown(event)}
                     />
                     <div style={{ textAlign: 'right', marginTop: 10 }}>
-                        <button style={buttonStyle} onClick={() => onAccept()}>
+                        <button
+                            style={buttonStyle}
+                            onClick={() => onClose(true)}
+                        >
                             OK
                         </button>
-                        <button style={buttonStyle} onClick={() => onReject()}>
+                        <button
+                            style={buttonStyle}
+                            onClick={() => onClose(false)}
+                        >
                             Cancel
                         </button>
                     </div>

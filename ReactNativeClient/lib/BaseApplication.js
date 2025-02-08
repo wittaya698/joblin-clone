@@ -60,7 +60,7 @@ class BaseApplication {
 
     switchCurrentFolder(folder) {
         this.dispatch({
-            type: 'FOLDERS_SELECT',
+            type: 'FOLDER_SELECT',
             id: folder ? folder.id : ''
         });
     }
@@ -181,14 +181,14 @@ class BaseApplication {
         }
 
         this.store().dispatch({
-            type: 'NOTES_UPDATE_ALL',
+            type: 'NOTE_UPDATE_ALL',
             notes: notes,
             notesSource: source
         });
 
         this.store().dispatch({
-            type: 'NOTES_SELECT',
-            noteId: notes.length ? notes[0].id : null
+            type: 'NOTE_SELECT',
+            id: notes.length ? notes[0].id : null
         });
     }
 
@@ -219,7 +219,7 @@ class BaseApplication {
             const newState = store.getState();
 
             if (
-                action.type == 'FOLDERS_SELECT' ||
+                action.type == 'FOLDER_SELECT' ||
                 action.type === 'FOLDER_DELETE'
             ) {
                 Setting.setValue('activeFolderId', newState.selectedFolderId);
@@ -232,7 +232,7 @@ class BaseApplication {
                 );
             }
 
-            if (action.type == 'TAGS_SELECT') {
+            if (action.type == 'TAG_SELECT') {
                 await this.refreshNotes(Tag.modelType(), action.id);
             }
 
@@ -242,9 +242,9 @@ class BaseApplication {
 
             if (
                 (this.hasGui() &&
-                    action.type == 'SETTINGS_UPDATE_ONE' &&
+                    action.type == 'SETTING_UPDATE_ONE' &&
                     action.key == 'sync.interval') ||
-                action.type == 'SETTINGS_UPDATE_ALL'
+                action.type == 'SETTING_UPDATE_ALL'
             ) {
                 reg.setupRecurrentSync();
             }

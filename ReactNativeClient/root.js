@@ -60,9 +60,9 @@ const generalMiddleware = store => next => async action => {
 
     if (
         [
-            'NOTES_UPDATE_ONE',
-            'NOTES_DELETE',
-            'FOLDERS_UPDATE_ONE',
+            'NOTE_UPDATE_ONE',
+            'NOTE_DELETE',
+            'FOLDER_UPDATE_ONE',
             'FOLDER_DELETE'
         ].indexOf(action.type) >= 0
     ) {
@@ -70,16 +70,16 @@ const generalMiddleware = store => next => async action => {
     }
 
     if (
-        (action.type == 'SETTINGS_UPDATE_ONE' &&
+        (action.type == 'SETTING_UPDATE_ONE' &&
             action.key == 'sync.interval') ||
-        action.type == 'SETTINGS_UPDATE_ALL'
+        action.type == 'SETTING_UPDATE_ALL'
     ) {
         reg.setupRecurrentSync();
     }
 
     if (
-        (action.type == 'SETTINGS_UPDATE_ONE' && action.key == 'locale') ||
-        action.type == 'SETTINGS_UPDATE_ALL'
+        (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale') ||
+        action.type == 'SETTING_UPDATE_ALL'
     ) {
         setLocale(Setting.value('locale'));
     }
@@ -315,7 +315,7 @@ async function initialize(dispatch, backButtonHandler) {
         const tags = await Tag.all();
 
         dispatch({
-            type: 'TAGS_UPDATE_ALL',
+            type: 'TAG_UPDATE_ALL',
             tags: tags
         });
 
@@ -362,7 +362,7 @@ class HomeStackComponent extends React.Component {
     async componentDidMount() {
         if (this.props.appState == 'starting') {
             this.props.dispatch({
-                type: 'SET_APP_STATE',
+                type: 'APP_STATE_SET',
                 state: 'initializing'
             });
 
@@ -372,7 +372,7 @@ class HomeStackComponent extends React.Component {
             );
 
             this.props.dispatch({
-                type: 'SET_APP_STATE',
+                type: 'APP_STATE_SET',
                 state: 'ready'
             });
         }

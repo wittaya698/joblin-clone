@@ -16,7 +16,7 @@ class NoteListComponent extends React.Component {
         menu.append(
             new MenuItem({
                 label: _('Delete'),
-                async click() {
+                click: async () => {
                     const ok = bridge().showConfirmMessageBox(
                         _('Delete note?')
                     );
@@ -31,8 +31,8 @@ class NoteListComponent extends React.Component {
     itemRenderer(index, item, theme) {
         const onClick = item => {
             this.props.dispatch({
-                type: 'NOTES_SELECT',
-                noteId: item.id
+                type: 'NOTE_SELECT',
+                id: item.id
             });
         };
 

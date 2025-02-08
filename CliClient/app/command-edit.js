@@ -111,7 +111,7 @@ class Command extends BaseCommand {
             }
 
             this.dispatch({
-                type: 'NOTES_SELECT',
+                type: 'NOTE_SELECT',
                 noteId: note.id
             });
 

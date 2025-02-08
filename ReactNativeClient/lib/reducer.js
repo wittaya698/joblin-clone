@@ -59,10 +59,10 @@ function folderOrNoteDelete(state, action) {
 
 function updateOneTagOrFolder(state, action) {
     let newItems =
-        action.type === 'TAGS_UPDATE_ONE'
+        action.type === 'TAG_UPDATE_ONE'
             ? state.tags.splice(0)
             : state.folders.splice(0);
-    let item = action.type === 'TAGS_UPDATE_ONE' ? action.tag : action.folder;
+    let item = action.type === 'TAG_UPDATE_ONE' ? action.tag : action.folder;
     var found = false;
 
     for (let i = 0; i < newItems.length; i++) {
@@ -77,7 +77,7 @@ function updateOneTagOrFolder(state, action) {
     if (!found) newItems.push(item);
 
     let newState = Object.assign({}, state);
-    if (action.type === 'TAGS_UPDATE_ONE') {
+    if (action.type === 'TAG_UPDATE_ONE') {
         newState.tags = newItems;
     } else {
         newState.folders = newItems;
@@ -103,12 +103,12 @@ const reducer = (state = defaultState, action) => {
 
     try {
         switch (action.type) {
-            case 'NOTES_SELECT':
+            case 'NOTE_SELECT':
                 newState = Object.assign({}, state);
-                newState.selectedNoteId = action.noteId;
+                newState.selectedNoteId = action.id;
                 break;
 
-            case 'FOLDERS_SELECT':
+            case 'FOLDER_SELECT':
                 newState = Object.assign({}, state);
                 newState.selectedFolderId = action.id;
                 if (!action.id) {
@@ -121,12 +121,12 @@ const reducer = (state = defaultState, action) => {
                 }
                 break;
 
-            case 'SETTINGS_UPDATE_ALL':
+            case 'SETTING_UPDATE_ALL':
                 newState = Object.assign({}, state);
                 newState.settings = action.settings;
                 break;
 
-            case 'SETTINGS_UPDATE_ONE':
+            case 'SETTING_UPDATE_ONE':
                 newState = Object.assign({}, state);
                 let newSettings = Object.assign({}, state.settings);
                 newSettings[action.key] = action.value;
@@ -134,7 +134,7 @@ const reducer = (state = defaultState, action) => {
                 break;
 
             // Replace all the notes with the provided array
-            case 'NOTES_UPDATE_ALL':
+            case 'NOTE_UPDATE_ALL':
                 newState = Object.assign({}, state);
                 newState.notes = action.notes;
                 newState.notesSource = action.notesSource;
@@ -142,7 +142,7 @@ const reducer = (state = defaultState, action) => {
 
             // Insert the note into the note list if it's new, or
             // update it within the note array if it already exists.
-            case 'NOTES_UPDATE_ONE':
+            case 'NOTE_UPDATE_ONE':
                 const modNote = action.note;
 
                 let noteFolderHasChanged = false;
@@ -196,21 +196,21 @@ const reducer = (state = defaultState, action) => {
                 }
                 break;
 
-            case 'NOTES_DELETE':
+            case 'NOTE_DELETE':
                 newState = folderOrNoteDelete(state, action);
                 break;
 
-            case 'FOLDERS_UPDATE_ALL':
+            case 'FOLDER_UPDATE_ALL':
                 newState = Object.assign({}, state);
                 newState.folders = action.folders;
                 break;
 
-            case 'TAGS_UPDATE_ALL':
+            case 'TAG_UPDATE_ALL':
                 newState = Object.assign({}, state);
                 newState.tags = action.tags;
                 break;
 
-            case 'TAGS_SELECT':
+            case 'TAG_SELECT':
                 newState = Object.assign({}, state);
                 newState.selectedTagId = action.id;
                 if (!action.id) {
@@ -223,11 +223,11 @@ const reducer = (state = defaultState, action) => {
                 }
                 break;
 
-            case 'TAGS_UPDATE_ONE':
+            case 'TAG_UPDATE_ONE':
                 newState = updateOneTagOrFolder(state, action);
                 break;
 
-            case 'FOLDERS_UPDATE_ONE':
+            case 'FOLDER_UPDATE_ONE':
                 newState = updateOneTagOrFolder(state, action);
                 break;
 
@@ -291,7 +291,7 @@ const reducer = (state = defaultState, action) => {
                 }
                 break;
 
-            case 'SET_APP_STATE':
+            case 'APP_STATE_SET':
                 newState = Object.assign({}, state);
                 newState.appState = action.state;
                 break;

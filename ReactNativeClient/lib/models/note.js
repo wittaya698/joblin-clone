@@ -448,7 +448,7 @@ class Note extends BaseItem {
 
         return super.save(o, options).then(note => {
             this.dispatch({
-                type: 'NOTES_UPDATE_ONE',
+                type: 'NOTE_UPDATE_ONE',
                 note: note
             });
 
@@ -460,7 +460,7 @@ class Note extends BaseItem {
         let r = await super.delete(id, options);
 
         this.dispatch({
-            type: 'NOTES_DELETE',
+            type: 'NOTE_DELETE',
             noteId: id
         });
     }
@@ -469,7 +469,7 @@ class Note extends BaseItem {
         const result = super.batchDelete(ids, options);
         for (let i = 0; i < ids.length; i++) {
             this.dispatch({
-                type: 'NOTES_DELETE',
+                type: 'NOTE_DELETE',
                 noteId: ids[i]
             });
         }

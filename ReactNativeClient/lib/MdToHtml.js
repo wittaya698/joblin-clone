@@ -239,8 +239,6 @@ class MdToHtml {
         if (!options.postMessageSyntax)
             options.postMessageSyntax = 'window.ReactNativeWebView.postMessage';
 
-        console.info(style);
-
         const cacheKey = this.makeContentKey(
             this.loadedResources_,
             body,
