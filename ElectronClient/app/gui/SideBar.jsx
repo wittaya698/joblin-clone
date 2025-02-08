@@ -15,14 +15,36 @@ class SideBarComponent extends React.Component {
     style() {
         const theme = themeStyle(this.props.theme);
 
-        const itemHeight = 20;
+        const itemHeight = 25;
 
         let style = {
-            root: {},
+            root: {
+                backgroundColor: theme.backgroundColor2
+            },
             listItem: {
-                display: 'block',
-                cursor: 'pointer',
-                height: itemHeight
+                height: itemHeight,
+                fontFamily: theme.fontFamily,
+                fontSize: theme.fontSize,
+                textDecoration: 'none',
+                boxSizing: 'border-box',
+                color: theme.color2,
+                paddingLeft: 14,
+                display: 'flex',
+                alignItems: 'center'
+            },
+            listItemSelected: {
+                backgroundColor: theme.selectedColor2
+            },
+            header: {
+                height: itemHeight * 1.8,
+                fontFamily: theme.fontFamily,
+                fontSize: theme.fontSize * 1.3,
+                textDecoration: 'none',
+                boxSizing: 'border-box',
+                color: theme.color2,
+                paddingLeft: 8,
+                display: 'flex',
+                alignItems: 'center'
             }
         };
 
@@ -81,9 +103,9 @@ class SideBarComponent extends React.Component {
     }
 
     folderItem(folder, selected) {
-        const style = Object.assign({}, this.style().listItem, {
-            fontWeight: selected ? 'bold' : 'normal'
-        });
+        let style = Object.assign({}, this.style().listItem);
+        if (selected)
+            style = Object.assign(style, this.style().listItemSelected);
         return (
             <a
                 href="#"
@@ -102,9 +124,9 @@ class SideBarComponent extends React.Component {
     }
 
     tagItem(tag, selected) {
-        const style = Object.assign({}, this.style().listItem, {
-            fontWeight: selected ? 'bold' : 'normal'
-        });
+        let style = Object.assign({}, this.style().listItem);
+        if (selected)
+            style = Object.assign(style, this.style().listItemSelected);
         return (
             <a
                 href="#"
@@ -117,7 +139,7 @@ class SideBarComponent extends React.Component {
                     this.tagItem_click(tag);
                 }}
             >
-                Tag: {tag.title}
+                {tag.title}
             </a>
         );
     }
@@ -125,6 +147,22 @@ class SideBarComponent extends React.Component {
     makeDivider(key) {
         return (
             <div style={{ height: 2, backgroundColor: 'blue' }} key={key}></div>
+        );
+    }
+
+    makeHeader(key, label, iconName) {
+        const style = this.style().header;
+        const icon = (
+            <i
+                style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }}
+                className={'icon ' + iconName}
+            ></i>
+        );
+        return (
+            <div style={style} key={key}>
+                {icon}
+                {label}
+            </div>
         );
     }
 
@@ -148,14 +186,23 @@ class SideBarComponent extends React.Component {
 
         let items = [];
 
+        items.push(
+            this.makeHeader(
+                'folderHeader',
+                _('Notebooks'),
+                'ion-android-folder'
+            )
+        );
+
         if (this.props.folders.length) {
             const folderItems = shared.renderFolders(
                 this.props,
                 this.folderItem.bind(this)
             );
             items = items.concat(folderItems);
-            if (items.length) items.push(this.makeDivider('divider_1'));
         }
+
+        items.push(this.makeHeader('tagHeader', _('Tags'), 'ion-pricetags'));
 
         if (this.props.tags.length) {
             const tagItems = shared.renderTags(
@@ -167,7 +214,6 @@ class SideBarComponent extends React.Component {
                     {tagItems}
                 </div>
             );
-            if (tagItems.length) items.push(this.makeDivider('divider_2'));
         }
 
         let lines = Synchronizer.reportToLines(this.props.syncReport);
