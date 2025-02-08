@@ -30,23 +30,25 @@ class MainScreenComponent extends React.Component {
         const rowHeight = style.height - theme.headerHeight;
 
         const sideBarStyle = {
-            width: layoutUtils.size(style.width * 0.2, 100, 300),
+            width: Math.floor(layoutUtils.size(style.width * 0.2, 100, 300)),
             height: rowHeight,
             display: 'inline-block',
             verticalAlign: 'top'
         };
 
         const noteListStyle = {
-            width: layoutUtils.size(style.width * 0.2, 100, 300),
+            width: Math.floor(layoutUtils.size(style.width * 0.2, 100, 300)),
             height: rowHeight,
             display: 'inline-block',
             verticalAlign: 'top'
         };
 
         const noteTextStyle = {
-            width: layoutUtils.size(
-                style.width - sideBarStyle.width - noteListStyle.width,
-                0
+            width: Math.floor(
+                layoutUtils.size(
+                    style.width - sideBarStyle.width - noteListStyle.width,
+                    0
+                )
             ),
             height: rowHeight,
             display: 'inline-block',

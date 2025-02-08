@@ -8,6 +8,11 @@ const shared = require('lib/components/shared/note-screen-shared.js');
 const { bridge } = require('@electron/remote').require('./bridge');
 const { themeStyle } = require('../theme.js');
 
+// Critical -> enable these when available
+// const AceEditor = require('react-ace').default;
+// require('brace/mode/markdown');
+// require('brace/theme/chrome');
+
 class NoteTextComponent extends React.Component {
     constructor() {
         super();
@@ -20,13 +25,24 @@ class NoteTextComponent extends React.Component {
             lastSavedNote: null,
             isLoading: true,
             webviewReady: false,
-            scrollHeight: null
+            scrollHeight: null,
+            editorScrollTop: 0
         };
 
         this.lastLoadedNoteId_ = null;
         this.webviewListeners_ = null;
         this.ignoreNextEditorScroll_ = false;
         this.scheduleSaveTimeout_ = null;
+        this.restoreScrollTop_ = null;
+
+        // Complicated but reliable method to get editor content height
+        // https://github.com/ajaxorg/ace/issues/2046
+        this.editorMaxScrollTop_ = 0;
+        this.onAfterEditorRender_ = () => {
+            throw new Error(
+                'NoteText onAfterEditorRender_ need implementation'
+            );
+        };
     }
 
     mdToHtml() {
@@ -112,14 +128,31 @@ class NoteTextComponent extends React.Component {
     }
 
     editorMaxScroll() {
+        // return this.editorMaxScrollTop_;
+
+        // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
         return Math.max(
             0,
             this.editor_.scrollHeight - this.editor_.clientHeight
         );
     }
 
-    setEditorPercentScroll(p) {
+    editorScrollTop() {
+        return this.editor_.editor.getSession().getScrollTop();
+    }
+
+    editorSetScrollTop(v) {
+        // this.editor_.editor.getSession().setScrollTop(v);
+
+        // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
         this.editor_.scrollTop = p * this.editorMaxScroll();
+    }
+
+    setEditorPercentScroll(p) {
+        // this.editorSetScrollTop(p * this.editorMaxScroll());
+
+        // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
+        this.setViewerPercentScroll(m ? this.editor_.scrollTop / m : 0);
     }
 
     setViewerPercentScroll(p) {
@@ -132,6 +165,9 @@ class NoteTextComponent extends React.Component {
             return;
         }
         const m = this.editorMaxScroll();
+        // this.setViewerPercentScroll(m ? this.editorScrollTop() / m : 0);
+
+        // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
         this.setViewerPercentScroll(m ? this.editor_.scrollTop / m : 0);
     }
 
@@ -160,7 +196,25 @@ class NoteTextComponent extends React.Component {
 
     editor_ref(element) {
         if (this.editor_ === element) return;
+
+        // Critical -> reactACE isn't compatible wasn't compatible with react19
+        // if (this.editor_) {
+        //     this.editorMaxScrollTop_ = 0;
+        //     this.editor_.editor.renderer.off(
+        //         'afterRender',
+        //         this.onAfterEditorRender_
+        //     );
+        // }
+
         this.editor_ = element;
+
+        // Critical -> reactACE isn't compatible wasn't compatible with react19
+        // if (this.editor_) {
+        //     this.editor_.editor.renderer.on(
+        //         'afterRender',
+        //         this.onAfterEditorRender_
+        //     );
+        // }
     }
 
     initWebview(wv) {
@@ -192,6 +246,11 @@ class NoteTextComponent extends React.Component {
         this.webview_ = null;
     }
 
+    aceEditor_change(body) {
+        shared.noteComponent_change(this, 'body', body);
+        this.scheduleSave();
+    }
+
     render() {
         const style = this.props.style;
         const note = this.state.note;
@@ -211,6 +270,8 @@ class NoteTextComponent extends React.Component {
         const editorStyle = {
             width: style.width - viewerStyle.width,
             height: style.height - paddingTop,
+            // overflowY: 'hidden',
+            // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
             overflowY: 'scroll',
             float: 'left',
             verticalAlign: 'top',
@@ -241,6 +302,12 @@ class NoteTextComponent extends React.Component {
                 }}
             />
         );
+
+        // Critical -> need to keep this textarea editor because reactACE doesn't compatible with React 19
+        // ------------------------
+        // AceEditor part is here
+        // ------------------------
+
         const editor = (
             <textarea
                 style={editorStyle}
