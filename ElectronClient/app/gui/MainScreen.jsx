@@ -63,13 +63,15 @@ class MainScreenComponent extends React.Component {
                 title: _('New note'),
                 onClick: () => {
                     this.setState({ newNotePromptVisible: true });
-                }
+                },
+                iconName: 'ion-document'
             },
             {
                 title: _('New notebook'),
                 onClick: () => {
                     this.setState({ newFolderPromptVisible: true });
-                }
+                },
+                iconName: 'ion-android-folder-open'
             }
         ];
 
