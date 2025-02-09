@@ -402,7 +402,7 @@ Setting.metadata_ = {
         value: Setting.THEME_LIGHT,
         type: Setting.TYPE_INT,
         public: true,
-        appTypes: ['mobile', 'desktop'],
+        appTypes: ['mobile'],
         isEnum: true,
         label: () => _('Theme'),
         options: () => {

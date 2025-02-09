@@ -84,4 +84,18 @@
             'note-content.html scroll EventListener need to be implemented'
         );
     });
+
+    // Disable drag and drop otherwise it's possible to drop a URL
+    // on it and it will open in the view as a website.
+    document.addEventListener('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    document.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    webview.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
 </script>
