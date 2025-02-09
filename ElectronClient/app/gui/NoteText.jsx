@@ -298,18 +298,21 @@ class NoteTextComponent extends React.Component {
                         properties: ['openFile', 'createDirectory']
                     });
                     if (!filePaths || !filePaths.length) return;
-
-                    await this.saveIfNeeded();
-                    const note = await Note.load(noteId);
-                    const newNote = await shim.attachFileToNote(
-                        note,
-                        filePaths[0]
+                    throw new Error(
+                        'Attach file process need further implementation'
                     );
 
-                    this.setState({
-                        note: newNote,
-                        lastSavedNote: Object.assign({}, newNote)
-                    });
+                    // await this.saveIfNeeded();
+                    // const note = await Note.load(noteId);
+                    // const newNote = await shim.attachFileToNote(
+                    //     note,
+                    //     filePaths[0]
+                    // );
+
+                    // this.setState({
+                    //     note: newNote,
+                    //     lastSavedNote: Object.assign({}, newNote)
+                    // });
                 }
             })
         );

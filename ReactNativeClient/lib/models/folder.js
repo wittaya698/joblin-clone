@@ -37,6 +37,20 @@ class Folder extends BaseItem {
         };
     }
 
+    static async findUniqueFolderTitle(title) {
+        let counter = 1;
+        let titleToTry = title;
+        while (true) {
+            const folder = await this.loadByField('title', titleToTry);
+            if (!folder) return titleToTry;
+            titleToTry = title + ' (' + counter + ')';
+            counter++;
+            if (counter >= 100)
+                titleToTry = title + ' (' + new Date().getTime() + ')';
+            if (counter >= 1000) throw new Error('Cannot find unique title');
+        }
+    }
+
     static noteIds(id) {
         return this.db()
             .selectAll(
