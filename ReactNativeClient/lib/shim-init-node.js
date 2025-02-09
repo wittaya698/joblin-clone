@@ -58,6 +58,62 @@ function shimInit() {
         return locale;
     };
 
+    const resizeImage_ = async function (filePath, targetPath) {
+        const sharp = require('sharp');
+        const { Resource } = require('lib/models/resource.js');
+
+        return new Promise((resolve, reject) => {
+            sharp(filePath)
+                .resize(
+                    Resource.IMAGE_MAX_DIMENSION,
+                    Resource.IMAGE_MAX_DIMENSION,
+                    {
+                        fit: 'inside', // Ensures the image fits within the given dimensions
+                        withoutEnlargement: true // Prevents upscaling
+                    }
+                )
+                .toFile(targetPath)
+                .then(resolve)
+                .catch(reject);
+        });
+    };
+
+    shim.attachFileToNote = async function (note, filePath) {
+        const { Resource } = require('lib/models/resource.js');
+        const { uuid } = require('lib/uuid.js');
+        const { filename } = require('lib/path-utils.js');
+        const mime = require('mime-types');
+        const { Note } = require('lib/models/note.js');
+
+        if (!(await fs.pathExists(filePath)))
+            throw new Error(_('Cannot access %s', filePath));
+
+        let resource = Resource.new();
+        resource.id = uuid.create();
+        resource.mime = mime.lookup(filePath);
+        resource.title = filename(filePath);
+
+        let targetPath = Resource.fullPath(resource);
+
+        if (
+            resource.mime == 'image/jpeg' ||
+            resource.mime == 'image/jpg' ||
+            resource.mime == 'image/png'
+        ) {
+            const result = await resizeImage_(filePath, targetPath);
+        } else {
+            await fs.copy(filePath, targetPath, { overwrite: true });
+        }
+
+        await Resource.save(resource, { isNew: true });
+
+        const newNote = Object.assign({}, note, {
+            body: note.body + '\n\n' + Resource.markdownTag(resource)
+        });
+
+        return await Note.save(newNote);
+    };
+
     const nodeFetch = require('cross-fetch');
 
     shim.readLocalFileBase64 = path => {
