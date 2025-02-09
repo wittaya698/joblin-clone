@@ -9,17 +9,39 @@
     }
 </style>
 
-<link rel="stylesheet" href="highlight/styles/atom-one-light.css" />
-<script src="highlight/highlight.pack.js"></script>
-
+<div id="hlScriptContainer"></div>
 <div id="content"></div>
 
 <script>
     const { ipcRenderer } = require('electron');
-
     const contentElement = document.getElementById('content');
+
+    // ----------------------------------------------------------------------
+    // Handle dynamically loading HLJS when a code element is present
+    // ----------------------------------------------------------------------
+    let hljsScriptAdded = false;
+    let hljsLoaded = false;
+    function loadHljs(callback) {
+        throw new Error('note-content.html loadHljs() need to be implemented');
+    }
+
+    function loadAndApplyHljs() {
+        throw new Error(
+            'note-content.html loadAndApplyHljs() need to be implemented'
+        );
+    }
+
+    function applyHljs(codeElements) {
+        throw new Error('note-content.html applyHljs() need to be implemented');
+    }
+
+    // ----------------------------------------------------------------------
+    // / Handle dynamically loading HLJS when a code element is present
+    // ----------------------------------------------------------------------
+
     ipcRenderer.on('setHtml', (event, html) => {
         contentElement.innerHTML = html;
+        loadAndApplyHljs();
 
         throw new Error(
             'note-content.html on setHtml need further implementation'
