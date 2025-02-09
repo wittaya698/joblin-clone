@@ -26,17 +26,28 @@
         );
     });
 
+    // A checkbox list is rendered like this by markdown-it:
+    // <ul>
+    //    <li>
+    //       <p>
+    //          [x] some item
+    //       </p>
+    //    </li>
+    // ...
+    // </ul>
+    // And we need to remove the padding from "p" and the bullet from "ul"
+    const checkboxes = document.getElementsByClassName('checkbox');
+    for (let i = 0; i < checkboxes.length; i++) {
+        throw new Error(
+            'note-content.html checkboxes rendering need to be implemented'
+        );
+    }
+
     let ignoreNextScroll = false;
     ipcRenderer.on('setPercentScroll', (event, percent) => {
         ignoreNextScroll = true;
         contentElement.scrollTop = percent * maxScrollTop();
     });
-
-    function elementMapCoordinates(element) {
-        throw new Error(
-            'note-content.html elementMapCoordinates need to be implemented'
-        );
-    }
 
     function maxScrollTop() {
         throw new Error(
