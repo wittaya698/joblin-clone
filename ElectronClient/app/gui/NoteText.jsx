@@ -17,8 +17,7 @@ class NoteTextComponent extends React.Component {
     constructor() {
         super();
         this.state = {
-            note: Note.new(),
-            mode: 'view',
+            note: null,
             noteMetadata: '',
             showNoteMetadata: false,
             folder: null,
@@ -52,7 +51,24 @@ class NoteTextComponent extends React.Component {
     }
 
     async UNSAFE_componentWillMount() {
-        await shared.initState(this);
+        let note = null;
+
+        if (this.props.noteId) {
+            note = await Note.load(this.props.noteId);
+        }
+
+        const folder = note
+            ? Folder.byId(this.props.folders, note.parent_id)
+            : null;
+
+        this.setState({
+            lastSavedNote: Object.assign({}, note),
+            note: note,
+            folder: folder,
+            isLoading: false
+        });
+
+        this.lastLoadedNoteId_ = note ? note.id : null;
     }
 
     componentWillUnmount() {
@@ -88,10 +104,17 @@ class NoteTextComponent extends React.Component {
             this.lastLoadedNoteId_ = noteId;
             const note = noteId ? await Note.load(noteId) : null;
             if (noteId !== this.lastLoadedNoteId_) return; // Race condition - current note was changed while this one was loading
+
+            // If we are loading nothing (noteId == null), make sure to
+            // set webviewReady to false too because the webview component
+            // is going to be removed in render().
+            const webviewReady =
+                this.webview_ && this.state.webviewReady && noteId;
+
             this.setState({
                 note: note,
                 lastSavedNote: Object.assign({}, note),
-                mode: 'view'
+                webviewReady: webviewReady
             });
         }
     }
@@ -256,6 +279,17 @@ class NoteTextComponent extends React.Component {
         const note = this.state.note;
         const body = note ? note.body : '';
         const theme = themeStyle(this.props.theme);
+
+        if (!note) {
+            const emptyDivStyle = Object.assign(
+                {
+                    backgroundColor: 'black',
+                    opacity: 0.1
+                },
+                style
+            );
+            return <div style={emptyDivStyle}></div>;
+        }
 
         const viewerStyle = {
             width: Math.floor(style.width / 2),
