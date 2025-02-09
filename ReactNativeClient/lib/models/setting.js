@@ -152,6 +152,8 @@ class Setting extends BaseModel {
         value = this.formatValue(key, value);
         if (md.type == Setting.TYPE_INT) return value.toFixed(0);
         if (md.type == Setting.TYPE_BOOL) return value ? '1' : '0';
+        if (md.type == Setting.TYPE_ARRAY)
+            return value ? JSON.stringify(value) : '[]';
         return value;
     }
 
@@ -167,6 +169,13 @@ class Setting extends BaseModel {
             }
             return !!value;
         }
+
+        if (md.type === Setting.TYPE_ARRAY) {
+            if (Array.isArray(value)) return value;
+            if (typeof value === 'string') return JSON.parse(value);
+            return [];
+        }
+
         return value;
     }
 
@@ -313,6 +322,7 @@ class Setting extends BaseModel {
         if (typeId === Setting.TYPE_INT) return 'int';
         if (typeId === Setting.TYPE_STRING) return 'string';
         if (typeId === Setting.TYPE_BOOL) return 'bool';
+        if (typeId === Setting.TYPE_ARRAY) return 'array';
     }
 }
 
@@ -326,6 +336,7 @@ Setting.THEME_DARK = 2;
 Setting.TYPE_INT = 1;
 Setting.TYPE_STRING = 2;
 Setting.TYPE_BOOL = 3;
+Setting.TYPE_ARRAY = 4;
 
 Setting.metadata_ = {
     activeFolderId: { value: '', type: Setting.TYPE_STRING, public: false },
@@ -461,6 +472,12 @@ Setting.metadata_ = {
         public: true,
         appTypes: ['mobile'],
         label: () => _('Show advanced options')
+    },
+    noteVisiblePanes: {
+        value: ['editor', 'viewer'],
+        type: Setting.TYPE_ARRAY,
+        public: false,
+        appTypes: ['desktop']
     }
 };
 

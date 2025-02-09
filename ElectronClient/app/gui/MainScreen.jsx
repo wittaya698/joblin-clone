@@ -17,8 +17,7 @@ const { bridge } = require('@electron/remote').require('./bridge');
 class MainScreenComponent extends React.Component {
     UNSAFE_componentWillMount() {
         this.setState({
-            promptOptions: null,
-            noteVisiblePanes: ['editor', 'viewer']
+            promptOptions: null
         });
     }
 
@@ -29,16 +28,9 @@ class MainScreenComponent extends React.Component {
     }
 
     toggleVisiblePanes() {
-        let panes = this.state.noteVisiblePanes.slice();
-        if (panes.length === 2) {
-            panes = ['editor'];
-        } else if (panes.indexOf('editor') >= 0) {
-            panes = ['viewer'];
-        } else if (panes.indexOf('viewer') >= 0) {
-            panes = ['editor', 'viewer'];
-        }
-
-        this.setState({ noteVisiblePanes: panes });
+        this.props.dispatch({
+            type: 'NOTE_VISIBLE_PANES_TOGGLE'
+        });
     }
 
     async doCommand(command) {
@@ -246,7 +238,7 @@ class MainScreenComponent extends React.Component {
                 <NoteList itemHeight={40} style={noteListStyle} />
                 <NoteText
                     style={noteTextStyle}
-                    visiblePanes={this.state.noteVisiblePanes}
+                    visiblePanes={this.props.noteVisiblePanes}
                 />
             </div>
         );
@@ -256,7 +248,8 @@ class MainScreenComponent extends React.Component {
 const mapStateToProps = state => {
     return {
         theme: state.settings.theme,
-        windowCommand: state.windowCommand
+        windowCommand: state.windowCommand,
+        noteVisiblePanes: state.noteVisiblePanes
     };
 };
 

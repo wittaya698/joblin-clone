@@ -28,7 +28,8 @@ const appDefaultState = Object.assign({}, defaultState, {
     },
     navHistory: [],
     fileToImport: null,
-    windowCommand: null
+    windowCommand: null,
+    noteVisiblePanes: ['editor', 'viewer']
 });
 
 class Application extends BaseApplication {
@@ -85,6 +86,26 @@ class Application extends BaseApplication {
                     delete command.type;
                     newState.windowCommand = command;
                     break;
+
+                case 'NOTE_VISIBLE_PANES_TOGGLE':
+                    let panes = state.noteVisiblePanes.slice();
+                    if (panes.length === 2) {
+                        panes = ['editor'];
+                    } else if (panes.indexOf('editor') >= 0) {
+                        panes = ['viewer'];
+                    } else if (panes.indexOf('viewer') >= 0) {
+                        panes = ['editor', 'viewer'];
+                    } else {
+                        panes = ['editor', 'viewer'];
+                    }
+                    newState = Object.assign({}, state);
+                    newState.noteVisiblePanes = panes;
+                    break;
+
+                case 'NOTE_VISIBLE_PANES_SET':
+                    newState = Object.assign({}, state);
+                    newState.noteVisiblePanes = action.panes;
+                    break;
             }
         } catch (error) {
             error.message =
@@ -123,6 +144,14 @@ class Application extends BaseApplication {
 
         if (action.type === 'NAV_GO' || action.type === 'NAV_BACK') {
             app().updateMenu(newState.route.routeName);
+        }
+
+        if (
+            ['NOTE_VISIBLE_PANES_TOGGLE', 'NOTE_VISIBLE_PANES_SET'].indexOf(
+                action.type
+            ) >= 0
+        ) {
+            Setting.setValue('noteVisiblePanes', newState.noteVisiblePanes);
         }
 
         return result;
