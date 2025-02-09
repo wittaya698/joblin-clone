@@ -99,7 +99,7 @@ class NoteListComponent extends React.Component {
             await Note.save(newNote);
         };
 
-        const padding = 6;
+        const hPadding = 10;
 
         let style = Object.assign({ width: width }, this.style().listItem);
         if (this.props.selectedNoteId === item.id)
@@ -113,7 +113,7 @@ class NoteListComponent extends React.Component {
                     display: 'flex',
                     height: style.height,
                     alignItems: 'center',
-                    paddingLeft: padding
+                    paddingLeft: hPadding
                 }}
             >
                 <input
@@ -128,7 +128,7 @@ class NoteListComponent extends React.Component {
         ) : null;
 
         let listItemTitleStyle = Object.assign({}, this.style().listItemTitle);
-        listItemTitleStyle.paddingLeft = checkbox ? padding : 4;
+        listItemTitleStyle.paddingLeft = checkbox ? hPadding : 4;
         if (item.is_todo && !!item.todo_completed)
             listItemTitleStyle = Object.assign(
                 listItemTitleStyle,
