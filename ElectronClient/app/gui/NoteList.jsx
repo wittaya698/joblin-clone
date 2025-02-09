@@ -55,6 +55,7 @@ class NoteListComponent extends React.Component {
         if (!noteId) throw new Error('No data-id on element');
 
         const menu = new Menu();
+
         menu.append(
             new MenuItem({
                 label: _('Delete'),
@@ -67,6 +68,17 @@ class NoteListComponent extends React.Component {
                 }
             })
         );
+
+        menu.append(
+            new MenuItem({
+                label: _('Switch between note and to-do'),
+                click: async () => {
+                    const note = await Note.load(noteId);
+                    await Note.save(Note.toggleIsTodo(note));
+                }
+            })
+        );
+
         menu.popup(bridge().window());
     }
 

@@ -58,6 +58,8 @@ globalStyle.lineInput = {
 
 let themeCache_ = {};
 function themeStyle(theme) {
+    // Critical -> to be commected out
+    // if (!theme) throw new Error('Theme must be specified');
     if (themeCache_[theme]) return themeCache_[theme];
 
     let output = Object.assign({}, globalStyle);

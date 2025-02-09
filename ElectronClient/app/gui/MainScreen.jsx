@@ -18,6 +18,7 @@ class MainScreenComponent extends React.Component {
         this.setState({
             newNotePromptVisible: false,
             newFolderPromptVisible: false,
+            promptOptions: null,
             noteVisiblePanes: ['editor', 'viewer']
         });
     }
@@ -38,6 +39,7 @@ class MainScreenComponent extends React.Component {
     render() {
         const style = this.props.style;
         const theme = themeStyle(this.props.theme);
+        const promptOptions = this.state.promptOptions;
 
         const headerStyle = {
             width: style.width
@@ -76,84 +78,104 @@ class MainScreenComponent extends React.Component {
             height: style.height
         };
 
-        const headerButtons = [
-            {
-                title: _('New note'),
-                onClick: () => {
-                    this.setState({ newNotePromptVisible: true });
-                },
-                iconName: 'fa-file-o'
-            },
-            {
-                title: _('New Notebook'),
-                onClick: () => {
-                    this.setState({ newFolderPromptVisible: true });
-                },
-                iconName: 'fa-folder-o'
-            },
-            {
-                title: _('Layout'),
-                onClick: () => {
-                    this.toggleVisiblePanes();
-                },
-                iconName: 'fa-columns'
-            }
-        ];
+        const createNewNote = async (title, isTodo) => {
+            const folderId = Setting.value('activeFolderId');
+            if (!folderId) return;
 
-        const newNotePromptOnClose = async answer => {
-            if (answer) {
-                const folderId = Setting.value('activeFolderId');
-                if (!folderId) return;
+            const note = await Note.save({
+                title: title,
+                parent_id: folderId,
+                is_todo: isTodo ? 1 : 0
+            });
+            Note.updateGeolocation(note.id);
 
-                const note = await Note.save({
-                    title: answer,
-                    parent_id: folderId
-                });
-
-                Note.updateGeolocation(note.id);
-
-                this.props.dispatch({
-                    type: 'NOTE_SELECT',
-                    id: note.id
-                });
-            }
-
-            this.setState({ newNotePromptVisible: false });
+            this.props.dispatch({
+                type: 'NOTE_SELECT',
+                id: note.id
+            });
         };
 
-        const newFolderPromptOnClose = async answer => {
-            if (answer) {
-                let folder = null;
-                try {
-                    folder = await Folder.save(
-                        { title: answer },
-                        { userSideValidation: true }
-                    );
-                } catch (error) {
-                    bridge().showErrorMessageBox(error.message);
-                    return;
-                }
+        const headerButtons = [];
 
-                this.props.dispatch({
-                    type: 'FOLDER_SELECT',
-                    id: folder.id
+        headerButtons.push({
+            title: _('New note'),
+            iconName: 'fa-file-o',
+            onClick: () => {
+                this.setState({
+                    promptOptions: {
+                        message: _('Note title:'),
+                        onClose: async answer => {
+                            if (answer) await createNewNote(answer, false);
+                            this.setState({ promptOptions: null });
+                        }
+                    }
                 });
             }
-            this.setState({ newFolderPromptVisible: false });
-        };
+        });
+
+        headerButtons.push({
+            title: _('New to-do'),
+            iconName: 'fa-check-square-o',
+            onClick: () => {
+                this.setState({
+                    promptOptions: {
+                        message: _('Note title:'),
+                        onClose: async answer => {
+                            if (answer) await createNewNote(answer, true);
+                            this.setState({ promptOptions: null });
+                        }
+                    }
+                });
+            }
+        });
+
+        headerButtons.push({
+            title: _('New notebook'),
+            iconName: 'fa-folder-o',
+            onClick: () => {
+                this.setState({
+                    promptOptions: {
+                        message: _('Notebook title:'),
+                        onClose: async answer => {
+                            if (answer) {
+                                let folder = null;
+                                try {
+                                    folder = await Folder.save(
+                                        { title: answer },
+                                        { userSideValidation: true }
+                                    );
+                                } catch (error) {
+                                    bridge().showErrorMessageBox(error.message);
+                                    return;
+                                }
+                                this.props.dispatch({
+                                    type: 'FOLDER_SELECT',
+                                    id: folder.id
+                                });
+                            }
+                            this.setState({ promptOptions: null });
+                        }
+                    }
+                });
+            }
+        });
+
+        headerButtons.push({
+            title: _('Layout'),
+            iconName: 'fa-columns',
+            onClick: () => {
+                this.toggleVisiblePanes();
+            }
+        });
+
         return (
             <div style={style}>
                 <PromptDialog
+                    theme={this.props.theme}
                     style={promptStyle}
-                    onClose={answer => newNotePromptOnClose(answer)}
-                    message={_('Note title:')}
-                    visible={this.state.newNotePromptVisible}
-                />
-                <PromptDialog
-                    style={promptStyle}
-                    onClose={answer => newFolderPromptOnClose(answer)}
-                    message={_('Notebook title:')}
-                    visible={this.state.newFolderPromptVisible}
+                    onClose={answer => promptOptions.onClose(answer)}
+                    message={promptOptions ? promptOptions.message : ''}
+                    visible={!!this.state.promptOptions}
                 />
                 <Header
                     style={headerStyle}
