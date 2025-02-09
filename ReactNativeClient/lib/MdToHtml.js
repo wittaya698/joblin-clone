@@ -396,7 +396,8 @@ class MdToHtml {
             `;
 			}
 			img {
-				width: 100%;
+				width: auto;
+				max-width: 100%;
 			}
 		`;
 
