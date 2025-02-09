@@ -339,7 +339,9 @@ class NoteTextComponent extends React.Component {
             height: bottomRowHeight,
             overflow: 'hidden',
             float: 'left',
-            verticalAlign: 'top'
+            verticalAlign: 'top',
+            borderLeft: '1px solid ' + theme.dividerColor,
+            boxSizing: 'border-box'
         };
 
         const paddingTop = 14;
@@ -362,6 +364,7 @@ class NoteTextComponent extends React.Component {
             // to this bug: https://github.com/electron/electron/issues/8277
             // So instead setting the width 0.
             viewerStyle.width = 0;
+            viewerStyle.borderLeft = 'none';
             editorStyle.width = innerWidth;
         }
 
