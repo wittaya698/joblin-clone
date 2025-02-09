@@ -114,6 +114,9 @@ class NoteTextComponent extends React.Component {
             const webviewReady =
                 this.webview_ && this.state.webviewReady && noteId;
 
+            this.editorMaxScrollTop_ = 0;
+            this.editorSetScrollTop(0);
+
             this.setState({
                 note: note,
                 lastSavedNote: Object.assign({}, note),
@@ -130,13 +133,8 @@ class NoteTextComponent extends React.Component {
         return shared.refreshNoteMetadata(this, force);
     }
 
-    title_changeText(text) {
-        shared.noteComponent_change(this, 'title', text);
-        this.scheduleSave();
-    }
-
-    editor_change(event) {
-        shared.noteComponent_change(this, 'body', event.target.value);
+    title_changeText(event) {
+        shared.noteComponent_change(this, 'title', event.target.value);
         this.scheduleSave();
     }
 
@@ -168,10 +166,11 @@ class NoteTextComponent extends React.Component {
     }
 
     editorSetScrollTop(v) {
+        if (!this.editor_) return;
         // this.editor_.editor.getSession().setScrollTop(v);
 
         // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
-        this.editor_.scrollTop = p * this.editorMaxScroll();
+        this.editor_.scrollTop = v;
     }
 
     setEditorPercentScroll(p) {
@@ -225,7 +224,6 @@ class NoteTextComponent extends React.Component {
 
         // Critical -> reactACE isn't compatible wasn't compatible with react19
         // if (this.editor_) {
-        //     this.editorMaxScrollTop_ = 0;
         //     this.editor_.editor.renderer.off(
         //         'afterRender',
         //         this.onAfterEditorRender_
@@ -273,7 +271,10 @@ class NoteTextComponent extends React.Component {
     }
 
     aceEditor_change(body) {
-        shared.noteComponent_change(this, 'body', body);
+        // shared.noteComponent_change(this, 'body', body);
+
+        // Critical -> reactACE isn't compatible wasn't compatible with react19
+        shared.noteComponent_change(this, 'body', event.target.value);
         this.scheduleSave();
     }
 
@@ -284,20 +285,58 @@ class NoteTextComponent extends React.Component {
         const theme = themeStyle(this.props.theme);
         const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 
+        const borderWidth = 1;
+
+        const rootStyle = Object.assign(
+            {
+                borderLeft: borderWidth + 'px solid ' + theme.dividerColor,
+                boxSizing: 'border-box',
+                paddingLeft: 10,
+                paddingRight: 0
+            },
+            style
+        );
+
+        const innerWidth =
+            rootStyle.width -
+            rootStyle.paddingLeft -
+            rootStyle.paddingRight -
+            borderWidth;
+
         if (!note) {
             const emptyDivStyle = Object.assign(
                 {
                     backgroundColor: 'black',
                     opacity: 0.1
                 },
-                style
+                rootStyle
             );
             return <div style={emptyDivStyle}></div>;
         }
 
+        const titleEditorStyle = {
+            width: innerWidth - rootStyle.paddingLeft,
+            height: 24,
+            display: 'block',
+            boxSizing: 'border-box',
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingLeft: 8,
+            paddingRight: 8,
+            marginTop: 10,
+            marginBottom: 10,
+            marginRight: rootStyle.paddingLeft
+        };
+
+        const bottomRowHeight =
+            rootStyle.height -
+            titleEditorStyle.height -
+            titleEditorStyle.marginBottom -
+            titleEditorStyle.marginTop;
+
         const viewerStyle = {
-            width: Math.floor(style.width / 2),
-            height: style.height,
+            width: Math.floor(innerWidth / 2),
+            height: bottomRowHeight,
             overflow: 'hidden',
             float: 'left',
             verticalAlign: 'top'
@@ -306,8 +345,8 @@ class NoteTextComponent extends React.Component {
         const paddingTop = 14;
 
         const editorStyle = {
-            width: style.width - viewerStyle.width,
-            height: style.height - paddingTop,
+            width: innerWidth - viewerStyle.width,
+            height: bottomRowHeight - paddingTop,
             // overflowY: 'hidden',
             // Critical -> need to use this because reactACE isn't compatible wasn't compatible with react19
             overflowY: 'scroll',
@@ -323,12 +362,12 @@ class NoteTextComponent extends React.Component {
             // to this bug: https://github.com/electron/electron/issues/8277
             // So instead setting the width 0.
             viewerStyle.width = 0;
-            editorStyle.width = style.width;
+            editorStyle.width = innerWidth;
         }
 
         if (visiblePanes.indexOf('editor') < 0) {
             editorStyle.display = 'none';
-            viewerStyle.width = style.width;
+            editorStyle.width = innerWidth;
         }
 
         if (this.state.webviewReady) {
@@ -342,6 +381,17 @@ class NoteTextComponent extends React.Component {
             const html = this.mdToHtml().render(body, theme, mdOptions);
             this.webview_.send('setHtml', html);
         }
+
+        const titleEditor = (
+            <input
+                type="text"
+                style={titleEditorStyle}
+                value={note ? note.title : ''}
+                onChange={event => {
+                    this.title_changeText(event);
+                }}
+            />
+        );
 
         const viewer = (
             <webview
@@ -367,7 +417,7 @@ class NoteTextComponent extends React.Component {
                     this.editor_scroll();
                 }}
                 onChange={event => {
-                    this.editor_change(event);
+                    this.aceEditor_change(event);
                 }}
                 ref={elem => {
                     this.editor_ref(elem);
@@ -376,7 +426,8 @@ class NoteTextComponent extends React.Component {
         );
 
         return (
-            <div style={style}>
+            <div style={rootStyle}>
+                {titleEditor}
                 {editor}
                 {viewer}
             </div>

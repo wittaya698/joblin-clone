@@ -338,7 +338,7 @@ class MdToHtml {
             `;
             font-family: sans-serif;
 			}
-            p, h1, h2, h3, h4, ul {
+            p, h1, h2, h3, h4, ul, table {
 				margin-top: 0;
 				margin-bottom: 14px;
 			}
