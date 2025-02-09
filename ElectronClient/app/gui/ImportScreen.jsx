@@ -98,9 +98,9 @@ class ImportScreenComponent extends React.Component {
             }
         };
 
-        // const folder = await Folder.save({ title: folderTitle });
+        const folder = await Folder.save({ title: folderTitle });
 
-        // await importEnex(folder.id, filePath, options);
+        await importEnex(folder.id, filePath, options);
 
         this.addMessage(
             'done',

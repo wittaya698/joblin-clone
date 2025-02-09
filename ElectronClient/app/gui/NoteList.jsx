@@ -58,13 +58,13 @@ class NoteListComponent extends React.Component {
 
         menu.append(
             new MenuItem({
-                label: _('Delete'),
+                label: _('Add or remove tags'),
                 click: async () => {
-                    const ok = bridge().showConfirmMessageBox(
-                        _('Delete note?')
-                    );
-                    if (!ok) return;
-                    await Note.delete(noteId);
+                    this.props.dispatch({
+                        type: 'WINDOW_COMMAND',
+                        name: 'setTags',
+                        noteId: noteId
+                    });
                 }
             })
         );
@@ -75,6 +75,19 @@ class NoteListComponent extends React.Component {
                 click: async () => {
                     const note = await Note.load(noteId);
                     await Note.save(Note.toggleIsTodo(note));
+                }
+            })
+        );
+
+        menu.append(
+            new MenuItem({
+                label: _('Delete'),
+                click: async () => {
+                    const ok = bridge().showConfirmMessageBox(
+                        _('Delete note?')
+                    );
+                    if (!ok) return;
+                    await Note.delete(noteId);
                 }
             })
         );

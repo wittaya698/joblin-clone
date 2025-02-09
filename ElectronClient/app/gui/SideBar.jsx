@@ -73,7 +73,8 @@ class SideBarComponent extends React.Component {
                 justifyContent: 'top',
                 marginTop: 10,
                 marginLeft: 5,
-                marginRight: 5
+                marginRight: 5,
+                minHeight: 70
             }
         };
 
@@ -216,7 +217,10 @@ class SideBarComponent extends React.Component {
 
     render() {
         const theme = themeStyle(this.props.theme);
-        const style = Object.assign({}, this.style().root, this.props.style);
+        const style = Object.assign({}, this.style().root, this.props.style, {
+            overflowX: 'hidden',
+            overflowY: 'auto'
+        });
 
         let items = [];
 

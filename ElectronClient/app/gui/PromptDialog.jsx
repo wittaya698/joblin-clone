@@ -7,7 +7,7 @@ class PromptDialog extends React.Component {
     UNSAFE_componentWillMount() {
         this.setState({
             visible: false,
-            answer: ''
+            answer: this.props.value ? this.props.value : ''
         });
         this.focusInput_ = true;
     }
@@ -16,6 +16,10 @@ class PromptDialog extends React.Component {
         if ('visible' in newProps) {
             this.setState({ visible: newProps.visible });
             if (newProps.visible) this.focusInput_ = true;
+        }
+
+        if ('value' in newProps) {
+            this.setState({ answer: newProps.value });
         }
     }
 
@@ -58,8 +62,13 @@ class PromptDialog extends React.Component {
             marginRight: 5,
             fontSize: theme.fontSize,
             color: theme.color,
-            fontFamily: theme.fontFamily
+            fontFamily: theme.fontFamily,
+            verticalAlign: 'top'
         };
+
+        const descStyle = Object.assign({}, theme.textStyle, {
+            marginTop: 10
+        });
 
         const inputStyle = {
             width: 0.5 * style.width,
@@ -84,20 +93,27 @@ class PromptDialog extends React.Component {
             }
         };
 
+        const descComp = this.props.description ? (
+            <div style={descStyle}>{this.props.description}</div>
+        ) : null;
+
         return (
             <div style={modalLayerStyle}>
                 <div style={promptDialogStyle}>
                     <label style={labelStyle}>
-                        {this.props.message ? this.props.message : ''}
+                        {this.props.label ? this.props.label : ''}
                     </label>
-                    <input
-                        style={inputStyle}
-                        ref={input => (this.answerInput_ = input)}
-                        value={this.state.answer}
-                        type="text"
-                        onChange={event => onChange(event)}
-                        onKeyDown={event => onKeyDown(event)}
-                    />
+                    <div style={{ display: 'inline-block' }}>
+                        <input
+                            style={inputStyle}
+                            ref={input => (this.answerInput_ = input)}
+                            value={this.state.answer}
+                            type="text"
+                            onChange={event => onChange(event)}
+                            onKeyDown={event => onKeyDown(event)}
+                        />
+                        {descComp}
+                    </div>
                     <div style={{ textAlign: 'right', marginTop: 10 }}>
                         <button
                             style={buttonStyle}

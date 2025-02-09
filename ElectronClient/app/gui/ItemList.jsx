@@ -39,6 +39,10 @@ class ItemList extends React.Component {
 
     render() {
         const items = this.props.items;
+        const style = Object.assign({}, this.props.style, {
+            overflowX: 'hidden',
+            overflowY: 'auto'
+        });
 
         if (!this.props.itemHeight) throw new Error('itemHeight is required');
 
@@ -75,7 +79,7 @@ class ItemList extends React.Component {
         return (
             <div
                 className={classes.join(' ')}
-                style={this.props.style}
+                style={style}
                 onScroll={event => {
                     this.onScroll(event.target.scrollTop);
                 }}
