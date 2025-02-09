@@ -85,11 +85,11 @@ class MainScreenComponent extends React.Component {
                 iconName: 'fa-file-o'
             },
             {
-                title: _('fa-folder-o'),
+                title: _('New Notebook'),
                 onClick: () => {
                     this.setState({ newFolderPromptVisible: true });
                 },
-                iconName: 'ion-android-folder-open'
+                iconName: 'fa-folder-o'
             },
             {
                 title: _('Layout'),

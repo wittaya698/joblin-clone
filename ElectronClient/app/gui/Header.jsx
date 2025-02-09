@@ -74,12 +74,9 @@ class HeaderComponent extends React.Component {
 
         if (this.props.buttons) {
             for (let i = 0; i < this.props.buttons.length; i++) {
+                const o = this.props.buttons[i];
                 buttons.push(
-                    this.makeButton(
-                        'btn_' + i,
-                        buttonStyle,
-                        this.props.buttons[i]
-                    )
+                    this.makeButton('btn_' + i + '_' + o.title, buttonStyle, o)
                 );
             }
         }

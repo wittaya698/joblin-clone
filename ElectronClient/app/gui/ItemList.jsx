@@ -55,7 +55,7 @@ class ItemList extends React.Component {
             i <= this.state.bottomItemIndex;
             i++
         ) {
-            const itemComp = this.props.itemRenderer(i, items[i]);
+            const itemComp = this.props.itemRenderer(items[i]);
             itemComps.push(itemComp);
         }
 
