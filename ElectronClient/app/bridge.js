@@ -60,6 +60,10 @@ class Bridge {
     openExternal(url) {
         return require('electron').shell.openExternal(url);
     }
+
+    openItem(fullPath) {
+        return require('electron').shell.openItem(fullPath);
+    }
 }
 
 let bridge_ = null;

@@ -19,7 +19,7 @@ class NoteBodyViewer extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        this.mdToHtml_ = new MdToHtml();
+        this.mdToHtml_ = new MdToHtml({ supportsResourceLinks: false });
         this.isMounted_ = true;
     }
 
