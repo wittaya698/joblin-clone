@@ -5,6 +5,10 @@ class Bridge {
         this.electronWrapper_ = electronWrapper;
     }
 
+    electronApp() {
+        return this.electronWrapper_;
+    }
+
     processArgv() {
         return process.argv;
     }
@@ -51,6 +55,10 @@ class Bridge {
 
     get MenuItem() {
         return require('electron').MenuItem;
+    }
+
+    openExternal(url) {
+        return require('electron').shell.openExternal(url);
     }
 }
 
