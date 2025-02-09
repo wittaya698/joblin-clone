@@ -208,51 +208,51 @@ class BaseApplication {
         return false;
     }
 
-    generalMiddleware() {
-        const middleware = store => next => async action => {
-            this.logger().debug(
-                'Reducer action',
-                this.reducerActionToString(action)
-            );
-
-            const result = next(action);
-            const newState = store.getState();
-
-            if (
-                action.type == 'FOLDER_SELECT' ||
-                action.type === 'FOLDER_DELETE'
-            ) {
-                Setting.setValue('activeFolderId', newState.selectedFolderId);
-                this.currentFolder_ = newState.selectedFolderId
-                    ? await Folder.load(newState.selectedFolderId)
-                    : null;
-                await this.refreshNotes(
-                    Folder.modelType(),
-                    newState.selectedFolderId
-                );
-            }
-
-            if (action.type == 'TAG_SELECT') {
-                await this.refreshNotes(Tag.modelType(), action.id);
-            }
-
-            if (action.type == 'SEARCH_SELECT') {
-                await this.refreshNotes(BaseModel.TYPE_SEARCH, action.id);
-            }
-
-            if (
-                (this.hasGui() &&
-                    action.type == 'SETTING_UPDATE_ONE' &&
-                    action.key == 'sync.interval') ||
-                action.type == 'SETTING_UPDATE_ALL'
-            ) {
-                reg.setupRecurrentSync();
-            }
-
-            return result;
+    generalMiddlewareFn() {
+        const middleware = store => next => action => {
+            return this.generalMiddleware(store, next, action);
         };
-
         return middleware;
+    }
+
+    async generalMiddleware(store, next, action) {
+        this.logger().debug(
+            'Reducer action',
+            this.reducerActionToString(action)
+        );
+
+        const result = next(action);
+        const newState = store.getState();
+
+        if (action.type == 'FOLDER_SELECT' || action.type === 'FOLDER_DELETE') {
+            Setting.setValue('activeFolderId', newState.selectedFolderId);
+            this.currentFolder_ = newState.selectedFolderId
+                ? await Folder.load(newState.selectedFolderId)
+                : null;
+            await this.refreshNotes(
+                Folder.modelType(),
+                newState.selectedFolderId
+            );
+        }
+
+        if (action.type == 'TAG_SELECT') {
+            await this.refreshNotes(Tag.modelType(), action.id);
+        }
+
+        if (action.type == 'SEARCH_SELECT') {
+            await this.refreshNotes(BaseModel.TYPE_SEARCH, action.id);
+        }
+
+        if (
+            (this.hasGui() &&
+                action.type == 'SETTING_UPDATE_ONE' &&
+                action.key == 'sync.interval') ||
+            action.type == 'SETTING_UPDATE_ALL'
+        ) {
+            reg.setupRecurrentSync();
+        }
+
+        return result;
     }
 
     dispatch(action) {
