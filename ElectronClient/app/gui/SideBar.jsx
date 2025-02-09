@@ -89,6 +89,8 @@ class SideBarComponent extends React.Component {
 
     itemContextMenu(event) {
         const itemId = event.target.getAttribute('data-id');
+        if (itemId === Folder.conflictFolderId()) return;
+
         const itemType = Number(event.target.getAttribute('data-type'));
         if (!itemId || !itemType) throw new Error('No data on element');
 
