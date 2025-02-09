@@ -107,7 +107,9 @@ class OneDriveLoginScreenComponent extends React.Component {
 }
 
 const mapStateToProps = state => {
-    return {};
+    return {
+        theme: state.settings.theme
+    };
 };
 
 const OneDriveLoginScreen = connect(mapStateToProps)(

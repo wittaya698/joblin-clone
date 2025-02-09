@@ -10,16 +10,37 @@ function shimInit() {
     shim.setInterval = PoorManIntervals.setInterval;
     shim.clearInterval = PoorManIntervals.clearInterval;
 
+    shim.fetch = async function (url, options = null) {
+        return shim.fetchWithRetry(() => {
+            return shim.nativeFetch_(url, options);
+        }, options);
+
+        // if (!options) options = {};
+        // if (!options.timeout) options.timeout = 1000 * 120; // ms
+        // if (!('maxRetry' in options)) options.maxRetry = 5;
+        // let retryCount = 0;
+        // while (true) {
+        // 	try {
+        // 		const response = await nodeFetch(url, options);
+        // 		return response;
+        // 	} catch (error) {
+        // 		if (fetchRequestCanBeRetried(error)) {
+        // 			retryCount++;
+        // 			if (retryCount > options.maxRetry) throw error;
+        // 			await time.sleep(retryCount * 3);
+        // 		} else {
+        // 			throw error;
+        // 		}
+        // 	}
+        // }
+    };
+
     shim.fetchBlob = async function (url, option) {
-        error_msg = 'react shim.fetchBlob has been called';
-        console.error(error_msg);
-        throw new Error(error_msg);
+        throw new Error('react shim.fetchBlob need implementation');
     };
 
     shim.uploadBlob = async function (url, options) {
-        error_msg = 'react shim.uploadBlob has been called';
-        console.error(error_msg);
-        throw new Error(error_msg);
+        throw new Error('react shim.uploadBlob need implementation');
     };
 
     shim.readLocalFileBase64 = async function (path) {
