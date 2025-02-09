@@ -266,7 +266,7 @@ class BaseApplication {
     initRedux() {
         this.store_ = createStore(
             this.reducer,
-            applyMiddleware(this.generalMiddleware())
+            applyMiddleware(this.generalMiddlewareFn())
         );
         BaseModel.dispatch = this.store().dispatch;
         FoldersScreenUtils.dispatch = this.store().dispatch;

@@ -12,11 +12,13 @@ class HeaderComponent extends React.Component {
     makeButton(key, style, options) {
         let icon = null;
         if (options.iconName) {
+            const iconStyle = {
+                fontSize: Math.round(style.fontSize * 1.4),
+                color: style.color
+            };
+            if (options.title) iconStyle.marginRight = 5;
             icon = (
-                <i
-                    style={{ fontSize: style.fontSize * 1.4, marginRight: 5 }}
-                    className={'icon ' + options.iconName}
-                ></i>
+                <i style={iconStyle} className={'fa ' + options.iconName}></i>
             );
         }
         return (
@@ -30,7 +32,7 @@ class HeaderComponent extends React.Component {
                 }}
             >
                 {icon}
-                {options.title}
+                {options.title ? options.title : ''}
             </a>
         );
     }

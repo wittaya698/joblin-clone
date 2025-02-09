@@ -62,6 +62,18 @@ class SideBarComponent extends React.Component {
                 marginLeft: 5,
                 marginRight: 5,
                 cursor: 'default'
+            },
+            syncReport: {
+                fontFamily: theme.fontFamily,
+                fontSize: Math.round(theme.fontSize * 0.9),
+                color: theme.color2,
+                opacity: 0.8,
+                display: 'flex',
+                alignItems: 'left',
+                justifyContent: 'top',
+                marginTop: 10,
+                marginLeft: 5,
+                marginRight: 5
             }
         };
 
@@ -248,7 +260,11 @@ class SideBarComponent extends React.Component {
             )
         );
 
-        items.push(<div key="sync_report">{syncReportText}</div>);
+        items.push(
+            <div style={this.style().syncReport} key="sync_report">
+                {syncReportText}
+            </div>
+        );
 
         return (
             <div className="side-bar" style={style}>

@@ -282,6 +282,7 @@ class NoteTextComponent extends React.Component {
         const note = this.state.note;
         const body = note ? note.body : '';
         const theme = themeStyle(this.props.theme);
+        const visiblePanes = this.props.visiblePanes || ['editor', 'viewer'];
 
         if (!note) {
             const emptyDivStyle = Object.assign(
@@ -316,6 +317,19 @@ class NoteTextComponent extends React.Component {
             lineHeight: theme.textAreaLineHeight + 'px',
             fontSize: theme.fontSize + 'px'
         };
+
+        if (visiblePanes.indexOf('viewer') < 0) {
+            // Note: setting webview.display to "none" is currently not supported due
+            // to this bug: https://github.com/electron/electron/issues/8277
+            // So instead setting the width 0.
+            viewerStyle.width = 0;
+            editorStyle.width = style.width;
+        }
+
+        if (visiblePanes.indexOf('editor') < 0) {
+            editorStyle.display = 'none';
+            viewerStyle.width = style.width;
+        }
 
         if (this.state.webviewReady) {
             const mdOptions = {

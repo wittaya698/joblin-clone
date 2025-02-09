@@ -15,8 +15,24 @@ const { bridge } = require('@electron/remote').require('./bridge');
 
 class MainScreenComponent extends React.Component {
     UNSAFE_componentWillMount() {
-        this.setState({ newNotePromptVisible: false });
-        this.setState({ newFolderPromptVisible: false });
+        this.setState({
+            newNotePromptVisible: false,
+            newFolderPromptVisible: false,
+            noteVisiblePanes: ['editor', 'viewer']
+        });
+    }
+
+    toggleVisiblePanes() {
+        let panes = this.state.noteVisiblePanes.slice();
+        if (panes.length === 2) {
+            panes = ['editor'];
+        } else if (panes.indexOf('editor') >= 0) {
+            panes = ['viewer'];
+        } else if (panes.indexOf('viewer') >= 0) {
+            panes = ['editor', 'viewer'];
+        }
+
+        this.setState({ noteVisiblePanes: panes });
     }
 
     render() {
@@ -66,14 +82,21 @@ class MainScreenComponent extends React.Component {
                 onClick: () => {
                     this.setState({ newNotePromptVisible: true });
                 },
-                iconName: 'ion-document'
+                iconName: 'fa-file-o'
             },
             {
-                title: _('New notebook'),
+                title: _('fa-folder-o'),
                 onClick: () => {
                     this.setState({ newFolderPromptVisible: true });
                 },
                 iconName: 'ion-android-folder-open'
+            },
+            {
+                title: _('Layout'),
+                onClick: () => {
+                    this.toggleVisiblePanes();
+                },
+                iconName: 'fa-columns'
             }
         ];
 
@@ -139,7 +162,10 @@ class MainScreenComponent extends React.Component {
                 />
                 <SideBar style={sideBarStyle} />
                 <NoteList itemHeight={40} style={noteListStyle} />
-                <NoteText style={noteTextStyle} />
+                <NoteText
+                    style={noteTextStyle}
+                    visiblePanes={this.state.noteVisiblePanes}
+                />
             </div>
         );
     }
