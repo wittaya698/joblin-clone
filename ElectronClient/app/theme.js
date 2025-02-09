@@ -69,8 +69,7 @@ globalStyle.textStyle2 = Object.assign({}, globalStyle.textStyle, {
 let themeCache_ = {};
 
 function themeStyle(theme) {
-    // Critical -> to be commected out
-    // if (!theme) throw new Error('Theme must be specified');
+    if (!theme) throw new Error('Theme must be specified');
     if (themeCache_[theme]) return themeCache_[theme];
 
     let output = Object.assign({}, globalStyle);

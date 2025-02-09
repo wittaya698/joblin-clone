@@ -16,6 +16,7 @@ const rootDir = dirname(dirname(__dirname));
 const cliDir = rootDir + '/CliClient';
 const cliLocalesDir = cliDir + '/locales';
 const rnDir = rootDir + '/ReactNativeClient';
+const electronDir = rootDir + '/ElectronClient/app';
 
 function execCommand(command) {
     if (!silentLog) console.info('Running: ' + command);
@@ -126,6 +127,9 @@ async function main() {
 
     await createPotFile(potFilePath, [
         cliDir + '/app/*.js',
+        cliDir + '/app/gui/*.js',
+        electronDir + '/*.js',
+        electronDir + '/gui/*.js',
         rnDir + '/lib/*.js',
         rnDir + '/lib/models/*.js',
         rnDir + '/lib/services/*.js',
@@ -163,7 +167,7 @@ async function main() {
         'rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"'
     );
 
-    const electronJsonLocaleDir = rootDir + '/ElectronClient/app/locales';
+    const electronJsonLocaleDir = electronDir + '/locales';
     await execCommand(
         'rsync -a "' + jsonLocalesDir + '/" "' + electronJsonLocaleDir + '"'
     );

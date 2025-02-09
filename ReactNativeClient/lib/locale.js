@@ -289,6 +289,7 @@ function localeStrings(canonicalName) {
 function setLocale(canonicalName) {
     if (currentLocale_ == canonicalName) return;
     currentLocale_ = closestSupportedLocale(canonicalName);
+    console.info('Set locale to ' + currentLocale_);
 }
 
 function languageCode() {

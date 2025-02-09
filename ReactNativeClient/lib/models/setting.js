@@ -36,7 +36,7 @@ class Setting extends BaseModel {
                     if (!this.metadata_.hasOwnProperty(n)) continue;
                     this.keys_.push(n);
                 }
-                this.keys_.sort();
+                // this.keys_.sort();
             }
         }
 
@@ -124,7 +124,7 @@ class Setting extends BaseModel {
                 c.value = this.formatValue(key, value);
 
                 this.dispatch({
-                    type: 'SETTING_UPDATE_ALL',
+                    type: 'SETTING_UPDATE_ONE',
                     key: key,
                     value: c.value
                 });
@@ -387,6 +387,20 @@ Setting.metadata_ = {
             return supportedLocalesToLanguages();
         }
     },
+    theme: {
+        value: Setting.THEME_LIGHT,
+        type: Setting.TYPE_INT,
+        public: true,
+        appTypes: ['mobile', 'desktop'],
+        isEnum: true,
+        label: () => _('Theme'),
+        options: () => {
+            let output = {};
+            output[Setting.THEME_LIGHT] = _('Light');
+            output[Setting.THEME_DARK] = _('Dark');
+            return output;
+        }
+    },
     // 'logLevel': { value: Logger.LEVEL_INFO, type: Setting.TYPE_STRING, isEnum: true, public: true, label: () => _('Log level'), options: () => {
     // 	return Logger.levelEnum();
     // }},
@@ -441,19 +455,12 @@ Setting.metadata_ = {
             };
         }
     },
-    theme: {
-        value: Setting.THEME_LIGHT,
-        type: Setting.TYPE_INT,
+    showAdvancedOptions: {
+        value: false,
+        type: Setting.TYPE_BOOL,
         public: true,
         appTypes: ['mobile'],
-        isEnum: true,
-        label: () => _('Theme'),
-        options: () => {
-            let output = {};
-            output[Setting.THEME_LIGHT] = _('Light');
-            output[Setting.THEME_DARK] = _('Dark');
-            return output;
-        }
+        label: () => _('Show advanced options')
     }
 };
 

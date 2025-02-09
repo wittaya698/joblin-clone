@@ -6,6 +6,7 @@ const { connect, Provider } = require('react-redux');
 const { MainScreen } = require('./MainScreen.min.js');
 const { OneDriveLoginScreen } = require('./OneDriveLoginScreen.min.js');
 const { ImportScreen } = require('./ImportScreen.min.js');
+const { ConfigScreen } = require('./ConfigScreen.min.js');
 const { Navigator } = require('./Navigator.min.js');
 
 const { app } = require('../app');
@@ -60,7 +61,8 @@ class RootComponent extends React.Component {
         const screens = {
             Main: { screen: MainScreen },
             OneDriveLogin: { screen: OneDriveLoginScreen },
-            Import: { screen: ImportScreen }
+            Import: { screen: ImportScreen },
+            Config: { screen: ConfigScreen }
         };
 
         return <Navigator style={navigatorStyle} screens={screens} />;

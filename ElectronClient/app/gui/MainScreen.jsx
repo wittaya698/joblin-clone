@@ -255,7 +255,7 @@ class MainScreenComponent extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        theme: state.theme,
+        theme: state.settings.theme,
         windowCommand: state.windowCommand
     };
 };

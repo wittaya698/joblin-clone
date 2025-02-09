@@ -31,7 +31,8 @@ class SideBarComponent extends React.Component {
                 paddingLeft: 14,
                 display: 'flex',
                 alignItems: 'center',
-                cursor: 'default'
+                cursor: 'default',
+                opacity: 0.8
             },
             listItemSelected: {
                 backgroundColor: theme.selectedColor2
@@ -67,7 +68,7 @@ class SideBarComponent extends React.Component {
                 fontFamily: theme.fontFamily,
                 fontSize: Math.round(theme.fontSize * 0.9),
                 color: theme.color2,
-                opacity: 0.8,
+                opacity: 0.5,
                 display: 'flex',
                 alignItems: 'left',
                 justifyContent: 'top',
@@ -187,7 +188,7 @@ class SideBarComponent extends React.Component {
         const icon = (
             <i
                 style={{ fontSize: style.fontSize * 1.2, marginRight: 5 }}
-                className={'icon ' + iconName}
+                className={'fa ' + iconName}
             ></i>
         );
         return (
@@ -225,11 +226,7 @@ class SideBarComponent extends React.Component {
         let items = [];
 
         items.push(
-            this.makeHeader(
-                'folderHeader',
-                _('Notebooks'),
-                'ion-android-folder'
-            )
+            this.makeHeader('folderHeader', _('Notebooks'), 'fa-folder-o')
         );
 
         if (this.props.folders.length) {
@@ -240,7 +237,7 @@ class SideBarComponent extends React.Component {
             items = items.concat(folderItems);
         }
 
-        items.push(this.makeHeader('tagHeader', _('Tags'), 'ion-pricetags'));
+        items.push(this.makeHeader('tagHeader', _('Tags'), 'fa-tags'));
 
         if (this.props.tags.length) {
             const tagItems = shared.renderTags(

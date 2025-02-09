@@ -213,6 +213,7 @@ const mapStateToProps = state => {
         notes: state.notes,
         selectedNoteId: state.selectedNoteId,
         theme: state.settings.theme
+        // uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
     };
 };
 

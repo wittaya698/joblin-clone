@@ -4,7 +4,7 @@ const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Setting } = require('lib/models/setting.js');
 const { BaseModel } = require('lib/base-model.js');
-const { _ } = require('lib/locale.js');
+const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
 const fs = require('fs-extra');
 const { Logger } = require('lib/logger.js');
@@ -100,6 +100,14 @@ class Application extends BaseApplication {
 
     async generalMiddleware(store, next, action) {
         if (
+            (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale') ||
+            action.type == 'SETTING_UPDATE_ALL'
+        ) {
+            setLocale(Setting.value('locale'));
+            this.refreshMenu();
+        }
+
+        if (
             [
                 'NOTE_UPDATE_ONE',
                 'NOTE_DELETE',
@@ -120,12 +128,18 @@ class Application extends BaseApplication {
         return result;
     }
 
+    refreshMenu() {
+        const screen = this.lastMenuScreen_;
+        this.lastMenuScreen_ = null;
+        this.updateMenu(screen);
+    }
+
     updateMenu(screen) {
         if (this.lastMenuScreen_ === screen) return;
 
         const template = [
             {
-                label: 'File',
+                label: _('File'),
                 submenu: [
                     {
                         label: _('New note'),
@@ -200,7 +214,21 @@ class Application extends BaseApplication {
                 ]
             },
             {
-                label: 'Help',
+                label: _('Tools'),
+                submenu: [
+                    {
+                        label: _('Options'),
+                        click: () => {
+                            this.dispatch({
+                                type: 'NAV_GO',
+                                routeName: 'Config'
+                            });
+                        }
+                    }
+                ]
+            },
+            {
+                label: _('Help'),
                 submenu: [
                     {
                         label: _('Documentation'),
@@ -211,7 +239,23 @@ class Application extends BaseApplication {
                     },
                     {
                         label: _('About Joplin'),
-                        click() {}
+                        click: () => {
+                            const p = require('./package.json');
+                            let message = [
+                                p.description,
+                                '',
+                                'Copyright © 2024-2025',
+                                _(
+                                    '%s %s (%s)',
+                                    p.name,
+                                    p.version,
+                                    Setting.value('env')
+                                )
+                            ];
+                            bridge().showMessageBox({
+                                message: message.join('\n')
+                            });
+                        }
                     }
                 ]
             }
