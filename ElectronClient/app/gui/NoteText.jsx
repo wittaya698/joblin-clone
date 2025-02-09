@@ -466,7 +466,7 @@ class NoteTextComponent extends React.Component {
             <webview
                 style={viewerStyle}
                 nodeintegration="1"
-                src="note-content.html"
+                src="gui/note-viewer/index.html"
                 ref={elem => {
                     this.webview_ref(elem);
                 }}
