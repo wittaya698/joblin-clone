@@ -37,6 +37,10 @@ class SideBarComponent extends React.Component {
             listItemSelected: {
                 backgroundColor: theme.selectedColor2
             },
+            conflictFolder: {
+                color: theme.colorError2,
+                fontWeight: 'bold'
+            },
             header: {
                 height: itemHeight * 1.8,
                 fontFamily: theme.fontFamily,
@@ -138,6 +142,8 @@ class SideBarComponent extends React.Component {
         let style = Object.assign({}, this.style().listItem);
         if (selected)
             style = Object.assign(style, this.style().listItemSelected);
+        if (folder.id === Folder.conflictFolderId())
+            style = Object.assign(style, this.style().conflictFolder);
         return (
             <a
                 className="list-item"

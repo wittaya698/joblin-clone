@@ -16,7 +16,7 @@ const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
-const { FsDriverNode } = require('../app/fs-driver-node.js');
+const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 
 let databases_ = [];
@@ -36,7 +36,7 @@ const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
 //const syncTargetId_ = Setting.SYNC_TARGET_ONEDRIVE;
 const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 600;
+const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 700;
 
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -111,6 +111,7 @@ function setupDatabase(id = null) {
         .then(() => {
             databases_[id] = new JoplinDatabase(new DatabaseDriverNode());
             // databases_[id].setLogger(logger);
+            // console.info(filePath);
             return databases_[id].open({ name: filePath }).then(() => {
                 BaseModel.db_ = databases_[id];
                 return setupDatabase(id);
