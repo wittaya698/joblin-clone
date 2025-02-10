@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/wittaya698/joplin-clone#readme",
   "optionalDependencies": {
-    "7zip-bin-mac": "^1.0.1"
+    "7zip-bin-mac": "^1.0.1",
+    "7zip-bin-linux": "^1.0.1"
   },
   "dependencies": {
     "@electron/remote": "^2.1.2",
