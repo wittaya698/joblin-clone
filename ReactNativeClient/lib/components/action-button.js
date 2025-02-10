@@ -170,7 +170,7 @@ class ActionButtonComponent extends React.Component {
                     open={open}
                     icon={open ? 'close' : 'plus'}
                     actions={buttonComps}
-                    onStateChange={this.handleStateChange}
+                    onStateChange={state => this.handleStateChange(state)}
                 />
             );
         }
