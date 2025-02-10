@@ -1,5 +1,5 @@
 {
-  "name": "joplin-desktop",
+  "name": "@tarwitthaya/Joplin",
   "version": "0.10.0",
   "description": "Joplin for Desktop",
   "main": "main.js",
@@ -19,7 +19,10 @@
     "url": "https://github.com/wittaya698/joplin-clone/issues"
   },
   "build": {
-    "appId": "thongchin.witthaya.joplin-desktop"
+    "appId": "thongchin.witthaya.joplin-desktop",
+    "win": {
+      "icon": "../../Assets/Joplin.ico"
+    }
   },
   "homepage": "https://github.com/wittaya698/joplin-clone#readme",
   "dependencies": {
