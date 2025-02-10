@@ -23,11 +23,14 @@
   "build": {
     "appId": "thongchin.witthaya.joplin-desktop",
     "win": {
-      "icon": "../../Assets/Joplin.ico"
+      "icon": "../../Assets/Joplin.ico",
+      "publish": [
+        "github"
+      ]
     },
-    "publish": [
-      "github"
-    ]
+    "mac": {
+      "asar": false
+    }
   },
   "homepage": "https://github.com/wittaya698/joplin-clone#readme",
   "optionalDependencies": {
