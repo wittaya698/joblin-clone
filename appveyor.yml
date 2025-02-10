@@ -1,7 +1,7 @@
 image: Visual Studio 2022
 
 platform:
-  - ARM64
+  - x64
 
 cache:
   # Not caching node_modules because appveyor doesn't restore it afterwards (not sure why)
@@ -9,12 +9,11 @@ cache:
   - '%USERPROFILE%\.electron'
 
 install:
-  - ps: Install-Product node 20.0.0 arm64
+  - ps: Install-Product node 20 x64
   - yarn
 
 build_script:
   - ps: cd ElectronClient\app
-  - ./build.sh
   - npm install
   - yarn dist
 
