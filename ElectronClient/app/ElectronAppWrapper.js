@@ -5,8 +5,9 @@ const path = require('path');
 const urlUtils = require('lib/urlUtils.js');
 
 class ElectronAppWrapper {
-    constructor(electronApp) {
+    constructor(electronApp, env) {
         this.electronApp_ = electronApp;
+        this.env_ = env;
         this.win_ = null;
     }
 
@@ -48,7 +49,7 @@ class ElectronAppWrapper {
             })
         );
 
-        this.win_.webContents.openDevTools();
+        if (this.env_ === 'dev') this.win_.webContents.openDevTools();
 
         this.win_.on('closed', () => {
             this.win_ = null;

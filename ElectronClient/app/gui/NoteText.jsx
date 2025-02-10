@@ -1,5 +1,6 @@
 const React = require('react');
 const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
 const { IconButton } = require('./IconButton.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
@@ -228,7 +229,7 @@ class NoteTextComponent extends React.Component {
             webviewReady: true
         });
 
-        // this.webview_.openDevTools();
+        // if (Setting.value('env') === 'dev') this.webview_.openDevTools();
     }
 
     webview_ref(element) {
