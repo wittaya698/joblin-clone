@@ -185,8 +185,10 @@ class MdToHtml {
 
     renderTokens_(tokens, options) {
         let output = [];
+        let previousToken = null;
         for (let i = 0; i < tokens.length; i++) {
             const t = tokens[i];
+            const nextToken = i < tokens.length ? tokens[i + 1] : null;
 
             let tag = t.tag;
             let openTag = null;
@@ -196,7 +198,12 @@ class MdToHtml {
 
             // if (t.map) attrs.push(['data-map', t.map.join(':')]);
 
-            if (tag && t.type.indexOf('_open') >= 0) {
+            if (previousToken && previousToken.tag === 'li' && tag === 'p') {
+                // Markdown-it render list items as <li><p>Text<p></li> which makes it
+                // complicated to style and layout the HTML, so we remove this extra
+                // <p> here and below in closeTag.
+                openTag = null;
+            } else if (tag && t.type.indexOf('_open') >= 0) {
                 openTag = tag;
             } else if (tag && t.type.indexOf('_close') >= 0) {
                 closeTag = tag;
@@ -228,6 +235,10 @@ class MdToHtml {
             if (t.type === 'image') {
                 if (t.content) attrs.push(['title', t.content]);
                 output.push(this.renderImage_(attrs, options));
+            } else if (t.type === 'softbreak') {
+                output.push('<br/>');
+            } else if (t.type === 'hr') {
+                output.push('<hr/>');
             } else {
                 if (t.children) {
                     const parsedChildren = this.renderTokens_(
@@ -242,7 +253,9 @@ class MdToHtml {
                 }
             }
 
-            if (t.type === 'link_close') {
+            if (nextToken && nextToken.tag === 'li' && t.tag === 'p') {
+                closeTag = null;
+            } else if (t.type === 'link_close') {
                 closeTag = 'a';
             } else if (tag && t.type.indexOf('inline') >= 0) {
                 closeTag = openTag;
@@ -259,6 +272,7 @@ class MdToHtml {
                     output.push('</' + closeTag + '>');
                 }
             }
+            previousToken = t;
         }
 
         return output.join('');
@@ -278,7 +292,10 @@ class MdToHtml {
 
         if (this.cachedContentKey_ === cacheKey) return this.cachedContent_;
 
-        const md = new MarkdownIt();
+        const md = new MarkdownIt({
+            breaks: true,
+            linkify: true
+        });
         const env = {};
 
         // Hack to make checkboxes clickable. Ideally, checkboxes should be parsed properly in
@@ -299,7 +316,7 @@ class MdToHtml {
         const tokens = md.parse(body, env);
 
         // console.info(body);
-        // console.info(tokens);
+        console.info(tokens);
 
         let renderedBody = this.renderTokens_(tokens, options);
 
@@ -372,7 +389,7 @@ class MdToHtml {
             `
 			}
 			ul {
-				padding-left: 0;
+				padding-left: 1.3em;
 			}
 			a.checkbox {
 				font-size: 1.6em;
@@ -391,7 +408,8 @@ class MdToHtml {
 				padding: .5em 1em .5em 1em;
 			}
 			hr {
-				border: 1px solid ` +
+				border: none;
+				border-bottom: 1px solid ` +
             style.htmlDividerColor +
             `;
 			}

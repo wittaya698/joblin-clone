@@ -196,7 +196,7 @@ class NoteListComponent extends React.Component {
 
         return (
             <ItemList
-                itemHeight={this.props.itemHeight}
+                itemHeight={this.style().listItem.height}
                 style={style}
                 className={'note-list'}
                 items={this.props.notes}

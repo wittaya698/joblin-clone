@@ -50,16 +50,7 @@
         );
     });
 
-    // A checkbox list is rendered like this by markdown-it:
-    // <ul>
-    //    <li>
-    //       <p>
-    //          [x] some item
-    //       </p>
-    //    </li>
-    // ...
-    // </ul>
-    // And we need to remove the padding from "p" and the bullet from "ul"
+    // Remove the bullet from "ul" for checkbox lists and extra padding
     const checkboxes = document.getElementsByClassName('checkbox');
     for (let i = 0; i < checkboxes.length; i++) {
         throw new Error(
@@ -95,7 +86,7 @@
         e.preventDefault();
         e.stopPropagation();
     });
-    webview.addEventListener('dragover', function (e) {
+    document.addEventListener('dragover', function (e) {
         e.preventDefault();
     });
 </script>

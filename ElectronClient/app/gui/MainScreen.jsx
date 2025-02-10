@@ -55,6 +55,13 @@ class MainScreenComponent extends React.Component {
 
         let commandProcessed = true;
         if (command.name === 'newNote') {
+            if (!this.props.folders.length) {
+                bridge().showErrorMessageBox(
+                    _('Please create a notebook first.')
+                );
+                return;
+            }
+
             this.setState({
                 promptOptions: {
                     label: _('Note title:'),
@@ -65,6 +72,13 @@ class MainScreenComponent extends React.Component {
                 }
             });
         } else if (command.name === 'newTodo') {
+            if (!this.props.folders.length) {
+                bridge().showErrorMessageBox(
+                    _('Please create a notebook first')
+                );
+                return;
+            }
+
             this.setState({
                 promptOptions: {
                     label: _('To-do title:'),
@@ -140,6 +154,8 @@ class MainScreenComponent extends React.Component {
         const style = this.props.style;
         const theme = themeStyle(this.props.theme);
         const promptOptions = this.state.promptOptions;
+        const folders = this.props.folders;
+        const notes = this.props.notes;
 
         const headerStyle = {
             width: style.width
@@ -183,6 +199,7 @@ class MainScreenComponent extends React.Component {
         headerButtons.push({
             title: _('New note'),
             iconName: 'fa-file-o',
+            enabled: !!folders.length,
             onClick: () => {
                 this.doCommand({ name: 'newNote' });
             }
@@ -191,6 +208,7 @@ class MainScreenComponent extends React.Component {
         headerButtons.push({
             title: _('New to-do'),
             iconName: 'fa-check-square-o',
+            enabled: !!folders.length,
             onClick: () => {
                 this.doCommand({ name: 'newTodo' });
             }
@@ -207,6 +225,7 @@ class MainScreenComponent extends React.Component {
         headerButtons.push({
             title: _('Layout'),
             iconName: 'fa-columns',
+            enabled: !!notes.length,
             onClick: () => {
                 this.toggleVisiblePanes();
             }
@@ -235,7 +254,7 @@ class MainScreenComponent extends React.Component {
                     buttons={headerButtons}
                 />
                 <SideBar style={sideBarStyle} />
-                <NoteList itemHeight={40} style={noteListStyle} />
+                <NoteList style={noteListStyle} />
                 <NoteText
                     style={noteTextStyle}
                     visiblePanes={this.props.noteVisiblePanes}
@@ -249,7 +268,9 @@ const mapStateToProps = state => {
     return {
         theme: state.settings.theme,
         windowCommand: state.windowCommand,
-        noteVisiblePanes: state.noteVisiblePanes
+        noteVisiblePanes: state.noteVisiblePanes,
+        folders: state.folders,
+        notes: state.notes
     };
 };
 
