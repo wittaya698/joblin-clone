@@ -10,17 +10,19 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
-cache:
-  directories:
-    - node_modules
-    - $HOME/.cache/electron
-    - $HOME/.cache/electron-builder
+# cache:
+#   directories:
+#     - node_modules
+#     - $HOME/.cache/electron
+#     - $HOME/.cache/electron-builder
 
 before_install:
-  - brew install yarn
+  # HOMEBREW_NO_AUTO_UPDATE needed so that Homebrew doesn't upgrade to the next
+  # version, which requires Ruby 2.3, which is not available on the Travis VM.
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install yarn
 
 script:
   - |
     cd ElectronClient/app
-    npm install
+    yarn install
     yarn dist
