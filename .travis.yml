@@ -19,7 +19,6 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
-
 # cache:
 #   directories:
 #     - node_modules
@@ -34,6 +33,7 @@ before_install:
 script:
   - |
     cd ElectronClient/app
+    rsync -aP ../../ReactNativeClient/lib lib/
     npm install
     yarn dist
 
