@@ -267,6 +267,12 @@ class Application extends BaseApplication {
                         }
                     },
                     {
+                        label: _('Check for updates'),
+                        click() {
+                            bridge().checkForUpdatesAndNotify();
+                        }
+                    },
+                    {
                         label: _('About Joplin'),
                         click: () => {
                             const p = require('./package.json');
