@@ -275,7 +275,7 @@ class Application extends BaseApplication {
                             let message = [
                                 p.description,
                                 '',
-                                'Copyright © 2024-2025',
+                                'Copyright © 2024-2025 Witthaya Thongchin',
                                 _(
                                     '%s %s (%s, %s)',
                                     p.name,
