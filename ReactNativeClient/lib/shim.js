@@ -10,6 +10,18 @@ shim.isReactNative = () => {
     return !shim.isNode();
 };
 
+shim.isLinux = () => {
+    return process && process.platform === 'linux';
+};
+
+shim.isWindows = () => {
+    return process && process.platform === 'win32';
+};
+
+shim.isMac = () => {
+    return process && process.platform === 'darwin';
+};
+
 // https://github.com/cheton/is-electron
 shim.isElectron = () => {
     // Renderer process

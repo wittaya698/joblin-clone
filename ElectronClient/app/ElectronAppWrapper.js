@@ -28,9 +28,19 @@ class ElectronAppWrapper {
     }
 
     createWindow() {
+        const windowStateKeeper = require('electron-window-state');
+
+        // Load the previous state with fallback to defaults
+        const windowState = windowStateKeeper({
+            defaultWidth: 800,
+            defaultHeight: 600
+        });
+
         this.win_ = new BrowserWindow({
-            width: 800,
-            height: 600,
+            x: windowState.x,
+            y: windowState.y,
+            width: windowState.width,
+            height: windowState.height,
             webPreferences: {
                 webviewTag: true,
                 nodeIntegration: true, // Enable node integration
@@ -54,6 +64,11 @@ class ElectronAppWrapper {
         this.win_.on('closed', () => {
             this.win_ = null;
         });
+
+        // Let us register listeners on the window, so we can update the state
+        // automatically (the listeners will be removed when the window is closed)
+        // and restore the maximized or full screen state
+        windowState.manage(this.win_);
     }
 
     async waitForElectronAppReady() {

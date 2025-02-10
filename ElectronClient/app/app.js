@@ -3,6 +3,7 @@ require('app-module-path').addPath(__dirname);
 const { BaseApplication } = require('lib/BaseApplication');
 const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
 const { Setting } = require('lib/models/setting.js');
+const { shim } = require('lib/shim.js');
 const { BaseModel } = require('lib/base-model.js');
 const { _, setLocale } = require('lib/locale.js');
 const os = require('os');
@@ -29,7 +30,8 @@ const appDefaultState = Object.assign({}, defaultState, {
     navHistory: [],
     fileToImport: null,
     windowCommand: null,
-    noteVisiblePanes: ['editor', 'viewer']
+    noteVisiblePanes: ['editor', 'viewer'],
+    windowContentSize: bridge().windowContentSize()
 });
 
 class Application extends BaseApplication {
@@ -260,7 +262,7 @@ class Application extends BaseApplication {
                 label: _('Help'),
                 submenu: [
                     {
-                        label: _('Documentation'),
+                        label: _('Website and documentation'),
                         accelerator: 'F1',
                         click() {
                             bridge().openExternal('http://localhost');
@@ -275,10 +277,11 @@ class Application extends BaseApplication {
                                 '',
                                 'Copyright © 2024-2025',
                                 _(
-                                    '%s %s (%s)',
+                                    '%s %s (%s, %s)',
                                     p.name,
                                     p.version,
-                                    Setting.value('env')
+                                    Setting.value('env'),
+                                    process.platform
                                 )
                             ];
                             bridge().showMessageBox({
@@ -317,6 +320,16 @@ class Application extends BaseApplication {
 
         this.initRedux();
 
+        // const windowSize = Setting.value('windowSize');
+        // const width = windowSize && windowSize.width ? windowSize.width : 800;
+        // const height = windowSize && windowSize.height ? windowSize.height : 800;
+        // bridge().windowSetSize(width, height);
+
+        // this.store().dispatch({
+        // 	type: 'WINDOW_CONTENT_SIZE_SET',
+        // 	size: bridge().windowContentSize(),
+        // });
+
         // Since the settings need to be loaded before the store is created, it will never
         // receive the SETTING_UPDATE_ALL even, which mean state.settings will not be
         // initialised. So we manually call dispatchUpdateAll() to force an update.
@@ -342,14 +355,23 @@ class Application extends BaseApplication {
             );
         };
 
-        setTimeout(() => {
-            runAutoUpdateCheck();
-        }, 5000);
+        // Note: Auto-update currently doesn't work in Linux: it downloads the update
+        // but then doesn't install it on exit.
+        if (shim.isWindows() || shim.isMac()) {
+            const runAutoUpdateCheck = function () {
+                bridge().checkForUpdatesAndNotify(
+                    Setting.value('profileDir') + '/log-autoupdater.txt'
+                );
+            };
 
-        // For those who leave the app always open
-        setInterval(() => {
-            runAutoUpdateCheck();
-        }, 2 * 60 * 60 * 1000);
+            setTimeout(() => {
+                runAutoUpdateCheck();
+            }, 5000);
+            // For those who leave the app always open
+            setInterval(() => {
+                runAutoUpdateCheck();
+            }, 2 * 60 * 60 * 1000);
+        }
     }
 }
 

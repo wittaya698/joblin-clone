@@ -148,8 +148,10 @@ class NoteListComponent extends React.Component {
                 this.style().listItemTitleCompleted
             );
 
+        // Need to include "todo_completed" in key so that checkbox is updated when
+        // item is changed via sync.
         return (
-            <div key={item.id} style={style}>
+            <div key={item.id + '_' + item.todo_completed} style={style}>
                 {checkbox}
                 <a
                     data-id={item.id}
