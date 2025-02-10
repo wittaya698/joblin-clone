@@ -267,12 +267,6 @@ class Application extends BaseApplication {
                         }
                     },
                     {
-                        label: _('Check for updates'),
-                        click() {
-                            bridge().checkForUpdatesAndNotify();
-                        }
-                    },
-                    {
                         label: _('About Joplin'),
                         click: () => {
                             const p = require('./package.json');
@@ -341,6 +335,21 @@ class Application extends BaseApplication {
             type: 'FOLDER_SELECT',
             id: Setting.value('activeFolderId')
         });
+
+        const runAutoUpdateCheck = function () {
+            bridge().checkForUpdatesAndNotify(
+                Setting.value('profileDir') + '/log-autoupdater.txt'
+            );
+        };
+
+        setTimeout(() => {
+            runAutoUpdateCheck();
+        }, 5000);
+
+        // For those who leave the app always open
+        setInterval(() => {
+            runAutoUpdateCheck();
+        }, 2 * 60 * 60 * 1000);
     }
 }
 
