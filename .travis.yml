@@ -10,6 +10,16 @@ matrix:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
+    - os: linux
+      sudo: required
+      dist: trusty
+      language: node_js
+      node_js: "20"
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+
 # cache:
 #   directories:
 #     - node_modules
@@ -26,3 +36,5 @@ script:
     cd ElectronClient/app
     npm install
     yarn dist
+
+# r
