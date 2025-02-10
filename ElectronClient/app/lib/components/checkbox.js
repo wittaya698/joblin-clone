@@ -1,0 +1,62 @@
+const { Component } = require('react');
+const { StyleSheet, TouchableHighlight } = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+
+const styles = {
+    checkboxIcon: {
+        fontSize: 20,
+        height: 22,
+        marginRight: 10
+    }
+};
+
+class Checkbox extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            checked: false
+        };
+    }
+
+    UNSAFE_componentWillMount() {
+        this.setState({ checked: this.props.checked });
+    }
+
+    UNSAFE_componentWillReceiveProps(newProps) {
+        if ('checked' in newProps) {
+            this.setState({ checked: newProps.checked });
+        }
+    }
+
+    onPress() {
+        let newChecked = !this.state.checked;
+        this.setState({ checked: newChecked });
+        if (this.props.onChange) this.props.onChange(newChecked);
+    }
+
+    render() {
+        const iconName = this.state.checked ? 'checkbox' : 'square-outline';
+
+        let style = this.props.style ? Object.assign({}, this.props.style) : {};
+        style.justifyContent = 'center';
+        style.alignItems = 'center';
+
+        const checkboxIconStyle = Object.assign({}, styles.checkboxIcon);
+        if (style.color) checkboxIconStyle.color = style.color;
+
+        const thStyle = {
+            justifyContent: 'center',
+            alignItems: 'center'
+        };
+
+        if (style.display) thStyle.display = style.display;
+
+        return (
+            <TouchableHighlight onPress={() => this.onPress()} style={thStyle}>
+                <Icon name={iconName} style={checkboxIconStyle} />
+            </TouchableHighlight>
+        );
+    }
+}
+
+module.exports = { Checkbox };

@@ -9,7 +9,7 @@ cache:
   - '%USERPROFILE%\.electron'
 
 install:
-  - ps: Install-Product node 20 arm64
+  - ps: Install-Product node 20.0.0 arm64
   - yarn
 
 build_script:
