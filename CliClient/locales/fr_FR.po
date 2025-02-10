@@ -573,8 +573,16 @@ msgstr ""
 "dedans. Continuer ?"
 
 #, fuzzy
+msgid "Please create a notebook first."
+msgstr "Veuillez d'abord sélectionner un carnet."
+
+#, fuzzy
 msgid "Note title:"
 msgstr "cat <titre>"
+
+#, fuzzy
+msgid "Please create a notebook first"
+msgstr "Veuillez d'abord sélectionner un carnet."
 
 #, fuzzy
 msgid "To-do title:"
@@ -614,6 +622,17 @@ msgstr "Attacher un fichier"
 
 msgid "Refresh"
 msgstr "Rafraîchir"
+
+#, fuzzy
+msgid "OneDrive Login"
+msgstr "OneDrive"
+
+#, fuzzy
+msgid "Import"
+msgstr "Importé - %s"
+
+msgid "Configuration"
+msgstr "Configuration"
 
 msgid "Delete notebook?"
 msgstr "Supprimer le carnet ?"
@@ -845,9 +864,6 @@ msgstr "Journal"
 msgid "Status"
 msgstr "Etat"
 
-msgid "Configuration"
-msgstr "Configuration"
-
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
 
@@ -1061,9 +1077,6 @@ msgstr "Bienvenue"
 #, fuzzy
 #~ msgid "use <notebook>"
 #~ msgstr "Nouveau carnet"
-
-#~ msgid "Imported - %s"
-#~ msgstr "Importé - %s"
 
 #~ msgid ""
 #~ "There is currently no notebook. Create one by clicking on the (+) button."

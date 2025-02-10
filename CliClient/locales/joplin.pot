@@ -513,7 +513,13 @@ msgid ""
 "New notebook \"%s\" will be created and file \"%s\" will be imported into it"
 msgstr ""
 
+msgid "Please create a notebook first."
+msgstr ""
+
 msgid "Note title:"
+msgstr ""
+
+msgid "Please create a notebook first"
 msgstr ""
 
 msgid "To-do title:"
@@ -547,6 +553,15 @@ msgid "Attach file"
 msgstr ""
 
 msgid "Refresh"
+msgstr ""
+
+msgid "OneDrive Login"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Configuration"
 msgstr ""
 
 msgid "Delete notebook?"
@@ -764,9 +779,6 @@ msgid "Log"
 msgstr ""
 
 msgid "Status"
-msgstr ""
-
-msgid "Configuration"
 msgstr ""
 
 msgid "Cancel synchronisation"
