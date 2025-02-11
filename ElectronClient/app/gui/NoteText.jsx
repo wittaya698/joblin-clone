@@ -312,25 +312,29 @@ class NoteTextComponent extends React.Component {
             new MenuItem({
                 label: _('Attach file'),
                 click: async () => {
-                    const filePaths = bridge().showOpenDialog({
+                    const filePathsObj = await bridge().showOpenDialog({
                         properties: ['openFile', 'createDirectory']
                     });
+                    const filePaths = filePathsObj.filePaths;
                     if (!filePaths || !filePaths.length) return;
-                    throw new Error(
-                        'Attach file process need further implementation'
-                    );
 
-                    // await this.saveIfNeeded();
-                    // const note = await Note.load(noteId);
-                    // const newNote = await shim.attachFileToNote(
-                    //     note,
-                    //     filePaths[0]
-                    // );
+                    await this.saveIfNeeded();
+                    const note = await Note.load(noteId);
 
-                    // this.setState({
-                    //     note: newNote,
-                    //     lastSavedNote: Object.assign({}, newNote)
-                    // });
+                    try {
+                        reg.logger().info('Attaching ' + filePaths[0]);
+                        const newNote = await shim.attachFileToNote(
+                            note,
+                            filePaths[0]
+                        );
+                        reg.logger().info('File was attached.');
+                        this.setState({
+                            note: newNote,
+                            lastSavedNote: Object.assign({}, newNote)
+                        });
+                    } catch (error) {
+                        reg.logger().error(error);
+                    }
                 }
             })
         );
