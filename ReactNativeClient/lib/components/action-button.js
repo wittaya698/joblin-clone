@@ -180,7 +180,7 @@ class ActionButtonComponent extends React.Component {
 }
 
 const ActionButton = connect(state => {
-    return { folders: state.folders };
+    return { folders: state.folders, locale: state.settings.locale };
 })(ActionButtonComponent);
 
 module.exports = { ActionButton };
