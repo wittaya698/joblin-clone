@@ -78,6 +78,7 @@
   },
   "devDependencies": {
     "gettext-parser": "^1.2.2",
-    "jasmine": "^5.5.0"
+    "jasmine": "^5.5.0",
+    "mustache": "^4.2.0"
   }
 }
