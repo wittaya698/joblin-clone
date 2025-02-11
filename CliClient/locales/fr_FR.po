@@ -603,6 +603,10 @@ msgstr "Modifier les étiquettes"
 msgid "Separate each tag by a comma."
 msgstr ""
 
+#, fuzzy
+msgid "Rename notebook:"
+msgstr "Nouveau carnet"
+
 msgid "Layout"
 msgstr ""
 
@@ -643,6 +647,9 @@ msgid "Delete notebook?"
 msgstr "Supprimer le carnet ?"
 
 msgid "Remove this tag from all the notes?"
+msgstr ""
+
+msgid "Rename"
 msgstr ""
 
 #, fuzzy
