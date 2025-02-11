@@ -538,6 +538,9 @@ msgstr ""
 msgid "Separate each tag by a comma."
 msgstr ""
 
+msgid "Rename notebook:"
+msgstr ""
+
 msgid "Layout"
 msgstr ""
 
@@ -572,6 +575,9 @@ msgid "Delete notebook?"
 msgstr ""
 
 msgid "Remove this tag from all the notes?"
+msgstr ""
+
+msgid "Rename"
 msgstr ""
 
 msgid "Notebooks"
