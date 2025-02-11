@@ -113,8 +113,8 @@ const headerHtml = `
 <body>
 <div class="container">
 <div class="header">
-	<a class="forkme" href="https://github.com/wittaya698/joplin-clone"><img src="docs/images/ForkMe.png"/></a>
-	<h1 id="joplin"><img class="title-icon" src="docs/images/Icon512.png">oplin</h1>
+	<a class="forkme" href="https://github.com/wittaya698/joplin-clone"><img src="images/ForkMe.png"/></a>
+	<h1 id="joplin"><img class="title-icon" src="images/Icon512.png">oplin</h1>
 	<p class="sub-title">A free, open source, note taking and to-do application with synchronisation capabilities.</p>
 </div>
 <div class="content">
@@ -194,7 +194,7 @@ async function main() {
     const md = fs.readFileSync(rootDir + '/README.md', 'utf8');
     const html = markdownToHtml(md);
 
-    fs.writeFileSync(rootDir + '/index.html', html);
+    fs.writeFileSync(rootDir + '/docs/index.html', html);
 }
 
 main().catch(error => {
