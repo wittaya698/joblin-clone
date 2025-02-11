@@ -8,14 +8,11 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-**SCREENSHOT OF THREE CLIENTS SIDE BY SIDE**
-
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminal.png" width="100%">
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/Phone.png">
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/AllClients.jpg" width="100%">
 
 # Installation
 
-Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android and iOS) or for **terminal** emulator (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
+Three types of applications are available: **desktop** (Windows, macOS and Linux), **mobile** (Android) or for **terminal** emulator (Windows, macOS and Linux). All applications have similar user interfaces and can synchronise with each others.
 
 ## Desktop applications
 
@@ -36,9 +33,9 @@ On macOS, Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandli
 
 To start it, type `joplin`.
 
-For usage information, please see the full
+For usage information, please refer to the full Document
 
-- See Documentation
+- See Document
 
 The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.
 
@@ -55,10 +52,10 @@ To start it, type `demo-joplin`.
 - Synchronises to a plain text format, which can be easily manipulated, backed up, or exported to a different format.
 - Plain text notes, which are rendered as markdown in the mobile and desktop application.
 - Tag support
-- File attachment support (images are displayed and other files are linked and can be opened in the relevant application).
+- File attachment support (images are displayed, and other files are linked and can be opened in the relevant application).
 - Search functionality.
 - Geo-location support.
-- Supports multiple languages (Currently English and French).
+- Supports multiple languages
 
 # Importing notes from Evernote
 
