@@ -10,6 +10,7 @@ class MdToHtml {
         if (!options) options = {};
 
         this.supportsResourceLinks_ = !!options.supportsResourceLinks;
+        this.loadedResources_ = {};
         this.cachedContent_ = null;
         this.cachedContentKey_ = null;
     }

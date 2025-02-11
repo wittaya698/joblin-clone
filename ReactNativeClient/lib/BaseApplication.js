@@ -71,7 +71,10 @@ class BaseApplication {
     async handleStartFlags_(argv, setDefaults = true) {
         let matched = {};
         argv = argv.slice(0);
-        argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+
+        // Critical :-> to set it back to 2 when argv is set right
+        // argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+        argv.splice(0, 3); // First arguments are the node executable, and the node JS file, and "."
 
         while (argv.length) {
             let arg = argv[0];
