@@ -102,12 +102,14 @@ class MainScreenComponent extends React.Component {
                                 );
                             } catch (error) {
                                 bridge().showErrorMessageBox(error.message);
-                                return;
                             }
-                            this.props.dispatch({
-                                type: 'FOLDER_SELECT',
-                                id: folder.id
-                            });
+
+                            if (folder) {
+                                this.props.dispatch({
+                                    type: 'FOLDER_SELECT',
+                                    id: folder.id
+                                });
+                            }
                         }
                         this.setState({ promptOptions: null });
                     }
@@ -133,6 +135,29 @@ class MainScreenComponent extends React.Component {
                                 command.noteId,
                                 tagTitles
                             );
+                        }
+                        this.setState({ promptOptions: null });
+                    }
+                }
+            });
+        } else if (command.name === 'renameNotebook') {
+            const folder = await Folder.load(command.id);
+            if (!folder) return;
+
+            this.setState({
+                promptOptions: {
+                    label: _('Rename notebook:'),
+                    value: folder.title,
+                    onClose: async answer => {
+                        if (answer !== null) {
+                            try {
+                                await Folder.save(
+                                    { id: folder.id, title: answer },
+                                    { userSideValidation: true }
+                                );
+                            } catch (error) {
+                                bridge().showErrorMessageBox(error.message);
+                            }
                         }
                         this.setState({ promptOptions: null });
                     }
