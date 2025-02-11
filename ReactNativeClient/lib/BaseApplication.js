@@ -71,7 +71,10 @@ class BaseApplication {
     async handleStartFlags_(argv, setDefaults = true) {
         let matched = {};
         argv = argv.slice(0);
-        argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+
+        // Critical :-> to set it back to 2 when argv is set right
+        // argv.splice(0, 2); // First arguments are the node executable, and the node JS file
+        argv.splice(0, 3); // First arguments are the node executable, and the node JS file, and "."
 
         while (argv.length) {
             let arg = argv[0];
@@ -95,6 +98,12 @@ class BaseApplication {
 
             if (arg == '--is-demo') {
                 Setting.setConstant('isDemo', true);
+                argv.splice(0, 1);
+                continue;
+            }
+
+            if (arg == '--open-dev-tools') {
+                Setting.setConstant('openDevTools', true);
                 argv.splice(0, 1);
                 continue;
             }
@@ -374,15 +383,6 @@ class BaseApplication {
             this.dbLogger_.setLevel(Logger.LEVEL_DEBUG);
         }
 
-        // const packageJson = require('./package.json');
-        // this.logger_.info(
-        //     sprintf(
-        //         'Starting %s %s (%s)...',
-        //         packageJson.name,
-        //         packageJson.version,
-        //         Setting.value('env')
-        //     )
-        // );
         this.logger_.info('Profile directory: ' + profileDir);
 
         this.database_ = new JoplinDatabase(new DatabaseDriverNode());

@@ -10,4 +10,4 @@ git tag $VERSION
 git push && git push --tags
 
 echo "Create a draft release at:
-https://github.com/wittaya698/joplin-clone/releases/tags/$VERSION"
+https://github.com/wittaya698/joplin-clone/releases/tag/$VERSION"

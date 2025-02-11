@@ -503,7 +503,8 @@ Setting.constants_ = {
     appType: 'SET_ME', // 'cli' or 'mobile'
     resourceDir: '',
     profileDir: '',
-    tempDir: ''
+    tempDir: '',
+    openDevTools: false
 };
 
 module.exports = { Setting };

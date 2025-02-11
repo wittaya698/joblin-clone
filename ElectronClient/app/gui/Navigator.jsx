@@ -5,7 +5,7 @@ const { app } = require('../app.js');
 const { bridge } = require('@electron/remote').require('./bridge');
 
 class NavigatorComponent extends Component {
-    componentWillReceiveProps(newProps) {
+    UNSAFE_componentWillReceiveProps(newProps) {
         if (newProps.route) {
             const screenInfo = this.props.screens[newProps.route.routeName];
             let windowTitle = ['Joplin'];

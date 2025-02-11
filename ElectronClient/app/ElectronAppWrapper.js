@@ -59,7 +59,7 @@ class ElectronAppWrapper {
             })
         );
 
-        if (this.env_ === 'dev') this.win_.webContents.openDevTools();
+        // if (this.env_ === 'dev') this.win_.webContents.openDevTools();
 
         this.win_.on('closed', () => {
             this.win_ = null;
