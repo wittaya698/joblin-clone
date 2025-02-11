@@ -25,24 +25,30 @@ const defaultState = {
     windowContentSize: { width: 0, height: 0 }
 };
 
-function folderOrNoteDelete(state, action) {
+// When deleting a note, tag or folder
+function handleItemDelete(state, action) {
     let newState = Object.assign({}, state);
 
-    const idKey = action.type === 'FOLDER_DELETE' ? 'folderId' : 'noteId';
-    const listKey = action.type === 'FOLDER_DELETE' ? 'folders' : 'notes';
-    const selectedItemKey =
-        action.type === 'FOLDER_DELETE' ? 'selectedFolderId' : 'selectedNoteId';
+    const map = {
+        FOLDER_DELETE: ['folders', 'selectedFolderId'],
+        NOTE_DELETE: ['notes', 'selectedNoteId'],
+        TAG_DELETE: ['tags', 'selectedTagId'],
+        SEARCH_DELETE: ['searches', 'selectedSearchId']
+    };
+
+    const listKey = map[action.type][0];
+    const selectedItemKey = map[action.type][1];
 
     let previousIndex = 0;
     let newItems = [];
     const items = state[listKey];
     for (let i = 0; i < items.length; i++) {
-        let f = items[i];
-        if (f.id == action[idKey]) {
+        let item = items[i];
+        if (item.id == action.id) {
             previousIndex = i;
             continue;
         }
-        newItems.push(f);
+        newItems.push(item);
     }
 
     newState = Object.assign({}, state);
@@ -68,8 +74,8 @@ function updateOneTagOrFolder(state, action) {
             ? state.tags.splice(0)
             : state.folders.splice(0);
     let item = action.type === 'TAG_UPDATE_ONE' ? action.tag : action.folder;
-    var found = false;
 
+    var found = false;
     for (let i = 0; i < newItems.length; i++) {
         let n = newItems[i];
         if (n.id == item.id) {
@@ -82,6 +88,7 @@ function updateOneTagOrFolder(state, action) {
     if (!found) newItems.push(item);
 
     let newState = Object.assign({}, state);
+
     if (action.type === 'TAG_UPDATE_ONE') {
         newState.tags = newItems;
     } else {
@@ -93,6 +100,7 @@ function updateOneTagOrFolder(state, action) {
 
 function defaultNotesParentType(state, exclusion) {
     let newNotesParentType = null;
+
     if (exclusion !== 'Folder' && state.selectedFolderId) {
         newNotesParentType = 'Folder';
     } else if (exclusion !== 'Tag' && state.selectedTagId) {
@@ -100,6 +108,7 @@ function defaultNotesParentType(state, exclusion) {
     } else if (exclusion !== 'Search' && state.selectedSearchId) {
         newNotesParentType = 'Search';
     }
+
     return newNotesParentType;
 }
 
@@ -208,7 +217,11 @@ const reducer = (state = defaultState, action) => {
                 break;
 
             case 'NOTE_DELETE':
-                newState = folderOrNoteDelete(state, action);
+                newState = handleItemDelete(state, action);
+                break;
+
+            case 'TAG_DELETE':
+                newState = handleItemDelete(state, action);
                 break;
 
             case 'FOLDER_UPDATE_ALL':
@@ -243,7 +256,7 @@ const reducer = (state = defaultState, action) => {
                 break;
 
             case 'FOLDER_DELETE':
-                newState = folderOrNoteDelete(state, action);
+                newState = handleItemDelete(state, action);
                 break;
 
             case 'SYNC_STARTED':
@@ -273,20 +286,8 @@ const reducer = (state = defaultState, action) => {
                 newState.searches = searches;
                 break;
 
-            case 'SEARCH_REMOVE':
-                let foundIndex = -1;
-                for (let i = 0; i < state.searches.length; i++) {
-                    if (state.searches[i].id === action.id) {
-                        foundIndex = i;
-                        break;
-                    }
-                }
-                if (foundIndex >= 0) {
-                    newState = Object.assign({}, state);
-                    let newSearches = newState.searches.slice();
-                    newSearches.splice(foundIndex, 1);
-                    newState.searches = newSearches;
-                }
+            case 'SEARCH_DELETE':
+                newState = handleItemDelete(state, action);
                 break;
 
             case 'SEARCH_SELECT':

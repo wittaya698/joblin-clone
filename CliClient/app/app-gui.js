@@ -345,7 +345,7 @@ class AppGui {
                         );
                     } else if (item.type_ === BaseModel.TYPE_SEARCH) {
                         this.store().dispatch({
-                            type: 'SEARCH_REMOVE',
+                            type: 'SEARCH_DELETE',
                             id: item.id
                         });
                     }

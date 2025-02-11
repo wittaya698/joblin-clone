@@ -52,13 +52,13 @@ class Bridge {
         });
     }
 
-    showConfirmMessageBox(message) {
-        const result = this.showMessageBox({
+    async showConfirmMessageBox(message) {
+        const result = await this.showMessageBox({
             type: 'question',
             message: message,
             buttons: [_('OK'), _('Cancel')]
         });
-        return result === 0;
+        return result.response === 0;
     }
 
     get Menu() {

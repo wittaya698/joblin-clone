@@ -245,6 +245,43 @@ class Application extends BaseApplication {
                 ]
             },
             {
+                label: _('Edit'),
+                submenu: [
+                    {
+                        label: _('Copy'),
+                        screens: ['Main'],
+                        role: 'copy',
+                        accelerator: 'CommandOrControl+C'
+                    },
+                    {
+                        label: _('Cut'),
+                        screens: ['Main'],
+                        role: 'copy',
+                        accelerator: 'CommandOrControl+X'
+                    },
+                    {
+                        label: _('Paste'),
+                        screens: ['Main'],
+                        role: 'copy',
+                        accelerator: 'CommandOrControl+V'
+                    },
+                    {
+                        type: 'separator'
+                    },
+                    {
+                        label: _('Search in all the notes'),
+                        screens: ['Main'],
+                        accelerator: 'F6',
+                        click: () => {
+                            this.dispatch({
+                                type: 'WINDOW_COMMAND',
+                                name: 'search'
+                            });
+                        }
+                    }
+                ]
+            },
+            {
                 label: _('Tools'),
                 submenu: [
                     {
@@ -342,12 +379,6 @@ class Application extends BaseApplication {
             type: 'FOLDER_SELECT',
             id: Setting.value('activeFolderId')
         });
-
-        const runAutoUpdateCheck = function () {
-            bridge().checkForUpdatesAndNotify(
-                Setting.value('profileDir') + '/log-autoupdater.txt'
-            );
-        };
 
         // Note: Auto-update currently doesn't work in Linux: it downloads the update
         // but then doesn't install it on exit.

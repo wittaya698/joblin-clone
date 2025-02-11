@@ -99,6 +99,8 @@ class SideBarComponent extends React.Component {
             deleteMessage = _('Delete notebook?');
         } else if (itemType === BaseModel.TYPE_TAG) {
             deleteMessage = _('Remove this tag from all the notes?');
+        } else if (itemType === BaseModel.TYPE_SEARCH) {
+            deleteMessage = _('Remove this search from the sidebar?');
         }
 
         const menu = new Menu();
@@ -107,30 +109,39 @@ class SideBarComponent extends React.Component {
             new MenuItem({
                 label: _('Delete'),
                 click: async () => {
-                    const ok = bridge().showConfirmMessageBox(deleteMessage);
+                    const ok = await bridge().showConfirmMessageBox(
+                        deleteMessage
+                    );
                     if (!ok) return;
 
                     if (itemType === BaseModel.TYPE_FOLDER) {
                         await Folder.delete(itemId);
                     } else if (itemType === BaseModel.TYPE_TAG) {
                         await Tag.untagAll(itemId);
+                    } else if (itemType === BaseModel.TYPE_SEARCH) {
+                        this.props.dispatch({
+                            type: 'SEARCH_DELETE',
+                            id: itemId
+                        });
                     }
                 }
             })
         );
 
-        menu.append(
-            new MenuItem({
-                label: _('Rename'),
-                click: async () => {
-                    this.props.dispatch({
-                        type: 'WINDOW_COMMAND',
-                        name: 'renameNotebook',
-                        id: itemId
-                    });
-                }
-            })
-        );
+        if (itemType === BaseModel.TYPE_FOLDER) {
+            menu.append(
+                new MenuItem({
+                    label: _('Rename'),
+                    click: async () => {
+                        this.props.dispatch({
+                            type: 'WINDOW_COMMAND',
+                            name: 'renameNotebook',
+                            id: itemId
+                        });
+                    }
+                })
+            );
+        }
 
         menu.popup(bridge().window());
     }
@@ -146,6 +157,13 @@ class SideBarComponent extends React.Component {
         this.props.dispatch({
             type: 'TAG_SELECT',
             id: tag ? tag.id : null
+        });
+    }
+
+    searchItem_click(search) {
+        this.props.dispatch({
+            type: 'SEARCH_SELECT',
+            id: search ? search.id : null
         });
     }
 
@@ -195,6 +213,28 @@ class SideBarComponent extends React.Component {
                 }}
             >
                 {tag.title}
+            </a>
+        );
+    }
+
+    searchItem(search, selected) {
+        let style = Object.assign({}, this.style().listItem);
+        if (selected)
+            style = Object.assign(style, this.style().listItemSelected);
+        return (
+            <a
+                className="list-item"
+                href="#"
+                data-id={search.id}
+                data-type={BaseModel.TYPE_SEARCH}
+                onContextMenu={event => this.itemContextMenu(event)}
+                key={search.id}
+                style={style}
+                onClick={() => {
+                    this.searchItem_click(search);
+                }}
+            >
+                {search.title}
             </a>
         );
     }
@@ -273,6 +313,21 @@ class SideBarComponent extends React.Component {
             );
         }
 
+        if (this.props.searches.length) {
+            items.push(
+                this.makeHeader('searchHeader', _('Searches'), 'fa-search')
+            );
+            const searchItems = shared.renderSearches(
+                this.props,
+                this.searchItem.bind(this)
+            );
+            items.push(
+                <div className="searches" key="search_items">
+                    {searchItems}
+                </div>
+            );
+        }
+
         let lines = Synchronizer.reportToLines(this.props.syncReport);
         const syncReportText = [];
         for (let i = 0; i < lines.length; i++) {
@@ -302,10 +357,12 @@ const mapStateToProps = state => {
     return {
         folders: state.folders,
         tags: state.tags,
+        searches: state.searches,
         syncStarted: state.syncStarted,
         syncReport: state.syncReport,
         selectedFolderId: state.selectedFolderId,
         selectedTagId: state.selectedTagId,
+        selectedSearchId: state.selectedSearchId,
         notesParentType: state.notesParentType,
         locale: state.settings.locale,
         theme: state.settings.theme
