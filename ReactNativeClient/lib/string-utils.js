@@ -362,4 +362,4 @@ function splitCommandString(command) {
     return args;
 }
 
-module.exports = { removeDiacritics, escapeFilename, wrap , splitCommandString);
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString };
