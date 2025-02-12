@@ -2,7 +2,7 @@ const React = require('react');
 const { Component } = React;
 const { connect } = require('react-redux');
 const {
-    Modal,
+    Platform,
     View,
     Text,
     Button,
@@ -54,6 +54,7 @@ class ScreenHeaderComponent extends Component {
                 alignItems: 'center',
                 shadowColor: '#000000',
                 elevation: 5
+                // paddingTop: Platform.OS === 'ios' ? 10 : 0 // Extra padding for iOS because the top icons are there
             },
             divider: {
                 borderBottomWidth: 1,
@@ -356,7 +357,7 @@ class ScreenHeaderComponent extends Component {
                             backgroundColor: theme.backgroundColor
                         }}
                         headerStyle={{
-                            color: theme.raisedColor,
+                            color: theme.raisedHighlightedColor,
                             fontSize: theme.fontSize
                         }}
                         itemStyle={{

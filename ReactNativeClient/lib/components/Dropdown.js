@@ -83,8 +83,8 @@ class Dropdown extends React.Component {
                 height: 35,
                 // borderWidth: 1,
                 // borderColor: '#ccc',
-                paddingLeft: 20,
-                paddingRight: 20,
+                // paddingLeft: 20,
+                // paddingRight: 20,
                 flex: 1,
                 flexDirection: 'row',
                 alignItems: 'center'
@@ -103,7 +103,8 @@ class Dropdown extends React.Component {
             {},
             this.props.headerStyle ? this.props.headerStyle : {},
             {
-                flex: 0
+                flex: 0,
+                marginRight: 10
             }
         );
 
@@ -156,6 +157,7 @@ class Dropdown extends React.Component {
                         this.setState({ listVisible: true });
                     }}
                 >
+                    <Text style={headerArrowStyle}>{'▼'}</Text>
                     <Text
                         ellipsizeMode="tail"
                         numberOfLines={1}
@@ -163,7 +165,6 @@ class Dropdown extends React.Component {
                     >
                         {headerLabel}
                     </Text>
-                    <Text style={headerArrowStyle}>{'▼'}</Text>
                 </TouchableOpacity>
                 <Modal
                     transparent={true}
