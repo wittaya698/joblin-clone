@@ -2,6 +2,7 @@ const React = require('react');
 const { Component } = React;
 const { connect } = require('react-redux');
 const {
+    Modal,
     View,
     Text,
     Button,
@@ -12,13 +13,14 @@ const {
 const Icon = require('react-native-vector-icons/Ionicons').default;
 const { Log } = require('lib/log.js');
 const { BackButtonService } = require('lib/services/back-button.js');
-const { Picker } = require('@react-native-picker/picker');
 const { _ } = require('lib/locale.js');
 const { Setting } = require('lib/models/setting.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { reg } = require('lib/registry.js');
 const { themeStyle } = require('lib/components/global-style.js');
+const { ItemList } = require('lib/components/ItemList.js');
+const { Dropdown } = require('lib/components/Dropdown.js');
 const {
     Menu,
     MenuOption,
@@ -52,11 +54,6 @@ class ScreenHeaderComponent extends Component {
                 alignItems: 'center',
                 shadowColor: '#000000',
                 elevation: 5
-            },
-            folderPicker: {
-                flex: 1,
-                color: theme.raisedHighlightedColor
-                // Note: cannot set backgroundStyle as that would remove the arrow in the component
             },
             divider: {
                 borderBottomWidth: 1,
@@ -345,33 +342,32 @@ class ScreenHeaderComponent extends Component {
         );
 
         const createTitleComponent = () => {
+            const themeId = Setting.value('theme');
+            const theme = themeStyle(themeId);
+
             const p = this.props.titlePicker;
             if (p) {
-                let items = [];
-                for (let i = 0; i < p.items.length; i++) {
-                    let item = p.items[i];
-                    items.push(
-                        <Picker.Item
-                            label={item.label}
-                            value={item.value}
-                            key={item.value}
-                        />
-                    );
-                }
                 return (
-                    // <View style={{ flex: 1 }}>
-                    <Picker
-                        style={this.styles().folderPicker}
-                        itemStyle={this.styles().titleText}
+                    <Dropdown
+                        items={p.items}
+                        itemHeight={35}
                         selectedValue={p.selectedValue}
+                        itemListStyle={{
+                            backgroundColor: theme.backgroundColor
+                        }}
+                        headerStyle={{
+                            color: theme.raisedColor,
+                            fontSize: theme.fontSize
+                        }}
+                        itemStyle={{
+                            color: theme.color,
+                            fontSize: theme.fontSize
+                        }}
                         onValueChange={(itemValue, itemIndex) => {
                             if (p.onValueChange)
                                 p.onValueChange(itemValue, itemIndex);
                         }}
-                    >
-                        {items}
-                    </Picker>
-                    // </View>
+                    />
                 );
             } else {
                 let title =
