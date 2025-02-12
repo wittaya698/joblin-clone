@@ -85,6 +85,10 @@
     <string>We need your location to provide better services while you use the app.</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>We need your location even when the app is in the background.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>To allow attaching images to a note</string>
+	<key>NSCameraUsageDescription</key>
+	<string>To allow attaching a photo to a note</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Entypo.ttf</string>

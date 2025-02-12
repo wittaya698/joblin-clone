@@ -178,6 +178,7 @@ dependencies {
     implementation project(':react-native-fs')
     implementation project(':react-native-document-picker')
     implementation project(':react-native-vector-icons')
+    implementation project(':react-native-image-picker')
 }
 
 apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
