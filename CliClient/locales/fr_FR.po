@@ -908,6 +908,18 @@ msgstr "Enregistrer les changements"
 msgid "Discard changes"
 msgstr "Ignorer les changements"
 
+#, fuzzy, javascript-format
+msgid "Unsupported image type: %s"
+msgstr "Lien ou message non géré : %s"
+
+#, fuzzy
+msgid "Attach image"
+msgstr "Attacher un fichier"
+
+#, fuzzy
+msgid "Attach any other file"
+msgstr "Attacher un fichier"
+
 msgid "Delete note"
 msgstr "Supprimer la note"
 
@@ -958,10 +970,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Either \"text\" or \"json\""
 #~ msgstr "Soit \"text\" soit \"json\""
-
-#, javascript-format
-#~ msgid "Unsupported link or message: %s"
-#~ msgstr "Lien ou message non géré : %s"
 
 #~ msgid ""
 #~ "Command line argument \"%s\" contains both quotes and double-quotes - "

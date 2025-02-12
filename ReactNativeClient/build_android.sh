@@ -1,2 +1,2 @@
 cd android
-./gradlew installDebug
+./gradlew installDebug --console plain

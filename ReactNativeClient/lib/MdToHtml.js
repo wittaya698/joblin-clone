@@ -78,6 +78,20 @@ class MdToHtml {
 
             const resource = await Resource.load(id);
 
+            // Critical -> been deleted but brought back, not sure why need to be removed
+            try {
+                resource.base64 = await shim.readLocalFileBase64(
+                    Resource.fullPath(resource)
+                );
+            } catch (error) {
+                console.warn(
+                    'Could not load resource file: ' + id,
+                    Resource.fullPath(resource),
+                    error
+                );
+                return;
+            }
+
             this.loadedResources_[id] = resource;
 
             if (options.onResourceLoaded) options.onResourceLoaded();
@@ -114,7 +128,7 @@ class MdToHtml {
             mime == 'image/jpeg' ||
             mime == 'image/gif'
         ) {
-            const src = './' + Resource.filename(resource);
+            const src = 'data:' + mime + ';base64,' + resource.base64;
             let output =
                 '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
             return output;
