@@ -1,10 +1,4 @@
-const fs = require('fs-extra');
-const { fileExtension, basename, dirname } = require('lib/path-utils.js');
-const { _, setLocale, languageCode } = require('lib/locale.js');
-const marked = require('lib/marked.js');
-const Mustache = require('mustache');
-
-const headerHtml = `<!doctype html>
+<!doctype html>
 <html>
 <head>
 	<title>Joplin - an open source note taking and to-do application with synchronisation capabilities</title>
@@ -166,17 +160,17 @@ const headerHtml = `<!doctype html>
 <div class="container">
 
 <div class="header">
-    <a class="forkme" href="https://github.com/wittaya698/joplin-clone"><img src="{{{imageBaseUrl}}}/ForkMe.png"/></a>
-    <h1 id="joplin"><img class="title-icon" src="{{{imageBaseUrl}}}/Icon512.png">oplin</h1>
+    <a class="forkme" href="https://github.com/wittaya698/joplin-clone"><img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ForkMe.png"/></a>
+    <h1 id="joplin"><img class="title-icon" src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/Icon512.png">oplin</h1>
     <p class="sub-title">An open source note taking and to-do application with synchronisation capabilities.</p>
 </div>
 
 <div class="nav-wrapper">
 	<div class="nav">
 		<ul>
-			<li class="{{selectedHome}}"><a href="{{baseUrl}}/" title="Home"><i class="fa fa-home"></i></a></li>
-			<li class="{{selectedTerminal}}"><a href="{{baseUrl}}/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
-			<li class="{{selectedDesktop}}"><a href="{{baseUrl}}/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;wittaya698&#x2F;joplin-clone&#x2F;7aaf4fb&#x2F;docs/" title="Home"><i class="fa fa-home"></i></a></li>
+			<li class=""><a href="https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;wittaya698&#x2F;joplin-clone&#x2F;7aaf4fb&#x2F;docs/terminal" title="Terminal"><i class="fa fa-terminal"></i></a></li>
+			<li class="selected"><a href="https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;wittaya698&#x2F;joplin-clone&#x2F;7aaf4fb&#x2F;docs/desktop" title="Desktop"><i class="fa fa-desktop"></i></a></li>
 		</ul>
 		<div class="nav-right">
 			<!-- <iframe src="https://www.facebook.com/plugins/share_button.php?href=http%3A%2F%2Fjoplin.cozic.net&layout=button&size=small&mobile_iframe=true&width=60&height=20&appId" width="60" height="20" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true"></iframe> -->
@@ -187,49 +181,8 @@ const headerHtml = `<!doctype html>
 </div>
 
 <div class="content">
-`;
+<p><img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/DemoDesktop.png" style="max-width: 100%"></p>
 
-const footerHtml = `
-</body>
-</html>
-`;
-
-// const screenshotHtml = `
-// <table class="screenshots">
-// 	<tr>
-// 		<th>
-// 			Mobile
-// 		</th>
-// 		<th>
-// 			Command line
-// 		</th>
-// 	</tr>
-// 	<tr>
-// 		<td>
-// 			<img class="mobile-screenshot" src="docs/images/Mobile.png"/>
-// 		</td>
-// 		<td class="cli-screenshot-wrapper">
-// 			<pre class="cli-screenshot">
-//             <span class="prompt">joplin:/My notebook$</span> ls -n 12
-//             [ ] 8am conference call ☎
-//             [ ] Make vet appointment
-//             [ ] Go pick up parcel
-//             [ ] Pay flat rent 💸
-//             [X] Book ferry 🚢
-//             [X] Deploy Joplin app
-//                 Open source stuff
-//                 Swimming pool time table 🏊
-//                 Grocery shopping list 📝
-//                 Work itinerary
-//                 Tuesday random note
-//                 Vacation plans ☀️
-// 			</pre>
-// 		</td>
-// 	</tr>
-// </table>
-// `;
-
-const scriptHtml = `
 <script>window.twttr = (function(d, s, id) {
 	var js, fjs = d.getElementsByTagName(s)[0],
 	t = window.twttr || {};
@@ -265,58 +218,6 @@ const scriptHtml = `
 	ga('create', 'UA-103586105-1', 'auto');
 	ga('send', 'pageview');
 </script>
-`;
 
-const rootDir = dirname(dirname(__dirname));
-
-function markdownToHtml(md) {
-    const renderer = new marked.Renderer();
-
-    // Remove the header because it's going to be added back as HTML
-    md = md.replace(/# Joplin/, '');
-
-    let output = marked(md, {
-        gfm: true,
-        break: true,
-        renderer: renderer
-    });
-
-    // output = output.replace(/<!-- \[SCREENSHOTS\] -->/, screenshotHtml);
-
-    return headerHtml + output + scriptHtml + footerHtml;
-}
-
-function renderFileToHtml(sourcePath, targetPath, params) {
-    const md = fs.readFileSync(sourcePath, 'utf8');
-    params.baseUrl =
-        'https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs';
-    params.imageBaseUrl = params.baseUrl + '/images';
-    const html = Mustache.render(markdownToHtml(md), params);
-    fs.writeFileSync(targetPath, html);
-}
-
-async function main() {
-    renderFileToHtml(rootDir + '/README.md', rootDir + '/docs/index.html', {
-        selectedHome: 'selected'
-    });
-
-    renderFileToHtml(
-        rootDir + '/README_terminal.md',
-        rootDir + '/docs/terminal/index.html',
-        {
-            selectedTerminal: 'selected'
-        }
-    );
-
-    renderFileToHtml(
-        rootDir + '/README_desktop.md',
-        rootDir + '/docs/desktop/index.html',
-        {
-            selectedDesktop: 'selected'
-        }
-    );
-}
-
-main().catch(error => {
-    console.error(error);
-});
+</body>
+</html>
