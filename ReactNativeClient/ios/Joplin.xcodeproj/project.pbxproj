@@ -26,6 +26,7 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Joplin/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Joplin/main.m; sourceTree = "<group>"; };
 		35A45F895D7642169D0C1E87 /* noop-file.swift */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.swift; name = "noop-file.swift"; path = "Joplin/noop-file.swift"; sourceTree = "<group>"; };
+		4DA7F7A61FC1196F00353191 /* Joplin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Joplin.entitlements; path = Joplin/Joplin.entitlements; sourceTree = "<group>"; };
 		58EEBF8E8E6FB1BC6CAF49B5 /* libPods-Joplin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Joplin.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		683F2CECDC154150A3F980AD /* Joplin-Bridging-Header.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = "Joplin-Bridging-Header.h"; path = "Joplin/Joplin-Bridging-Header.h"; sourceTree = "<group>"; };
 		6C2E3173556A471DD304B334 /* Pods-Joplin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Joplin.debug.xcconfig"; path = "Target Support Files/Pods-Joplin/Pods-Joplin.debug.xcconfig"; sourceTree = "<group>"; };
@@ -52,6 +53,7 @@
 		13B07FAE1A68108700A75B9A /* Joplin */ = {
 			isa = PBXGroup;
 			children = (
+				4DA7F7A61FC1196F00353191 /* Joplin.entitlements */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -176,6 +178,11 @@
 						DevelopmentTeam = GLN6L6D32Q;
 						LastSwiftMigration = 1250;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};

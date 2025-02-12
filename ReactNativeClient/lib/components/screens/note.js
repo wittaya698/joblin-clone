@@ -1,5 +1,6 @@
 const React = require('react');
 const {
+    Platform,
     Keyboard,
     BackHandler,
     View,
@@ -54,6 +55,9 @@ class NoteScreenComponent extends BaseScreenComponent {
             isLoading: true,
             titleTextInputHeight: 20
         };
+
+        // iOS doesn't support multiline text fields properly so disable it
+        this.enableMultilineTitle_ = Platform.OS !== 'ios';
 
         this.saveButtonHasBeenShown_ = false;
 
@@ -198,7 +202,7 @@ class NoteScreenComponent extends BaseScreenComponent {
     async pickDocument() {
         try {
             const res = await DocumentPicker.pickSingle({
-                type: [DocumentPicker.types.images]
+                type: [DocumentPicker.types.allFiles]
             });
             return res;
         } catch (error) {
@@ -375,6 +379,8 @@ class NoteScreenComponent extends BaseScreenComponent {
     }
 
     titleTextInput_contentSizeChange(event) {
+        if (!this.enableMultilineTitle_) return;
+
         let height = event.nativeEvent.contentSize.height;
         this.setState({ titleTextInputHeight: height });
     }
@@ -489,15 +495,20 @@ class NoteScreenComponent extends BaseScreenComponent {
             color: theme.color,
             backgroundColor: theme.backgroundColor,
             fontWeight: 'bold',
-            fontSize: theme.fontSize
+            fontSize: theme.fontSize,
+            paddingTop: 10, // Added for iOS (Not needed for Android??)
+            paddingBottom: 10 // Added for iOS (Not needed for Android??)
         };
 
-        titleTextInputStyle.height = this.state.titleTextInputHeight;
+        if (this.enableMultilineTitle_)
+            titleTextInputStyle.height = this.state.titleTextInputHeight;
 
         let checkboxStyle = {
             color: theme.color,
             paddingRight: 10,
-            paddingLeft: theme.marginLeft
+            paddingLeft: theme.marginLeft,
+            paddingTop: 10, // Added for iOS (Not needed for Android??)
+            paddingBottom: 10 // Added for iOS (Not needed for Android??)
         };
 
         const titleComp = (
@@ -516,7 +527,7 @@ class NoteScreenComponent extends BaseScreenComponent {
                         this.titleTextInput_contentSizeChange(event)
                     }
                     autoFocus={isNew}
-                    multiline={true}
+                    multiline={this.enableMultilineTitle_}
                     underlineColorAndroid="#ffffff00"
                     autoCapitalize="sentences"
                     style={titleTextInputStyle}
