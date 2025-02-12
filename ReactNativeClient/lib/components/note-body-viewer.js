@@ -4,6 +4,7 @@ const { Platform, View, Linking } = require('react-native');
 const { WebView } = require('react-native-webview');
 const { globalStyle } = require('lib/components/global-style.js');
 const { Resource } = require('lib/models/resource.js');
+const { Setting } = require('lib/models/setting.js');
 const { reg } = require('lib/registry.js');
 const MdToHtml = require('lib/MdToHtml.js');
 
@@ -86,7 +87,11 @@ class NoteBodyViewer extends Component {
                 <WebView
                     scalesPageToFit={Platform.OS !== 'ios'}
                     style={webViewStyle}
-                    source={{ html: html }}
+                    /* baseUrl is where the images will be loaded from. So images must use a path relative to resourceDir. */
+                    source={{
+                        html: html
+                        // baseUrl: 'file://' + Setting.value('resourceDir') + '/'
+                    }}
                     onLoadEnd={() => this.onLoadEnd()}
                     onError={e => reg.logger().error('WebView error', e)}
                     onMessage={event => {

@@ -1,6 +1,8 @@
 const React = require('react');
 const { Component } = require('react');
 const {
+    TouchableOpacity,
+    Linking,
     View,
     Switch,
     StyleSheet,
@@ -72,6 +74,12 @@ class ConfigScreenComponent extends BaseScreenComponent {
         );
         styles.switchSettingContainer.flexDirection = 'row';
         styles.switchSettingContainer.justifyContent = 'space-between';
+
+        styles.linkText = Object.assign({}, styles.settingText);
+        styles.linkText.borderBottomWidth = 1;
+        styles.linkText.borderBottomColor = theme.color;
+        styles.linkText.flex = 0;
+        styles.linkText.fontWeight = 'normal';
 
         styles.switchSettingControl = Object.assign({}, styles.settingControl);
         delete styles.switchSettingControl.color;
@@ -179,6 +187,38 @@ class ConfigScreenComponent extends BaseScreenComponent {
             if (!comp) continue;
             settingComps.push(comp);
         }
+
+        settingComps.push(
+            <View key="website_link" style={this.styles().settingContainer}>
+                <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL(
+                            'https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/index.html'
+                        );
+                    }}
+                >
+                    <Text key="label" style={this.styles().linkText}>
+                        Joplin Website
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        );
+
+        settingComps.push(
+            <View key="privacy_link" style={this.styles().settingContainer}>
+                <TouchableOpacity
+                    onPress={() => {
+                        Linking.openURL(
+                            'https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/privacy/index.html'
+                        );
+                    }}
+                >
+                    <Text key="label" style={this.styles().linkText}>
+                        Privacy Policy
+                    </Text>
+                </TouchableOpacity>
+            </View>
+        );
 
         //style={this.styles().body}
 

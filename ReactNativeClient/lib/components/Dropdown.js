@@ -157,7 +157,6 @@ class Dropdown extends React.Component {
                         this.setState({ listVisible: true });
                     }}
                 >
-                    <Text style={headerArrowStyle}>{'▼'}</Text>
                     <Text
                         ellipsizeMode="tail"
                         numberOfLines={1}
@@ -165,6 +164,7 @@ class Dropdown extends React.Component {
                     >
                         {headerLabel}
                     </Text>
+                    <Text style={headerArrowStyle}>{'▼'}</Text>
                 </TouchableOpacity>
                 <Modal
                     transparent={true}
