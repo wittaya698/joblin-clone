@@ -223,6 +223,7 @@ async function initialize(dispatch, backButtonHandler) {
     Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
     Setting.setConstant('appId', 'net.witthaya.joplin_clone');
     Setting.setConstant('appType', 'mobile');
+    //Setting.setConstant('resourceDir', () => { return RNFetchBlob.fs.dirs.DocumentDir; });
     Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
 
     const logDatabase = new Database(new DatabaseDriverReactNative());

@@ -62,9 +62,7 @@
 	<key>UIUserInterfaceStyle</key>
 	<string>Automatic</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to provide better services while you use the app.</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>We need your location even when the app is in the background.</string>
+    <string>To add geo-location information to a note. Can be disabled in app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>To allow attaching images to a note</string>
 	<key>NSCameraUsageDescription</key>
