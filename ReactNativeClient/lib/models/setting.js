@@ -491,6 +491,13 @@ Setting.metadata_ = {
         type: Setting.TYPE_ARRAY,
         public: false,
         appTypes: ['desktop']
+    },
+    autoUpdateEnabled: {
+        value: true,
+        type: Setting.TYPE_BOOL,
+        public: true,
+        appTypes: ['desktop'],
+        label: () => _('Automatically update the application')
     }
 };
 
