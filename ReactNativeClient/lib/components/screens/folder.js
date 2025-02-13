@@ -35,7 +35,8 @@ class FolderScreenComponent extends BaseScreenComponent {
 
         let styles = {
             textInput: {
-                color: theme.color
+                color: theme.color,
+                paddingLeft: 10
             }
         };
 
