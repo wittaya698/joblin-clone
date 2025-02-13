@@ -261,8 +261,16 @@ class SideBarComponent extends React.Component {
         );
     }
 
-    synchronizeButton(label) {
+    synchronizeButton(type) {
         const style = this.style().button;
+        const iconName = type === 'sync' ? 'fa-refresh' : 'fa-times';
+        const label = type === 'sync' ? _('Synchronise') : _('Cancel');
+        const icon = (
+            <i
+                style={{ fontSize: style.fontSize, marginRight: 5 }}
+                className={'fa ' + iconName}
+            ></i>
+        );
         return (
             <a
                 className="synchronize-button"
@@ -273,6 +281,7 @@ class SideBarComponent extends React.Component {
                     this.sync_click();
                 }}
             >
+                {icon}
                 {label}
             </a>
         );
@@ -334,9 +343,7 @@ class SideBarComponent extends React.Component {
             syncReportText.push(<div key={i}>{lines[i]}</div>);
         }
         items.push(
-            this.synchronizeButton(
-                this.props.syncStarted ? _('Cancel') : _('Synchronise')
-            )
+            this.synchronizeButton(this.props.syncStarted ? 'cancel' : 'sync')
         );
 
         items.push(
