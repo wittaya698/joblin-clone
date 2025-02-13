@@ -479,13 +479,6 @@ Setting.metadata_ = {
             };
         }
     },
-    showAdvancedOptions: {
-        value: false,
-        type: Setting.TYPE_BOOL,
-        public: true,
-        appTypes: ['mobile'],
-        label: () => _('Show advanced options')
-    },
     noteVisiblePanes: {
         value: ['editor', 'viewer'],
         type: Setting.TYPE_ARRAY,
@@ -498,6 +491,13 @@ Setting.metadata_ = {
         public: true,
         appTypes: ['desktop'],
         label: () => _('Automatically update the application')
+    },
+    showAdvancedOptions: {
+        value: false,
+        type: Setting.TYPE_BOOL,
+        public: true,
+        appTypes: ['mobile'],
+        label: () => _('Show advanced options')
     }
 };
 

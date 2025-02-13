@@ -154,6 +154,7 @@ class NoteItemComponent extends Component {
             <TouchableOpacity
                 onPress={() => this.onPress()}
                 onLongPress={() => this.onLongPress()}
+                activeOpacity={0.5}
             >
                 <View style={selectionWrapperStyle}>
                     <View style={opacityStyle}>
