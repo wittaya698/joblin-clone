@@ -13,6 +13,10 @@ class MdToHtml {
         this.loadedResources_ = {};
         this.cachedContent_ = null;
         this.cachedContentKey_ = null;
+
+        // Must include last "/"
+        this.resourceBaseUrl_ =
+            'resourceBaseUrl' in options ? options.resourceBaseUrl : null;
     }
 
     makeContentKey(resources, body, style, options) {
@@ -128,6 +132,10 @@ class MdToHtml {
             mime == 'image/jpeg' ||
             mime == 'image/gif'
         ) {
+            // let src = './' + Resource.filename(resource);
+            // if (this.resourceBaseUrl_ !== null)
+            //     src = this.resourceBaseUrl_ + src;
+            // Critical -> been deleted but brought back, not sure why need to be removed
             const src = 'data:' + mime + ';base64,' + resource.base64;
             let output =
                 '<img title="' + htmlentities(title) + '" src="' + src + '"/>';
