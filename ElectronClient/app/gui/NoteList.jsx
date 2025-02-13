@@ -51,19 +51,20 @@ class NoteListComponent extends React.Component {
     }
 
     itemContextMenu(event) {
-        const noteId = event.target.getAttribute('data-id');
-        if (!noteId) throw new Error('No data-id on element');
+        const noteIds = this.props.selectedNoteIds;
+        if (!noteIds.length) return;
 
         const menu = new Menu();
 
         menu.append(
             new MenuItem({
                 label: _('Add or remove tags'),
+                enabled: noteIds.length === 1,
                 click: async () => {
                     this.props.dispatch({
                         type: 'WINDOW_COMMAND',
                         name: 'setTags',
-                        noteId: noteId
+                        noteId: noteIds[0]
                     });
                 }
             })
@@ -71,10 +72,12 @@ class NoteListComponent extends React.Component {
 
         menu.append(
             new MenuItem({
-                label: _('Switch between note and to-do'),
+                label: _('Switch between note and to-do type'),
                 click: async () => {
-                    const note = await Note.load(noteId);
-                    await Note.save(Note.toggleIsTodo(note));
+                    for (let i = 0; i < noteIds.length; i++) {
+                        const note = await Note.load(noteIds[i]);
+                        await Note.save(Note.toggleIsTodo(note));
+                    }
                 }
             })
         );
@@ -84,10 +87,12 @@ class NoteListComponent extends React.Component {
                 label: _('Delete'),
                 click: async () => {
                     const ok = bridge().showConfirmMessageBox(
-                        _('Delete note?')
+                        noteIds.length > 1
+                            ? _('Delete notes?')
+                            : _('Delete note?')
                     );
                     if (!ok) return;
-                    await Note.delete(noteId);
+                    await Note.batchDelete(noteIds);
                 }
             })
         );
@@ -97,10 +102,24 @@ class NoteListComponent extends React.Component {
 
     itemRenderer(item, theme, width) {
         const onTitleClick = async (event, item) => {
-            this.props.dispatch({
-                type: 'NOTE_SELECT',
-                id: item.id
-            });
+            event.preventDefault();
+            // Critical: ctrlKey isn't available, use metaKey instead
+            if (event.metaKey) {
+                this.props.dispatch({
+                    type: 'NOTE_SELECT_TOGGLE',
+                    id: item.id
+                });
+            } else if (event.shiftKey) {
+                this.props.dispatch({
+                    type: 'NOTE_SELECT_EXTEND',
+                    id: item.id
+                });
+            } else {
+                this.props.dispatch({
+                    type: 'NOTE_SELECT',
+                    id: item.id
+                });
+            }
         };
 
         const onCheckboxClick = async event => {
@@ -115,7 +134,7 @@ class NoteListComponent extends React.Component {
         const hPadding = 10;
 
         let style = Object.assign({ width: width }, this.style().listItem);
-        if (this.props.selectedNoteId === item.id)
+        if (this.props.selectedNoteIds.indexOf(item.id) >= 0)
             style = Object.assign(style, this.style().listItemSelected);
 
         // Setting marginBottom = 1 because it makes the checkbox looks more centered, at least on Windows
@@ -154,7 +173,6 @@ class NoteListComponent extends React.Component {
             <div key={item.id + '_' + item.todo_completed} style={style}>
                 {checkbox}
                 <a
-                    data-id={item.id}
                     className="list-item"
                     onContextMenu={event => this.itemContextMenu(event)}
                     href="#"
@@ -213,7 +231,7 @@ class NoteListComponent extends React.Component {
 const mapStateToProps = state => {
     return {
         notes: state.notes,
-        selectedNoteId: state.selectedNoteId,
+        selectedNoteIds: state.selectedNoteIds,
         theme: state.settings.theme
         // uncompletedTodosOnTop: state.settings.uncompletedTodosOnTop,
     };

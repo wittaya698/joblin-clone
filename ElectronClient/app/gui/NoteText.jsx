@@ -537,8 +537,10 @@ class NoteTextComponent extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        noteId: state.selectedNoteId,
-        // notes: state.notes,
+        noteId:
+            state.selectedNoteIds.length === 1
+                ? state.selectedNoteIds[0]
+                : null,
         folderId: state.selectedFolderId,
         itemType: state.selectedItemType,
         folders: state.folders,
