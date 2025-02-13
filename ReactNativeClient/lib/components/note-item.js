@@ -107,7 +107,9 @@ class NoteItemComponent extends Component {
         if (!this.props.note) return;
 
         this.props.dispatch({
-            type: 'NOTE_SELECTION_START',
+            type: this.props.noteSelectionEnabled
+                ? 'NOTE_SELECTION_TOGGLE'
+                : 'NOTE_SELECTION_START',
             id: this.props.note.id
         });
     }
@@ -139,7 +141,7 @@ class NoteItemComponent extends Component {
         const listItemTextStyle = isTodo
             ? this.styles().listItemTextWithCheckbox
             : this.styles().listItemText;
-        const rootStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
+        const opacityStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
         const isSelected =
             this.props.noteSelectionEnabled &&
             this.props.selectedNoteIds.indexOf(note.id) >= 0;
@@ -151,19 +153,20 @@ class NoteItemComponent extends Component {
         return (
             <TouchableOpacity
                 onPress={() => this.onPress()}
-                style={rootStyle}
                 onLongPress={() => this.onLongPress()}
             >
                 <View style={selectionWrapperStyle}>
-                    <View style={listItemStyle}>
-                        <Checkbox
-                            style={checkboxStyle}
-                            checked={checkboxChecked}
-                            onChange={checked =>
-                                this.todoCheckbox_change(checked)
-                            }
-                        />
-                        <Text style={listItemTextStyle}>{note.title}</Text>
+                    <View style={opacityStyle}>
+                        <View style={listItemStyle}>
+                            <Checkbox
+                                style={checkboxStyle}
+                                checked={checkboxChecked}
+                                onChange={checked =>
+                                    this.todoCheckbox_change(checked)
+                                }
+                            />
+                            <Text style={listItemTextStyle}>{note.title}</Text>
+                        </View>
                     </View>
                 </View>
             </TouchableOpacity>
