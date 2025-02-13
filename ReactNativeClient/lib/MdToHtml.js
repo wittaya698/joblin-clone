@@ -292,6 +292,7 @@ class MdToHtml {
         if (!options) options = {};
         if (!options.postMessageSyntax)
             options.postMessageSyntax = 'window.ReactNativeWebView.postMessage';
+        if (!options.paddingBottom) options.paddingBottom = '0';
 
         const cacheKey = this.makeContentKey(
             this.loadedResources_,
@@ -382,6 +383,9 @@ class MdToHtml {
             style.htmlBackgroundColor +
             `;
             font-family: sans-serif;
+            padding-bottom: ` +
+            options.paddingBottom +
+            `;
 			}
             p, h1, h2, h3, h4, ul, table {
 				margin-top: 0;

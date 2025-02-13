@@ -47,7 +47,8 @@ class NoteBodyViewer extends Component {
         const mdOptions = {
             onResourceLoaded: () => {
                 this.forceUpdate();
-            }
+            },
+            paddingBottom: '3.8em' // Extra bottom padding to make it possible to scroll past the action button (so that it doesn't overlap the text)
         };
 
         const html = this.mdToHtml_.render(
