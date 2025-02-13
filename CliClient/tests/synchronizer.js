@@ -588,4 +588,26 @@ describe('Synchronizer', function () {
         expect(notes[0].id).toBe(note1.id);
         expect(notes[0].todo_completed).toBe(note2.todo_completed);
     });
+
+    it('items should be downloaded again when user cancels in the middle of delta operation', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({
+            title: 'un',
+            is_todo: 1,
+            parent_id: folder1.id
+        });
+        await synchronizer().start();
+
+        await switchClient(2);
+
+        synchronizer().debugFlags_ = ['cancelDeltaLoop2'];
+        let context = await synchronizer().start();
+        let notes = await Note.all();
+        expect(notes.length).toBe(0);
+
+        synchronizer().debugFlags_ = [];
+        await synchronizer().start({ context: context });
+        notes = await Note.all();
+        expect(notes.length).toBe(1);
+    });
 });
