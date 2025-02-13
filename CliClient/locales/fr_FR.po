@@ -614,12 +614,6 @@ msgstr "Séparez chaque étiquette par une virgule."
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
-msgid "Seach:"
-msgstr "Chercher :"
-
-msgid "Seach"
-msgstr "Chercher"
-
 msgid "Layout"
 msgstr "Disposition"
 
@@ -663,6 +657,9 @@ msgstr "Enlever cette recherche de la barre latérale ?"
 msgid "Rename"
 msgstr "Renommer"
 
+msgid "Synchronise"
+msgstr "Synchroniser"
+
 msgid "Notebooks"
 msgstr "Carnets"
 
@@ -671,9 +668,6 @@ msgstr "Etiquettes"
 
 msgid "Searches"
 msgstr "Recherches"
-
-msgid "Synchronise"
-msgstr "Synchroniser"
 
 #, javascript-format
 msgid "Usage: %s"
@@ -958,6 +952,12 @@ msgstr ""
 
 msgid "Welcome"
 msgstr "Bienvenue"
+
+#~ msgid "Seach:"
+#~ msgstr "Chercher :"
+
+#~ msgid "Seach"
+#~ msgstr "Chercher"
 
 #~ msgid "Edit the selected note"
 #~ msgstr "Editer la note sélectionnée"
