@@ -812,6 +812,9 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+msgid "Export Debug Report"
+msgstr ""
+
 msgid "Cancel synchronisation"
 msgstr ""
 

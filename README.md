@@ -8,7 +8,9 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 Joplin is still under development but is out of Beta and should be suitable for every day use. The UI of the terminal client is built on top of the great [terminal-kit](https://github.com/cronvel/terminal-kit) library, the desktop client using [Electron](https://electronjs.org/), and the Android client front end is done using [React Native](https://facebook.github.io/react-native/).
 
-<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/AllClients.jpg" style="max-width: 100%">
+<div class="top-screenshot">
+    <img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/AllClients.jpg" style="max-width: 100%; max-height: 35em;">
+</div>
 
 # Installation
 
@@ -16,14 +18,14 @@ Three types of applications are available: **desktop** (Windows, macOS and Linux
 
 ## Desktop applications
 
-- Download Joplin for Windows
-- Download Joplin for macOS
-- Download Joplin for Linux
+- Add download link for Windows
+- Add download link for macOS
+- Add download link for Linux
 
 ## Mobile applications
 
-- Get Android app
-- Get iOS app
+- Add download link for Android app
+- Add download link for iOS app
 
 ## Terminal application
 
@@ -114,13 +116,16 @@ This translation will apply to both the terminal and the Android application.
 
 The two main features that remain to be implemented are:
 
-- iOS application (80% done)
-- End to end encryption (to-do)
+- All: End to end encryption
+- Windows: Tray icon
+- Desktop apps: Tag auto-complete
+- Desktop apps: Dark theme
+- Linux: Enable auto-update for desktop app
 
 # Known bugs
 
 - Non-alphabetical characters such as Chinese or Arabic might create glitches in the terminal on Windows. This is a limitation of the current Windows console.
-- In the React Native app, changing the notebook of a note sometimes has no effect, due to [this bug](https://github.com/facebook/react-native/issues/15556). Due to [this other bug](https://github.com/facebook/react-native/issues/13351), changing one config value sometimes also set a different one. This is likely to be resolved soon in a future version of React Native.
+- Auto-update is not working in the Linux desktop application.
 
 # License
 
