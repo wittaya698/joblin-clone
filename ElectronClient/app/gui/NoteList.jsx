@@ -102,14 +102,15 @@ class NoteListComponent extends React.Component {
 
     itemRenderer(item, theme, width) {
         const onTitleClick = async (event, item) => {
-            event.preventDefault();
             // Critical: ctrlKey isn't available, use metaKey instead
             if (event.metaKey) {
+                event.preventDefault();
                 this.props.dispatch({
                     type: 'NOTE_SELECT_TOGGLE',
                     id: item.id
                 });
             } else if (event.shiftKey) {
+                event.preventDefault();
                 this.props.dispatch({
                     type: 'NOTE_SELECT_EXTEND',
                     id: item.id
@@ -120,6 +121,18 @@ class NoteListComponent extends React.Component {
                     id: item.id
                 });
             }
+        };
+
+        const onDragStart = event => {
+            const noteIds = this.props.selectedNoteIds;
+            if (!noteIds.length) return;
+
+            event.dataTransfer.setDragImage(new Image(), 1, 1);
+            event.dataTransfer.clearData();
+            event.dataTransfer.setData(
+                'text/x-jop-note-ids',
+                JSON.stringify(noteIds)
+            );
         };
 
         const onCheckboxClick = async event => {
@@ -176,10 +189,12 @@ class NoteListComponent extends React.Component {
                     className="list-item"
                     onContextMenu={event => this.itemContextMenu(event)}
                     href="#"
+                    draggable={true}
                     style={listItemTitleStyle}
                     onClick={event => {
                         onTitleClick(event, item);
                     }}
+                    onDragStart={event => onDragStart(event)}
                 >
                     {item.title}
                 </a>
