@@ -127,7 +127,8 @@ const NoteList = connect(state => {
     return {
         items: state.notes,
         notesSource: state.notesSource,
-        theme: state.settings.theme
+        theme: state.settings.theme,
+        noteSelectionEnabled: state.noteSelectionEnabled
     };
 })(NoteListComponent);
 

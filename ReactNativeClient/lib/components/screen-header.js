@@ -16,6 +16,7 @@ const { BackButtonService } = require('lib/services/back-button.js');
 const { ReportService } = require('lib/services/report.js');
 const { _ } = require('lib/locale.js');
 const { Setting } = require('lib/models/setting.js');
+const { Note } = require('lib/models/note.js');
 const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 const { reg } = require('lib/registry.js');
@@ -30,6 +31,8 @@ const {
 } = require('react-native-popup-menu');
 const { time } = require('lib/time-utils');
 const RNFS = require('react-native-fs');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -168,7 +171,6 @@ class ScreenHeaderComponent extends Component {
 
     async backButton_press() {
         await BackButtonService.back();
-        //this.props.dispatch({ type: 'NAV_BACK' });
     }
 
     searchButton_press() {
@@ -176,6 +178,22 @@ class ScreenHeaderComponent extends Component {
             type: 'NAV_GO',
             routeName: 'Search'
         });
+    }
+
+    async deleteButton_press() {
+        // Dialog needs to be displayed as a child of the parent component, otherwise
+        // it won't be visible within the header component.
+        if (!this.props.parentComponent)
+            throw new Error('parentComponent not set');
+        const ok = await dialogs.confirm(
+            this.props.parentComponent,
+            _('Delete these notes?')
+        );
+        if (!ok) return;
+
+        const noteIds = this.props.selectedNoteIds;
+        this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+        await Note.batchDelete(noteIds);
     }
 
     menu_select(value) {
@@ -302,24 +320,83 @@ class ScreenHeaderComponent extends Component {
             );
         }
 
-        let key = 0;
-        let menuOptionComponents = [];
-        for (let i = 0; i < this.props.menuOptions.length; i++) {
-            let o = this.props.menuOptions[i];
-            menuOptionComponents.push(
-                <MenuOption
-                    value={o.onPress}
-                    key={'menuOption_' + key++}
-                    style={this.styles().contextMenuItem}
-                >
-                    <Text style={this.styles().contextMenuItemText}>
-                        {o.title}
-                    </Text>
-                </MenuOption>
+        function deleteButton(styles, onPress) {
+            return (
+                <TouchableOpacity onPress={onPress}>
+                    <View style={styles.iconButton}>
+                        <Icon name="trash" style={styles.topIcon} />
+                    </View>
+                </TouchableOpacity>
             );
         }
 
-        if (this.props.showAdvancedOptions) {
+        let key = 0;
+        let menuOptionComponents = [];
+        if (!this.props.noteSelectionEnabled) {
+            for (let i = 0; i < this.props.menuOptions.length; i++) {
+                let o = this.props.menuOptions[i];
+                menuOptionComponents.push(
+                    <MenuOption
+                        value={o.onPress}
+                        key={'menuOption_' + key++}
+                        style={this.styles().contextMenuItem}
+                    >
+                        <Text style={this.styles().contextMenuItemText}>
+                            {o.title}
+                        </Text>
+                    </MenuOption>
+                );
+            }
+
+            if (this.props.showAdvancedOptions) {
+                if (menuOptionComponents.length) {
+                    menuOptionComponents.push(
+                        <View
+                            key={'menuOption_showAdvancedOptions'}
+                            style={this.styles().divider}
+                        />
+                    );
+                }
+
+                menuOptionComponents.push(
+                    <MenuOption
+                        value={() => this.log_press()}
+                        key={'menuOption_log'}
+                        style={this.styles().contextMenuItem}
+                    >
+                        <Text style={this.styles().contextMenuItemText}>
+                            {_('Log')}
+                        </Text>
+                    </MenuOption>
+                );
+
+                menuOptionComponents.push(
+                    <MenuOption
+                        value={() => this.status_press()}
+                        key={'menuOption_status'}
+                        style={this.styles().contextMenuItem}
+                    >
+                        <Text style={this.styles().contextMenuItemText}>
+                            {_('Status')}
+                        </Text>
+                    </MenuOption>
+                );
+
+                if (Platform.OS === 'android') {
+                    menuOptionComponents.push(
+                        <MenuOption
+                            value={() => this.debugReport_press()}
+                            key={'menuOption_debugReport'}
+                            style={this.styles().contextMenuItem}
+                        >
+                            <Text style={this.styles().contextMenuItemText}>
+                                {_('Export Debug Report')}
+                            </Text>
+                        </MenuOption>
+                    );
+                }
+            }
+
             if (menuOptionComponents.length) {
                 menuOptionComponents.push(
                     <View
@@ -331,75 +408,67 @@ class ScreenHeaderComponent extends Component {
 
             menuOptionComponents.push(
                 <MenuOption
-                    value={() => this.log_press()}
-                    key={'menuOption_log'}
+                    value={() => this.config_press()}
+                    key={'menuOption_config'}
                     style={this.styles().contextMenuItem}
                 >
                     <Text style={this.styles().contextMenuItemText}>
-                        {_('Log')}
+                        {_('Configuration')}
                     </Text>
                 </MenuOption>
             );
-
+        } else {
             menuOptionComponents.push(
                 <MenuOption
-                    value={() => this.status_press()}
-                    key={'menuOption_status'}
+                    value={() => this.deleteButton_press()}
+                    key={'menuOption_delete'}
                     style={this.styles().contextMenuItem}
                 >
                     <Text style={this.styles().contextMenuItemText}>
-                        {_('Status')}
+                        {_('Delete')}
                     </Text>
                 </MenuOption>
             );
-
-            if (Platform.OS === 'android') {
-                menuOptionComponents.push(
-                    <MenuOption
-                        value={() => this.debugReport_press()}
-                        key={'menuOption_debugReport'}
-                        style={this.styles().contextMenuItem}
-                    >
-                        <Text style={this.styles().contextMenuItemText}>
-                            {_('Export Debug Report')}
-                        </Text>
-                    </MenuOption>
-                );
-            }
         }
-
-        if (menuOptionComponents.length) {
-            menuOptionComponents.push(
-                <View
-                    key={'menuOption_' + key++}
-                    style={this.styles().divider}
-                />
-            );
-        }
-
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.config_press()}
-                key={'menuOption_' + key++}
-                style={this.styles().contextMenuItem}
-            >
-                <Text style={this.styles().contextMenuItemText}>
-                    {_('Configuration')}
-                </Text>
-            </MenuOption>
-        );
 
         const createTitleComponent = () => {
             const themeId = Setting.value('theme');
             const theme = themeStyle(themeId);
+            const folderPickerOptions = this.props.folderPickerOptions;
 
-            const p = this.props.titlePicker;
-            if (p) {
+            if (folderPickerOptions && folderPickerOptions.enabled) {
+                const titlePickerItems = mustSelect => {
+                    let output = [];
+                    if (mustSelect)
+                        output.push({
+                            label: _('Move to notebook...'),
+                            value: null
+                        });
+                    for (let i = 0; i < this.props.folders.length; i++) {
+                        let f = this.props.folders[i];
+                        output.push({ label: f.title, value: f.id });
+                    }
+                    output.sort((a, b) => {
+                        if (a.value === null) return -1;
+                        if (b.value === null) return +1;
+                        return a.label.toLowerCase() < b.label.toLowerCase()
+                            ? -1
+                            : +1;
+                    });
+                    return output;
+                };
+
                 return (
                     <Dropdown
-                        items={p.items}
+                        items={titlePickerItems(
+                            !!folderPickerOptions.mustSelect
+                        )}
                         itemHeight={35}
-                        selectedValue={p.selectedValue}
+                        selectedValue={
+                            'selectedFolderId' in folderPickerOptions
+                                ? folderPickerOptions.selectedFolderId
+                                : null
+                        }
                         itemListStyle={{
                             backgroundColor: theme.backgroundColor
                         }}
@@ -412,8 +481,11 @@ class ScreenHeaderComponent extends Component {
                             fontSize: theme.fontSize
                         }}
                         onValueChange={(itemValue, itemIndex) => {
-                            if (p.onValueChange)
-                                p.onValueChange(itemValue, itemIndex);
+                            if (!folderPickerOptions.onValueChange) return;
+                            folderPickerOptions.onValueChange(
+                                itemValue,
+                                itemIndex
+                            );
                         }}
                     />
                 );
@@ -427,17 +499,42 @@ class ScreenHeaderComponent extends Component {
         };
 
         const titleComp = createTitleComponent();
+        const sideMenuComp = this.props.noteSelectionEnabled
+            ? null
+            : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
+        const backButtonComp = backButton(
+            this.styles(),
+            () => this.backButton_press(),
+            !this.props.historyCanGoBack
+        );
+        const searchButtonComp = this.props.noteSelectionEnabled
+            ? null
+            : searchButton(this.styles(), () => this.searchButton_press());
+        const deleteButtonComp = this.props.noteSelectionEnabled
+            ? deleteButton(this.styles(), () => this.deleteButton_press())
+            : null;
+
+        const menuComp = (
+            <Menu
+                onSelect={value => this.menu_select(value)}
+                style={this.styles().contextMenu}
+            >
+                <MenuTrigger
+                    style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}
+                >
+                    <Text style={this.styles().contextMenuTrigger}>
+                        {' '}
+                        &#8942;
+                    </Text>
+                </MenuTrigger>
+                <MenuOptions>{menuOptionComponents}</MenuOptions>
+            </Menu>
+        );
 
         return (
             <View style={this.styles().container}>
-                {sideMenuButton(this.styles(), () =>
-                    this.sideMenuButton_press()
-                )}
-                {backButton(
-                    this.styles(),
-                    () => this.backButton_press(),
-                    !this.props.historyCanGoBack
-                )}
+                {sideMenuComp}
+                {backButtonComp}
                 {saveButton(
                     this.styles(),
                     () => {
@@ -448,24 +545,14 @@ class ScreenHeaderComponent extends Component {
                     this.props.showSaveButton === true
                 )}
                 {titleComp}
-                {searchButton(this.styles(), () => this.searchButton_press())}
-                <Menu
-                    onSelect={value => this.menu_select(value)}
-                    style={this.styles().contextMenu}
-                >
-                    <MenuTrigger
-                        style={{
-                            paddingTop: PADDING_V,
-                            paddingBottom: PADDING_V
-                        }}
-                    >
-                        <Text style={this.styles().contextMenuTrigger}>
-                            {' '}
-                            &#8942;{' '}
-                        </Text>
-                    </MenuTrigger>
-                    <MenuOptions>{menuOptionComponents}</MenuOptions>
-                </Menu>
+                {searchButtonComp}
+                {deleteButtonComp}
+                {menuComp}
+                <DialogBox
+                    ref={dialogbox => {
+                        this.dialogbox = dialogbox;
+                    }}
+                />
             </View>
         );
     }
@@ -479,8 +566,11 @@ const ScreenHeader = connect(state => {
     return {
         historyCanGoBack: state.historyCanGoBack,
         locale: state.settings.locale,
+        folders: state.folders,
         theme: state.settings.theme,
-        showAdvancedOptions: state.settings.showAdvancedOptions
+        showAdvancedOptions: state.settings.showAdvancedOptions,
+        noteSelectionEnabled: state.noteSelectionEnabled,
+        selectedNoteIds: state.selectedNoteIds
     };
 })(ScreenHeaderComponent);
 

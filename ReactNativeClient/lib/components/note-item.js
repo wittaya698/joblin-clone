@@ -1,7 +1,7 @@
 const React = require('react');
 const { Component } = require('react');
 const { connect } = require('react-redux');
-const { Text, TouchableHighlight, View, StyleSheet } = require('react-native');
+const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
 const { Log } = require('lib/log.js');
 const { _ } = require('lib/locale.js');
 const { Checkbox } = require('lib/components/checkbox.js');
@@ -32,13 +32,16 @@ class NoteItemComponent extends Component {
                 paddingLeft: theme.marginLeft,
                 paddingRight: theme.marginRight,
                 paddingTop: theme.itemMarginTop,
-                paddingBottom: theme.itemMarginBottom,
-                backgroundColor: theme.backgroundColor
+                paddingBottom: theme.itemMarginBottom
+                // backgroundColor: theme.backgroundColor
             },
             listItemText: {
                 flex: 1,
                 color: theme.color,
                 fontSize: theme.fontSize
+            },
+            selectionWrapper: {
+                backgroundColor: theme.backgroundColor
             }
         };
 
@@ -55,6 +58,12 @@ class NoteItemComponent extends Component {
             styles.listItem.paddingTop - 1;
         styles.listItemTextWithCheckbox.marginBottom =
             styles.listItem.paddingBottom;
+
+        styles.selectionWrapperSelected = Object.assign(
+            {},
+            styles.selectionWrapper
+        );
+        styles.selectionWrapperSelected.backgroundColor = theme.selectedColor;
 
         this.styles_[this.props.theme] = StyleSheet.create(styles);
         return this.styles_[this.props.theme];
@@ -76,12 +85,30 @@ class NoteItemComponent extends Component {
         };
         await Note.save(newNote);
     }
+
     onPress() {
         if (!this.props.note) return;
+
+        if (this.props.noteSelectionEnabled) {
+            this.props.dispatch({
+                type: 'NOTE_SELECTION_TOGGLE',
+                id: this.props.note.id
+            });
+        } else {
+            this.props.dispatch({
+                type: 'NAV_GO',
+                routeName: 'Note',
+                noteId: this.props.note.id
+            });
+        }
+    }
+
+    onLongPress() {
+        if (!this.props.note) return;
+
         this.props.dispatch({
-            type: 'NAV_GO',
-            routeName: 'Note',
-            noteId: this.props.note.id
+            type: 'NOTE_SELECTION_START',
+            id: this.props.note.id
         });
     }
 
@@ -113,28 +140,42 @@ class NoteItemComponent extends Component {
             ? this.styles().listItemTextWithCheckbox
             : this.styles().listItemText;
         const rootStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
+        const isSelected =
+            this.props.noteSelectionEnabled &&
+            this.props.selectedNoteIds.indexOf(note.id) >= 0;
+
+        const selectionWrapperStyle = isSelected
+            ? this.styles().selectionWrapperSelected
+            : this.styles().selectionWrapper;
 
         return (
-            <TouchableHighlight
+            <TouchableOpacity
                 onPress={() => this.onPress()}
-                onLongPress={() => onLongPress(note)}
-                underlayColor="#0066FF"
                 style={rootStyle}
+                onLongPress={() => this.onLongPress()}
             >
-                <View style={listItemStyle}>
-                    <Checkbox
-                        style={checkboxStyle}
-                        checked={checkboxChecked}
-                        onChange={checked => this.todoCheckbox_change(checked)}
-                    />
-                    <Text style={listItemTextStyle}>{note.title}</Text>
+                <View style={selectionWrapperStyle}>
+                    <View style={listItemStyle}>
+                        <Checkbox
+                            style={checkboxStyle}
+                            checked={checkboxChecked}
+                            onChange={checked =>
+                                this.todoCheckbox_change(checked)
+                            }
+                        />
+                        <Text style={listItemTextStyle}>{note.title}</Text>
+                    </View>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     }
 }
 
 const NoteItem = connect(state => {
-    return { theme: state.settings.theme };
+    return {
+        theme: state.settings.theme,
+        noteSelectionEnabled: state.noteSelectionEnabled,
+        selectedNoteIds: state.selectedNoteIds
+    };
 })(NoteItemComponent);
 module.exports = { NoteItem };

@@ -106,7 +106,8 @@ const appDefaultState = Object.assign({}, defaultState, {
         type: 'NAV_GO',
         routeName: 'Welcome',
         params: {}
-    }
+    },
+    noteSelectionEnabled: false
 });
 
 const appReducer = (state = appDefaultState, action) => {
@@ -203,6 +204,38 @@ const appReducer = (state = appDefaultState, action) => {
             case 'SIDE_MENU_OPEN_PERCENT':
                 newState = Object.assign({}, state);
                 newState.sideMenuOpenPercent = action.value;
+                break;
+
+            case 'NOTE_SELECTION_TOGGLE':
+                newState = Object.assign({}, state);
+
+                const noteId = action.id;
+
+                const newSelectedNoteIds = state.selectedNoteIds.slice();
+                const existingIndex = state.selectedNoteIds.indexOf(noteId);
+
+                if (existingIndex >= 0) {
+                    newSelectedNoteIds.splice(existingIndex, 1);
+                } else {
+                    newSelectedNoteIds.push(noteId);
+                }
+
+                newState.selectedNoteIds = newSelectedNoteIds;
+                newState.noteSelectionEnabled = !!newSelectedNoteIds.length;
+                break;
+
+            case 'NOTE_SELECTION_START':
+                if (!state.noteSelectionEnabled) {
+                    newState = Object.assign({}, state);
+                    newState.noteSelectionEnabled = true;
+                    newState.selectedNoteIds = [action.id];
+                }
+                break;
+
+            case 'NOTE_SELECTION_END':
+                newState = Object.assign({}, state);
+                newState.noteSelectionEnabled = false;
+                newState.selectedNoteIds = [];
                 break;
         }
     } catch (error) {
@@ -382,6 +415,11 @@ class HomeStackComponent extends React.Component {
     }
 
     async backButtonHandler() {
+        if (this.props.noteSelectionEnabled) {
+            this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+            return true;
+        }
+
         if (this.props.showSideMenu) {
             this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
             return true;
@@ -419,7 +457,8 @@ export const HomeStack = connect(state => {
         historyCanGoBack: state.historyCanGoBack,
         showSideMenu: state.showSideMenu,
         syncStarted: state.syncStarted,
-        appState: state.appState
+        appState: state.appState,
+        noteSelectionEnabled: state.noteSelectionEnabled
     };
 })(HomeStackComponent);
 

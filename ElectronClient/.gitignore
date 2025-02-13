@@ -3,7 +3,3 @@ dist/
 app/lib/
 app/gui/*.min.js
 .DS_Store
-Assets/DownloadBadges*.psd
-node_modules
-
-Tools/node_modules
