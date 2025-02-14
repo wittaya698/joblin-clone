@@ -14,6 +14,7 @@ const { Logger } = require('lib/logger.js');
 const { splitCommandString } = require('lib/string-utils.js');
 const { sprintf } = require('sprintf-js');
 const { reg } = require('lib/registry.js');
+const BaseSyncTarget = require('lib/BaseSyncTarget.js');
 const { fileExtension } = require('lib/path-utils.js');
 const { shim } = require('lib/shim.js');
 const {
@@ -308,6 +309,7 @@ class BaseApplication {
         BaseModel.dispatch = this.store().dispatch;
         FoldersScreenUtils.dispatch = this.store().dispatch;
         reg.dispatch = this.store().dispatch;
+        BaseSyncTarget.dispatch = this.store().dispatch;
     }
 
     async readFlagsFromFile(flagPath) {

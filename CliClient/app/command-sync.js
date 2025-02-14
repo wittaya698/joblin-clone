@@ -15,7 +15,7 @@ const osTmpdir = require('os-tmpdir');
 class Command extends BaseCommand {
     constructor() {
         super();
-        this.syncTarget_ = null;
+        this.syncTargetId_ = null;
         this.releaseLockFn_ = null;
         this.oneDriveApiUtils_ = null;
     }
@@ -60,6 +60,31 @@ class Command extends BaseCommand {
         ];
     }
 
+    async doAuth(syncTargetId) {
+        const syncTarget = reg.syncTarget(this.syncTargetId_);
+        this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(
+            syncTarget.oneDriveApi()
+        );
+        const auth = await this.oneDriveApiUtils_.oauthDance({
+            log: (...s) => {
+                return this.stdout(...s);
+            }
+        });
+        this.oneDriveApiUtils_ = null;
+        return auth;
+    }
+
+    cancelAuth() {
+        if (this.oneDriveApiUtils_) {
+            this.oneDriveApiUtils_.cancelOAuthDance();
+            return;
+        }
+    }
+
+    doingAuth() {
+        return !!this.oneDriveApiUtils_;
+    }
+
     async action(args) {
         this.releaseLockFn_ = null;
 
@@ -94,26 +119,17 @@ class Command extends BaseCommand {
         };
 
         try {
-            this.syncTarget_ = Setting.value('sync.target');
-            if (args.options.target) this.syncTarget_ = args.options.target;
+            this.syncTargetId_ = Setting.value('sync.target');
+            if (args.options.target) this.syncTargetId_ = args.options.target;
 
-            if (
-                this.syncTarget_ == Setting.SYNC_TARGET_ONEDRIVE &&
-                !reg.syncHasAuth(this.syncTarget_)
-            ) {
+            const syncTarget = reg.syncTarget(this.syncTargetId_);
+
+            if (syncTarget.isAuthenticated()) {
                 app().gui().showConsole();
                 app().gui().maximizeConsole();
-                this.oneDriveApiUtils_ = new OneDriveApiNodeUtils(
-                    reg.oneDriveApi()
-                );
-                const auth = await this.oneDriveApiUtils_.oauthDance({
-                    log: (...s) => {
-                        return this.stdout(...s);
-                    }
-                });
-                this.oneDriveApiUtils_ = null;
+                const auth = await this.doAuth(this.syncTargetId_);
                 Setting.setValue(
-                    'sync.3.auth',
+                    'sync.' + this.syncTargetId_ + '.auth',
                     auth ? JSON.stringify(auth) : null
                 );
                 if (!auth) {
@@ -126,7 +142,7 @@ class Command extends BaseCommand {
                 }
             }
 
-            let sync = await reg.synchronizer(this.syncTarget_);
+            const sync = await syncTarget.synchronizer();
 
             let options = {
                 onProgress: report => {
@@ -143,8 +159,8 @@ class Command extends BaseCommand {
             this.stdout(
                 _(
                     'Synchronisation target: %s (%s)',
-                    Setting.enumOptionLabel('sync.target', this.syncTarget_),
-                    this.syncTarget_
+                    Setting.enumOptionLabel('sync.target', this.syncTargetId_),
+                    this.syncTargetId_
                 )
             );
 
@@ -152,7 +168,7 @@ class Command extends BaseCommand {
 
             this.stdout(_('Starting synchronisation...'));
 
-            const contextKey = 'sync.' + this.syncTarget_ + '.context';
+            const contextKey = 'sync.' + this.syncTargetId_ + '.context';
             let context = Setting.value(contextKey);
 
             context = context ? JSON.parse(context) : {};
@@ -178,27 +194,29 @@ class Command extends BaseCommand {
     }
 
     async cancel() {
-        if (this.oneDriveApiUtils_) {
-            this.oneDriveApiUtils_.cancelOAuthDance();
+        if (this.doingAuth()) {
+            this.cancelAuth();
             return;
         }
 
-        const target = this.syncTarget_
-            ? this.syncTarget_
+        const syncTargetId = this.syncTargetId_
+            ? this.syncTargetId_
             : Setting.value('sync.target');
 
         cliUtils.redrawDone();
         this.stdout(_('Cancelling... Please wait.'));
 
-        if (reg.syncHasAuth(target)) {
-            let sync = await reg.synchronizer(target);
+        const syncTarget = reg.syncTarget(syncTargetId);
+
+        if (syncTarget.isAuthenticated()) {
+            const sync = await syncTarget.synchronizer();
             if (sync) await sync.cancel();
         } else {
             if (this.releaseLockFn_) this.releaseLockFn_();
             this.releaseLockFn_ = null;
         }
 
-        this.syncTarget_ = null;
+        this.syncTargetId_ = null;
     }
 
     cancellable() {

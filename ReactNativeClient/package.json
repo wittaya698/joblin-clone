@@ -73,7 +73,8 @@
     "sqlite3": "^5.1.7",
     "stream-browserify": "^3.0.0",
     "tcp-port-used": "^1.0.2",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "word-wrap": "^1.2.5"
   },
   "devDependencies": {
     "@react-native-community/cli": "latest",

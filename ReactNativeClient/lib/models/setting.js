@@ -76,15 +76,19 @@ class Setting extends BaseModel {
         });
     }
 
-    static dispatchUpdateAll() {
+    static toPlainObject() {
         const keys = this.keys();
         let keyToValues = {};
         for (let i = 0; i < keys.length; i++) {
             keyToValues[keys[i]] = this.value(keys[i]);
         }
+        return keyToValues;
+    }
+
+    static dispatchUpdateAll() {
         this.dispatch({
             type: 'SETTING_UPDATE_ALL',
-            settings: keyToValues
+            settings: this.toPlainObject()
         });
     }
 
@@ -341,6 +345,7 @@ class Setting extends BaseModel {
 Setting.SYNC_TARGET_MEMORY = 1;
 Setting.SYNC_TARGET_FILESYSTEM = 2;
 Setting.SYNC_TARGET_ONEDRIVE = 3;
+//Setting.SYNC_TARGET_ONEDRIVE_DEV = 4;
 
 Setting.THEME_LIGHT = 1;
 Setting.THEME_DARK = 2;
@@ -366,6 +371,7 @@ Setting.metadata_ = {
             )
     },
     'sync.3.auth': { value: '', type: Setting.TYPE_STRING, public: false },
+    'sync.4.auth': { value: '', type: Setting.TYPE_STRING, public: false },
     'sync.target': {
         value: Setting.SYNC_TARGET_ONEDRIVE,
         type: Setting.TYPE_INT,
@@ -381,6 +387,7 @@ Setting.metadata_ = {
             output[Setting.SYNC_TARGET_MEMORY] = 'Memory';
             output[Setting.SYNC_TARGET_FILESYSTEM] = _('File system');
             output[Setting.SYNC_TARGET_ONEDRIVE] = _('OneDrive');
+            //output[Setting.SYNC_TARGET_ONEDRIVE_DEV] = _('OneDrive (Testing Only)');
             return output;
         }
     },
