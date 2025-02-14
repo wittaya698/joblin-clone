@@ -28,11 +28,11 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
     }
 
     startUrl() {
-        return reg.oneDriveApi().authCodeUrl(this.redirectUrl());
+        return reg.syncTarget().api().authCodeUrl(this.redirectUrl());
     }
 
     redirectUrl() {
-        return reg.oneDriveApi().nativeClientRedirectUrl();
+        return reg.syncTarget().api().nativeClientRedirectUrl();
     }
 
     async webview_load(noIdeaWhatThisIs) {
@@ -53,7 +53,8 @@ class OneDriveLoginScreenComponent extends BaseScreenComponent {
 
             try {
                 await reg
-                    .oneDriveApi()
+                    .syncTarget()
+                    .api()
                     .execTokenRequest(this.authCode_, this.redirectUrl(), true);
                 this.props.dispatch({ type: 'NAV_BACK' });
                 reg.scheduleSync(0);
