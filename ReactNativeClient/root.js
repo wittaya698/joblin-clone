@@ -1,6 +1,8 @@
 const React = require('react');
 const Component = React.Component;
 const { Keyboard, NativeModules } = require('react-native');
+const PushNotificationIOS =
+    require('@react-native-community/push-notification-ios').default;
 const Localization = require('expo-localization');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -404,11 +406,21 @@ async function initialize(dispatch, backButtonHandler) {
         reg.scheduleSync();
     }
 
+    reg.logger().info('Scheduling iOS notification');
+
+    PushNotificationIOS.scheduleLocalNotification({
+        alertTitle: 'From Joplin',
+        alertBody: 'Testing notification on iOS',
+        fireDate: new Date(Date.now() + 10 * 1000)
+    });
+
     // Critical :> not sure how to make this work yet
-    // PushNotification.localNotificationSchedule({
-    //     message: 'My Notification Message', // (required)
-    //     date: new Date(Date.now() + 10 * 1000) // in 60 secs
+    // const r = PushNotification.localNotificationSchedule({
+    // 	id: '222456',
+    // 	message: "My Notification Message", // (required)
+    // 	date: new Date(Date.now() + (10 * 1000)) // in 60 secs
     // });
+    //PushNotification.cancelLocalNotifications({ id: '222456' });
 
     reg.logger().info('Application initialized');
 }
