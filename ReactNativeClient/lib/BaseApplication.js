@@ -30,6 +30,9 @@ const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 
+SyncTargetRegistry.addClass(SyncTargetFilesystem);
+SyncTargetRegistry.addClass(SyncTargetOneDrive);
+
 class BaseApplication {
     constructor() {
         this.logger_ = new Logger();
@@ -359,9 +362,6 @@ class BaseApplication {
         Setting.setConstant('profileDir', profileDir);
         Setting.setConstant('resourceDir', resourceDir);
         Setting.setConstant('tempDir', tempDir);
-
-        SyncTargetRegistry.addClass(SyncTargetFilesystem);
-        SyncTargetRegistry.addClass(SyncTargetOneDrive);
 
         await fs.mkdirp(profileDir, 0o755);
         await fs.mkdirp(resourceDir, 0o755);

@@ -34,10 +34,14 @@ Resource.fsDriver_ = fsDriver;
 const logDir = __dirname + '/../tests/logs';
 fs.mkdirpSync(logDir, 0o755);
 
-const syncTargetId_ = Setting.SYNC_TARGET_MEMORY;
+SyncTargetRegistry.addClass(SyncTargetMemory);
+SyncTargetRegistry.addClass(SyncTargetFilesystem);
+
+const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 const syncDir = __dirname + '/../tests/sync';
 
-const sleepTime = syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM ? 1001 : 700;
+const sleepTime =
+    syncTargetId_ == SyncTargetRegistry.nameToId('filesystem') ? 1001 : 700;
 
 const logger = new Logger();
 logger.addTarget('file', { path: logDir + '/log.txt' });
@@ -51,9 +55,6 @@ BaseItem.loadClass('NoteTag', NoteTag);
 
 Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
 Setting.setConstant('appType', 'cli');
-
-SyncTargetRegistry.addClass(SyncTargetMemory);
-SyncTargetRegistry.addClass(SyncTargetFilesystem);
 
 function syncTargetId() {
     return syncTargetId_;
@@ -136,7 +137,7 @@ async function setupDatabaseAndSynchronizer(id = null) {
         synchronizers_[id] = await syncTarget.synchronizer();
     }
 
-    if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
+    if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
         fs.removeSync(syncDir);
         fs.mkdirpSync(syncDir, 0o755);
     } else {
@@ -158,11 +159,11 @@ function synchronizer(id = null) {
 function fileApi() {
     if (fileApi_) return fileApi_;
 
-    if (syncTargetId_ == Setting.SYNC_TARGET_FILESYSTEM) {
+    if (syncTargetId_ == SyncTargetRegistry.nameToId('filesystem')) {
         fs.removeSync(syncDir);
         fs.mkdirpSync(syncDir, 0o755);
         fileApi_ = new FileApi(syncDir, new FileApiDriverLocal());
-    } else if (syncTargetId_ == Setting.SYNC_TARGET_MEMORY) {
+    } else if (syncTargetId_ == SyncTargetRegistry.nameToId('memory')) {
         fileApi_ = new FileApi('/root', new FileApiDriverMemory());
     }
     // } else if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {

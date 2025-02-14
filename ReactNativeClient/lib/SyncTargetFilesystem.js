@@ -14,6 +14,10 @@ class SyncTargetFilesystem extends BaseSyncTarget {
         return 'filesystem';
     }
 
+    static targetName() {
+        return 'filesystem';
+    }
+
     static label() {
         return _('File system');
     }

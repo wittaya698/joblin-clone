@@ -771,10 +771,6 @@ msgstr "Impossible de copier la note vers le carnet \"%s\""
 msgid "Cannot move note to \"%s\" notebook"
 msgstr "Impossible de déplacer la note vers le carnet \"%s\""
 
-#, javascript-format
-msgid "Invalid option value: \"%s\". Possible values are: %s."
-msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
-
 msgid "File system synchronisation target directory"
 msgstr "Cible de la synchronisation sur le disque dur"
 
@@ -820,9 +816,6 @@ msgstr "Sombre"
 msgid "Show uncompleted todos on top of the lists"
 msgstr "Tâches non-terminées en haut des listes"
 
-msgid "Show advanced options"
-msgstr "Montrer les options avancées"
-
 msgid "Save geo-location with notes"
 msgstr "Enregistrer l'emplacement avec les notes"
 
@@ -847,6 +840,13 @@ msgstr "%d heures"
 #, fuzzy
 msgid "Automatically update the application"
 msgstr "Quitter le logiciel."
+
+msgid "Show advanced options"
+msgstr "Montrer les options avancées"
+
+#, javascript-format
+msgid "Invalid option value: \"%s\". Possible values are: %s."
+msgstr "Option invalide: \"%s\". Les valeurs possibles sont : %s."
 
 msgid "Sync status (synced items / total items)"
 msgstr "Status de la synchronisation (objets synchro. / total)"

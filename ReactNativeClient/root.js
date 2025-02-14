@@ -51,6 +51,8 @@ const { reducer, defaultState } = require('lib/reducer.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 
+SyncTargetRegistry.addClass(SyncTargetOneDrive);
+
 const generalMiddleware = store => next => async action => {
     if (action.type !== 'SIDE_MENU_OPEN_PERCENT')
         reg.logger().info('Reducer action', action.type);
@@ -274,8 +276,6 @@ async function initialize(dispatch, backButtonHandler) {
     mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
     reg.setLogger(mainLogger);
-
-    SyncTargetRegistry.addClass(SyncTargetOneDrive);
 
     reg.logger().info('====================================');
     reg.logger().info(

@@ -19,6 +19,7 @@ const { Database } = require('lib/database.js');
 const { Setting } = require('lib/models/setting.js');
 const { BaseItem } = require('lib/models/base-item.js');
 const { BaseModel } = require('lib/base-model.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -47,7 +48,7 @@ async function localItemsSameAsRemote(locals, expect) {
             expect(!!remote).toBe(true);
             if (!remote) continue;
 
-            if (syncTargetId() == Setting.SYNC_TARGET_FILESYSTEM) {
+            if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
                 expect(remote.updated_time).toBe(
                     Math.floor(dbItem.updated_time / 1000) * 1000
                 );
