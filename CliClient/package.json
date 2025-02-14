@@ -18,7 +18,7 @@
     ],
     "owner": "Witthaya Thongchin"
   },
-  "version": "0.10.72",
+  "version": "0.10.74",
   "bin": {
     "joplin": "./main.js"
   },
