@@ -5,6 +5,7 @@ import android.content.res.Configuration
 
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
@@ -38,6 +39,7 @@ class MainApplication : Application(), ReactApplication {
             packages.add(RNFSPackage());
             packages.add(SQLitePluginPackage());
             packages.add(VectorIconsPackage());
+            packages.add(ReactNativePushNotificationPackage())
             return packages
           }
 

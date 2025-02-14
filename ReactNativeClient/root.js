@@ -48,6 +48,9 @@ const {
 const RNFS = require('react-native-fs');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+// Critical :> Invariant Violation: `new NativeEventEmitter()` requires a non-null argument.
+// const PushNotification = require('react-native-push-notification');
+
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
@@ -400,6 +403,12 @@ async function initialize(dispatch, backButtonHandler) {
     } else {
         reg.scheduleSync();
     }
+
+    // Critical :> not sure how to make this work yet
+    // PushNotification.localNotificationSchedule({
+    //     message: 'My Notification Message', // (required)
+    //     date: new Date(Date.now() + 10 * 1000) // in 60 secs
+    // });
 
     reg.logger().info('Application initialized');
 }
