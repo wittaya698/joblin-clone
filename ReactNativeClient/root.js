@@ -50,8 +50,10 @@ const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 
 SyncTargetRegistry.addClass(SyncTargetOneDrive);
+SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
 
 const generalMiddleware = store => next => async action => {
     if (action.type !== 'SIDE_MENU_OPEN_PERCENT')
@@ -345,8 +347,15 @@ async function initialize(dispatch, backButtonHandler) {
             // Set locale and other settings
             const locale = getLocale();
             Setting.setValue('locale', closestSupportedLocale(locale));
+            if (Setting.value('env') === 'dev')
+                Setting.setValue(
+                    'sync.target',
+                    SyncTargetRegistry.nameToId('onedrive_dev')
+                );
             Setting.setValue('firstStart', 0);
         }
+
+        reg.logger().info('Sync target: ' + Setting.value('sync.target'));
 
         setLocale(Setting.value('locale'));
 

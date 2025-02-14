@@ -33,6 +33,14 @@ class SyncTargetOneDrive extends BaseSyncTarget {
         return this.api().auth();
     }
 
+    syncTargetId() {
+        return SyncTargetOneDrive.id();
+    }
+
+    oneDriveParameters() {
+        return parameters().oneDrive;
+    }
+
     api() {
         if (this.api_) return this.api_;
 
@@ -41,8 +49,8 @@ class SyncTargetOneDrive extends BaseSyncTarget {
         const isPublic = true;
 
         this.api_ = new OneDriveApi(
-            parameters().oneDrive.id,
-            parameters().oneDrive.secret,
+            this.oneDriveParameters().id,
+            this.oneDriveParameters().secret,
             isPublic
         );
         this.api_.setLogger(this.logger());
@@ -50,12 +58,12 @@ class SyncTargetOneDrive extends BaseSyncTarget {
         this.api_.on('authRefreshed', a => {
             this.logger().info('Saving updated OneDrive auth.');
             Setting.setValue(
-                'sync.' + staticSelf.id() + '.auth',
+                'sync.' + this.syncTargetId() + '.auth',
                 a ? JSON.stringify(a) : null
             );
         });
 
-        let auth = Setting.value('sync.' + staticSelf.id() + '.auth');
+        let auth = Setting.value('sync.' + this.syncTargetId() + '.auth');
         if (auth) {
             try {
                 auth = JSON.parse(auth);
@@ -88,7 +96,5 @@ class SyncTargetOneDrive extends BaseSyncTarget {
         );
     }
 }
-
-const staticSelf = SyncTargetOneDrive;
 
 module.exports = SyncTargetOneDrive;

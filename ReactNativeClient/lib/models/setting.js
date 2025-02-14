@@ -49,20 +49,6 @@ class Setting extends BaseModel {
                 type: Setting.TYPE_STRING,
                 public: false
             },
-            'sync.target': {
-                value: SyncTargetRegistry.nameToId('onedrive'),
-                type: Setting.TYPE_INT,
-                isEnum: true,
-                public: true,
-                label: () => _('Synchronisation target'),
-                description: () =>
-                    _(
-                        'The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'
-                    ),
-                options: () => {
-                    return SyncTargetRegistry.idAndLabelPlainObject();
-                }
-            },
             'sync.1.context': {
                 value: '',
                 type: Setting.TYPE_STRING,
@@ -194,6 +180,20 @@ class Setting extends BaseModel {
                 public: true,
                 appTypes: ['mobile'],
                 label: () => _('Show advanced options')
+            },
+            'sync.target': {
+                value: SyncTargetRegistry.nameToId('onedrive'),
+                type: Setting.TYPE_INT,
+                isEnum: true,
+                public: true,
+                label: () => _('Synchronisation target'),
+                description: () =>
+                    _(
+                        'The target to synchonise to. If synchronising with the file system, set `sync.2.path` to specify the target directory.'
+                    ),
+                options: () => {
+                    return SyncTargetRegistry.idAndLabelPlainObject();
+                }
             }
         };
 
