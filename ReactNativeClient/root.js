@@ -48,6 +48,8 @@ const {
 const RNFS = require('react-native-fs');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTarget3 = require('lib/SyncTarget3.js');
 
 const generalMiddleware = store => next => async action => {
     if (action.type !== 'SIDE_MENU_OPEN_PERCENT')
@@ -272,6 +274,8 @@ async function initialize(dispatch, backButtonHandler) {
     mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
     reg.setLogger(mainLogger);
+
+    SyncTargetRegistry.addClass(SyncTarget3);
 
     reg.logger().info('====================================');
     reg.logger().info(

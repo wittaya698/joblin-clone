@@ -19,6 +19,8 @@ const { FileApiDriverLocal } = require('lib/file-api-driver-local.js');
 const { FsDriverNode } = require('lib/fs-driver-node.js');
 const { time } = require('lib/time-utils.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTarget1 = require('lib/SyncTarget1.js');
+const SyncTarget2 = require('lib/SyncTarget2.js');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -49,6 +51,9 @@ BaseItem.loadClass('NoteTag', NoteTag);
 
 Setting.setConstant('appId', 'net.witthaya.joplin_clone-cli');
 Setting.setConstant('appType', 'cli');
+
+SyncTargetRegistry.addClass(SyncTarget1);
+SyncTargetRegistry.addClass(SyncTarget2);
 
 function syncTargetId() {
     return syncTargetId_;

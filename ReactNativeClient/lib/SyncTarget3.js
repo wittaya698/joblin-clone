@@ -13,7 +13,7 @@ class SyncTarget3 extends BaseSyncTarget {
         this.api_ = null;
     }
 
-    id() {
+    static id() {
         return 3;
     }
 
@@ -21,7 +21,7 @@ class SyncTarget3 extends BaseSyncTarget {
         return 'onedrive';
     }
 
-    label() {
+    static label() {
         return _('OneDrive');
     }
 
@@ -46,12 +46,12 @@ class SyncTarget3 extends BaseSyncTarget {
         this.api_.on('authRefreshed', a => {
             this.logger().info('Saving updated OneDrive auth.');
             Setting.setValue(
-                'sync.' + this.id() + '.auth',
+                'sync.' + staticSelf.id() + '.auth',
                 a ? JSON.stringify(a) : null
             );
         });
 
-        let auth = Setting.value('sync.' + this.id() + '.auth');
+        let auth = Setting.value('sync.' + staticSelf.id() + '.auth');
         if (auth) {
             try {
                 auth = JSON.parse(auth);
@@ -67,19 +67,22 @@ class SyncTarget3 extends BaseSyncTarget {
         return this.api_;
     }
 
-    initFileApi() {
-        throw new Error('SyncTarget3 initFileApi need implementation');
+    async initFileApi() {
+        const appDir = await this.api().appDirectory();
+        throw new Error('SyncTarget3 initFileApi need further implementation');
     }
 
     async initSynchronizer() {
         if (!this.isAuthenticated())
             throw new Error('User is not authentified');
-
-        const appDir = await this.api().appDirectory();
-        throw new Error(
-            'SyncTarget3 initSynchronizer need further implementation'
+        return new Synchronizer(
+            this.db(),
+            await this.fileApi(),
+            Setting.value('appType')
         );
     }
 }
+
+const staticSelf = SyncTarget3;
 
 module.exports = SyncTarget3;
