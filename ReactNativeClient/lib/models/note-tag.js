@@ -1,6 +1,5 @@
-import { BaseItem } from '@/lib/models/base-item.js';
-import { BaseModel } from '@/lib/base-model.js';
-import lodash from 'lodash';
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
 
 class NoteTag extends BaseItem {
     static tableName() {
@@ -25,6 +24,18 @@ class NoteTag extends BaseItem {
                 '")'
         );
     }
+
+    static async tagIdsByNoteId(noteId) {
+        let rows = await this.db().selectAll(
+            'SELECT tag_id FROM note_tags WHERE note_id = ?',
+            [noteId]
+        );
+        let output = [];
+        for (let i = 0; i < rows.length; i++) {
+            output.push(rows[i].tag_id);
+        }
+        return output;
+    }
 }
 
-export { NoteTag };
+module.exports = { NoteTag };

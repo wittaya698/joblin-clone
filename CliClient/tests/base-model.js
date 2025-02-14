@@ -1,7 +1,7 @@
 require('source-map-support').install();
 
-import { time } from 'lib/time-utils.js';
-import {
+const { time } = require('lib/time-utils.js');
+const {
     setupDatabase,
     setupDatabaseAndSynchronizer,
     db,
@@ -10,12 +10,12 @@ import {
     sleep,
     clearDatabase,
     switchClient
-} from 'test-utils.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Setting } from 'lib/models/setting.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { BaseModel } from 'lib/base-model.js';
+} = require('test-utils.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
 
 process.on('unhandledRejection', (reason, p) => {
     console.error(

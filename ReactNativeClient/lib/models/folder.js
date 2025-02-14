@@ -1,14 +1,14 @@
-import { BaseModel } from '@/lib/base-model.js';
-import { Log } from '@/lib/log.js';
-import { promiseChain } from '@/lib/promise-utils.js';
-import { time } from '@/lib/time-utils.js';
-import { Note } from '@/lib/models/note.js';
-import { Setting } from '@/lib/models/setting.js';
-import { Database } from '@/lib/database.js';
-import { _ } from '@/lib/locale.js';
-import moment from 'moment';
-import { BaseItem } from '@/lib/models/base-item.js';
-import lodash from 'lodash';
+const { BaseModel } = require('lib/base-model.js');
+const { Log } = require('lib/log.js');
+const { promiseChain } = require('lib/promise-utils.js');
+const { time } = require('lib/time-utils.js');
+const { Note } = require('lib/models/note.js');
+const { Setting } = require('lib/models/setting.js');
+const { Database } = require('lib/database.js');
+const { _ } = require('lib/locale.js');
+const moment = require('moment');
+const { BaseItem } = require('lib/models/base-item.js');
+const lodash = require('lodash');
 
 class Folder extends BaseItem {
     static tableName() {
@@ -35,6 +35,20 @@ class Folder extends BaseItem {
             id: null,
             title: ''
         };
+    }
+
+    static async findUniqueFolderTitle(title) {
+        let counter = 1;
+        let titleToTry = title;
+        while (true) {
+            const folder = await this.loadByField('title', titleToTry);
+            if (!folder) return titleToTry;
+            titleToTry = title + ' (' + counter + ')';
+            counter++;
+            if (counter >= 100)
+                titleToTry = title + ' (' + new Date().getTime() + ')';
+            if (counter >= 1000) throw new Error('Cannot find unique title');
+        }
     }
 
     static noteIds(id) {
@@ -177,7 +191,7 @@ class Folder extends BaseItem {
 
         return super.save(o, options).then(folder => {
             this.dispatch({
-                type: 'FOLDERS_UPDATE_ONE',
+                type: 'FOLDER_UPDATE_ONE',
                 folder: folder
             });
             return folder;
@@ -185,4 +199,4 @@ class Folder extends BaseItem {
     }
 }
 
-export { Folder };
+module.exports = { Folder };

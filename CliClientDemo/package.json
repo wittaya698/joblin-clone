@@ -1,0 +1,32 @@
+{
+  "name": "demo-joplin",
+  "version": "1.0.8",
+  "description": "Demo for Joplin CLI",
+  "bin": {
+    "demo-joplin": "./index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/wittaya698/joplin-clone/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wittaya698/joplin-clone"
+  },
+  "engines": {
+    "node": ">=8.7.0"
+  },
+  "copyright": {
+    "title": "Demo for Joplin CLI",
+    "years": [
+      2024,
+      2025
+    ],
+    "owner": "Witthaya Thongchin"
+  },
+  "dependencies": {
+    "@tarwitthaya/joplin": "^0.10.69",
+    "fs-extra": "^11.3.0"
+  },
+  "author": "Witthaya Thongchin",
+  "license": "MIT"
+}

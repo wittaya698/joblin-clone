@@ -860,4 +860,4 @@ const mime = {
     }
 };
 
-export { mime };
+module.exports = { mime };

@@ -1,5 +1,5 @@
-import * as Location from 'expo-location';
-import { Setting } from '@/lib/models/setting.js';
+const Location = require('expo-location');
+const { Setting } = require('lib/models/setting.js');
 
 class GeolocationReact {
     static currentPosition_testResponse() {
@@ -43,4 +43,4 @@ class GeolocationReact {
     }
 }
 
-export { GeolocationReact };
+module.exports = { GeolocationReact };

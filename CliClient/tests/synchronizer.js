@@ -1,8 +1,7 @@
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
+require('app-module-path').addPath(__dirname);
 
-import { time } from 'lib/time-utils.js';
-import {
+const { time } = require('lib/time-utils.js');
+const {
     setupDatabase,
     setupDatabaseAndSynchronizer,
     db,
@@ -12,14 +11,15 @@ import {
     clearDatabase,
     switchClient,
     syncTargetId
-} from 'test-utils.js';
-import { Folder } from 'lib/models/folder.js';
-import { Note } from 'lib/models/note.js';
-import { Tag } from 'lib/models/tag.js';
-import { Database } from 'lib/database.js';
-import { Setting } from 'lib/models/setting.js';
-import { BaseItem } from 'lib/models/base-item.js';
-import { BaseModel } from 'lib/base-model.js';
+} = require('test-utils.js');
+const { Folder } = require('lib/models/folder.js');
+const { Note } = require('lib/models/note.js');
+const { Tag } = require('lib/models/tag.js');
+const { Database } = require('lib/database.js');
+const { Setting } = require('lib/models/setting.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 
 process.on('unhandledRejection', (reason, p) => {
     console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
@@ -48,7 +48,7 @@ async function localItemsSameAsRemote(locals, expect) {
             expect(!!remote).toBe(true);
             if (!remote) continue;
 
-            if (syncTargetId() == Setting.SYNC_TARGET_FILESYSTEM) {
+            if (syncTargetId() == SyncTargetRegistry.nameToId('filesystem')) {
                 expect(remote.updated_time).toBe(
                     Math.floor(dbItem.updated_time / 1000) * 1000
                 );
@@ -545,5 +545,70 @@ describe('Synchronizer', function () {
         const deletedItems = await BaseItem.deletedItems(syncTargetId());
 
         expect(deletedItems.length).toBe(0);
+    });
+
+    it('should not consider it is a conflict if neither the title nor body of the note have changed', async () => {
+        // That was previously a common conflict:
+        // - Client 1 mark todo as "done", and sync
+        // - Client 2 doesn't sync, mark todo as "done" todo. Then sync.
+        // In theory it is a conflict because the todo_completed dates are different
+        // but in practice it doesn't matter, we can just take the date when the
+        // todo was marked as "done" the first time.
+
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({
+            title: 'un',
+            is_todo: 1,
+            parent_id: folder1.id
+        });
+
+        await synchronizer().start();
+
+        await switchClient(2);
+
+        await synchronizer().start();
+        let note2 = await Note.load(note1.id);
+        note2.todo_completed = time.unixMs() - 1;
+        await Note.save(note2);
+        note2 = await Note.load(note2.id);
+        await synchronizer().start();
+
+        await switchClient(1);
+
+        let note2conf = await Note.load(note1.id);
+        note2conf.todo_completed = time.unixMs();
+        await Note.save(note2conf);
+        note2conf = await Note.load(note1.id);
+        await synchronizer().start();
+
+        let conflictedNotes = await Note.conflictedNotes();
+        expect(conflictedNotes.length).toBe(0);
+
+        let notes = await Note.all();
+        expect(notes.length).toBe(1);
+        expect(notes[0].id).toBe(note1.id);
+        expect(notes[0].todo_completed).toBe(note2.todo_completed);
+    });
+
+    it('items should be downloaded again when user cancels in the middle of delta operation', async () => {
+        let folder1 = await Folder.save({ title: 'folder1' });
+        let note1 = await Note.save({
+            title: 'un',
+            is_todo: 1,
+            parent_id: folder1.id
+        });
+        await synchronizer().start();
+
+        await switchClient(2);
+
+        synchronizer().debugFlags_ = ['cancelDeltaLoop2'];
+        let context = await synchronizer().start();
+        let notes = await Note.all();
+        expect(notes.length).toBe(0);
+
+        synchronizer().debugFlags_ = [];
+        await synchronizer().start({ context: context });
+        notes = await Note.all();
+        expect(notes.length).toBe(1);
     });
 });

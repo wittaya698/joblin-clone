@@ -1,6 +1,6 @@
-import { Component } from 'react';
-import { StyleSheet, TouchableHighlight } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons.js';
+const { Component } = require('react');
+const { StyleSheet, View, TouchableHighlight } = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
 
 const styles = {
     checkboxIcon: {
@@ -49,7 +49,8 @@ class Checkbox extends Component {
             alignItems: 'center'
         };
 
-        if (style.display) thStyle.display = style.display;
+        if (style && style.display === 'none') return <View />;
+        //if (style.display) thStyle.display = style.display;
 
         return (
             <TouchableHighlight onPress={() => this.onPress()} style={thStyle}>
@@ -59,4 +60,4 @@ class Checkbox extends Component {
     }
 }
 
-export { Checkbox };
+module.exports = { Checkbox };

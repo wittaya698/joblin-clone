@@ -1,20 +1,12 @@
-import { Logger } from '@/lib/logger.js';
-import { Setting } from '@/lib/models/setting.js';
-import { OneDriveApi } from '@/lib/onedrive-api.js';
-import { parameters } from '@/lib/parameters.js';
-import { FileApi } from '@/lib/file-api.js';
-import { Database } from '@/lib/database.js';
-import { Synchronizer } from '@/lib/synchronizer.js';
-import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
-import { shim } from '@/lib/shim.js';
-import { time } from '@/lib/time-utils.js';
-import { FileApiDriverMemory } from '@/lib/file-api-driver-memory.js';
-import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
-import { _ } from '@/lib/locale.js';
+const { Logger } = require('lib/logger.js');
+const { Setting } = require('lib/models/setting.js');
+const { shim } = require('lib/shim.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const { _ } = require('lib/locale.js');
 
 const reg = {};
 
-reg.initSynchronizerStates_ = {};
+reg.syncTargets_ = {};
 
 reg.logger = () => {
     if (!reg.logger_) {
@@ -29,129 +21,21 @@ reg.setLogger = l => {
     reg.logger_ = l;
 };
 
-reg.oneDriveApi = () => {
-    if (reg.oneDriveApi_) return reg.oneDriveApi_;
+reg.syncTarget = (syncTargetId = null) => {
+    if (syncTargetId === null) syncTargetId = Setting.value('sync.target');
+    if (reg.syncTargets_[syncTargetId]) return reg.syncTargets_[syncTargetId];
 
-    // Critical -> both appType is public for now
-    // const isPublic = Setting.value('appType') != 'cli';
-    const isPublic = true;
+    const SyncTargetClass = SyncTargetRegistry.classById(syncTargetId);
+    if (!reg.db()) throw new Error('Cannot initialize sync without a db');
 
-    reg.oneDriveApi_ = new OneDriveApi(
-        parameters().oneDrive.id,
-        parameters().oneDrive.secret,
-        isPublic
-    );
-
-    reg.oneDriveApi_.setLogger(reg.logger());
-
-    reg.oneDriveApi_.on('authRefreshed', a => {
-        reg.logger().info('Saving updated OneDrive auth.');
-        Setting.setValue('sync.3.auth', a ? JSON.stringify(a) : null);
-    });
-
-    let auth = Setting.value('sync.3.auth');
-    if (auth) {
-        try {
-            auth = JSON.parse(auth);
-        } catch (error) {
-            reg.logger().warn('Could not parse OneDrive auth token');
-            reg.logger().warn(error);
-            auth = null;
-        }
-        reg.oneDriveApi_.setAuth(auth);
-    }
-
-    return reg.oneDriveApi_;
-};
-
-reg.initSynchronizer_ = async syncTargetId => {
-    if (!reg.db())
-        throw new Error('Cannot initialize synchronizer: db not initialized');
-
-    let fileApi = null;
-    if (syncTargetId == Setting.SYNC_TARGET_ONEDRIVE) {
-        if (!reg.oneDriveApi().auth())
-            throw new Error('User is not authentified');
-        let error_msg = 'Error: Tenant does not have a SPO license.';
-        reg.logger().error(error_msg);
-        throw new Error(error_msg);
-
-        // let appDir = await reg.oneDriveApi().appDirectory();
-        // fileApi_ = new FileApi(appDir, reg.oneDriveApi()));
-    } else if (syncTargetId == Setting.SYNC_TARGET_MEMORY) {
-        fileApi = new FileApi('joplin', new FileApiDriverMemory());
-    } else if (syncTargetId == Setting.SYNC_TARGET_FILESYSTEM) {
-        let syncDir = Setting.value('sync.2.path');
-        if (!syncDir)
-            throw new Error(
-                _(
-                    'Please set the "sync.2.path" config value to the desired synchronisation destination.'
-                )
-            );
-        await shim.fs.mkdirp(syncDir, 0o755);
-        fileApi = new FileApi(syncDir, new shim.FileApiDriverLocal());
-    } else {
-        throw new Error('Unknown sync target: ' + syncTargetId);
-    }
-
-    fileApi.setSyncTargetId(syncTargetId);
-    fileApi.setLogger(reg.logger());
-
-    let sync = new Synchronizer(reg.db(), fileApi, Setting.value('appType'));
-    sync.setLogger(reg.logger());
-    sync.dispatch = reg.dispatch;
-
-    return sync;
-};
-
-reg.synchronizer = async syncTargetId => {
-    if (!reg.synchronizers_) reg.synchronizers_ = [];
-    if (reg.synchronizers_[syncTargetId])
-        return reg.synchronizers_[syncTargetId];
-    if (!reg.db())
-        throw new Error('Cannot initialize synchronizer: db not initialized');
-
-    if (reg.initSynchronizerStates_[syncTargetId] == 'started') {
-        // Synchronizer is already being initialized, so wait here till it's done.
-        return new Promise((resolve, reject) => {
-            const iid = setInterval(() => {
-                if (reg.initSynchronizerStates_[syncTargetId] == 'ready') {
-                    clearInterval(iid);
-                    resolve(reg.synchronizers_[syncTargetId]);
-                }
-                if (reg.initSynchronizerStates_[syncTargetId] == 'error') {
-                    clearInterval(iid);
-                    reject(new Error('Could not initialise synchroniser'));
-                }
-            }, 1000);
-        });
-    } else {
-        reg.initSynchronizerStates_[syncTargetId] = 'started';
-        try {
-            const sync = await reg.initSynchronizer_(syncTargetId);
-            reg.synchronizers_[syncTargetId] = sync;
-            reg.initSynchronizerStates_[syncTargetId] = 'ready';
-            return sync;
-        } catch (error) {
-            reg.initSynchronizerStates_[syncTargetId] = 'error';
-            throw error;
-        }
-    }
-};
-
-reg.syncHasAuth = syncTargetId => {
-    if (
-        syncTargetId == Setting.SYNC_TARGET_ONEDRIVE &&
-        !reg.oneDriveApi().auth()
-    ) {
-        return false;
-    }
-
-    return true;
+    const target = new SyncTargetClass(reg.db());
+    target.setLogger(reg.logger());
+    reg.syncTargets_[syncTargetId] = target;
+    return target;
 };
 
 reg.scheduleSync = async (delay = null) => {
-    if (delay === null) delay = 1000 * 10;
+    if (delay === null) delay = 1000 * 3;
 
     if (reg.scheduleSyncId_) {
         clearTimeout(reg.scheduleSyncId_);
@@ -160,13 +44,18 @@ reg.scheduleSync = async (delay = null) => {
 
     reg.logger().info('Scheduling sync operation...');
 
+    // if (Setting.value('env') === 'dev') {
+    // 	reg.logger().info('Scheduling sync operation DISABLED!!!');
+    // 	return;
+    // }
+
     const timeoutCallback = async () => {
         reg.scheduleSyncId_ = null;
         reg.logger().info('Doing scheduled sync');
 
         const syncTargetId = Setting.value('sync.target');
 
-        if (!reg.syncHasAuth(syncTargetId)) {
+        if (!reg.syncTarget(syncTargetId).isAuthenticated()) {
             reg.logger().info(
                 'Synchroniser is missing credentials - manual sync required to authenticate.'
             );
@@ -174,7 +63,7 @@ reg.scheduleSync = async (delay = null) => {
         }
 
         try {
-            const sync = await reg.synchronizer(syncTargetId);
+            const sync = await reg.syncTarget(syncTargetId).synchronizer();
 
             const contextKey = 'sync.' + syncTargetId + '.context';
             let context = Setting.value(contextKey);
@@ -204,16 +93,9 @@ reg.scheduleSync = async (delay = null) => {
     }
 };
 
-reg.syncStarted = async () => {
-    const syncTarget = Setting.value('sync.target');
-    if (!reg.syncHasAuth(syncTarget)) return false;
-    const sync = await reg.synchronizer(syncTarget);
-    return sync.state() != 'idle';
-};
-
 reg.setupRecurrentSync = () => {
     if (reg.recurrentSyncId_) {
-        PoorManIntervals.clearInterval(reg.recurrentSyncId_);
+        shim.clearInterval(reg.recurrentSyncId_);
         reg.recurrentSyncId_ = null;
     }
 
@@ -225,7 +107,7 @@ reg.setupRecurrentSync = () => {
                 Setting.value('sync.interval')
         );
 
-        reg.recurrentSyncId_ = PoorManIntervals.setInterval(() => {
+        reg.recurrentSyncId_ = shim.setInterval(() => {
             reg.logger().info('Running background sync on timer...');
             reg.scheduleSync(0);
         }, 1000 * Setting.value('sync.interval'));
@@ -240,4 +122,4 @@ reg.db = () => {
     return reg.db_;
 };
 
-export { reg };
+module.exports = { reg };

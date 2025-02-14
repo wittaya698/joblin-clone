@@ -1,4 +1,4 @@
-import SQLite from 'react-native-sqlite-storage';
+const SQLite = require('react-native-sqlite-storage');
 
 class DatabaseDriverReactNative {
     open(options) {
@@ -66,4 +66,4 @@ class DatabaseDriverReactNative {
     }
 }
 
-export { DatabaseDriverReactNative };
+module.exports = { DatabaseDriverReactNative };

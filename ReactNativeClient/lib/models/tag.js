@@ -1,9 +1,8 @@
-import { BaseModel } from '@/lib/base-model.js';
-import { BaseItem } from '@/lib/models/base-item.js';
-import { NoteTag } from '@/lib/models/note-tag.js';
-import { Note } from '@/lib/models/note.js';
-import { time } from '@/lib/time-utils.js';
-import lodash from 'lodash';
+const { BaseModel } = require('lib/base-model.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { Note } = require('lib/models/note.js');
+const { time } = require('lib/time-utils.js');
 
 class Tag extends BaseItem {
     static tableName() {
@@ -36,23 +35,51 @@ class Tag extends BaseItem {
         let noteIds = await this.noteIds(tagId);
         if (!noteIds.length) return [];
 
-        let noteIdsSql = noteIds.join('","');
-        noteIdsSql = '"' + noteIdsSql + '"';
-        let options = {
-            conditions: ['id IN (' + noteIdsSql + ')']
-        };
+        return Note.search({
+            conditions: ['id IN ("' + noteIds.join('","') + '")']
+        });
+    }
 
-        return Note.search(options);
+    // Untag all the notes and delete tag
+    static async untagAll(tagId) {
+        const noteTags = await NoteTag.modelSelectAll(
+            'SELECT id FROM note_tags WHERE tag_id = ?',
+            [tagId]
+        );
+        for (let i = 0; i < noteTags.length; i++) {
+            await NoteTag.delete(noteTags[i].id);
+        }
+
+        const tags = await Tag.allWithNotes();
+        this.dispatch({
+            type: 'TAG_UPDATE_ALL',
+            tags: tags
+        });
+
+        this.dispatch({
+            type: 'TAG_SELECT',
+            id: null
+        });
+        // Currently not actually deleting it as the reducer would need to be updated. The
+        // tag will stay in the db but just won't show up in the UI.
+        //await Tag.delete(tagId);
     }
 
     static async addNote(tagId, noteId) {
         let hasIt = await this.hasNote(tagId, noteId);
         if (hasIt) return;
 
-        return NoteTag.save({
+        const output = await NoteTag.save({
             tag_id: tagId,
             note_id: noteId
         });
+
+        this.dispatch({
+            type: 'TAG_UPDATE_ONE',
+            tag: await Tag.load(tagId)
+        });
+
+        return output;
     }
 
     static async removeNote(tagId, noteId) {
@@ -63,6 +90,11 @@ class Tag extends BaseItem {
         for (let i = 0; i < noteTags.length; i++) {
             await NoteTag.delete(noteTags[i].id);
         }
+
+        this.dispatch({
+            type: 'TAG_UPDATE_ONE',
+            tag: await Tag.load(tagId)
+        });
     }
 
     static async hasNote(tagId, noteId) {
@@ -72,6 +104,59 @@ class Tag extends BaseItem {
         );
         return !!r;
     }
+
+    static async allWithNotes() {
+        return await Tag.modelSelectAll(
+            'SELECT * FROM tags WHERE id IN (SELECT DISTINCT tag_id FROM note_tags)'
+        );
+    }
+
+    static async tagsByNoteId(noteId) {
+        const tagIds = await NoteTag.tagIdsByNoteId(noteId);
+        return this.modelSelectAll(
+            'SELECT * FROM tags WHERE id IN ("' + tagIds.join('","') + '")'
+        );
+    }
+
+    static async setNoteTagsByTitles(noteId, tagTitles) {
+        const previousTags = await this.tagsByNoteId(noteId);
+        const addedTitles = [];
+
+        for (let i = 0; i < tagTitles.length; i++) {
+            const title = tagTitles[i].trim().toLowerCase();
+            if (!title) continue;
+            let tag = await this.loadByField('title', title);
+            if (!tag)
+                tag = await Tag.save(
+                    { title: title },
+                    { userSideValidation: true }
+                );
+            await this.addNote(tag.id, noteId);
+            addedTitles.push(title);
+        }
+
+        for (let i = 0; i < previousTags.length; i++) {
+            if (addedTitles.indexOf(previousTags[i].title) < 0) {
+                await this.removeNote(previousTags[i].id, noteId);
+            }
+        }
+    }
+
+    static async save(o, options = null) {
+        if (options && options.userSideValidation) {
+            if ('title' in o) {
+                o.title = o.title.trim().toLowerCase();
+            }
+        }
+
+        return super.save(o, options).then(tag => {
+            this.dispatch({
+                type: 'TAG_UPDATE_ONE',
+                tag: tag
+            });
+            return tag;
+        });
+    }
 }
 
-export { Tag };
+module.exports = { Tag };

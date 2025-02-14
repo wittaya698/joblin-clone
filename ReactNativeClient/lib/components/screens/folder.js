@@ -1,16 +1,16 @@
-import React from 'react';
-import { View, Button, TextInput, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
-import { Log } from '@/lib/log.js';
-import { ActionButton } from '@/lib/components/action-button.js';
-import { Folder } from '@/lib/models/folder.js';
-import { BaseModel } from '@/lib/base-model.js';
-import { ScreenHeader } from '@/lib/components/screen-header.js';
-import { reg } from '@/lib/registry.js';
-import { BaseScreenComponent } from '@/lib/components/base-screen.js';
-import { dialogs } from '@/lib/dialogs.js';
-import { themeStyle } from '@/lib/components/global-style.js';
-import { _ } from '@/lib/locale.js';
+const React = require('react');
+const { View, Button, TextInput, StyleSheet } = require('react-native');
+const { connect } = require('react-redux');
+const { Log } = require('lib/log.js');
+const { ActionButton } = require('lib/components/action-button.js');
+const { Folder } = require('lib/models/folder.js');
+const { BaseModel } = require('lib/base-model.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { reg } = require('lib/registry.js');
+const { BaseScreenComponent } = require('lib/components/base-screen.js');
+const { dialogs } = require('lib/dialogs.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { _ } = require('lib/locale.js');
 
 class FolderScreenComponent extends BaseScreenComponent {
     static navigationOptions(options) {
@@ -35,7 +35,8 @@ class FolderScreenComponent extends BaseScreenComponent {
 
         let styles = {
             textInput: {
-                color: theme.color
+                color: theme.color,
+                paddingLeft: 10
             }
         };
 
@@ -136,4 +137,4 @@ const FolderScreen = connect(state => {
     return { folderId: state.selectedFolderId, theme: state.settings.theme };
 })(FolderScreenComponent);
 
-export { FolderScreen };
+module.exports = { FolderScreen };

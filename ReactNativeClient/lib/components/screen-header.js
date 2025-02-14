@@ -1,30 +1,39 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {
+const React = require('react');
+const { Component } = React;
+const { connect } = require('react-redux');
+const {
+    Platform,
     View,
     Text,
     Button,
     StyleSheet,
     TouchableOpacity,
     Image
-} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { Log } from '@/lib/log.js';
-import { BackButtonService } from '@/lib/services/back-button.js';
-import { Picker } from '@react-native-picker/picker';
-import { _ } from '@/lib/locale.js';
-import { Setting } from '@/lib/models/setting.js';
-import { FileApi } from '@/lib/file-api.js';
-import { FileApiDriverOneDrive } from '@/lib/file-api-driver-onedrive.js';
-import { reg } from '@/lib/registry.js';
-import { themeStyle } from '@/lib/components/global-style.js';
-
-import {
+} = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { Log } = require('lib/log.js');
+const { BackButtonService } = require('lib/services/back-button.js');
+const { ReportService } = require('lib/services/report.js');
+const { _ } = require('lib/locale.js');
+const { Setting } = require('lib/models/setting.js');
+const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
+const { FileApi } = require('lib/file-api.js');
+const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
+const { reg } = require('lib/registry.js');
+const { themeStyle } = require('lib/components/global-style.js');
+const { ItemList } = require('lib/components/ItemList.js');
+const { Dropdown } = require('lib/components/Dropdown.js');
+const {
     Menu,
     MenuOption,
     MenuOptions,
     MenuTrigger
-} from 'react-native-popup-menu';
+} = require('react-native-popup-menu');
+const { time } = require('lib/time-utils');
+const RNFS = require('react-native-fs');
+const { dialogs } = require('lib/dialogs.js');
+const DialogBox = require('react-native-dialogbox').default;
 
 // Rather than applying a padding to the whole bar, it is applied to each
 // individual component (button, picker, etc.) so that the touchable areas
@@ -52,11 +61,7 @@ class ScreenHeaderComponent extends Component {
                 alignItems: 'center',
                 shadowColor: '#000000',
                 elevation: 5
-            },
-            folderPicker: {
-                flex: 1,
-                color: theme.raisedHighlightedColor
-                // Note: cannot set backgroundStyle as that would remove the arrow in the component
+                // paddingTop: Platform.OS === 'ios' ? 15 : 0 // Extra padding for iOS because the top icons are there
             },
             divider: {
                 borderBottomWidth: 1,
@@ -167,7 +172,6 @@ class ScreenHeaderComponent extends Component {
 
     async backButton_press() {
         await BackButtonService.back();
-        //this.props.dispatch({ type: 'NAV_BACK' });
     }
 
     searchButton_press() {
@@ -175,6 +179,20 @@ class ScreenHeaderComponent extends Component {
             type: 'NAV_GO',
             routeName: 'Search'
         });
+    }
+
+    async deleteButton_press() {
+        // Dialog needs to be displayed as a child of the parent component, otherwise
+        // it won't be visible within the header component.
+        const ok = await dialogs.confirm(
+            this.props.parentComponent,
+            _('Delete these notes?')
+        );
+        if (!ok) return;
+
+        const noteIds = this.props.selectedNoteIds;
+        this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+        await Note.batchDelete(noteIds);
     }
 
     menu_select(value) {
@@ -202,6 +220,36 @@ class ScreenHeaderComponent extends Component {
             type: 'NAV_GO',
             routeName: 'Config'
         });
+    }
+
+    async debugReport_press() {
+        const service = new ReportService();
+
+        const logItems = await reg.logger().lastEntries(null);
+        const logItemRows = [['Date', 'Level', 'Message']];
+        for (let i = 0; i < logItems.length; i++) {
+            const item = logItems[i];
+            logItemRows.push([
+                time.formatMsToLocal(item.timestamp, 'MM-DDTHH:mm:ss'),
+                item.level,
+                item.message
+            ]);
+        }
+        const logItemCsv = service.csvCreate(logItemRows);
+
+        const itemListCsv = await service.basicItemList({ format: 'csv' });
+        const filePath =
+            RNFS.ExternalDirectoryPath +
+            '/syncReport-' +
+            new Date().getTime() +
+            '.txt';
+
+        const finalText = [logItemCsv, itemListCsv].join(
+            '\n--------------------------------------------------------------------------------'
+        );
+
+        await RNFS.writeFile(filePath, finalText);
+        alert('Debug report exported to ' + filePath);
     }
 
     render() {
@@ -271,105 +319,202 @@ class ScreenHeaderComponent extends Component {
             );
         }
 
+        function deleteButton(styles, onPress) {
+            return (
+                <TouchableOpacity onPress={onPress}>
+                    <View style={styles.iconButton}>
+                        <Icon name="trash" style={styles.topIcon} />
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
         let key = 0;
         let menuOptionComponents = [];
-        for (let i = 0; i < this.props.menuOptions.length; i++) {
-            let o = this.props.menuOptions[i];
+        if (!this.props.noteSelectionEnabled) {
+            for (let i = 0; i < this.props.menuOptions.length; i++) {
+                let o = this.props.menuOptions[i];
+                menuOptionComponents.push(
+                    <MenuOption
+                        value={o.onPress}
+                        key={'menuOption_' + key++}
+                        style={this.styles().contextMenuItem}
+                    >
+                        <Text style={this.styles().contextMenuItemText}>
+                            {o.title}
+                        </Text>
+                    </MenuOption>
+                );
+            }
+
+            if (this.props.showAdvancedOptions) {
+                if (menuOptionComponents.length) {
+                    menuOptionComponents.push(
+                        <View
+                            key={'menuOption_showAdvancedOptions'}
+                            style={this.styles().divider}
+                        />
+                    );
+                }
+
+                menuOptionComponents.push(
+                    <MenuOption
+                        value={() => this.log_press()}
+                        key={'menuOption_log'}
+                        style={this.styles().contextMenuItem}
+                    >
+                        <Text style={this.styles().contextMenuItemText}>
+                            {_('Log')}
+                        </Text>
+                    </MenuOption>
+                );
+
+                menuOptionComponents.push(
+                    <MenuOption
+                        value={() => this.status_press()}
+                        key={'menuOption_status'}
+                        style={this.styles().contextMenuItem}
+                    >
+                        <Text style={this.styles().contextMenuItemText}>
+                            {_('Status')}
+                        </Text>
+                    </MenuOption>
+                );
+
+                if (Platform.OS === 'android') {
+                    menuOptionComponents.push(
+                        <MenuOption
+                            value={() => this.debugReport_press()}
+                            key={'menuOption_debugReport'}
+                            style={this.styles().contextMenuItem}
+                        >
+                            <Text style={this.styles().contextMenuItemText}>
+                                {_('Export Debug Report')}
+                            </Text>
+                        </MenuOption>
+                    );
+                }
+            }
+
+            if (menuOptionComponents.length) {
+                menuOptionComponents.push(
+                    <View
+                        key={'menuOption_' + key++}
+                        style={this.styles().divider}
+                    />
+                );
+            }
+
             menuOptionComponents.push(
                 <MenuOption
-                    value={o.onPress}
-                    key={'menuOption_' + key++}
+                    value={() => this.config_press()}
+                    key={'menuOption_config'}
                     style={this.styles().contextMenuItem}
                 >
                     <Text style={this.styles().contextMenuItemText}>
-                        {o.title}
+                        {_('Configuration')}
+                    </Text>
+                </MenuOption>
+            );
+        } else {
+            menuOptionComponents.push(
+                <MenuOption
+                    value={() => this.deleteButton_press()}
+                    key={'menuOption_delete'}
+                    style={this.styles().contextMenuItem}
+                >
+                    <Text style={this.styles().contextMenuItemText}>
+                        {_('Delete')}
                     </Text>
                 </MenuOption>
             );
         }
 
-        if (menuOptionComponents.length) {
-            menuOptionComponents.push(
-                <View
-                    key={'menuOption_' + key++}
-                    style={this.styles().divider}
-                />
-            );
-        }
-
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.log_press()}
-                key={'menuOption_' + key++}
-                style={this.styles().contextMenuItem}
-            >
-                <Text style={this.styles().contextMenuItemText}>
-                    {_('Log')}
-                </Text>
-            </MenuOption>
-        );
-
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.status_press()}
-                key={'menuOption_' + key++}
-                style={this.styles().contextMenuItem}
-            >
-                <Text style={this.styles().contextMenuItemText}>
-                    {_('Status')}
-                </Text>
-            </MenuOption>
-        );
-
-        if (menuOptionComponents.length) {
-            menuOptionComponents.push(
-                <View
-                    key={'menuOption_' + key++}
-                    style={this.styles().divider}
-                />
-            );
-        }
-
-        menuOptionComponents.push(
-            <MenuOption
-                value={() => this.config_press()}
-                key={'menuOption_' + key++}
-                style={this.styles().contextMenuItem}
-            >
-                <Text style={this.styles().contextMenuItemText}>
-                    {_('Configuration')}
-                </Text>
-            </MenuOption>
-        );
-
         const createTitleComponent = () => {
-            const p = this.props.titlePicker;
-            if (p) {
-                let items = [];
-                for (let i = 0; i < p.items.length; i++) {
-                    let item = p.items[i];
-                    items.push(
-                        <Picker.Item
-                            label={item.label}
-                            value={item.value}
-                            key={item.value}
-                        />
-                    );
-                }
+            const themeId = Setting.value('theme');
+            const theme = themeStyle(themeId);
+            const folderPickerOptions = this.props.folderPickerOptions;
+
+            if (folderPickerOptions && folderPickerOptions.enabled) {
+                const titlePickerItems = mustSelect => {
+                    let output = [];
+                    if (mustSelect)
+                        output.push({
+                            label: _('Move to notebook...'),
+                            value: null
+                        });
+                    for (let i = 0; i < this.props.folders.length; i++) {
+                        let f = this.props.folders[i];
+                        output.push({ label: f.title, value: f.id });
+                    }
+                    output.sort((a, b) => {
+                        if (a.value === null) return -1;
+                        if (b.value === null) return +1;
+                        return a.label.toLowerCase() < b.label.toLowerCase()
+                            ? -1
+                            : +1;
+                    });
+                    return output;
+                };
+
                 return (
-                    // <View style={{ flex: 1 }}>
-                    <Picker
-                        style={this.styles().folderPicker}
-                        itemStyle={this.styles().titleText}
-                        selectedValue={p.selectedValue}
-                        onValueChange={(itemValue, itemIndex) => {
-                            if (p.onValueChange)
-                                p.onValueChange(itemValue, itemIndex);
+                    <Dropdown
+                        items={titlePickerItems(
+                            !!folderPickerOptions.mustSelect
+                        )}
+                        itemHeight={35}
+                        selectedValue={
+                            'selectedFolderId' in folderPickerOptions
+                                ? folderPickerOptions.selectedFolderId
+                                : null
+                        }
+                        itemListStyle={{
+                            backgroundColor: theme.backgroundColor
                         }}
-                    >
-                        {items}
-                    </Picker>
-                    // </View>
+                        headerStyle={{
+                            color: theme.raisedHighlightedColor,
+                            fontSize: theme.fontSize
+                        }}
+                        itemStyle={{
+                            color: theme.color,
+                            fontSize: theme.fontSize
+                        }}
+                        onValueChange={async (folderId, itemIndex) => {
+                            // If onValueChange is specified, use this as a callback, otherwise do the default
+                            // which is to take the selectedNoteIds from the state and move them to the
+                            // chosen folder.
+                            if (folderPickerOptions.onValueChange) {
+                                folderPickerOptions.onValueChange(
+                                    folderId,
+                                    itemIndex
+                                );
+                                return;
+                            }
+
+                            if (!folderId) return;
+                            const noteIds = this.props.selectedNoteIds;
+                            if (!noteIds.length) return;
+                            const folder = await Folder.load(folderId);
+
+                            const ok =
+                                noteIds.length > 1
+                                    ? await dialogs.confirm(
+                                          this.props.parentComponent,
+                                          _(
+                                              'Move %d notes to notebook "%s"?',
+                                              noteIds.length,
+                                              folder.title
+                                          )
+                                      )
+                                    : true;
+                            if (!ok) return;
+
+                            this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+                            for (let i = 0; i < noteIds.length; i++) {
+                                await Note.moveToFolder(noteIds[i], folderId);
+                            }
+                        }}
+                    />
                 );
             } else {
                 let title =
@@ -381,17 +526,42 @@ class ScreenHeaderComponent extends Component {
         };
 
         const titleComp = createTitleComponent();
+        const sideMenuComp = this.props.noteSelectionEnabled
+            ? null
+            : sideMenuButton(this.styles(), () => this.sideMenuButton_press());
+        const backButtonComp = backButton(
+            this.styles(),
+            () => this.backButton_press(),
+            !this.props.historyCanGoBack
+        );
+        const searchButtonComp = this.props.noteSelectionEnabled
+            ? null
+            : searchButton(this.styles(), () => this.searchButton_press());
+        const deleteButtonComp = this.props.noteSelectionEnabled
+            ? deleteButton(this.styles(), () => this.deleteButton_press())
+            : null;
+
+        const menuComp = (
+            <Menu
+                onSelect={value => this.menu_select(value)}
+                style={this.styles().contextMenu}
+            >
+                <MenuTrigger
+                    style={{ paddingTop: PADDING_V, paddingBottom: PADDING_V }}
+                >
+                    <Text style={this.styles().contextMenuTrigger}>
+                        {' '}
+                        &#8942;
+                    </Text>
+                </MenuTrigger>
+                <MenuOptions>{menuOptionComponents}</MenuOptions>
+            </Menu>
+        );
 
         return (
             <View style={this.styles().container}>
-                {sideMenuButton(this.styles(), () =>
-                    this.sideMenuButton_press()
-                )}
-                {backButton(
-                    this.styles(),
-                    () => this.backButton_press(),
-                    !this.props.historyCanGoBack
-                )}
+                {sideMenuComp}
+                {backButtonComp}
                 {saveButton(
                     this.styles(),
                     () => {
@@ -402,24 +572,14 @@ class ScreenHeaderComponent extends Component {
                     this.props.showSaveButton === true
                 )}
                 {titleComp}
-                {searchButton(this.styles(), () => this.searchButton_press())}
-                <Menu
-                    onSelect={value => this.menu_select(value)}
-                    style={this.styles().contextMenu}
-                >
-                    <MenuTrigger
-                        style={{
-                            paddingTop: PADDING_V,
-                            paddingBottom: PADDING_V
-                        }}
-                    >
-                        <Text style={this.styles().contextMenuTrigger}>
-                            {' '}
-                            &#8942;{' '}
-                        </Text>
-                    </MenuTrigger>
-                    <MenuOptions>{menuOptionComponents}</MenuOptions>
-                </Menu>
+                {searchButtonComp}
+                {deleteButtonComp}
+                {menuComp}
+                <DialogBox
+                    ref={dialogbox => {
+                        this.dialogbox = dialogbox;
+                    }}
+                />
             </View>
         );
     }
@@ -433,8 +593,12 @@ const ScreenHeader = connect(state => {
     return {
         historyCanGoBack: state.historyCanGoBack,
         locale: state.settings.locale,
-        theme: state.settings.theme
+        folders: state.folders,
+        theme: state.settings.theme,
+        showAdvancedOptions: state.settings.showAdvancedOptions,
+        noteSelectionEnabled: state.noteSelectionEnabled,
+        selectedNoteIds: state.selectedNoteIds
     };
 })(ScreenHeaderComponent);
 
-export { ScreenHeader };
+module.exports = { ScreenHeader };

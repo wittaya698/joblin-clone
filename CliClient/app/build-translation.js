@@ -1,16 +1,14 @@
 'use strict';
 
-require('source-map-support').install();
-require('@babel/plugin-transform-runtime');
+require('app-module-path').addPath(__dirname);
 
 const processArgs = process.argv.splice(2, process.argv.length);
-
 const silentLog = processArgs.indexOf('--silent') >= 0;
 
-import { basename, dirname } from '@/lib/path-utils.js';
-import fs from 'fs-extra';
-import getTextParser from 'gettext-parser';
-import { exec } from 'child_process';
+const { basename, dirname } = require('lib/path-utils.js');
+const fs = require('fs-extra');
+const getTextParser = require('gettext-parser');
+const { exec } = require('child_process');
 
 const localeDir = __dirname + '/../app/locale';
 const outputDir = __dirname + '/locale';
@@ -18,9 +16,12 @@ const rootDir = dirname(dirname(__dirname));
 const cliDir = rootDir + '/CliClient';
 const cliLocalesDir = cliDir + '/locales';
 const rnDir = rootDir + '/ReactNativeClient';
+const electronDir = rootDir + '/ElectronClient/app';
 
 function execCommand(command) {
     if (!silentLog) console.info('Running: ' + command);
+
+    const exec = require('child_process').exec;
 
     return new Promise((resolve, reject) => {
         let childProcess = exec(command, (error, stdout, stderr) => {
@@ -126,6 +127,9 @@ async function main() {
 
     await createPotFile(potFilePath, [
         cliDir + '/app/*.js',
+        cliDir + '/app/gui/*.js',
+        electronDir + '/*.js',
+        electronDir + '/gui/*.js',
         rnDir + '/lib/*.js',
         rnDir + '/lib/models/*.js',
         rnDir + '/lib/services/*.js',
@@ -157,9 +161,15 @@ async function main() {
     }
 
     saveToFile(jsonLocalesDir + '/index.js', buildIndex(locales));
+
     const rnJsonLocaleDir = rnDir + '/locales';
     await execCommand(
         'rsync -a "' + jsonLocalesDir + '/" "' + rnJsonLocaleDir + '"'
+    );
+
+    const electronJsonLocaleDir = electronDir + '/locales';
+    await execCommand(
+        'rsync -a "' + jsonLocalesDir + '/" "' + electronJsonLocaleDir + '"'
     );
 }
 

@@ -1,5 +1,5 @@
-import { Component } from 'react';
-import { connect } from 'react-redux';
+const { Component } = require('react');
+const { connect } = require('react-redux');
 
 class SideMenuComponent extends Component {
     constructor(props) {
@@ -7,10 +7,10 @@ class SideMenuComponent extends Component {
     }
 }
 
-const SideMenu = connect(state => {
+const MySideMenu = connect(state => {
     return {
         isOpen: state.showSideMenu
     };
 })(SideMenuComponent);
 
-export { SideMenu };
+module.export = { SideMenu: MySideMenu };

@@ -1,11 +1,11 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons.js';
-import { FAB, Provider } from 'react-native-paper';
-import { connect } from 'react-redux';
-import { globalStyle } from '@/lib/components/global-style.js';
-import { Log } from '@/lib/log.js';
-import { _ } from '@/lib/locale.js';
+const React = require('react');
+const { StyleSheet, Text, View } = require('react-native');
+const Icon = require('react-native-vector-icons/Ionicons').default;
+const { FAB, Provider } = require('react-native-paper');
+const { connect } = require('react-redux');
+const { globalStyle } = require('lib/components/global-style.js');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
 
 const styles = StyleSheet.create({
     actionButtonIcon: {
@@ -61,9 +61,9 @@ class ActionButtonComponent extends React.Component {
         });
     }
 
-    handleStateChange = ({ open }) => {
+    handleStateChange({ open }) {
         this.setState({ open });
-    };
+    }
 
     render() {
         const { open } = this.state;
@@ -73,7 +73,7 @@ class ActionButtonComponent extends React.Component {
         if (this.props.addFolderNoteButtons) {
             if (this.props.folders.length) {
                 buttons.push({
-                    title: 'New todo',
+                    title: 'New to-do',
                     icon: 'checkbox',
                     onPress: () => {
                         this.newTodo_press();
@@ -170,7 +170,7 @@ class ActionButtonComponent extends React.Component {
                     open={open}
                     icon={open ? 'close' : 'plus'}
                     actions={buttonComps}
-                    onStateChange={this.handleStateChange}
+                    onStateChange={state => this.handleStateChange(state)}
                 />
             );
         }
@@ -180,7 +180,7 @@ class ActionButtonComponent extends React.Component {
 }
 
 const ActionButton = connect(state => {
-    return { folders: state.folders };
+    return { folders: state.folders, locale: state.settings.locale };
 })(ActionButtonComponent);
 
-export { ActionButton };
+module.exports = { ActionButton };

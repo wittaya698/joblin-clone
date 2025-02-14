@@ -285,11 +285,81 @@ function escapeFilename(s, maxLength = 32) {
     return output.substr(0, maxLength);
 }
 
-function folderItemFilename(item) {
-    return item.id;
-    // let output = escapeFilename(item.title).trim();
-    // if (!output.length) output = '_';
-    // return output + '.' + item.id.substr(0, 7);
+function wrap(text, indent, width) {
+    const wrap_ = require('word-wrap');
+    return wrap_(text, {
+        width: width - indent.length,
+        indent: indent
+    });
 }
 
-export { removeDiacritics, escapeFilename };
+function splitCommandString(command) {
+    let args = [];
+    let state = 'start';
+    let current = '';
+    let quote = '"';
+    let escapeNext = false;
+    for (let i = 0; i < command.length; i++) {
+        let c = command[i];
+
+        if (state == 'quotes') {
+            if (c != quote) {
+                current += c;
+            } else {
+                args.push(current);
+                current = '';
+                state = 'start';
+            }
+            continue;
+        }
+
+        if (escapeNext) {
+            current += c;
+            escapeNext = false;
+            continue;
+        }
+
+        if (c == '\\') {
+            escapeNext = true;
+            continue;
+        }
+
+        if (c == '"' || c == "'") {
+            state = 'quotes';
+            quote = c;
+            continue;
+        }
+
+        if (state == 'arg') {
+            if (c == ' ' || c == '\t') {
+                args.push(current);
+                current = '';
+                state = 'start';
+            } else {
+                current += c;
+            }
+            continue;
+        }
+
+        if (c != ' ' && c != '\t') {
+            state = 'arg';
+            current += c;
+        }
+    }
+
+    if (state == 'quotes') {
+        throw new Error('Unclosed quote in command line: ' + command);
+    }
+
+    if (current != '') {
+        args.push(current);
+    }
+
+    if (args.length <= 0) {
+        throw new Error('Empty command line');
+    }
+
+    return args;
+}
+
+module.exports = { removeDiacritics, escapeFilename, wrap, splitCommandString };

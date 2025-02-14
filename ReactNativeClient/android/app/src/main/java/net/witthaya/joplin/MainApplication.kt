@@ -5,6 +5,7 @@ import android.content.res.Configuration
 
 import com.facebook.react.PackageList
 import com.facebook.react.ReactApplication
+import com.imagepicker.ImagePickerPackage;
 import com.facebook.react.ReactNativeHost
 import com.facebook.react.ReactPackage
 import com.facebook.react.ReactHost
@@ -12,10 +13,11 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.load
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
-import org.pgsqlite.SQLitePluginPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+// import com.RNFetchBlob.RNFetchBlobPackage;
 import com.rnfs.RNFSPackage;
-// import com.reactnativedocumentpicker.DocumentPickerPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import org.pgsqlite.SQLitePluginPackage;
 
 import expo.modules.ApplicationLifecycleDispatcher
 import expo.modules.ReactNativeHostWrapper
@@ -29,10 +31,13 @@ class MainApplication : Application(), ReactApplication {
             val packages = PackageList(this).packages
             // Packages that cannot be autolinked yet can be added manually here, for example:
             // packages.add(new MyReactNativePackage());
-            packages.add(SQLitePluginPackage());
-            packages.add(RNFSPackage());
-            // packages.add(DocumentPickerPackage());
+
+            packages.add(ImagePickerPackage());
             packages.add(ImageResizerPackage());
+            // packages.add(RNFetchBlobPackage());
+            packages.add(RNFSPackage());
+            packages.add(SQLitePluginPackage());
+            packages.add(VectorIconsPackage());
             return packages
           }
 

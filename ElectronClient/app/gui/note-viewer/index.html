@@ -1,0 +1,92 @@
+<style>
+    body {
+        overflow: hidden;
+    }
+
+    #content {
+        overflow-y: auto;
+        height: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+</style>
+
+<div id="hlScriptContainer"></div>
+<div id="content" ondragstart="return false;" ondrop="return false;"></div>
+
+<script>
+    const { ipcRenderer } = require('electron');
+    const contentElement = document.getElementById('content');
+
+    // ----------------------------------------------------------------------
+    // Handle dynamically loading HLJS when a code element is present
+    // ----------------------------------------------------------------------
+    let hljsScriptAdded = false;
+    let hljsLoaded = false;
+    function loadHljs(callback) {
+        throw new Error('note-content.html loadHljs() need to be implemented');
+    }
+
+    function loadAndApplyHljs() {
+        throw new Error(
+            'note-content.html loadAndApplyHljs() need to be implemented'
+        );
+    }
+
+    function applyHljs(codeElements) {
+        throw new Error('note-content.html applyHljs() need to be implemented');
+    }
+
+    // ----------------------------------------------------------------------
+    // / Handle dynamically loading HLJS when a code element is present
+    // ----------------------------------------------------------------------
+
+    ipcRenderer.on('setHtml', (event, html) => {
+        contentElement.innerHTML = html;
+        loadAndApplyHljs();
+
+        throw new Error(
+            'note-content.html on setHtml need further implementation'
+        );
+    });
+
+    // Remove the bullet from "ul" for checkbox lists and extra padding
+    const checkboxes = document.getElementsByClassName('checkbox');
+    for (let i = 0; i < checkboxes.length; i++) {
+        throw new Error(
+            'note-content.html checkboxes rendering need to be implemented'
+        );
+    }
+
+    let ignoreNextScroll = false;
+    ipcRenderer.on('setPercentScroll', (event, percent) => {
+        ignoreNextScroll = true;
+        contentElement.scrollTop = percent * maxScrollTop();
+    });
+
+    function maxScrollTop() {
+        throw new Error(
+            'note-content.html maxScrollTop need to be implemented'
+        );
+    }
+
+    contentElement.addEventListener('scroll', function (e) {
+        throw new Error(
+            'note-content.html scroll EventListener need to be implemented'
+        );
+    });
+
+    // Disable drag and drop otherwise it's possible to drop a URL
+    // on it and it will open in the view as a website.
+    document.addEventListener('drop', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    document.addEventListener('dragover', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+    document.addEventListener('dragover', function (e) {
+        e.preventDefault();
+    });
+</script>

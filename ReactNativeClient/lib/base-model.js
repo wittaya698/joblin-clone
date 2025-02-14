@@ -1,7 +1,7 @@
-import { Log } from '@/lib/log.js';
-import { Database } from '@/lib/database.js';
-import { uuid } from '@/lib/uuid.js';
-import { time } from '@/lib/time-utils.js';
+const { Log } = require('lib/log.js');
+const { Database } = require('lib/database.js');
+const { uuid } = require('lib/uuid.js');
+const { time } = require('lib/time-utils.js');
 
 class BaseModel {
     static modelType() {
@@ -111,8 +111,17 @@ class BaseModel {
         return id.substr(0, 5);
     }
 
+    // static minimalPartialId(id) {
+    // 	let length = 2;
+    // 	while (true) {
+    // 		const partialId = id.substr(0, length);
+    // 		const r = await this.db().selectOne('SELECT count(*) as total FROM `' + this.tableName() + '` WHERE `id` LIKE ?', [partialId + '%']);
+    // 		if (r['total'] <= 1) return partialId;
+    // 	}
+    // }
+
     static loadByPartialId(partialId) {
-        return this.modelSelectOne(
+        return this.modelSelectAll(
             'SELECT * FROM `' + this.tableName() + '` WHERE `id` LIKE ?',
             [partialId + '%']
         );
@@ -268,7 +277,11 @@ class BaseModel {
             }
 
             if (!o.user_created_time && this.hasField('user_created_time')) {
-                o.user_created_time = timeNow;
+                o.user_created_time = o.created_time ? o.created_time : timeNow;
+            }
+
+            if (!o.user_updated_time && this.hasField('user_updated_time')) {
+                o.user_updated_time = o.updated_time ? o.updated_time : timeNow;
             }
 
             query = Database.insertQuery(this.tableName(), o);
@@ -393,7 +406,9 @@ BaseModel.TYPE_SETTING = 3;
 BaseModel.TYPE_RESOURCE = 4;
 BaseModel.TYPE_TAG = 5;
 BaseModel.TYPE_NOTE_TAG = 6;
+BaseModel.TYPE_SEARCH = 7;
+
 BaseModel.db_ = null;
 BaseModel.dispatch = function (o) {};
 
-export { BaseModel };
+module.exports = { BaseModel };

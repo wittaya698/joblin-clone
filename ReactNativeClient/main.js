@@ -5,10 +5,10 @@
 // - Communication from SQLite to Redux is done via dispatcher.
 
 // So there's basically still a one way flux: React => SQLite => Redux => React
-
-import React, { Component } from 'react';
-import { Log } from '@/lib/log.js';
-import { Root } from '@/root.js';
+const React = require('react');
+const { Component } = React;
+const { Log } = require('lib/log.js');
+const { Root } = require('./root.js');
 
 export default class Main extends Component {
     render() {
@@ -19,4 +19,4 @@ export default class Main extends Component {
     }
 }
 
-export { Main };
+module.exports = { Main };

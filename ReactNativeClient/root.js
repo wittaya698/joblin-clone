@@ -1,116 +1,123 @@
-import React, { Component } from 'react';
-import { Keyboard } from 'react-native';
-import * as Localization from 'expo-localization';
-import { connect, Provider } from 'react-redux';
-import { BackButtonService } from '@/lib/services/back-button.js';
-import { applyMiddleware, createStore } from 'redux';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { shimInit } from '@/lib/shim-init-react.js';
-import { Log } from '@/lib/log.js';
-import { AppNav } from '@/lib/components/app-nav.js';
-import { Logger } from '@/lib/logger.js';
-import { Note } from '@/lib/models/note.js';
-import { Folder } from '@/lib/models/folder.js';
-import { FoldersScreenUtils } from '@/lib/components/screens/folders-utils.js';
-import { Resource } from '@/lib/models/resource.js';
-import { Tag } from '@/lib/models/tag.js';
-import { NoteTag } from '@/lib/models/note-tag.js';
-import { BaseItem } from '@/lib/models/base-item.js';
-import { BaseModel } from '@/lib/base-model.js';
-import { JoplinDatabase } from '@/lib/joplin-database.js';
-import { Database } from '@/lib/database.js';
-import { NotesScreen } from '@/lib/components/screens/notes.js';
-import { NoteScreen } from '@/lib/components/screens/note.js';
-import { FolderScreen } from '@/lib/components/screens/folder.js';
-import { ConfigScreen } from '@/lib/components/screens/config.js';
-import { LogScreen } from '@/lib/components/screens/log.js';
-import { StatusScreen } from '@/lib/components/screens/status.js';
-import { WelcomeScreen } from '@/lib/components/screens/welcome.js';
-import { SearchScreen } from '@/lib/components/screens/search.js';
-import { OneDriveLoginScreen } from '@/lib/components/screens/onedrive-login.js';
-import { Setting } from '@/lib/models/setting.js';
-import { MenuProvider } from 'react-native-popup-menu';
-import { SideMenuContent } from '@/lib/components/side-menu-content.js';
-import { DatabaseDriverReactNative } from '@/lib/database-driver-react-native.js';
-import { reg } from '@/lib/registry.js';
-import {
+const React = require('react');
+const Component = React.Component;
+const { Keyboard, NativeModules } = require('react-native');
+const Localization = require('expo-localization');
+const { connect, Provider } = require('react-redux');
+const { BackButtonService } = require('lib/services/back-button.js');
+const { applyMiddleware, createStore } = require('redux');
+const { createDrawerNavigator } = require('@react-navigation/drawer');
+const { shimInit } = require('lib/shim-init-react.js');
+const { Log } = require('lib/log.js');
+const { AppNav } = require('lib/components/app-nav.js');
+const { Logger } = require('lib/logger.js');
+const { Note } = require('lib/models/note.js');
+const { Folder } = require('lib/models/folder.js');
+const BaseSyncTarget = require('lib/BaseSyncTarget.js');
+const { FoldersScreenUtils } = require('lib/folders-screen-utils.js');
+const { Resource } = require('lib/models/resource.js');
+const { Tag } = require('lib/models/tag.js');
+const { NoteTag } = require('lib/models/note-tag.js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { BaseModel } = require('lib/base-model.js');
+const { JoplinDatabase } = require('lib/joplin-database.js');
+const { Database } = require('lib/database.js');
+const { NotesScreen } = require('lib/components/screens/notes.js');
+const { NoteScreen } = require('lib/components/screens/note.js');
+const { ConfigScreen } = require('lib/components/screens/config.js');
+const { FolderScreen } = require('lib/components/screens/folder.js');
+const { LogScreen } = require('lib/components/screens/log.js');
+const { StatusScreen } = require('lib/components/screens/status.js');
+const { WelcomeScreen } = require('lib/components/screens/welcome.js');
+const { SearchScreen } = require('lib/components/screens/search.js');
+const {
+    OneDriveLoginScreen
+} = require('lib/components/screens/onedrive-login.js');
+const { Setting } = require('lib/models/setting.js');
+const { MenuProvider } = require('react-native-popup-menu');
+const { SideMenuContent } = require('lib/components/side-menu-content.js');
+const {
+    DatabaseDriverReactNative
+} = require('lib/database-driver-react-native.js');
+const { reg } = require('lib/registry.js');
+const {
     _,
     setLocale,
     closestSupportedLocale,
     defaultLocale
-} from '@/lib/locale.js';
-import RNFS, { stat } from 'react-native-fs';
-import { PoorManIntervals } from '@/lib/poor-man-intervals.js';
+} = require('lib/locale.js');
+const RNFS = require('react-native-fs');
+const { PoorManIntervals } = require('lib/poor-man-intervals.js');
+const { reducer, defaultState } = require('lib/reducer.js');
+const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
+const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
+const SyncTargetOneDriveDev = require('lib/SyncTargetOneDriveDev.js');
 
-let defaultState = {
-    notes: [],
-    notesSource: '',
-    notesParentType: null,
-    folders: [],
-    tags: [],
-    selectedNoteId: null,
-    selectedFolderId: null,
-    selectedTagId: null,
-    selectedItemType: 'note',
-    showSideMenu: false,
-    screens: {},
-    historyCanGoBack: false,
-    notesOrder: [{ by: 'user_updated_time', dir: 'DESC' }],
-    syncStarted: false,
-    syncReport: {},
-    searchQuery: '',
-    settings: {},
-    appState: 'starting'
+SyncTargetRegistry.addClass(SyncTargetOneDrive);
+SyncTargetRegistry.addClass(SyncTargetOneDriveDev);
+
+const generalMiddleware = store => next => async action => {
+    if (action.type !== 'SIDE_MENU_OPEN_PERCENT')
+        reg.logger().info('Reducer action', action.type);
+    PoorManIntervals.update(); // This function needs to be called regularly so put it here
+
+    const result = next(action);
+    const newState = store.getState();
+
+    if (action.type == 'NAV_GO') Keyboard.dismiss();
+
+    if (
+        [
+            'NOTE_UPDATE_ONE',
+            'NOTE_DELETE',
+            'FOLDER_UPDATE_ONE',
+            'FOLDER_DELETE'
+        ].indexOf(action.type) >= 0
+    ) {
+        if (!(await reg.syncTarget().syncStarted())) reg.scheduleSync();
+    }
+
+    if (
+        (action.type == 'SETTING_UPDATE_ONE' &&
+            action.key == 'sync.interval') ||
+        action.type == 'SETTING_UPDATE_ALL'
+    ) {
+        reg.setupRecurrentSync();
+    }
+
+    if (
+        (action.type == 'SETTING_UPDATE_ONE' && action.key == 'locale') ||
+        action.type == 'SETTING_UPDATE_ALL'
+    ) {
+        setLocale(Setting.value('locale'));
+    }
+
+    if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
+        Setting.setValue('activeFolderId', newState.selectedFolderId);
+    }
+
+    return result;
 };
-
-const initialRoute = {
-    type: 'NAV_GO',
-    routeName: 'Welcome',
-    params: {}
-};
-
-defaultState.route = initialRoute;
 
 let navHistory = [];
 
 function historyCanGoBackTo(route) {
     if (route.routeName == 'Note') return false;
     if (route.routeName == 'Folder') return false;
-
     return true;
 }
 
-function reducerActionsAreSame(a1, a2) {
-    if (
-        Object.getOwnPropertyNames(a1).length !==
-        Object.getOwnPropertyNames(a2).length
-    )
-        return false;
-    for (let n in a1) {
-        if (!a1.hasOwnProperty(n)) continue;
-        if (a1[n] !== a2[n]) return false;
-    }
-    return true;
-}
+const appDefaultState = Object.assign({}, defaultState, {
+    // Critical -> To change to 0 when sidebar sliding is available
+    sideMenuOpenPercent: 100,
+    route: {
+        type: 'NAV_GO',
+        routeName: 'Welcome',
+        params: {}
+    },
+    noteSelectionEnabled: false
+});
 
-function updateStateFromSettings(action, newState) {
-    // if (action.type == 'SETTINGS_UPDATE_ALL' || action.key == 'uncompletedTodosOnTop') {
-    // 	let newNotesOrder = [];
-    // 	for (let i = 0; i < newState.notesOrder.length; i++) {
-    // 		const o = newState.notesOrder[i];
-    // 		if (o.by == 'is_todo') continue;
-    // 		newNotesOrder.push(o);
-    // 	}
-    // 	if (newState.settings['uncompletedTodosOnTop']) {
-    // 		newNotesOrder.unshift({ by: 'is_todo', dir: 'DESC' });
-    // 	}
-    // 	newState.notesOrder = newNotesOrder;
-    // 	console.info('NEW', newNotesOrder);
-    // }
-    return newState;
-}
-
-const reducer = (state = defaultState, action) => {
+const appReducer = (state = appDefaultState, action) => {
     let newState = state;
     let historyGoingBack = false;
 
@@ -126,9 +133,7 @@ const reducer = (state = defaultState, action) => {
                 }
 
                 action = newAction ? newAction : navHistory.pop();
-
                 historyGoingBack = true;
-
             // Fall throught
 
             case 'NAV_GO':
@@ -136,7 +141,6 @@ const reducer = (state = defaultState, action) => {
                 const currentRouteName = currentRoute
                     ? currentRoute.routeName
                     : '';
-
                 if (!historyGoingBack && historyCanGoBackTo(currentRoute)) {
                     // If the route *name* is the same (even if the other parameters are different), we
                     // overwrite the last route in the history with the current one. If the route name
@@ -162,15 +166,13 @@ const reducer = (state = defaultState, action) => {
                 }
 
                 if (action.routeName == 'Welcome') navHistory = [];
-
-                reg.logger().info(
-                    'Route: ' + currentRouteName + ' => ' + action.routeName
-                );
-
+                //reg.logger().info('Route: ' + currentRouteName + ' => ' + action.routeName);
                 newState = Object.assign({}, state);
 
                 if ('noteId' in action) {
-                    newState.selectedNoteId = action.noteId;
+                    newState.selectedNoteIds = action.noteId
+                        ? [action.noteId]
+                        : [];
                 }
 
                 if ('folderId' in action) {
@@ -189,128 +191,6 @@ const reducer = (state = defaultState, action) => {
 
                 newState.route = action;
                 newState.historyCanGoBack = !!navHistory.length;
-
-                break;
-
-            case 'SETTINGS_UPDATE_ALL':
-                newState = Object.assign({}, state);
-                newState.settings = action.settings;
-                newState = updateStateFromSettings(action, newState);
-                break;
-
-            case 'SETTINGS_UPDATE_ONE':
-                newState = Object.assign({}, state);
-                let newSettings = Object.assign({}, state.settings);
-                newSettings[action.key] = action.value;
-                newState.settings = newSettings;
-                newState = updateStateFromSettings(action, newState);
-                break;
-
-            // Replace all the notes with the provided array
-            case 'NOTES_UPDATE_ALL':
-                newState = Object.assign({}, state);
-                newState.notes = action.notes;
-                newState.notesSource = action.notesSource;
-                break;
-
-            // Insert the note into the note list if it's new, or
-            // update it within the note array if it already exists.
-            case 'NOTES_UPDATE_ONE':
-                const modNote = action.note;
-
-                let newNotes = state.notes.slice();
-                var found = false;
-                for (let i = 0; i < newNotes.length; i++) {
-                    let n = newNotes[i];
-                    if (n.id == modNote.id) {
-                        if (
-                            !('parent_id' in modNote) ||
-                            modNote.parent_id == n.parent_id
-                        ) {
-                            // Merge the properties that have changed (in modNote) into
-                            // the object we already have.
-                            newNotes[i] = Object.assign({}, newNotes[i]);
-                            for (let n in modNote) {
-                                if (!modNote.hasOwnProperty(n)) continue;
-                                newNotes[i][n] = modNote[n];
-                            }
-                        } else {
-                            newNotes.splice(i, 1);
-                        }
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (
-                    !found &&
-                    'parent_id' in modNote &&
-                    modNote.parent_id == state.selectedFolderId
-                )
-                    newNotes.push(modNote);
-
-                newNotes = Note.sortNotes(
-                    newNotes,
-                    state.notesOrder,
-                    newState.settings.uncompletedTodosOnTop
-                );
-                newState = Object.assign({}, state);
-                newState.notes = newNotes;
-                break;
-
-            case 'NOTES_DELETE':
-                newNotes = [];
-                for (let i = 0; i < state.notes.length; i++) {
-                    let f = state.notes[i];
-                    if (f.id == action.noteId) continue;
-                    newNotes.push(f);
-                }
-
-                newState = Object.assign({}, state);
-                newState.notes = newNotes;
-                break;
-
-            case 'FOLDERS_UPDATE_ALL':
-                newState = Object.assign({}, state);
-                newState.folders = action.folders;
-                break;
-
-            case 'FOLDERS_UPDATE_ONE':
-                var newFolders = state.folders.splice(0);
-                var found = false;
-                for (let i = 0; i < newFolders.length; i++) {
-                    let n = newFolders[i];
-                    if (n.id == action.folder.id) {
-                        newFolders[i] = Object.assign(
-                            newFolders[i],
-                            action.folder
-                        );
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (!found) newFolders.push(action.folder);
-
-                newState = Object.assign({}, state);
-                newState.folders = newFolders;
-                break;
-
-            case 'TAGS_UPDATE_ALL':
-                newState = Object.assign({}, state);
-                newState.tags = action.tags;
-                break;
-
-            case 'FOLDER_DELETE':
-                var newFolders = [];
-                for (let i = 0; i < state.folders.length; i++) {
-                    let f = state.folders[i];
-                    if (f.id == action.folderId) continue;
-                    newFolders.push(f);
-                }
-
-                newState = Object.assign({}, state);
-                newState.folders = newFolders;
                 break;
 
             case 'SIDE_MENU_TOGGLE':
@@ -328,29 +208,41 @@ const reducer = (state = defaultState, action) => {
                 newState.showSideMenu = false;
                 break;
 
-            case 'SYNC_STARTED':
+            case 'SIDE_MENU_OPEN_PERCENT':
                 newState = Object.assign({}, state);
-                newState.syncStarted = true;
+                newState.sideMenuOpenPercent = action.value;
                 break;
 
-            case 'SYNC_COMPLETED':
+            case 'NOTE_SELECTION_TOGGLE':
                 newState = Object.assign({}, state);
-                newState.syncStarted = false;
+
+                const noteId = action.id;
+
+                const newSelectedNoteIds = state.selectedNoteIds.slice();
+                const existingIndex = state.selectedNoteIds.indexOf(noteId);
+
+                if (existingIndex >= 0) {
+                    newSelectedNoteIds.splice(existingIndex, 1);
+                } else {
+                    newSelectedNoteIds.push(noteId);
+                }
+
+                newState.selectedNoteIds = newSelectedNoteIds;
+                newState.noteSelectionEnabled = !!newSelectedNoteIds.length;
                 break;
 
-            case 'SYNC_REPORT_UPDATE':
-                newState = Object.assign({}, state);
-                newState.syncReport = action.report;
+            case 'NOTE_SELECTION_START':
+                if (!state.noteSelectionEnabled) {
+                    newState = Object.assign({}, state);
+                    newState.noteSelectionEnabled = true;
+                    newState.selectedNoteIds = [action.id];
+                }
                 break;
 
-            case 'SEARCH_QUERY':
+            case 'NOTE_SELECTION_END':
                 newState = Object.assign({}, state);
-                newState.searchQuery = action.query.trim();
-                break;
-
-            case 'SET_APP_STATE':
-                newState = Object.assign({}, state);
-                newState.appState = action.state;
+                newState.noteSelectionEnabled = false;
+                newState.selectedNoteIds = [];
                 break;
         }
     } catch (error) {
@@ -362,45 +254,10 @@ const reducer = (state = defaultState, action) => {
         throw error;
     }
 
-    return newState;
+    return reducer(newState, action);
 };
 
-const generalMiddleware = store => next => async action => {
-    reg.logger().info('Reducer action', action.type);
-    PoorManIntervals.update(); // This function needs to be called regularly so put it here
-
-    const result = next(action);
-    const newState = store.getState();
-
-    if (action.type == 'NAV_GO') Keyboard.dismiss();
-
-    if (
-        [
-            'NOTES_UPDATE_ONE',
-            'NOTES_DELETE',
-            'FOLDERS_UPDATE_ONE',
-            'FOLDER_DELETE'
-        ].indexOf(action.type) >= 0
-    ) {
-        if (!(await reg.syncStarted())) reg.scheduleSync();
-    }
-
-    if (
-        (action.type == 'SETTINGS_UPDATE_ONE' &&
-            action.key == 'sync.interval') ||
-        action.type == 'SETTINGS_UPDATE_ALL'
-    ) {
-        reg.setupRecurrentSync();
-    }
-
-    if (action.type == 'NAV_GO' && action.routeName == 'Notes') {
-        Setting.setValue('activeFolderId', newState.selectedFolderId);
-    }
-
-    return result;
-};
-
-let store = createStore(reducer, applyMiddleware(generalMiddleware));
+let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 
 async function initialize(dispatch, backButtonHandler) {
     shimInit();
@@ -408,6 +265,7 @@ async function initialize(dispatch, backButtonHandler) {
     Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
     Setting.setConstant('appId', 'net.witthaya.joplin_clone');
     Setting.setConstant('appType', 'mobile');
+    //Setting.setConstant('resourceDir', () => { return RNFetchBlob.fs.dirs.DocumentDir; });
     Setting.setConstant('resourceDir', RNFS.DocumentDirectoryPath);
 
     const logDatabase = new Database(new DatabaseDriverReactNative());
@@ -446,6 +304,7 @@ async function initialize(dispatch, backButtonHandler) {
     reg.dispatch = dispatch;
     BaseModel.dispatch = dispatch;
     FoldersScreenUtils.dispatch = dispatch;
+    BaseSyncTarget.dispatch = dispatch;
     BaseModel.db_ = db;
 
     BaseItem.loadClass('Note', Note);
@@ -488,8 +347,15 @@ async function initialize(dispatch, backButtonHandler) {
             // Set locale and other settings
             const locale = getLocale();
             Setting.setValue('locale', closestSupportedLocale(locale));
+            if (Setting.value('env') === 'dev')
+                Setting.setValue(
+                    'sync.target',
+                    SyncTargetRegistry.nameToId('onedrive_dev')
+                );
             Setting.setValue('firstStart', 0);
         }
+
+        reg.logger().info('Sync target: ' + Setting.value('sync.target'));
 
         setLocale(Setting.value('locale'));
 
@@ -500,7 +366,7 @@ async function initialize(dispatch, backButtonHandler) {
         const tags = await Tag.all();
 
         dispatch({
-            type: 'TAGS_UPDATE_ALL',
+            type: 'TAG_UPDATE_ALL',
             tags: tags
         });
 
@@ -547,7 +413,7 @@ class HomeStackComponent extends React.Component {
     async componentDidMount() {
         if (this.props.appState == 'starting') {
             this.props.dispatch({
-                type: 'SET_APP_STATE',
+                type: 'APP_STATE_SET',
                 state: 'initializing'
             });
 
@@ -557,13 +423,18 @@ class HomeStackComponent extends React.Component {
             );
 
             this.props.dispatch({
-                type: 'SET_APP_STATE',
+                type: 'APP_STATE_SET',
                 state: 'ready'
             });
         }
     }
 
     async backButtonHandler() {
+        if (this.props.noteSelectionEnabled) {
+            this.props.dispatch({ type: 'NOTE_SELECTION_END' });
+            return true;
+        }
+
         if (this.props.showSideMenu) {
             this.props.dispatch({ type: 'SIDE_MENU_CLOSE' });
             return true;
@@ -601,7 +472,8 @@ export const HomeStack = connect(state => {
         historyCanGoBack: state.historyCanGoBack,
         showSideMenu: state.showSideMenu,
         syncStarted: state.syncStarted,
-        appState: state.appState
+        appState: state.appState,
+        noteSelectionEnabled: state.noteSelectionEnabled
     };
 })(HomeStackComponent);
 
@@ -611,6 +483,13 @@ const App = () => {
         <MenuProvider>
             <Drawer.Navigator
                 drawerContent={props => <SideMenuContent {...props} />}
+                onChange={isOpen => this.sideMenu_change(isOpen)}
+                onDrawerSlide={percent => {
+                    this.props.dispatch({
+                        type: 'SIDE_MENU_OPEN_PERCENT',
+                        value: percent
+                    });
+                }}
             >
                 <Drawer.Screen name="Home" component={HomeStack} />
             </Drawer.Navigator>
@@ -628,4 +507,4 @@ class Root extends React.Component {
     }
 }
 
-export { Root };
+module.exports = { Root };

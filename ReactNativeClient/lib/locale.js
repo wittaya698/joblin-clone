@@ -1,4 +1,4 @@
-import { sprintf } from 'sprintf-js';
+const sprintf = require('sprintf-js').sprintf;
 
 // Critical -> to be removed
 const enGBLocale = require('../locales/en_GB.json');
@@ -310,7 +310,7 @@ const localeList = {
     fr_FR: frFRLocale
 };
 
-export {
+module.exports = {
     _,
     supportedLocales,
     localeStrings,

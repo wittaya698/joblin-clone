@@ -1,13 +1,13 @@
-import { BaseCommand } from './base-command.js';
-import { app } from './app.js';
-import { _ } from '@/lib/locale.js';
-import { BaseModel } from '@/lib/base-model.js';
-import { Folder } from '@/lib/models/folder.js';
-import { Setting } from '@/lib/models/setting.js';
-import { Note } from '@/lib/models/note.js';
-import { sprintf } from 'sprintf-js';
-import { time } from '@/lib/time-utils.js';
-import { cliUtils } from './cli-utils.js';
+const { BaseCommand } = require('./base-command.js');
+const { app } = require('./app.js');
+const { _ } = require('lib/locale.js');
+const { BaseModel } = require('lib/base-model.js');
+const { Folder } = require('lib/models/folder.js');
+const { Setting } = require('lib/models/setting.js');
+const { Note } = require('lib/models/note.js');
+const { sprintf } = require('sprintf-js');
+const { time } = require('lib/time-utils.js');
+const { cliUtils } = require('./cli-utils.js');
 
 class Command extends BaseCommand {
     usage() {
@@ -18,6 +18,10 @@ class Command extends BaseCommand {
         return _(
             'Displays the notes in the current notebook. Use `ls /` to display the list of notebooks.'
         );
+    }
+
+    enabled() {
+        return false;
     }
 
     options() {
@@ -36,14 +40,14 @@ class Command extends BaseCommand {
             [
                 '-t, --type <type>',
                 _(
-                    'Displays only the items of the specific type(s). Can be `n` for notes, `t` for todos, or `nt` for notes and todos (eg. `-tt` would display only the todos, while `-ttd` would display notes and todos.'
+                    'Displays only the items of the specific type(s). Can be `n` for notes, `t` for to-dos, or `nt` for notes and to-dos (eg. `-tt` would display only the to-dos, while `-ttd` would display notes and to-dos.'
                 )
             ],
             ['-f, --format <format>', 'Either "text" or "json"'],
             [
                 '-l, --long',
                 _(
-                    'Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for todos), TITLE'
+                    'Use long list format. Format is ID, NOTE_COUNT (for notebook), DATE, TODO_CHECKED (for to-dos), TITLE'
                 )
             ]
         ];
@@ -90,7 +94,7 @@ class Command extends BaseCommand {
         }
 
         if (options.format && options.format == 'json') {
-            this.log(JSON.stringify(items));
+            this.stdout(JSON.stringify(items));
         } else {
             let hasTodos = false;
             for (let i = 0; i < items.length; i++) {
@@ -145,7 +149,7 @@ class Command extends BaseCommand {
                 rows.push(row);
             }
 
-            cliUtils.printArray(this.log, rows);
+            cliUtils.printArray(this.stdout.bind(this), rows);
         }
     }
 }

@@ -1,7 +1,7 @@
-import moment from 'moment';
-import { _ } from '@/lib/locale.js';
-import { time } from '@/lib/time-utils.js';
-import { FsDriverDummy } from '@/lib/fs-driver-dummy.js';
+const moment = require('moment');
+const { _ } = require('lib/locale.js');
+const { time } = require('lib/time-utils.js');
+const { FsDriverDummy } = require('lib/fs-driver-dummy.js');
 
 class Logger {
     constructor() {
@@ -43,6 +43,10 @@ class Logger {
         if (typeof object === 'object') {
             if (object instanceof Error) {
                 output = object.toString();
+                if (object.code) output += '\nCode: ' + object.code;
+                if (object.headers)
+                    output += '\nHeader: ' + JSON.stringify(object.headers);
+                if (object.request) output += '\nRequest: ' + object.request;
                 if (object.stack) output += '\n' + object.stack;
             } else {
                 output = JSON.stringify(object);
@@ -80,9 +84,9 @@ class Logger {
         for (let i = 0; i < this.targets_.length; i++) {
             const target = this.targets_[i];
             if (target.type == 'database') {
-                return await target.database.selectAll(
-                    'SELECT * FROM logs ORDER BY timestamp DESC LIMIT ' + limit
-                );
+                let sql = 'SELECT * FROM logs ORDER BY timestamp DESC';
+                if (limit !== null) sql += ' LIMIT ' + limit;
+                return await target.database.selectAll(sql);
             }
         }
         return [];
@@ -111,8 +115,6 @@ class Logger {
                     target.path,
                     line + serializedObject + '\n'
                 );
-            } else if (target.type == 'vorpal') {
-                // target.vorpa.log(...object);
             } else if (target.type == 'database') {
                 let msg = this.objectToString(...object);
                 let queries = [
@@ -192,4 +194,4 @@ Logger.LEVEL_ERROR = 10;
 Logger.LEVEL_WARN = 20;
 Logger.LEVEL_INFO = 30;
 Logger.LEVEL_DEBUG = 40;
-export { Logger };
+module.exports = { Logger };

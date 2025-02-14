@@ -1,5 +1,5 @@
-import { shim } from '@/lib/shim.js';
-import { netUtils } from '@/lib/net-utils.js';
+const { shim } = require('lib/shim.js');
+const { netUtils } = require('lib/net-utils.js');
 
 class GeolocationNode {
     static async currentPosition(options = null) {
@@ -26,4 +26,4 @@ class GeolocationNode {
     }
 }
 
-export { GeolocationNode };
+module.exports = { GeolocationNode };

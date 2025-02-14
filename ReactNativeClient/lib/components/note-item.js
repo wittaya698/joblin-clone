@@ -1,19 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {
-    ListView,
-    Text,
-    TouchableHighlight,
-    View,
-    StyleSheet
-} from 'react-native';
-import { Log } from '@/lib/log.js';
-import { _ } from '@/lib/locale.js';
-import { Checkbox } from '@/lib/components/checkbox.js';
-import { reg } from '@/lib/registry.js';
-import { Note } from '@/lib/models/note.js';
-import { time } from '@/lib/time-utils.js';
-import { globalStyle, themeStyle } from '@/lib/components/global-style.js';
+const React = require('react');
+const { Component } = require('react');
+const { connect } = require('react-redux');
+const { Text, TouchableOpacity, View, StyleSheet } = require('react-native');
+const { Log } = require('lib/log.js');
+const { _ } = require('lib/locale.js');
+const { Checkbox } = require('lib/components/checkbox.js');
+const { reg } = require('lib/registry.js');
+const { Note } = require('lib/models/note.js');
+const { time } = require('lib/time-utils.js');
+const { globalStyle, themeStyle } = require('lib/components/global-style.js');
 
 class NoteItemComponent extends Component {
     constructor() {
@@ -37,13 +32,16 @@ class NoteItemComponent extends Component {
                 paddingLeft: theme.marginLeft,
                 paddingRight: theme.marginRight,
                 paddingTop: theme.itemMarginTop,
-                paddingBottom: theme.itemMarginBottom,
-                backgroundColor: theme.backgroundColor
+                paddingBottom: theme.itemMarginBottom
+                // backgroundColor: theme.backgroundColor
             },
             listItemText: {
                 flex: 1,
                 color: theme.color,
                 fontSize: theme.fontSize
+            },
+            selectionWrapper: {
+                backgroundColor: theme.backgroundColor
             }
         };
 
@@ -60,6 +58,12 @@ class NoteItemComponent extends Component {
             styles.listItem.paddingTop - 1;
         styles.listItemTextWithCheckbox.marginBottom =
             styles.listItem.paddingBottom;
+
+        styles.selectionWrapperSelected = Object.assign(
+            {},
+            styles.selectionWrapper
+        );
+        styles.selectionWrapperSelected.backgroundColor = theme.selectedColor;
 
         this.styles_[this.props.theme] = StyleSheet.create(styles);
         return this.styles_[this.props.theme];
@@ -81,12 +85,32 @@ class NoteItemComponent extends Component {
         };
         await Note.save(newNote);
     }
+
     onPress() {
         if (!this.props.note) return;
+
+        if (this.props.noteSelectionEnabled) {
+            this.props.dispatch({
+                type: 'NOTE_SELECTION_TOGGLE',
+                id: this.props.note.id
+            });
+        } else {
+            this.props.dispatch({
+                type: 'NAV_GO',
+                routeName: 'Note',
+                noteId: this.props.note.id
+            });
+        }
+    }
+
+    onLongPress() {
+        if (!this.props.note) return;
+
         this.props.dispatch({
-            type: 'NAV_GO',
-            routeName: 'Note',
-            noteId: this.props.note.id
+            type: this.props.noteSelectionEnabled
+                ? 'NOTE_SELECTION_TOGGLE'
+                : 'NOTE_SELECTION_START',
+            id: this.props.note.id
         });
     }
 
@@ -97,6 +121,7 @@ class NoteItemComponent extends Component {
         const onCheckboxChange = this.props.onCheckboxChange;
         const theme = themeStyle(this.props.theme);
 
+        // IOS: display: none crashes the app
         let checkboxStyle = !isTodo
             ? { display: 'none' }
             : { color: theme.color };
@@ -116,29 +141,45 @@ class NoteItemComponent extends Component {
         const listItemTextStyle = isTodo
             ? this.styles().listItemTextWithCheckbox
             : this.styles().listItemText;
-        const rootStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
+        const opacityStyle = isTodo && checkboxChecked ? { opacity: 0.4 } : {};
+        const isSelected =
+            this.props.noteSelectionEnabled &&
+            this.props.selectedNoteIds.indexOf(note.id) >= 0;
+
+        const selectionWrapperStyle = isSelected
+            ? this.styles().selectionWrapperSelected
+            : this.styles().selectionWrapper;
 
         return (
-            <TouchableHighlight
+            <TouchableOpacity
                 onPress={() => this.onPress()}
-                onLongPress={() => onLongPress(note)}
-                underlayColor="#0066FF"
-                style={rootStyle}
+                onLongPress={() => this.onLongPress()}
+                activeOpacity={0.5}
             >
-                <View style={listItemStyle}>
-                    <Checkbox
-                        style={checkboxStyle}
-                        checked={checkboxChecked}
-                        onChange={checked => this.todoCheckbox_change(checked)}
-                    />
-                    <Text style={listItemTextStyle}>{note.title}</Text>
+                <View style={selectionWrapperStyle}>
+                    <View style={opacityStyle}>
+                        <View style={listItemStyle}>
+                            <Checkbox
+                                style={checkboxStyle}
+                                checked={checkboxChecked}
+                                onChange={checked =>
+                                    this.todoCheckbox_change(checked)
+                                }
+                            />
+                            <Text style={listItemTextStyle}>{note.title}</Text>
+                        </View>
+                    </View>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         );
     }
 }
 
 const NoteItem = connect(state => {
-    return { theme: state.settings.theme };
+    return {
+        theme: state.settings.theme,
+        noteSelectionEnabled: state.noteSelectionEnabled,
+        selectedNoteIds: state.selectedNoteIds
+    };
 })(NoteItemComponent);
-export { NoteItem };
+module.exports = { NoteItem };

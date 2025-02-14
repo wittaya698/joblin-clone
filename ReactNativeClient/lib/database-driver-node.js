@@ -1,5 +1,5 @@
-import sqlite3 from 'sqlite3';
-import Promise from 'promise';
+const sqlite3 = require('sqlite3');
+const Promise = require('promise');
 
 sqlite3.verbose();
 
@@ -73,4 +73,4 @@ class DatabaseDriverNode {
     }
 }
 
-export { DatabaseDriverNode };
+module.exports = { DatabaseDriverNode };

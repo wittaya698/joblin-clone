@@ -1,14 +1,13 @@
-import { BaseModel } from '@/lib/base-model.js';
-import { Log } from '@/lib/log.js';
-import { sprintf } from 'sprintf-js';
-import { Folder } from '@/lib/models/folder.js';
-import { BaseItem } from '@/lib/models/base-item.js';
-import { Setting } from '@/lib/models/setting.js';
-import { shim } from '@/lib/shim.js';
-import { time } from '@/lib/time-utils.js';
-import { _ } from '@/lib/locale.js';
-import moment from 'moment';
-import lodash from 'lodash';
+const { BaseModel } = require('lib/base-model.js');
+const { Log } = require('lib/log.js');
+const { sprintf } = require('sprintf-js');
+const { BaseItem } = require('lib/models/base-item.js');
+const { Setting } = require('lib/models/setting.js');
+const { shim } = require('lib/shim.js');
+const { time } = require('lib/time-utils.js');
+const { _ } = require('lib/locale.js');
+const moment = require('moment');
+const lodash = require('lodash');
 
 class Note extends BaseItem {
     static tableName() {
@@ -40,12 +39,42 @@ class Note extends BaseItem {
         return super.serialize(note, 'note', fieldNames);
     }
 
+    static minimalSerializeForDisplay(note) {
+        let n = Object.assign({}, note);
+
+        let fieldNames = this.fieldNames();
+
+        if (!n.is_conflict) lodash.pull(fieldNames, 'is_conflict');
+        if (!Number(n.latitude)) lodash.pull(fieldNames, 'latitude');
+        if (!Number(n.longitude)) lodash.pull(fieldNames, 'longitude');
+        if (!Number(n.altitude)) lodash.pull(fieldNames, 'altitude');
+        if (!n.author) lodash.pull(fieldNames, 'author');
+        if (!n.source_url) lodash.pull(fieldNames, 'source_url');
+        if (!n.is_todo) {
+            lodash.pull(fieldNames, 'is_todo');
+            lodash.pull(fieldNames, 'todo_due');
+            lodash.pull(fieldNames, 'todo_completed');
+        }
+        if (!n.application_data) lodash.pull(fieldNames, 'application_data');
+
+        lodash.pull(fieldNames, 'type_');
+        lodash.pull(fieldNames, 'title');
+        lodash.pull(fieldNames, 'body');
+        lodash.pull(fieldNames, 'created_time');
+        lodash.pull(fieldNames, 'updated_time');
+        lodash.pull(fieldNames, 'order');
+
+        return super.serialize(n, 'note', fieldNames);
+    }
+
     static defaultTitle(note) {
         if (note.title && note.title.length) return note.title;
+
         if (note.body && note.body.length) {
             const lines = note.body.trim().split('\n');
             return lines[0].trim().substr(0, 80).trim();
         }
+
         return _('Untitled');
     }
 
@@ -87,11 +116,30 @@ class Note extends BaseItem {
         return output;
     }
 
+    // Note: sort logic must be duplicated in previews();
     static sortNotes(notes, orders, uncompletedTodosOnTop) {
         const noteOnTop = note => {
             return (
                 uncompletedTodosOnTop && note.is_todo && !note.todo_completed
             );
+        };
+
+        const noteFieldComp = (f1, f2) => {
+            if (f1 === f2) return 0;
+            return f1 < f2 ? -1 : +1;
+        };
+
+        // Makes the sort deterministic, so that if, for example, a and b have the
+        // same updated_time, they aren't swapped every time a list is refreshed.
+        const sortIdenticalNotes = (a, b) => {
+            let r = null;
+            r = noteFieldComp(a.user_updated_time, b.user_updated_time);
+            if (r) return r;
+            r = noteFieldComp(a.user_created_time, b.user_created_time);
+            if (r) return r;
+            r = noteFieldComp(a.title.toLowerCase(), b.title.toLowerCase());
+            if (r) return r;
+            return noteFieldComp(a.id, b.id);
         };
 
         return notes.sort((a, b) => {
@@ -105,10 +153,10 @@ class Note extends BaseItem {
                 if (a[order.by] < b[order.by]) r = +1;
                 if (a[order.by] > b[order.by]) r = -1;
                 if (order.dir == 'ASC') r = -r;
-                if (r) break;
+                if (r !== 0) return r;
             }
 
-            return r;
+            return sortIdenticalNotes(a, b);
         });
     }
 
@@ -145,19 +193,24 @@ class Note extends BaseItem {
     }
 
     static async previews(parentId, options = null) {
-        // Note: ordering logic must be duplicated in sortNotes, which
+        // Note: ordering logic must be duplicated in sortNotes(), which
         // is used to sort already loaded notes.
 
         if (!options) options = {};
         if (!options.order)
-            options.order = [{ by: 'user_updated_time', dir: 'DESC' }];
+            options.order = [
+                { by: 'user_updated_time', dir: 'DESC' },
+                { by: 'user_created_time', dir: 'DESC' },
+                { by: 'title', dir: 'DESC' },
+                { by: 'id', dir: 'DESC' }
+            ];
         if (!options.conditions) options.conditions = [];
         if (!options.conditionsParams) options.conditionsParams = [];
         if (!options.fields) options.fields = this.previewFields();
         if (!options.uncompletedTodosOnTop)
             options.uncompletedTodosOnTop = false;
 
-        if (parentId == Folder.conflictFolderId()) {
+        if (parentId == BaseItem.getClass('Folder').conflictFolderId()) {
             options.conditions.push('is_conflict = 1');
         } else {
             options.conditions.push('is_conflict = 0');
@@ -225,7 +278,7 @@ class Note extends BaseItem {
         return this.modelSelectOne(
             'SELECT ' +
                 this.previewFieldsSql() +
-                ' FROM notes WHERE is_conflict = 0 AND notes WHERE id = ?',
+                ' FROM notes WHERE is_conflict = 0 AND id = ?',
             [noteId]
         );
     }
@@ -270,11 +323,24 @@ class Note extends BaseItem {
             geoData = Object.assign({}, this.geolocationCache_);
         } else {
             this.geolocationUpdating_ = true;
+
             this.logger().info('Fetching geolocation...');
-            geoData = await shim.Geolocation.currentPosition();
+            try {
+                geoData = await shim.Geolocation.currentPosition();
+            } catch (error) {
+                this.logger().error(
+                    'Could not get lat/long for note ' + noteId + ': ',
+                    error
+                );
+                geoData = null;
+            }
+
+            this.geolocationUpdating_ = false;
+
+            if (!geoData) return;
+
             this.logger().info('Got lat/long');
             this.geolocationCache_ = geoData;
-            this.geolocationUpdating_ = false;
         }
 
         this.logger().info('Updating lat/long of note ' + noteId);
@@ -290,6 +356,7 @@ class Note extends BaseItem {
 
     static filter(note) {
         if (!note) return note;
+
         let output = super.filter(note);
         if ('longitude' in output)
             output.longitude = Number(
@@ -307,11 +374,11 @@ class Note extends BaseItem {
     }
 
     static async copyToFolder(noteId, folderId) {
-        if (folderId == Folder.conflictFolderId())
+        if (folderId == this.getClass('Folder').conflictFolderId())
             throw new Error(
                 _(
                     'Cannot copy note to "%s" notebook',
-                    Folder.conflictFolderIdTitle()
+                    this.getClass('Folder').conflictFolderIdTitle()
                 )
             );
 
@@ -324,16 +391,17 @@ class Note extends BaseItem {
     }
 
     static async moveToFolder(noteId, folderId) {
-        if (folderId == Folder.conflictFolderId())
+        if (folderId == this.getClass('Folder').conflictFolderId())
             throw new Error(
                 _(
                     'Cannot move note to "%s" notebook',
-                    Folder.conflictFolderIdTitle()
+                    this.getClass('Folder').conflictFolderIdTitle()
                 )
             );
 
         // When moving a note to a different folder, the user timestamp is not updated.
         // However updated_time is updated so that the note can be synced later on.
+
         const modifiedNote = {
             id: noteId,
             parent_id: folderId,
@@ -351,6 +419,7 @@ class Note extends BaseItem {
         output.is_todo = output.is_todo ? 0 : 1;
         output.todo_due = 0;
         output.todo_completed = 0;
+
         return output;
     }
 
@@ -367,6 +436,7 @@ class Note extends BaseItem {
             if (!changes.hasOwnProperty(n)) continue;
             newNote[n] = changes[n];
         }
+
         return this.save(newNote);
     }
 
@@ -378,7 +448,7 @@ class Note extends BaseItem {
 
         return super.save(o, options).then(note => {
             this.dispatch({
-                type: 'NOTES_UPDATE_ONE',
+                type: 'NOTE_UPDATE_ONE',
                 note: note
             });
 
@@ -390,13 +460,36 @@ class Note extends BaseItem {
         let r = await super.delete(id, options);
 
         this.dispatch({
-            type: 'NOTES_DELETE',
+            type: 'NOTE_DELETE',
             noteId: id
         });
+    }
+
+    static batchDelete(ids, options = null) {
+        const result = super.batchDelete(ids, options);
+        for (let i = 0; i < ids.length; i++) {
+            this.dispatch({
+                type: 'NOTE_DELETE',
+                noteId: ids[i]
+            });
+        }
+        return result;
+    }
+
+    // Tells whether the conflict between the local and remote note can be ignored.
+    static mustHandleConflict(localNote, remoteNote) {
+        // That shouldn't happen so throw an exception
+        if (localNote.id !== remoteNote.id)
+            throw new Error('Cannot handle conflict for two different notes');
+
+        if (localNote.title !== remoteNote.title) return true;
+        if (localNote.body !== remoteNote.body) return true;
+
+        return false;
     }
 }
 
 Note.updateGeolocationEnabled_ = true;
 Note.geolocationUpdating_ = false;
 
-export { Note };
+module.exports = { Note };

@@ -1,0 +1,43 @@
+rvm: 2.3.3
+
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode14
+      language: node_js
+      node_js: "20"
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+    - os: linux
+      sudo: required
+      dist: trusty
+      language: node_js
+      node_js: "20"
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+# cache:
+#   directories:
+#     - node_modules
+#     - $HOME/.cache/electron
+#     - $HOME/.cache/electron-builder
+
+before_install:
+  # HOMEBREW_NO_AUTO_UPDATE needed so that Homebrew doesn't upgrade to the next
+  # version, which requires Ruby 2.3, which is not available on the Travis VM.
+
+  - HOMEBREW_NO_AUTO_UPDATE=1 brew install yarn
+
+script:
+  - |
+    cd ElectronClient/app
+    rsync -aP ../../ReactNativeClient/lib/ lib/
+    npm install
+    ls -la .
+    ls -la lib
+    yarn dist
+
+# r
