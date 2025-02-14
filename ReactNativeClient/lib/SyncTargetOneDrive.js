@@ -7,7 +7,7 @@ const { FileApi } = require('lib/file-api.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 const { FileApiDriverOneDrive } = require('lib/file-api-driver-onedrive.js');
 
-class SyncTarget3 extends BaseSyncTarget {
+class SyncTargetOneDrive extends BaseSyncTarget {
     constructor(db, options = null) {
         super(db, options);
         this.api_ = null;
@@ -69,7 +69,9 @@ class SyncTarget3 extends BaseSyncTarget {
 
     async initFileApi() {
         const appDir = await this.api().appDirectory();
-        throw new Error('SyncTarget3 initFileApi need further implementation');
+        throw new Error(
+            'SyncTargetOneDrive initFileApi need further implementation'
+        );
     }
 
     async initSynchronizer() {
@@ -83,6 +85,6 @@ class SyncTarget3 extends BaseSyncTarget {
     }
 }
 
-const staticSelf = SyncTarget3;
+const staticSelf = SyncTargetOneDrive;
 
-module.exports = SyncTarget3;
+module.exports = SyncTargetOneDrive;

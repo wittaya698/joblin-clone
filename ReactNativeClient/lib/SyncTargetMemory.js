@@ -5,7 +5,7 @@ const { FileApi } = require('lib/file-api.js');
 const { FileApiDriverMemory } = require('lib/file-api-driver-memory.js');
 const { Synchronizer } = require('lib/synchronizer.js');
 
-class SyncTarget1 extends BaseSyncTarget {
+class SyncTargetMemory extends BaseSyncTarget {
     static id() {
         return 1;
     }
@@ -25,7 +25,7 @@ class SyncTarget1 extends BaseSyncTarget {
     initFileApi() {
         const fileApi = new FileApi('/root', new FileApiDriverMemory());
         fileApi.setLogger(this.logger());
-        fileApi.setSyncTargetId(SyncTarget1.id());
+        fileApi.setSyncTargetId(SyncTargetMemory.id());
         return fileApi;
     }
 
@@ -38,4 +38,4 @@ class SyncTarget1 extends BaseSyncTarget {
     }
 }
 
-module.exports = SyncTarget1;
+module.exports = SyncTargetMemory;
