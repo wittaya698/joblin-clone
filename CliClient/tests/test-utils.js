@@ -21,6 +21,7 @@ const { time } = require('lib/time-utils.js');
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetMemory = require('lib/SyncTargetMemory.js');
 const SyncTargetFilesystem = require('lib/SyncTargetFilesystem.js');
+const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
 
 let databases_ = [];
 let synchronizers_ = [];
@@ -36,6 +37,7 @@ fs.mkdirpSync(logDir, 0o755);
 
 SyncTargetRegistry.addClass(SyncTargetMemory);
 SyncTargetRegistry.addClass(SyncTargetFilesystem);
+SyncTargetRegistry.addClass(SyncTargetOneDrive);
 
 const syncTargetId_ = SyncTargetRegistry.nameToId('memory');
 const syncDir = __dirname + '/../tests/sync';

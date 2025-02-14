@@ -193,6 +193,38 @@ class MainScreenComponent extends React.Component {
                     }
                 }
             });
+        } else if (command.name === 'editAlarm') {
+            const note = await Note.load(command.noteId);
+
+            this.setState({
+                promptOptions: {
+                    label: _('Set or clear alarm:'),
+                    inputType: 'datetime',
+                    buttons: ['ok', 'cancel', 'clear'],
+                    value: note.todo_due ? new Date(note.todo_due) : null,
+                    onClose: async (answer, buttonType) => {
+                        let newNote = null;
+
+                        if (buttonType === 'clear') {
+                            newNote = {
+                                id: note.id,
+                                todo_due: 0
+                            };
+                        } else if (answer !== null) {
+                            newNote = {
+                                id: note.id,
+                                todo_due: answer.getTime()
+                            };
+                        }
+
+                        if (newNote) {
+                            await Note.save(newNote);
+                        }
+
+                        this.setState({ promptOptions: null });
+                    }
+                }
+            });
         } else {
             commandProcessed = false;
         }
@@ -309,12 +341,24 @@ class MainScreenComponent extends React.Component {
                     }
                     theme={this.props.theme}
                     style={promptStyle}
-                    onClose={answer => promptOptions.onClose(answer)}
+                    onClose={(answer, buttonType) =>
+                        promptOptions.onClose(answer, buttonType)
+                    }
                     label={promptOptions ? promptOptions.label : ''}
                     description={
                         promptOptions ? promptOptions.description : null
                     }
                     visible={!!this.state.promptOptions}
+                    buttons={
+                        promptOptions && 'buttons' in promptOptions
+                            ? promptOptions.buttons
+                            : null
+                    }
+                    inputType={
+                        promptOptions && 'inputType' in promptOptions
+                            ? promptOptions.inputType
+                            : null
+                    }
                 />
                 <Header
                     style={headerStyle}

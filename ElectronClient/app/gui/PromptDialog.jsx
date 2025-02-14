@@ -2,6 +2,7 @@ const React = require('react');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { themeStyle } = require('../theme.js');
+const Datetime = require('react-datetime').default;
 
 class PromptDialog extends React.Component {
     UNSAFE_componentWillMount() {
@@ -31,6 +32,9 @@ class PromptDialog extends React.Component {
     render() {
         const style = this.props.style;
         const theme = themeStyle(this.props.theme);
+        const buttonTypes = this.props.buttons
+            ? this.props.buttons
+            : ['ok', 'cancel'];
 
         const modalLayerStyle = {
             zIndex: 9999,
@@ -75,14 +79,21 @@ class PromptDialog extends React.Component {
             maxWidth: 400
         };
 
-        const onClose = accept => {
+        const onClose = (accept, buttonType) => {
             if (this.props.onClose)
-                this.props.onClose(accept ? this.state.answer : null);
+                this.props.onClose(
+                    accept ? this.state.answer : null,
+                    buttonType
+                );
             this.setState({ visible: false, answer: '' });
         };
 
         const onChange = event => {
             this.setState({ answer: event.target.value });
+        };
+
+        const onDateTimeChange = momentObject => {
+            this.setState({ answer: momentObject.toDate() });
         };
 
         const onKeyDown = event => {
@@ -97,6 +108,62 @@ class PromptDialog extends React.Component {
             <div style={descStyle}>{this.props.description}</div>
         ) : null;
 
+        let inputComp = null;
+
+        if (this.props.inputType === 'datetime') {
+            inputComp = (
+                <Datetime
+                    value={this.state.answer}
+                    dateFormat="DD/MM/YYYY"
+                    timeFormat="HH:mm"
+                    onChange={momentObject => onDateTimeChange(momentObject)}
+                />
+            );
+        } else {
+            inputComp = (
+                <input
+                    style={inputStyle}
+                    ref={input => (this.answerInput_ = input)}
+                    value={this.state.answer}
+                    type="text"
+                    onChange={event => onChange(event)}
+                    onKeyDown={event => onKeyDown(event)}
+                />
+            );
+        }
+
+        const buttonComps = [];
+        if (buttonTypes.indexOf('ok') >= 0)
+            buttonComps.push(
+                <button
+                    key="ok"
+                    style={buttonStyle}
+                    onClick={() => onClose(true, 'ok')}
+                >
+                    {_('OK')}
+                </button>
+            );
+        if (buttonTypes.indexOf('cancel') >= 0)
+            buttonComps.push(
+                <button
+                    key="cancel"
+                    style={buttonStyle}
+                    onClick={() => onClose(false, 'cancel')}
+                >
+                    {_('Cancel')}
+                </button>
+            );
+        if (buttonTypes.indexOf('clear') >= 0)
+            buttonComps.push(
+                <button
+                    key="clear"
+                    style={buttonStyle}
+                    onClick={() => onClose(false, 'clear')}
+                >
+                    {_('Clear')}
+                </button>
+            );
+
         return (
             <div style={modalLayerStyle}>
                 <div style={promptDialogStyle}>
@@ -104,29 +171,11 @@ class PromptDialog extends React.Component {
                         {this.props.label ? this.props.label : ''}
                     </label>
                     <div style={{ display: 'inline-block' }}>
-                        <input
-                            style={inputStyle}
-                            ref={input => (this.answerInput_ = input)}
-                            value={this.state.answer}
-                            type="text"
-                            onChange={event => onChange(event)}
-                            onKeyDown={event => onKeyDown(event)}
-                        />
+                        {inputComp}
                         {descComp}
                     </div>
                     <div style={{ textAlign: 'right', marginTop: 10 }}>
-                        <button
-                            style={buttonStyle}
-                            onClick={() => onClose(true)}
-                        >
-                            OK
-                        </button>
-                        <button
-                            style={buttonStyle}
-                            onClick={() => onClose(false)}
-                        >
-                            Cancel
-                        </button>
+                        {buttonComps}
                     </div>
                 </div>
             </div>
