@@ -490,7 +490,7 @@ class Note extends BaseItem {
 
     static dueNotes() {
         return this.modelSelectAll(
-            'SELECT id, title, body, todo_due FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?',
+            'SELECT id, title, body, is_todo, todo_due, todo_completed, is_conflict FROM notes WHERE is_conflict = 0 AND is_todo = 1 AND todo_completed = 0 AND todo_due > ?',
             [time.unixMs()]
         );
     }
