@@ -1,7 +1,9 @@
 const React = require('react');
 const { Note } = require('lib/models/note.js');
+const { time } = require('lib/time-utils.js');
 const { Setting } = require('lib/models/setting.js');
 const { IconButton } = require('./IconButton.min.js');
+const Toolbar = require('./Toolbar.min.js');
 const { connect } = require('react-redux');
 const { _ } = require('lib/locale.js');
 const { reg } = require('lib/registry.js');
@@ -16,6 +18,7 @@ const { themeStyle } = require('../theme.js');
 const Menu = bridge().Menu;
 const MenuItem = bridge().MenuItem;
 const { shim } = require('lib/shim.js');
+const eventManager = require('../eventManager');
 
 // Critical -> enable these when AceEditor available with react19
 // require('brace/mode/markdown');
@@ -52,6 +55,16 @@ class NoteTextComponent extends React.Component {
                 'NoteText onAfterEditorRender_ need implementation'
             );
         };
+
+        this.onAlarmChange_ = event => {
+            if (event.noteId === this.props.noteId) this.reloadNote(this.props);
+        };
+        this.onNoteTypeToggle_ = event => {
+            if (event.noteId === this.props.noteId) this.reloadNote(this.props);
+        };
+        this.onTodoToggle_ = event => {
+            if (event.noteId === this.props.noteId) this.reloadNote(this.props);
+        };
     }
 
     mdToHtml() {
@@ -82,6 +95,10 @@ class NoteTextComponent extends React.Component {
         });
 
         this.lastLoadedNoteId_ = note ? note.id : null;
+
+        eventManager.on('alarmChange', this.onAlarmChange_);
+        eventManager.on('noteTypeToggle', this.onNoteTypeToggle_);
+        eventManager.on('todoToggle', this.onTodoToggle_);
     }
 
     componentWillUnmount() {
@@ -89,6 +106,10 @@ class NoteTextComponent extends React.Component {
 
         this.mdToHtml_ = null;
         this.destroyWebview();
+
+        eventManager.removeListener('alarmChange', this.onAlarmChange_);
+        eventManager.removeListener('noteTypeToggle', this.onNoteTypeToggle_);
+        eventManager.removeListener('todoToggle', this.onTodoToggle_);
     }
 
     async saveIfNeeded() {
@@ -312,6 +333,40 @@ class NoteTextComponent extends React.Component {
         this.scheduleSave();
     }
 
+    async commandAttachFile() {
+        const filePathsObj = await bridge().showOpenDialog({
+            properties: ['openFile', 'createDirectory']
+        });
+        const filePaths = filePathsObj.filePaths;
+        if (!filePaths || !filePaths.length) return;
+
+        await this.saveIfNeeded();
+        const note = await Note.load(noteId);
+
+        try {
+            reg.logger().info('Attaching ' + filePaths[0]);
+            const newNote = await shim.attachFileToNote(note, filePaths[0]);
+            reg.logger().info('File was attached.');
+            this.setState({
+                note: newNote,
+                lastSavedNote: Object.assign({}, newNote)
+            });
+        } catch (error) {
+            reg.logger().error(error);
+        }
+    }
+
+    commandSetAlarm() {
+        const noteId = this.props.noteId;
+        if (!noteId) return;
+
+        this.props.dispatch({
+            type: 'WINDOW_COMMAND',
+            name: 'editAlarm',
+            noteId: noteId
+        });
+    }
+
     itemContextMenu(event) {
         const noteId = this.props.noteId;
         if (!noteId) return;
@@ -322,48 +377,32 @@ class NoteTextComponent extends React.Component {
             new MenuItem({
                 label: _('Attach file'),
                 click: async () => {
-                    const filePathsObj = await bridge().showOpenDialog({
-                        properties: ['openFile', 'createDirectory']
-                    });
-                    const filePaths = filePathsObj.filePaths;
-                    if (!filePaths || !filePaths.length) return;
-
-                    await this.saveIfNeeded();
-                    const note = await Note.load(noteId);
-
-                    try {
-                        reg.logger().info('Attaching ' + filePaths[0]);
-                        const newNote = await shim.attachFileToNote(
-                            note,
-                            filePaths[0]
-                        );
-                        reg.logger().info('File was attached.');
-                        this.setState({
-                            note: newNote,
-                            lastSavedNote: Object.assign({}, newNote)
-                        });
-                    } catch (error) {
-                        reg.logger().error(error);
-                    }
+                    return this.commandAttachFile();
                 }
             })
         );
 
         menu.append(
             new MenuItem({
-                label: _('Set or clear alarm'),
+                label: _('Set alarm'),
                 click: async () => {
-                    this.props.dispatch({
-                        type: 'WINDOW_COMMAND',
-                        name: 'editAlarm',
-                        noteId: noteId
-                    });
+                    return this.commandSetAlarm();
                 }
             })
         );
 
         menu.popup(bridge().window());
     }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    // 	//console.info('NEXT PROPS', JSON.stringify(nextProps));
+    // 	console.info('NEXT STATE ====================');
+    // 	for (var n in nextProps) {
+    // 		if (!nextProps.hasOwnProperty(n)) continue;
+    // 		console.info(n + ' = ' + (nextProps[n] === this.props[n]));
+    // 	}
+    // 	return true;
+    // }
 
     render() {
         const style = this.props.style;
@@ -406,7 +445,7 @@ class NoteTextComponent extends React.Component {
             height: 30,
             boxSizing: 'border-box',
             marginTop: 10,
-            marginBottom: 10,
+            marginBottom: 0,
             display: 'flex',
             flexDirection: 'row'
         };
@@ -422,11 +461,17 @@ class NoteTextComponent extends React.Component {
             marginRight: rootStyle.paddingLeft
         };
 
+        const toolbarStyle = {
+            marginBottom: 10
+        };
+
         const bottomRowHeight =
             rootStyle.height -
             titleBarStyle.height -
             titleBarStyle.marginBottom -
-            titleBarStyle.marginTop;
+            titleBarStyle.marginTop -
+            theme.toolbarHeight -
+            toolbarStyle.marginBottom;
 
         const viewerStyle = {
             width: Math.floor(innerWidth / 2),
@@ -485,6 +530,31 @@ class NoteTextComponent extends React.Component {
             const html = this.mdToHtml().render(body, theme, mdOptions);
             this.webview_.send('setHtml', html);
         }
+
+        const toolbarItems = [];
+
+        toolbarItems.push({
+            title: _('Attach file'),
+            iconName: 'fa-paperclip',
+            onClick: () => {
+                return this.commandAttachFile();
+            }
+        });
+
+        if (note.is_todo) {
+            toolbarItems.push({
+                title: Note.needAlarm(note)
+                    ? time.formatMsToLocal(note.todo_due)
+                    : _('Set alarm'),
+                iconName: 'fa-clock-o',
+                enabled: !note.todo_completed,
+                onClick: () => {
+                    return this.commandSetAlarm();
+                }
+            });
+        }
+
+        const toolbar = <Toolbar style={toolbarStyle} items={toolbarItems} />;
 
         const titleEditor = (
             <input
@@ -548,6 +618,7 @@ class NoteTextComponent extends React.Component {
                     {titleEditor}
                     {titleBarMenuButton}
                 </div>
+                {toolbar}
                 {editor}
                 {viewer}
             </div>

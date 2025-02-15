@@ -47,7 +47,7 @@ class HeaderComponent extends React.Component {
     }
 
     render() {
-        const style = this.props.style;
+        const style = Object.assign({}, this.props.style);
         const theme = themeStyle(this.props.theme);
         const showBackButton =
             this.props.showBackButton === undefined ||

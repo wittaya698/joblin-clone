@@ -9,19 +9,22 @@ class PromptDialog extends React.Component {
     UNSAFE_componentWillMount() {
         this.setState({
             visible: false,
-            answer: this.props.value ? this.props.value : ''
+            answer: this.props.defaultValue ? this.props.defaultValue : ''
         });
         this.focusInput_ = true;
     }
 
     UNSAFE_componentWillReceiveProps(newProps) {
-        if ('visible' in newProps) {
+        if ('visible' in newProps && newProps.visible !== this.props.visible) {
             this.setState({ visible: newProps.visible });
             if (newProps.visible) this.focusInput_ = true;
         }
 
-        if ('value' in newProps) {
-            this.setState({ answer: newProps.value });
+        if (
+            'defaultValue' in newProps &&
+            newProps.defaultValue !== this.props.defaultValue
+        ) {
+            this.setState({ answer: newProps.defaultValue });
         }
     }
 
@@ -30,40 +33,43 @@ class PromptDialog extends React.Component {
         this.focusInput_ = false;
     }
 
-    render() {
-        const style = this.props.style;
-        const theme = themeStyle(this.props.theme);
-        const buttonTypes = this.props.buttons
-            ? this.props.buttons
-            : ['ok', 'cancel'];
+    styles(themeId, width, height, visible) {
+        const styleKey = themeId + '_' + width + '_' + height + '_' + visible;
+        if (styleKey === this.styleKey_) return this.styles_;
 
-        const modalLayerStyle = {
+        const theme = themeStyle(themeId);
+
+        this.styleKey_ = styleKey;
+
+        this.styles_ = {};
+
+        this.styles_.modalLayer = {
             zIndex: 9999,
             position: 'absolute',
             top: 0,
             left: 0,
-            width: style.width,
-            height: style.height,
+            width: width,
+            height: height,
             backgroundColor: 'rgba(0,0,0,0.6)',
-            display: this.state.visible ? 'flex' : 'none',
+            display: visible ? 'flex' : 'none',
             alignItems: 'center',
             justifyContent: 'center'
         };
 
-        const promptDialogStyle = {
+        this.styles_.promptDialog = {
             backgroundColor: 'white',
             padding: 16,
             display: 'inline-block',
             boxShadow: '6px 6px 20px rgba(0,0,0,0.5)'
         };
 
-        const buttonStyle = {
+        this.styles_.button = {
             minWidth: theme.buttonMinWidth,
             minHeight: theme.buttonMinHeight,
             marginLeft: 5
         };
 
-        const labelStyle = {
+        this.styles_.label = {
             marginRight: 5,
             fontSize: theme.fontSize,
             color: theme.color,
@@ -71,14 +77,46 @@ class PromptDialog extends React.Component {
             verticalAlign: 'top'
         };
 
-        const descStyle = Object.assign({}, theme.textStyle, {
+        this.styles_.input = {
+            width: 0.5 * width,
+            maxWidth: 400
+        };
+
+        this.styles_.desc = Object.assign({}, theme.textStyle, {
             marginTop: 10
         });
 
-        const inputStyle = {
-            width: 0.5 * style.width,
-            maxWidth: 400
-        };
+        return this.styles_;
+    }
+
+    // shouldComponentUpdate(nextProps, nextState) {
+    // 	console.info(JSON.stringify(nextProps)+JSON.stringify(nextState));
+    // 	console.info('NEXT PROPS ====================');
+    // 	for (var n in nextProps) {
+    // 		if (!nextProps.hasOwnProperty(n)) continue;
+    // 		console.info(n + ' = ' + (nextProps[n] === this.props[n]));
+    // 	}
+    // 	console.info('NEXT STATE ====================');
+    // 	for (var n in nextState) {
+    // 		if (!nextState.hasOwnProperty(n)) continue;
+    // 		console.info(n + ' = ' + (nextState[n] === this.state[n]));
+    // 	}
+    // 	return true;
+    // }
+
+    render() {
+        const style = this.props.style;
+        const theme = themeStyle(this.props.theme);
+        const buttonTypes = this.props.buttons
+            ? this.props.buttons
+            : ['ok', 'cancel'];
+
+        const styles = this.styles(
+            this.props.theme,
+            style.width,
+            style.height,
+            this.state.visible
+        );
 
         const onClose = (accept, buttonType) => {
             if (this.props.onClose)
@@ -106,7 +144,7 @@ class PromptDialog extends React.Component {
         };
 
         const descComp = this.props.description ? (
-            <div style={descStyle}>{this.props.description}</div>
+            <div style={styles.desc}>{this.props.description}</div>
         ) : null;
 
         let inputComp = null;
@@ -123,7 +161,7 @@ class PromptDialog extends React.Component {
         } else {
             inputComp = (
                 <input
-                    style={inputStyle}
+                    style={styles.input}
                     ref={input => (this.answerInput_ = input)}
                     value={this.state.answer}
                     type="text"
@@ -138,7 +176,7 @@ class PromptDialog extends React.Component {
             buttonComps.push(
                 <button
                     key="ok"
-                    style={buttonStyle}
+                    style={styles.button}
                     onClick={() => onClose(true, 'ok')}
                 >
                     {_('OK')}
@@ -148,7 +186,7 @@ class PromptDialog extends React.Component {
             buttonComps.push(
                 <button
                     key="cancel"
-                    style={buttonStyle}
+                    style={styles.button}
                     onClick={() => onClose(false, 'cancel')}
                 >
                     {_('Cancel')}
@@ -158,7 +196,7 @@ class PromptDialog extends React.Component {
             buttonComps.push(
                 <button
                     key="clear"
-                    style={buttonStyle}
+                    style={styles.button}
                     onClick={() => onClose(false, 'clear')}
                 >
                     {_('Clear')}
@@ -166,9 +204,9 @@ class PromptDialog extends React.Component {
             );
 
         return (
-            <div style={modalLayerStyle}>
-                <div style={promptDialogStyle}>
-                    <label style={labelStyle}>
+            <div style={styles.modalLayer}>
+                <div style={styles.promptDialog}>
+                    <label style={styles.label}>
                         {this.props.label ? this.props.label : ''}
                     </label>
                     <div style={{ display: 'inline-block' }}>
