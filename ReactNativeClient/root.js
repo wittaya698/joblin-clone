@@ -10,6 +10,7 @@ const { applyMiddleware, createStore } = require('redux');
 const { createDrawerNavigator } = require('@react-navigation/drawer');
 const { shimInit } = require('lib/shim-init-react.js');
 const { Log } = require('lib/log.js');
+const { time } = require('lib/time-utils.js');
 const { AppNav } = require('lib/components/app-nav.js');
 const { Logger } = require('lib/logger.js');
 const { Note } = require('lib/models/note.js');
@@ -85,6 +86,15 @@ const generalMiddleware = store => next => async action => {
         action.type == 'SETTING_UPDATE_ALL'
     ) {
         reg.setupRecurrentSync();
+    }
+
+    if (
+        (action.type == 'SETTING_UPDATE_ONE' &&
+            (action.key == 'dateFormat' || action.key == 'timeFormat')) ||
+        action.type == 'SETTING_UPDATE_ALL'
+    ) {
+        time.setDateFormat(Setting.value('dateFormat'));
+        time.setTimeFormat(Setting.value('timeFormat'));
     }
 
     if (
