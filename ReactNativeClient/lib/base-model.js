@@ -48,14 +48,6 @@ class BaseModel {
         return fields.indexOf(name) >= 0;
     }
 
-    static fieldType(name) {
-        let fields = this.fields();
-        for (let i = 0; i < fields.length; i++) {
-            if (fields[i].name == name) return fields[i].type;
-        }
-        throw new Error('Unknown field: ' + name);
-    }
-
     static fieldNames(withPrefix = false) {
         let output = this.db().tableFieldNames(this.tableName());
         if (!withPrefix) return output;
@@ -65,7 +57,16 @@ class BaseModel {
         for (let i = 0; i < output.length; i++) {
             temp.push(p + '.' + output[i]);
         }
+
         return temp;
+    }
+
+    static fieldType(name) {
+        let fields = this.fields();
+        for (let i = 0; i < fields.length; i++) {
+            if (fields[i].name == name) return fields[i].type;
+        }
+        throw new Error('Unknown field: ' + name);
     }
 
     static fields() {
@@ -129,6 +130,7 @@ class BaseModel {
 
     static applySqlOptions(options, sql, params = null) {
         if (!options) options = {};
+
         if (options.order && options.order.length) {
             let items = [];
             for (let i = 0; i < options.order.length; i++) {
@@ -140,6 +142,7 @@ class BaseModel {
             }
             sql += ' ORDER BY ' + items.join(', ');
         }
+
         if (options.limit) sql += ' LIMIT ' + options.limit;
 
         return { sql: sql, params: params };
@@ -341,6 +344,7 @@ class BaseModel {
             if (options.isNew === true) return true;
             if (options.isNew === false) return false;
         }
+
         return !object.id;
     }
 
@@ -351,6 +355,7 @@ class BaseModel {
         }
         return output;
     }
+
     static filter(model) {
         if (!model) return model;
 
@@ -368,7 +373,6 @@ class BaseModel {
     static delete(id, options = null) {
         if (!id) throw new Error('Cannot delete object without an ID');
         options = this.modOptions(options);
-
         return this.db().exec(
             'DELETE FROM ' + this.tableName() + ' WHERE id = ?',
             [id]
@@ -378,7 +382,6 @@ class BaseModel {
     static batchDelete(ids, options = null) {
         if (!ids.length) return;
         options = this.modOptions(options);
-        if (!ids.length) throw new Error('Cannot delete object without an ID');
         return this.db().exec(
             'DELETE FROM ' +
                 this.tableName() +

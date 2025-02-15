@@ -35,9 +35,13 @@ shared.saveNoteButton_press = async function (comp) {
     }
 
     // Save only the properties that have changed
-    const diff = BaseModel.diffObjects(comp.state.lastSavedNote, note);
-    diff.type_ = note.type_;
-    diff.id = note.id;
+
+    // Critical: not sure if intentional many essential parameters get removed
+    // So need to comment this all first until further notice
+    // const diff = BaseModel.diffObjects(comp.state.lastSavedNote, note);
+    // diff.type_ = note.type_;
+    // diff.id = note.id;
+    const diff = note;
 
     const savedNote = await Note.save(diff);
 
@@ -86,6 +90,7 @@ shared.noteComponent_change = function (comp, propName, propValue) {
 
 shared.refreshNoteMetadata = async function (comp, force = null) {
     if (force !== true && !comp.state.showNoteMetadata) return;
+
     let noteMetadata = await Note.serializeAllProps(comp.state.note);
     comp.setState({ noteMetadata: noteMetadata });
 };

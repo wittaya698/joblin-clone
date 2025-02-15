@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Platform } from 'react-native';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import moment from 'moment';
@@ -85,6 +86,9 @@ class SelectDateTimeDialog extends Component {
                 onPress: () => this.onReject()
             }
         ];
+        const dtObj = this.state.date || new Date();
+        const dt = dtObj.toISOString();
+
         return (
             <Modal
                 isVisible={this.state.isVisible}
@@ -92,18 +96,38 @@ class SelectDateTimeDialog extends Component {
             >
                 <View style={styles.dialog}>
                     <Text style={styles.titleText}>{_('Select date')}</Text>
-                    <DatePicker
-                        value={this.state.date || new Date()}
-                        mode="datetime"
-                        format={this.dateTimeFormat()}
-                        onConfirm={() => this.onAccept()}
-                        onChange={(event, date) => {
-                            this.setState({
-                                date: this.stringToDate(date)
-                            });
-                        }}
-                        style={{ width: 300 }}
-                    />
+                    {Platform.OS === 'android' ? (
+                        // Critical DatePicker not work well on android devices yet
+                        // So created this button for test with current time + 10 secs
+                        <>
+                            <TouchableOpacity
+                                key="android_btn"
+                                style={styles.button}
+                                onPress={() => {
+                                    this.setState({
+                                        date: new Date(Date.now() + 10000)
+                                    });
+                                }}
+                            >
+                                <Text>Click to change date</Text>
+                            </TouchableOpacity>
+                            <Text>{dt}</Text>
+                        </>
+                    ) : (
+                        <DatePicker
+                            value={dtObj}
+                            mode="datetime"
+                            display="default"
+                            onChange={(event, date) => {
+                                if (date) {
+                                    this.setState({
+                                        date: date
+                                    });
+                                }
+                            }}
+                            style={{ width: 300 }}
+                        />
+                    )}
                     <View style={styles.buttonContainer}>
                         {popupActions.map((button, index) => (
                             <TouchableOpacity

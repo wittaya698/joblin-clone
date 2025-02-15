@@ -1,14 +1,17 @@
 const React = require('react');
+const Component = React.Component;
 const { View, Button } = require('react-native');
 const { connect } = require('react-redux');
 const { reg } = require('lib/registry.js');
+const { Log } = require('lib/log.js');
 const { NoteList } = require('lib/components/note-list.js');
-const { ScreenHeader } = require('lib/components/screen-header.js');
 const { Folder } = require('lib/models/folder.js');
 const { Tag } = require('lib/models/tag.js');
 const { Note } = require('lib/models/note.js');
 const { Setting } = require('lib/models/setting.js');
 const { themeStyle } = require('lib/components/global-style.js');
+const { ScreenHeader } = require('lib/components/screen-header.js');
+const { MenuOption, Text } = require('react-native-popup-menu');
 const { _ } = require('lib/locale.js');
 const { ActionButton } = require('lib/components/action-button.js');
 const { dialogs } = require('lib/dialogs.js');
@@ -93,11 +96,10 @@ class NotesScreenComponent extends BaseScreenComponent {
     }
 
     menuOptions() {
-        if (this.props.selectedFolderId == Folder.conflictFolderId()) return [];
-
         if (this.props.notesParentType == 'Folder') {
             if (this.props.selectedFolderId == Folder.conflictFolderId())
                 return [];
+
             return [
                 {
                     title: _('Delete notebook'),
@@ -134,7 +136,6 @@ class NotesScreenComponent extends BaseScreenComponent {
 
     render() {
         const parent = this.parentItem();
-
         const theme = themeStyle(this.props.theme);
 
         let rootStyle = {
