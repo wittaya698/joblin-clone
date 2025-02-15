@@ -4,6 +4,11 @@ const PushNotificationIOS =
 class AlarmServiceDriver {
     constructor() {
         this.hasPermission_ = null;
+        this.inAppNotificationHandler_ = null;
+
+        PushNotificationIOS.addEventListener('localNotification', instance => {
+            throw new Error('LocalNotification listener need implementation');
+        });
     }
 
     hasPersistentNotifications() {
@@ -12,6 +17,10 @@ class AlarmServiceDriver {
 
     notificationIsSet(alarmId) {
         throw new Error('Available only for non-persistent alarms');
+    }
+
+    setInAppNotificationHandler(v) {
+        this.inAppNotificationHandler_ = v;
     }
 
     async hasPermissions(perm = null) {

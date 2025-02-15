@@ -1,11 +1,12 @@
 const React = require('react');
 const Component = React.Component;
-const { Keyboard, NativeModules } = require('react-native');
+const { View, Keyboard, NativeModules } = require('react-native');
 const Localization = require('expo-localization');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriver = require('lib/services/AlarmServiceDriver');
+const Alarm = require('lib/models/Alarm');
 const { applyMiddleware, createStore } = require('redux');
 const { createDrawerNavigator } = require('@react-navigation/drawer');
 const { shimInit } = require('lib/shim-init-react.js');
@@ -51,6 +52,7 @@ const {
 const RNFS = require('react-native-fs');
 const { PoorManIntervals } = require('lib/poor-man-intervals.js');
 const { reducer, defaultState } = require('lib/reducer.js');
+const DropdownAlert = require('react-native-dropdownalert').default;
 
 const SyncTargetRegistry = require('lib/SyncTargetRegistry.js');
 const SyncTargetOneDrive = require('lib/SyncTargetOneDrive.js');
@@ -457,6 +459,10 @@ class HomeStackComponent extends React.Component {
                 state: 'ready'
             });
         }
+
+        AlarmService.setInAppNotificationHandler(async alarmId => {
+            throw new Error('AppNotificationHandler need implementation');
+        });
     }
 
     async backButtonHandler() {
@@ -493,7 +499,15 @@ class HomeStackComponent extends React.Component {
             Config: { screen: ConfigScreen }
         };
 
-        return <AppNav screens={appNavInit} />;
+        return (
+            <View style={{ flex: 1 }}>
+                <AppNav screens={appNavInit} />
+                <DropdownAlert
+                    ref={ref => (this.dropdownAlert_ = ref)}
+                    tapToCloseEnabled={true}
+                />
+            </View>
+        );
     }
 }
 

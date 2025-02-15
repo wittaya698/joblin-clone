@@ -1,4 +1,5 @@
 const { BaseModel } = require('lib/base-model.js');
+const { Note } = require('lib/models/note.js');
 
 class Alarm extends BaseModel {
     static tableName() {
@@ -29,6 +30,17 @@ class Alarm extends BaseModel {
         return alarms.map(a => {
             return a.id;
         });
+    }
+
+    static async makeNotification(alarm, note = null) {
+        if (!note) note = await Note.load(alarm.note_id);
+        const output = {
+            id: alarm.id,
+            date: new Date(note.todo_due),
+            title: note.title.substr(0, 128)
+        };
+        if (note.body) output.body = note.body.substr(0, 512);
+        return output;
     }
 }
 module.exports = Alarm;

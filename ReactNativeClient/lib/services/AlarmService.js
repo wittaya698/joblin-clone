@@ -19,6 +19,12 @@ class AlarmService {
         return this.logger_;
     }
 
+    static setInAppNotificationHandler(v) {
+        this.inAppNotificationHandler_ = v;
+        if (this.driver_.setInAppNotificationHandler)
+            this.driver_.setInAppNotificationHandler(v);
+    }
+
     static async garbageCollect() {
         this.logger().info('Garbage collecting alarms...');
 
@@ -58,16 +64,6 @@ class AlarmService {
         let alarm = noteId ? await Alarm.byNoteId(noteId) : null;
         let clearAlarm = false;
 
-        const makeNotificationFromAlarm = alarm => {
-            const output = {
-                id: alarm.id,
-                date: new Date(note.todo_due),
-                title: note.title.substr(0, 128)
-            };
-            if (note.body) output.body = note.body.substr(0, 512);
-            return output;
-        };
-
         if (
             isDeleted ||
             !Note.needAlarm(note) ||
@@ -87,7 +83,7 @@ class AlarmService {
                 !driver.hasPersistentNotifications() &&
                 !driver.notificationIsSet(alarm.id)
             ) {
-                const notification = makeNotificationFromAlarm(alarm);
+                const notification = await Alarm.makeNotification(alarm, note);
                 this.logger().info(
                     'Scheduling (non-persistent) notification for note ' +
                         note.id,
@@ -115,7 +111,7 @@ class AlarmService {
         // Reload alarm to get its ID
         alarm = await Alarm.byNoteId(note.id);
 
-        const notification = makeNotificationFromAlarm(alarm);
+        const notification = await Alarm.makeNotification(alarm, note);
 
         this.logger().info(
             'Scheduling notification for note ' + note.id,
