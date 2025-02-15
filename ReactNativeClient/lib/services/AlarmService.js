@@ -130,9 +130,6 @@ class AlarmService {
             await this.updateNoteNotification(dueNotes[i]);
         }
     }
-
-    // TODO: inner notifications (when app is active)
-    // TODO: status to view active notifications
 }
 
 module.exports = AlarmService;

@@ -435,22 +435,23 @@ class NoteScreenComponent extends BaseScreenComponent {
             canAttachPicture = false;
         if (canAttachPicture) {
             output.push({
-                title: _('Attach image'),
+                title: _('Attach photo'),
                 onPress: () => {
                     this.attachImage_onPress();
                 }
             });
             output.push({
-                title: _('Attach any other file'),
+                title: _('Attach any file'),
                 onPress: () => {
                     this.attachFile_onPress();
                 }
             });
+            output.push({ isDivider: true });
         }
 
         if (isTodo) {
             output.push({
-                title: _('Set or clear alarm'),
+                title: _('Set alarm'),
                 onPress: () => {
                     this.setState({ alarmDialogShown: true });
                 }
@@ -458,17 +459,12 @@ class NoteScreenComponent extends BaseScreenComponent {
         }
 
         output.push({
-            title: _('Delete note'),
-            onPress: () => {
-                this.deleteNote_onPress();
-            }
-        });
-        output.push({
-            title: isTodo ? _('Convert to regular note') : _('Convert to todo'),
+            title: isTodo ? _('Convert to note') : _('Convert to todo'),
             onPress: () => {
                 this.toggleIsTodo_onPress();
             }
         });
+        output.push({ isDivider: true });
         if (this.props.showAdvancedOptions)
             output.push({
                 title: this.state.showNoteMetadata
@@ -479,9 +475,16 @@ class NoteScreenComponent extends BaseScreenComponent {
                 }
             });
         output.push({
-            title: _('View location on map'),
+            title: _('View on map'),
             onPress: () => {
                 this.showOnMap_onPress();
+            }
+        });
+        output.push({ isDivider: true });
+        output.push({
+            title: _('Delete'),
+            onPress: () => {
+                this.deleteNote_onPress();
             }
         });
 
