@@ -59,11 +59,13 @@ class AlarmService {
         let clearAlarm = false;
 
         const makeNotificationFromAlarm = alarm => {
-            return {
+            const output = {
                 id: alarm.id,
                 date: new Date(note.todo_due),
-                title: note.title
+                title: note.title.substr(0, 128)
             };
+            if (note.body) output.body = note.body.substr(0, 512);
+            return output;
         };
 
         if (
@@ -114,8 +116,6 @@ class AlarmService {
         alarm = await Alarm.byNoteId(note.id);
 
         const notification = makeNotificationFromAlarm(alarm);
-
-        if (note.body) notification.body = note.body;
 
         this.logger().info(
             'Scheduling notification for note ' + note.id,

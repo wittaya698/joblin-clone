@@ -81,6 +81,16 @@ const generalMiddleware = store => next => async action => {
     }
 
     if (
+        ['EVENT_NOTE_ALARM_FIELD_CHANGE', 'NOTE_DELETE'].indexOf(action.type) >=
+        0
+    ) {
+        await AlarmService.updateNoteNotification(
+            action.id,
+            action.type === 'NOTE_DELETE'
+        );
+    }
+
+    if (
         (action.type == 'SETTING_UPDATE_ONE' &&
             action.key == 'sync.interval') ||
         action.type == 'SETTING_UPDATE_ALL'
@@ -411,27 +421,15 @@ async function initialize(dispatch, backButtonHandler) {
 
     reg.setupRecurrentSync();
 
-    if (Setting.value('env') == 'dev') {
-        // reg.scheduleSync();
-    } else {
-        reg.scheduleSync();
-    }
+    PoorManIntervals.setTimeout(() => {
+        AlarmService.garbageCollect();
+    }, 1000 * 60 * 60);
 
-    // reg.logger().info('Scheduling iOS notification');
-
-    // PushNotificationIOS.scheduleLocalNotification({
-    //     alertTitle: 'From Joplin',
-    //     alertBody: 'Testing notification on iOS',
-    //     fireDate: new Date(Date.now() + 10 * 1000)
-    // });
-
-    // Critical :> not sure how to make this work yet
-    // const r = PushNotification.localNotificationSchedule({
-    // 	id: '222456',
-    // 	message: "My Notification Message", // (required)
-    // 	date: new Date(Date.now() + (10 * 1000)) // in 60 secs
-    // });
-    //PushNotification.cancelLocalNotifications({ id: '222456' });
+    reg.scheduleSync().then(() => {
+        // Wait for the first sync before updating the notifications, since synchronisation
+        // might change the notifications.
+        AlarmService.updateAllNotifications();
+    });
 
     reg.logger().info('Application initialized');
 }
