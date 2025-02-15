@@ -1,5 +1,10 @@
+const notifier = require('node-notifier');
+
 class AlarmServiceDriverNode {
-    constructor() {
+    constructor(options) {
+        // Note: appName is required to get the notification to work. It must be the same as the appId defined in package.json
+        // https://github.com/mikaelbr/node-notifier/issues/144#issuecomment-319324058
+        this.appName_ = options.appName;
         this.notifications_ = {};
     }
 
@@ -23,9 +28,17 @@ class AlarmServiceDriverNode {
         if (interval < 0) return;
 
         const timeoutId = setTimeout(() => {
-            console.info('NOTIFICATION: ', notification);
+            const o = {
+                appName: this.appName_,
+                title: notification.title
+            };
+            if ('body' in notification) o.message = notification.body;
+            notifier.notify(o);
             this.clearNotification(notification.id);
         }, interval);
+
+        this.notifications_[notification.id] = Object.assign({}, notification);
+        this.notifications_[notification.id].timeoutId = timeoutId;
     }
 }
 
