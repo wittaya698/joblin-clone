@@ -15,6 +15,7 @@ const { JoplinDatabase } = require('lib/joplin-database.js');
 const { DatabaseDriverNode } = require('lib/database-driver-node.js');
 const { ElectronAppWrapper } = require('./ElectronAppWrapper');
 const { defaultState } = require('lib/reducer.js');
+const packageInfo = require('./packageInfo.js');
 const AlarmService = require('lib/services/AlarmService.js');
 const AlarmServiceDriverNode = require('lib/services/AlarmServiceDriverNode');
 
@@ -320,7 +321,7 @@ class Application extends BaseApplication {
                     {
                         label: _('About Joplin'),
                         click: () => {
-                            const p = this.packageInfo();
+                            const p = packageInfo;
                             let message = [
                                 p.description,
                                 '',
@@ -362,19 +363,11 @@ class Application extends BaseApplication {
         this.lastMenuScreen_ = screen;
     }
 
-    packageInfo() {
-        if (this.packageInfo_) return this.packageInfo_;
-        this.packageInfo_ = require('./package.json');
-        return this.packageInfo_;
-    }
-
     async start(argv) {
         argv = await super.start(argv);
 
         AlarmService.setDriver(
-            new AlarmServiceDriverNode({
-                appName: this.packageInfo().build.appId
-            })
+            new AlarmServiceDriverNode({ appName: packageInfo.build.appId })
         );
         AlarmService.setLogger(reg.logger());
 
