@@ -282,7 +282,7 @@ function markdownToHtml(md) {
     // Remove the header because it's going to be added back as HTML
     md = md.replace(/# Joplin/, '');
 
-    let output = marked(md, {
+    let output = marked.marked(md, {
         gfm: true,
         break: true,
         renderer: renderer

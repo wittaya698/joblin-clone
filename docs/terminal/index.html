@@ -202,23 +202,27 @@
 <p>Joplin is a free, open source note taking and to-do application, which can handle a large number of notes organised into notebooks. The notes are searchable, can be copied, tagged and modified with your own text editor.</p>
 <p>Notes exported from Evernote via .enex files <a href="#importing-notes-from-evernote">can be imported</a> into Joplin, including the formatted content (which is converted to markdown), resources (images, attachments, etc.) and complete metadata (geolocation, updated time, created time, etc.).</p>
 <p>The notes can be <a href="#synchronisation">synchronised</a> with various targets including the file system (for example with a network directory) or with Microsoft OneDrive. When synchronising the notes, notebooks, tags and other metadata are saved to plain text files which can be easily inspected, backed up and moved around.</p>
-<p><img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminal.png" style="max-width: 60%"></p>
-<h1 id="installation">Installation</h1>
-<p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&amp;MSPPError=-2147217396">WSL</a>), type:</p>
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminal.png" style="max-width: 60%">
+
+<h1>Installation</h1>
+<p>On macOS, Linux or Windows (via <a href="https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396">WSL</a>), type:</p>
 <pre><code>npm install -g joplin
-</code></pre><p>To start it, type <code>joplin</code>.</p>
-<h1 id="demo">Demo</h1>
+</code></pre>
+<p>To start it, type <code>joplin</code>.</p>
+<h1>Demo</h1>
 <p>The demo application shows various Wikipedia articles converted to Markdown and organised into notebooks, as well as an example to-do list, in order to test and demonstrate the application. The demo application and its settings will be installed in a separate directory so as not to interfere with any existing Joplin application.</p>
 <pre><code>npm install -g demo-joplin
-</code></pre><p>To start it, type <code>demo-joplin</code>.</p>
-<h1 id="usage">Usage</h1>
+</code></pre>
+<p>To start it, type <code>demo-joplin</code>.</p>
+<h1>Usage</h1>
 <p>To start the application type <code>joplin</code>. This will open the user interface, which has three main panes: Notebooks, Notes and the text of the current note. There are also additional panels that can be toggled on and off via <a href="#available-shortcuts">shortcuts</a>.</p>
-<p><img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminalCaptions.png" height="450px"></p>
-<h2 id="input-modes">Input modes</h2>
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/ScreenshotTerminalCaptions.png" height="450px">
+
+<h2>Input modes</h2>
 <p>Joplin user interface is partly based on the text editor Vim and offers two different modes to interact with the notes and notebooks:</p>
-<h3 id="normal-mode">Normal mode</h3>
+<h3>Normal mode</h3>
 <p>Allows moving from one pane to another using the <code>Tab</code> and <code>Shift-Tab</code> keys, and to select/view notes using the arrow keys. Text area can be scrolled using the arrow keys too. Press <code>Enter</code> to edit a note. Various other <a href="#available-shortcuts">shortcuts</a> are available.</p>
-<h3 id="command-line-mode">Command-line mode</h3>
+<h3>Command-line mode</h3>
 <p>Press <code>:</code> to enter command line mode. From there, the Joplin commands such as <code>mknote</code> or <code>search</code> are available. See the <a href="#available-commands">full list of commands</a>.</p>
 <p>It is possible to refer to a note or notebook by title or ID. However the simplest way is to refer to the currently selected item using one of these shortcuts:</p>
 <table>
@@ -228,8 +232,7 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><code>$n</code></td>
 <td>Refers to the currently selected note</td>
 </tr>
@@ -241,24 +244,29 @@
 <td><code>$c</code></td>
 <td>Refers to the currently selected item. For example, if the note list is current active, <code>$c</code> will refer to the currently selected note.</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p><strong>Examples:</strong></p>
 <p>Create a new note with title &quot;Wednesday&#39;s meeting&quot;:</p>
 <pre><code>mknote &quot;Wednesday&#39;s meeting&quot;
-</code></pre><p>Create a new to-do:</p>
+</code></pre>
+<p>Create a new to-do:</p>
 <pre><code>mktodo &quot;Buy bread&quot;
-</code></pre><p>Move the currently selected note ($n) to the notebook with title &quot;Personal&quot;</p>
+</code></pre>
+<p>Move the currently selected note ($n) to the notebook with title &quot;Personal&quot;</p>
 <pre><code>mv $n &quot;Personal&quot;
-</code></pre><p>Rename the currently selected notebook ($b) to &quot;Something&quot;:</p>
+</code></pre>
+<p>Rename the currently selected notebook ($b) to &quot;Something&quot;:</p>
 <pre><code>ren $b &quot;Something&quot;
-</code></pre><p>Attach a local file to the currently selected note ($n):</p>
+</code></pre>
+<p>Attach a local file to the currently selected note ($n):</p>
 <pre><code>ren $n /home/pictures/Vacation12.jpg
-</code></pre><p>The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:</p>
+</code></pre>
+<p>The configuration can also be changed from command-line mode. For example, to change the current editor to Sublime Text:</p>
 <pre><code>config editor &quot;subl -w&quot;
-</code></pre><h2 id="editing-a-note">Editing a note</h2>
+</code></pre>
+<h2>Editing a note</h2>
 <p>To edit a note, select it and press <code>ENTER</code>. Or, in command-line mode, type <code>edit $n</code> to edit the currently selected note, or <code>edit &quot;Note title&quot;</code> to edit a particular note.</p>
-<h2 id="getting-help">Getting help</h2>
+<h2>Getting help</h2>
 <p>The complete usage information is available from command-line mode, by typing one of these commands:</p>
 <table>
 <thead>
@@ -267,8 +275,7 @@
 <th>Description</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><code>help</code></td>
 <td>General help information</td>
 </tr>
@@ -280,31 +287,33 @@
 <td><code>help [command]</code></td>
 <td>Displays information about a particular command</td>
 </tr>
-</tbody>
-</table>
+</tbody></table>
 <p>If the help is not fully visible, press <code>Tab</code> multiple times till the console is in focus and use the arrow keys or page up/down to scroll the text.</p>
-<h1 id="importing-notes-from-evernote">Importing notes from Evernote</h1>
+<h1>Importing notes from Evernote</h1>
 <p>To import Evernote data, follow these steps:</p>
 <ul>
 <li>First, export your Evernote notebooks to ENEX files as described <a href="https://help.evernote.com/hc/en-us/articles/209005557-How-to-back-up-export-and-restore-import-notes-and-notebooks">here</a>.</li>
 <li>In Joplin, in <a href="#command-line-mode">command-line mode</a>, type <code>import-enex /path/to/file.enex</code>. This will import the notes into a new notebook named after the filename.</li>
 <li>Then repeat the process for each notebook that needs to be imported.</li>
 </ul>
-<h1 id="synchronisation">Synchronisation</h1>
+<h1>Synchronisation</h1>
 <p>One of the goals of Joplin was to avoid being tied to any particular company or service, whether it is Evernote, Google or Microsoft. As such the synchronisation is designed without any hard dependency to any particular service. Most of the synchronisation process is done at an abstract level and access to external services, such as OneDrive or Dropbox, is done via lightweight drivers. It is easy to support new services by creating simple drivers that provide a filesystem-like interface, i.e. the ability to read, write, delete and list items. It is also simple to switch from one service to another or to even sync to multiple services at once. Each note, notebook, tags, as well as the relation between items is transmitted as plain text files during synchronisation, which means the data can also be moved to a different application, can be easily backed up, inspected, etc.</p>
 <p>Currently, synchronisation is possible with OneDrive (by default) or the local filesystem. A Dropbox driver will also be available once <a href="https://github.com/facebook/react-native/issues/14445">this React Native bug</a> is fixed. When syncing with OneDrive, Joplin creates a sub-directory in OneDrive, in /Apps/Joplin and read/write the notes and notebooks from it. The application does not have access to anything outside this directory.</p>
 <p>To initiate the synchronisation process, type <code>:sync</code>. You will be asked to follow a link to authorise the application (simply input your Microsoft credentials - you do not need to register with OneDrive). After that, the application will synchronise in the background whenever it is running. It is possible to also synchronise outside of the user interface by typing <code>joplin sync</code> from the terminal. This can be used to setup a cron script to synchronise at regular interval. For example, this would do it every 30 minutes:</p>
 <pre><code>*/30 * * * * /path/to/joplin sync
-</code></pre><h1 id="urls">URLs</h1>
+</code></pre>
+<h1>URLs</h1>
 <p>When Ctrl+Clicking a URL, most terminals will open that URL in the default browser. However, one issue, especially with long URLs, is that they can end up like this:</p>
-<p><img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlCut.png" width="300px"></p>
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlCut.png" width="300px">
+
 <p>Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:</p>
-<p><img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlNoCut.png" width="300px"></p>
+<img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlNoCut.png" width="300px">
+
 <p>Since this is still an actual URL, the terminal will still make it clickable. And with shorter URLs, the text is more readable and the links unlikely to be cut. Both resources (files that are attached to notes) and external links are handled in this way.</p>
-<h1 id="attachments-resources">Attachments / Resources</h1>
+<h1>Attachments / Resources</h1>
 <p>In Markdown, links to resources are represented as a simple ID to the resource. In order to give access to these resources, they will be, like links, converted to local URLs. Clicking this link will then open a browser, which will handle the file - i.e. display the image, open the PDF file, etc.</p>
-<h1 id="available-shortcuts">Available shortcuts</h1>
+<h1>Available shortcuts</h1>
 <p>There are two types of shortcuts: those that manipulate the user interface directly, such as <code>TAB</code> to move from one pane to another, and those that are simply shortcuts to actual commands. In a way similar to Vim, these shortcuts are generally a verb followed by an object. For example, typing <code>mn</code> ([m]ake [n]ote), is used to create a new note: it will switch the interface to command line mode and pre-fill it with <code>mknote &quot;&quot;</code> from where the title of the note can be entered. See below for the full list of shortcuts:</p>
 <pre><code>Tab       Give focus to next pane
 Shift+Tab Give focus to previous pane
@@ -323,7 +332,8 @@ mt        [M]ake a new [t]odo
 mb        [M]ake a new note[b]ook
 yn        Copy ([Y]ank) the [n]ote to a notebook.
 dn        Move the note to a notebook.
-</code></pre><h1 id="available-commands">Available commands</h1>
+</code></pre>
+<h1>Available commands</h1>
 <p>The following commands are available in <a href="#command-line-mode">command-line mode</a>:</p>
 <pre><code>attach &lt;note&gt; &lt;file&gt;
 
@@ -484,7 +494,8 @@ undone &lt;note&gt;
 version
 
     Displays version information
-</code></pre><h1 id="license">License</h1>
+</code></pre>
+<h1>License</h1>
 <p>Copyright (c) 2024-2025 Witthaya Thongchin</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
