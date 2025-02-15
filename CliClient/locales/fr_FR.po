@@ -614,6 +614,9 @@ msgstr "Séparez chaque étiquette par une virgule."
 msgid "Rename notebook:"
 msgstr "Renommer le carnet :"
 
+msgid "Set or clear alarm:"
+msgstr ""
+
 msgid "Layout"
 msgstr "Disposition"
 
@@ -636,8 +639,14 @@ msgstr ""
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
+msgid "Set or clear alarm"
+msgstr ""
+
 msgid "Refresh"
 msgstr "Rafraîchir"
+
+msgid "Clear"
+msgstr ""
 
 msgid "OneDrive Login"
 msgstr "Connexion OneDrive"
@@ -683,11 +692,11 @@ msgstr "Paramètre inconnu : %s"
 msgid "File system"
 msgstr "Système de fichier"
 
-msgid "OneDrive Dev (For testing only)"
-msgstr "OneDrive Dév (Pour tester uniquement)"
-
 msgid "OneDrive"
 msgstr "OneDrive"
+
+msgid "OneDrive Dev (For testing only)"
+msgstr "OneDrive Dév (Pour tester uniquement)"
 
 #, javascript-format
 msgid "Unknown log level: %s"
@@ -795,6 +804,12 @@ msgstr ""
 msgid "Language"
 msgstr "Langue"
 
+msgid "Date format"
+msgstr ""
+
+msgid "Time format"
+msgstr ""
+
 msgid "Theme"
 msgstr "Apparence"
 
@@ -897,6 +912,13 @@ msgstr "Déplacer la note vers carnet..."
 #, javascript-format
 msgid "Move %d notes to notebook \"%s\"?"
 msgstr "Déplacer %d notes vers carnet \"%s\" ?"
+
+#, fuzzy
+msgid "Confirm"
+msgstr "Conflits"
+
+msgid "Select date"
+msgstr ""
 
 msgid "Cancel synchronisation"
 msgstr "Annuler synchronisation"
@@ -1039,10 +1061,6 @@ msgstr "Bienvenue"
 
 #~ msgid "Done editing."
 #~ msgstr "Edition terminée."
-
-#, fuzzy
-#~ msgid "Confirm"
-#~ msgstr "Conflits"
 
 #~ msgid "Last error: %s (stacktrace in log)."
 #~ msgstr "Dernière erreur : %s (Plus d'information dans le journal d'erreurs)"
