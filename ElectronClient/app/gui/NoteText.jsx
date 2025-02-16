@@ -130,7 +130,7 @@ class NoteTextComponent extends React.Component {
         }, 500);
     }
 
-    async reloadNote(props) {
+    async reloadNote(props, options = null) {
         if (!options) options = {};
         if (!('noReloadIfLocalChanges' in options))
             options.noReloadIfLocalChanges = false;

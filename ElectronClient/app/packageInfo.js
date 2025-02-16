@@ -2,7 +2,7 @@
 // Do not change directly
 const packageInfo = {
     "name": "@tarwitthaya/Joplin",
-    "version": "0.10.30",
+    "version": "0.10.31",
     "description": "Joplin for Desktop",
     "main": "main.js",
     "repository": {

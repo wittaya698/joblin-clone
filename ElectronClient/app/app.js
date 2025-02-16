@@ -262,24 +262,25 @@ class Application extends BaseApplication {
                 submenu: [
                     {
                         label: _('Copy'),
-                        screens: ['Main'],
+                        screens: ['Main', 'OneDriveLogin'],
                         role: 'copy',
                         accelerator: 'CommandOrControl+C'
                     },
                     {
                         label: _('Cut'),
-                        screens: ['Main'],
+                        screens: ['Main', 'OneDriveLogin'],
                         role: 'cut',
                         accelerator: 'CommandOrControl+X'
                     },
                     {
                         label: _('Paste'),
-                        screens: ['Main'],
+                        screens: ['Main', 'OneDriveLogin'],
                         role: 'paste',
                         accelerator: 'CommandOrControl+V'
                     },
                     {
-                        type: 'separator'
+                        type: 'separator',
+                        screens: ['Main']
                     },
                     {
                         label: _('Search in all the notes'),
@@ -343,6 +344,14 @@ class Application extends BaseApplication {
             }
         ];
 
+        function isEmptyMenu(template) {
+            for (let i = 0; i < template.length; i++) {
+                const t = template[i];
+                if (t.type !== 'separator') return false;
+            }
+            return true;
+        }
+
         function removeUnwantedItems(template, screen) {
             let output = [];
             for (let i = 0; i < template.length; i++) {
@@ -350,6 +359,8 @@ class Application extends BaseApplication {
                 if (t.screens && t.screens.indexOf(screen) < 0) continue;
                 if (t.submenu)
                     t.submenu = removeUnwantedItems(t.submenu, screen);
+                if ('submenu' in t && isEmptyMenu(t.submenu)) continue;
+
                 output.push(t);
             }
             return output;
