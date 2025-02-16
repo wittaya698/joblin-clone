@@ -639,7 +639,7 @@ msgstr ""
 msgid "Attach file"
 msgstr "Attacher un fichier"
 
-msgid "Set or clear alarm"
+msgid "Set alarm"
 msgstr ""
 
 msgid "Refresh"
@@ -957,9 +957,6 @@ msgstr "Attacher un fichier"
 #, fuzzy
 msgid "Attach any file"
 msgstr "Attacher un fichier"
-
-msgid "Set alarm"
-msgstr ""
 
 #, fuzzy
 msgid "Convert to note"

@@ -580,7 +580,7 @@ msgstr ""
 msgid "Attach file"
 msgstr ""
 
-msgid "Set or clear alarm"
+msgid "Set alarm"
 msgstr ""
 
 msgid "Refresh"
@@ -884,9 +884,6 @@ msgid "Attach photo"
 msgstr ""
 
 msgid "Attach any file"
-msgstr ""
-
-msgid "Set alarm"
 msgstr ""
 
 msgid "Convert to note"
