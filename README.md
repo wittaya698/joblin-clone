@@ -106,7 +106,7 @@ On mobile, the alarms will be displayed using the built-in notification system.
 
 # Localisation
 
-Joplin is currently available in English and French. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
+Joplin is currently available in English, French and Spanish. If you would like to contribute a translation, it is quite straightforward, please follow these steps:
 
 - [Download Poedit](https://poedit.net/), the translation editor, and install it.
 - [Download the file to be translated] (https://raw.githubusercontent.com/wittaya698/joplin-clone/refs/heads/7aaf4fb/CliClient/locales/joplin.pot)
