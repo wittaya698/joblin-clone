@@ -1,6 +1,6 @@
 const React = require('react');
 const Component = React.Component;
-const { View, Keyboard, NativeModules } = require('react-native');
+const { View, Keyboard, NativeModules, BackHandler } = require('react-native');
 const Localization = require('expo-localization');
 const { connect, Provider } = require('react-redux');
 const { BackButtonService } = require('lib/services/back-button.js');
@@ -284,7 +284,7 @@ const appReducer = (state = appDefaultState, action) => {
 
 let store = createStore(appReducer, applyMiddleware(generalMiddleware));
 
-async function initialize(dispatch, backButtonHandler) {
+async function initialize(dispatch) {
     shimInit();
 
     Setting.setConstant('env', __DEV__ ? 'dev' : 'prod');
@@ -422,8 +422,6 @@ async function initialize(dispatch, backButtonHandler) {
         reg.logger().error('Initialization error:', error);
     }
 
-    BackButtonService.initialize(backButtonHandler);
-
     reg.setupRecurrentSync();
 
     PoorManIntervals.setTimeout(() => {
@@ -443,6 +441,10 @@ class HomeStackComponent extends React.Component {
     constructor() {
         super();
         this.lastSyncStarted_ = defaultState.syncStarted;
+
+        this.backButtonHandler_ = () => {
+            return this.backButtonHandler();
+        };
     }
 
     async componentDidMount() {
@@ -452,16 +454,15 @@ class HomeStackComponent extends React.Component {
                 state: 'initializing'
             });
 
-            await initialize(
-                this.props.dispatch,
-                this.backButtonHandler.bind(this)
-            );
+            await initialize(this.props.dispatch);
 
             this.props.dispatch({
                 type: 'APP_STATE_SET',
                 state: 'ready'
             });
         }
+
+        BackButtonService.initialize(this.backButtonHandler_);
 
         AlarmService.setInAppNotificationHandler(async alarmId => {
             throw new Error('AppNotificationHandler need implementation');
@@ -483,6 +484,8 @@ class HomeStackComponent extends React.Component {
             this.props.dispatch({ type: 'NAV_BACK' });
             return true;
         }
+
+        BackHandler.exitApp();
 
         return false;
     }
