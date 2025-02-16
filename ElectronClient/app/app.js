@@ -269,13 +269,13 @@ class Application extends BaseApplication {
                     {
                         label: _('Cut'),
                         screens: ['Main'],
-                        role: 'copy',
+                        role: 'cut',
                         accelerator: 'CommandOrControl+X'
                     },
                     {
                         label: _('Paste'),
                         screens: ['Main'],
-                        role: 'copy',
+                        role: 'paste',
                         accelerator: 'CommandOrControl+V'
                     },
                     {
