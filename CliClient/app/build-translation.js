@@ -3,15 +3,18 @@
 require('app-module-path').addPath(__dirname);
 
 const processArgs = process.argv.splice(2, process.argv.length);
+
 const silentLog = processArgs.indexOf('--silent') >= 0;
 
-const { basename, dirname } = require('lib/path-utils.js');
+const {
+    basename,
+    dirname,
+    filename,
+    fileExtension
+} = require('lib/path-utils.js');
 const fs = require('fs-extra');
-const getTextParser = require('gettext-parser');
-const { exec } = require('child_process');
+const gettextParser = require('gettext-parser');
 
-const localeDir = __dirname + '/../app/locale';
-const outputDir = __dirname + '/locale';
 const rootDir = dirname(dirname(__dirname));
 const cliDir = rootDir + '/CliClient';
 const cliLocalesDir = cliDir + '/locales';
@@ -39,8 +42,8 @@ function execCommand(command) {
 }
 
 function parsePoFile(filePath) {
-    const content = fs.readFileSync(filePath, 'utf8');
-    return getTextParser.po.parse(content);
+    const content = fs.readFileSync(filePath);
+    return gettextParser.po.parse(content);
 }
 
 function serializeTranslation(translation) {
@@ -85,7 +88,7 @@ async function createPotFile(potFilePath, sources) {
     baseArgs.push('--from-code=utf-8');
     baseArgs.push('--output="' + potFilePath + '"');
     baseArgs.push('--language=JavaScript');
-    baseArgs.push('--copyright-holder="Wittaya698"');
+    baseArgs.push('--copyright-holder="Witthaya Thongchin"');
     baseArgs.push('--package-name=Joplin-CLI');
     baseArgs.push('--package-version=1.0.0');
     baseArgs.push('--no-location');
@@ -120,6 +123,17 @@ function buildIndex(locales) {
     return output.join('\n');
 }
 
+function availableLocales(defaultLocale) {
+    const output = [defaultLocale];
+    fs.readdirSync(cliLocalesDir).forEach(path => {
+        if (fileExtension(path) !== 'po') return;
+        const locale = filename(path);
+        if (locale === defaultLocale) return;
+        output.push(locale);
+    });
+    return output;
+}
+
 async function main() {
     let potFilePath = cliLocalesDir + '/joplin.pot';
     let jsonLocalesDir = cliDir + '/build/locales';
@@ -150,7 +164,7 @@ async function main() {
 
     fs.mkdirpSync(jsonLocalesDir, 0o755);
 
-    let locales = [defaultLocale, 'fr_FR'];
+    let locales = availableLocales(defaultLocale);
     for (let i = 0; i < locales.length; i++) {
         const locale = locales[i];
         const poFilePäth = cliLocalesDir + '/' + locale + '.po';

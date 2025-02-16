@@ -1,8 +1,4 @@
-const sprintf = require('sprintf-js').sprintf;
-
-// Critical -> to be removed
-const enGBLocale = require('../locales/en_GB.json');
-const frFRLocale = require('../locales/fr_FR.json');
+const { sprintf } = require('sprintf-js');
 
 let codeToLanguageE_ = {};
 codeToLanguageE_['aa'] = 'Afar';
@@ -280,8 +276,7 @@ function localeStrings(canonicalName) {
 
     if (loadedLocales_[locale]) return loadedLocales_[locale];
 
-    loadedLocales_[locale] = localeList[locale];
-    // loadedLocales_[locale] = require('../locales/' + locale + '.json');
+    loadedLocales_[locale] = Object.assign({}, supportedLocales_[locale]);
 
     return loadedLocales_[locale];
 }
@@ -297,18 +292,10 @@ function languageCode() {
 
 function _(s, ...args) {
     let strings = localeStrings(currentLocale_);
-
     let result = strings[s];
-
     if (result === '' || result === undefined) result = s;
     return sprintf(result, ...args);
 }
-
-// Critical -> to be removed
-const localeList = {
-    en_GB: enGBLocale,
-    fr_FR: frFRLocale
-};
 
 module.exports = {
     _,
