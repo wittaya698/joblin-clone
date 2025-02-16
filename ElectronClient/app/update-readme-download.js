@@ -65,7 +65,7 @@ function setReadmeContent(content) {
     return fs.writeFileSync(readmePath, content);
 }
 
-async function main() {
+async function main(argv) {
     const waitForVersion = argv.length === 3 ? argv[2] : null;
 
     if (waitForVersion)
