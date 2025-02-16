@@ -10,9 +10,18 @@ The notes can be [synchronised](#synchronisation) with various targets including
 
 # Installation
 
-On macOS, Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)), type:
+**IMPORTANT: Node v8+ is required**
 
-    npm install -g joplin
+On macOS:
+
+    brew install joplin
+
+On Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)), type:
+
+    NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+    sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
+
+By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed. Alternatively, if your npm permissions are setup as described [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions#option-2-change-npms-default-directory-to-another-directory) (Option 2) then simply running `npm -g install joplin` would work.
 
 To start it, type `joplin`.
 
@@ -117,6 +126,7 @@ When Ctrl+Clicking a URL, most terminals will open that URL in the default brows
 <img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlCut.png" width="300px">
 
 Not only it makes the text hard to read, but the link, being cut in two, will also not be clickable.
+
 As a solution Joplin tries to start a mini-server in the background and, if successful, all the links will be converted to a much shorter URL:
 
 <img src="https://raw.githubusercontent.com/wittaya698/joplin-clone/7aaf4fb/docs/images/UrlNoCut.png" width="300px">
@@ -162,9 +172,15 @@ The following commands are available in [command-line mode](#command-line-mode):
         Gets or sets a config value. If [value] is not provided, it will show the
         value of [name]. If neither [name] nor [value] is provided, it will list
         the current configuration.
+
         -v, --verbose  Also displays unset and hidden config variables.
 
     Possible keys/values:
+
+        sync.2.path            File system synchronisation target directory.
+                               The path to synchronise with when file system
+                               synchronisation is enabled. See `sync.target`.
+                               Type: string.
 
         editor                 Text editor.
                                The editor that will be used to open a note. If
@@ -174,13 +190,29 @@ The following commands are available in [command-line mode](#command-line-mode):
 
         locale                 Language.
                                Type: Enum.
-                               Possible values: en_GB (English), fr_FR (Français).
+                               Possible values: en_GB (English), es_CR (Español),
+                               fr_FR (Français).
                                Default: "en_GB"
 
-        sync.2.path            File system synchronisation target directory.
-                               The path to synchronise with when file system
-                               synchronisation is enabled. See `sync.target`.
-                               Type: string.
+        dateFormat             Date format.
+                               Type: Enum.
+                               Possible values: DD/MM/YYYY (30/01/2017), DD/MM/YY
+                               (30/01/17), MM/DD/YYYY (01/30/2017), MM/DD/YY
+                               (01/30/17), YYYY-MM-DD (2017-01-30).
+                               Default: "DD/MM/YYYY"
+
+        timeFormat             Time format.
+                               Type: Enum.
+                               Possible values: HH:mm (20:30), h:mm A (8:30 PM).
+                               Default: "HH:mm"
+
+        uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
+                               Type: bool.
+                               Default: true
+
+        trackLocation          Save geo-location with notes.
+                               Type: bool.
+                               Default: true
 
         sync.interval          Synchronisation interval.
                                Type: Enum.
@@ -194,17 +226,9 @@ The following commands are available in [command-line mode](#command-line-mode):
                                the file system, set `sync.2.path` to specify the
                                target directory.
                                Type: Enum.
-                               Possible values: 1 (Memory), 2 (File system), 3
-                               (OneDrive).
+                               Possible values: 2 (File system), 3 (OneDrive), 4
+                               (OneDrive Dev (For testing only)).
                                Default: 3
-
-        trackLocation          Save geo-location with notes.
-                               Type: bool.
-                               Default: true
-
-        uncompletedTodosOnTop  Show uncompleted todos on top of the lists.
-                               Type: bool.
-                               Default: true
 
     cp <note> [notebook]
 
@@ -286,6 +310,7 @@ The following commands are available in [command-line mode](#command-line-mode):
         Displays summary about the notes and notebooks.
 
     sync
+
         Synchronises with remote storage.
 
         --target <target>  Sync to provided target (defaults to sync.target config
