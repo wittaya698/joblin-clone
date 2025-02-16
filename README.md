@@ -31,10 +31,12 @@ Three types of applications are available: for the **desktop** (Windows, macOS a
 
 On macOS, Linux or Windows (via [WSL](https://msdn.microsoft.com/en-us/commandline/wsl/faq?f=255&MSPPError=-2147217396)), type:
 
-    npm install -g joplin
+    NPM_CONFIG_PREFIX=~/.joplin-bin npm install -g joplin
+    sudo ln -s ~/.joplin-bin/bin/joplin /usr/bin/joplin
 
-If the application does not install due to permission issues, please make sure that your global npm permissions are correct by following the instructions [here](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
+**IMPORTANT: Node v8+ is required**
 
+By default, the application binary will be installed under `~/.joplin-bin`. You may change this directory if needed.
 To start it, type `joplin`.
 
 For usage information, please refer to the full Document
