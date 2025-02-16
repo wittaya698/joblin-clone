@@ -30,6 +30,8 @@ class ConfigScreenComponent extends React.Component {
             Setting.setValue(key, value);
         };
 
+        // Component key needs to be key+value otherwise it doesn't update when the settings change.
+
         const md = Setting.settingMetadata(key);
 
         if (md.isEnum) {
@@ -45,7 +47,7 @@ class ConfigScreenComponent extends React.Component {
             }
 
             return (
-                <div key={key} style={rowStyle}>
+                <div key={key + value} style={rowStyle}>
                     <div style={labelStyle}>
                         <label>{md.label()}</label>
                     </div>
@@ -62,7 +64,7 @@ class ConfigScreenComponent extends React.Component {
             );
         } else if (md.type === Setting.TYPE_BOOL) {
             return (
-                <div key={key} style={rowStyle}>
+                <div key={key + value} style={rowStyle}>
                     <div style={controlStyle}>
                         <label>
                             <input

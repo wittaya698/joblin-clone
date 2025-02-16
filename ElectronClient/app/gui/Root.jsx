@@ -77,7 +77,7 @@ class RootComponent extends React.Component {
                 title: () => _('OneDrive Login')
             },
             Import: { screen: ImportScreen, title: () => _('Import') },
-            Config: { screen: ConfigScreen, title: () => _('Configuration') }
+            Config: { screen: ConfigScreen, title: () => _('Options') }
         };
 
         return <Navigator style={navigatorStyle} screens={screens} />;
