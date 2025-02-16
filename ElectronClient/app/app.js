@@ -371,6 +371,10 @@ class Application extends BaseApplication {
         );
         AlarmService.setLogger(reg.logger());
 
+        reg.setShowErrorMessageBoxHandler(message => {
+            bridge().showErrorMessageBox(message);
+        });
+
         if (Setting.value('openDevTools')) {
             bridge().window().webContents.openDevTools();
         }

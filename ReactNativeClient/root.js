@@ -303,6 +303,9 @@ async function initialize(dispatch, backButtonHandler) {
     mainLogger.setLevel(Logger.LEVEL_DEBUG);
 
     reg.setLogger(mainLogger);
+    reg.setShowErrorMessageBoxHandler(message => {
+        alert(message);
+    });
 
     reg.logger().info('====================================');
     reg.logger().info(
